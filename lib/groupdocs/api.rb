@@ -42,7 +42,7 @@ module GroupDocs
         when :delete
           @resource[@options[:path]].delete(@options[:headers])
         else
-          raise UnsupportedMethodError, "Unsupported HTTP method: #{@options[:method].inspect}"
+          raise GroupDocs::Errors::UnsupportedMethodError, "Unsupported HTTP method: #{@options[:method].inspect}"
         end
       end
 
