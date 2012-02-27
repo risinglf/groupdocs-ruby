@@ -14,7 +14,7 @@ module GroupDocs
         #
         def add_params(params)
           params.each do |param, value|
-            @options[:path] << "#{separator}#{param}=#{value}"
+            options[:path] << "#{separator}#{param}=#{value}"
           end
         end
 
@@ -29,7 +29,7 @@ module GroupDocs
         def sign_url
           # calculate a hash of the path with private key
           hash = HMAC::SHA1.new(GroupDocs.private_key)
-          hash << @options[:path]
+          hash << options[:path]
           hash = hash.digest
           # convert hash to base64
           hash = Base64.strict_encode64(hash)
@@ -40,7 +40,7 @@ module GroupDocs
           # covert all hexademical characters to upper case
           hash = hash.gsub(/(%[A-Fa-f0-9]{1,2})/) { $1.upcase }
 
-          @options[:path] << "#{separator}signature=#{hash}"
+          options[:path] << "#{separator}signature=#{hash}"
         end
 
         #
@@ -50,7 +50,7 @@ module GroupDocs
         # @api private
         #
         def separator
-          @options[:path].include?('?') ? '&' : '?'
+          options[:path].include?('?') ? '&' : '?'
         end
 
         #
@@ -60,7 +60,7 @@ module GroupDocs
         #
         def prepend_version
           if GroupDocs.api_version
-            @options[:path].prepend("/v#{GroupDocs.api_version}")
+            options[:path].prepend("/v#{GroupDocs.api_version}")
           end
         end
 
