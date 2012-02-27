@@ -22,21 +22,27 @@ module GroupDocs
 
       def execute
         sign_url
-        send_request(@options[:method], @options[:path], @options[:request_body], @options[:headers])
+        send_request
       end
 
       private
 
-      def send_request(method, path, request_body, headers)
-        headers ||= DEFAULT_HEADERS
-        method = method.downcase
+      def send_request
+        @options[:headers] ||= DEFAULT_HEADERS
+        @options[:method] = @options[:method].downcase
+        @options[:request_body].to_json if @options[:request_body]
 
-        case method
-        when :post, :put
-          headers = headers.merge(content_type: 'application/json')
-          @resource[path].send(method, request_body.to_json, headers)
+        case @options[:method]
+        when :get
+          @resource[@options[:path]].get(@options[:headers])
+        when :post
+          @resource[@options[:path]].post(@options[:request_body], @options[:headers])
+        when :put
+          @resource[@options[:path]].put(@options[:request_body], @options[:headers])
+        when :delete
+          @resource[@options[:path]].delete(@options[:headers])
         else
-          @resource[path].send(method, headers)
+          raise UnsupportedMethodError, "Unsupported HTTP method: #{@options[:method].inspect}"
         end
       end
 
