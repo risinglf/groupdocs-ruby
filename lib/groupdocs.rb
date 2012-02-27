@@ -1,7 +1,6 @@
 require 'groupdocs/version'
 require 'groupdocs/errors'
 require 'groupdocs/api'
-require 'groupdocs/jobs'
 
 module GroupDocs
   class << self
