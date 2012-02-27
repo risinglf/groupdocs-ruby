@@ -66,17 +66,17 @@ describe GroupDocs do
   end
 
   context 'API settings' do
-    describe '#api_hostname' do
-      it { should respond_to(:api_hostname)  }
-      it { should respond_to(:api_hostname=) }
+    describe '#api_server' do
+      it { should respond_to(:api_server)  }
+      it { should respond_to(:api_server=) }
 
       it 'should return default URL if it has not been overwritten' do
-        subject.api_hostname.should == 'dev-api.groupdocs.com'
+        subject.api_server.should == 'https://dev-api.groupdocs.com'
       end
 
       it 'should return custom URL' do
-        subject.api_hostname = 'api.groupdocs.com'
-        subject.api_hostname.should == 'api.groupdocs.com'
+        subject.api_server = 'https://api.groupdocs.com'
+        subject.api_server.should == 'https://api.groupdocs.com'
       end
     end
 
