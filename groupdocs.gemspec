@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
 
   s.add_runtime_dependency 'rest-client', '~> 1.6'
+  s.add_runtime_dependency 'json'       , '~> 1.6'
   s.add_runtime_dependency 'ruby-hmac'  , '~> 0.4'
 
   s.add_development_dependency 'rspec'    , '~> 2.8'
