@@ -4,63 +4,75 @@ describe GroupDocs::Api::Helpers::URL do
 
   subject { Object.new.extend(described_class) }
 
+  describe '#add_params' do
+    it { should respond_to(:add_params) }
+
+    it 'should add parameters to query' do
+      mock_api_request('/1/files/2?new_name=invoice.docx')
+      subject.options[:path].should_receive(:<<).with("&param=value")
+      subject.add_params({ param: 'value' })
+    end
+
+    it 'should determine correct URL separator' do
+      mock_api_request('/1/files/2')
+      subject.should_receive(:separator)
+      subject.add_params({ param: 'value' })
+    end
+  end
+
   describe '#sign_url' do
-    before(:all) do
+    before(:each) do
       GroupDocs.private_key = 'e98ea443354183fd1fb434047232c687'
     end
 
-    after(:all) do
-      GroupDocs.private_key = nil
-      GroupDocs.api_version = nil
-    end
-
-    let!(:url)       { '/1/files/2?new_name=invoice.docx' }
-    let!(:signature) { 'gw%2BLupOB3krtliSSM0dvUBSznJY' }
-
     it 'should use defined private key' do
+      mock_api_request('/1/files/2?new_name=invoice.docx')
       GroupDocs.should_receive(:private_key).and_return('e98ea443354183fd1fb434047232c687')
-      subject.sign_url(url)
+      subject.send(:sign_url)
     end
 
-    it 'should sign URL' do
-      subject.sign_url(url).should == "#{url}&signature=#{signature}"
+    it 'should add signature to path' do
+      path = '/1/files/2?new_name=invoice.docx'
+      mock_api_request(path)
+      subject.send(:sign_url)
+      subject.options[:path].should == "#{path}&signature=gw%2BLupOB3krtliSSM0dvUBSznJY"
+    end
+
+    it 'should determine correct URL separator' do
+      path = '/1/files/2?new_name=invoice.docx'
+      mock_api_request(path)
+      subject.should_receive(:separator)
+      subject.send(:sign_url)
     end
   end
 
   describe '#separator' do
     it 'should return ? if URL has no parameters' do
-      url = '/1/files/2'
-      subject.separator(url).should == '?'
+      mock_api_request('/1/files/2')
+      subject.send(:separator).should == '?'
     end
 
     it 'should return & if URL has parameters' do
-      url = '/1/files/2?new_name=invoice.docx'
-      subject.separator(url).should == '&'
-    end
-  end
-
-  describe '#prepend_slash' do
-    it 'should add leading slash to URL if it is missed' do
-      url = '1/files/2?new_name=invoice.docx'
-      subject.prepend_slash(url).should == "/#{url}"
-    end
-
-    it 'should not modify URL if leading slash is not missed' do
-      url = '/1/files/2?new_name=invoice.docx'
-      subject.prepend_slash(url).should == url
+      mock_api_request('/1/files/2?new_name=invoice.docx')
+      subject.send(:separator).should == '&'
     end
   end
 
   describe '#prepend_version' do
     it 'should not modify URL if API version is not specified' do
-      url = '/1/files/2?new_name=invoice.docx'
-      subject.prepend_version(url).should == url
+      GroupDocs.should_receive(:api_version).and_return(nil)
+      path = '/1/files/2?new_name=invoice.docx'
+      mock_api_request(path)
+      subject.send(:prepend_version)
+      subject.options[:path].should == path
     end
 
     it 'should prepend API version number' do
-      GroupDocs.api_version = '2.0'
-      url = '/1/files/2?new_name=invoice.docx'
-      subject.prepend_version(url).should == "/v#{GroupDocs.api_version}#{url}"
+      GroupDocs.should_receive(:api_version).any_number_of_times.and_return('2.0')
+      path = '/1/files/2?new_name=invoice.docx'
+      mock_api_request(path)
+      subject.send(:prepend_version)
+      subject.options[:path].should == "/v2.0#{path}"
     end
   end
 end
