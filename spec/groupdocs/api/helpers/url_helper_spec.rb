@@ -25,6 +25,10 @@ describe GroupDocs::Api::Helpers::URL do
       GroupDocs.private_key = 'e98ea443354183fd1fb434047232c687'
     end
 
+    after(:all) do
+      GroupDocs.private_key = nil
+    end
+
     it 'should use defined private key' do
       mock_api_request('/1/files/2?new_name=invoice.docx')
       GroupDocs.should_receive(:private_key).and_return('e98ea443354183fd1fb434047232c687')

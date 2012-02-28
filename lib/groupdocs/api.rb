@@ -28,21 +28,27 @@ module GroupDocs
       private
 
       def send_request
-        @options[:headers] ||= DEFAULT_HEADERS
-        @options[:method] = @options[:method].downcase
-        @options[:request_body].to_json if @options[:request_body]
-
-        case @options[:method]
-        when :get
-          @resource[@options[:path]].get(@options[:headers])
-        when :post
-          @resource[@options[:path]].post(@options[:request_body], @options[:headers])
-        when :put
-          @resource[@options[:path]].put(@options[:request_body], @options[:headers])
-        when :delete
-          @resource[@options[:path]].delete(@options[:headers])
+        if options[:headers].is_a?(Hash)
+          options[:headers].merge!(DEFAULT_HEADERS)
         else
-          raise GroupDocs::Errors::UnsupportedMethodError, "Unsupported HTTP method: #{@options[:method].inspect}"
+          options[:headers] = DEFAULT_HEADERS
+        end
+        options[:method] = options[:method].downcase
+        if options[:request_body]
+          options[:request_body] = options[:request_body].to_json
+        end
+
+        case options[:method]
+        when :get
+          resource[options[:path]].get(options[:headers])
+        when :post
+          resource[options[:path]].post(options[:request_body], options[:headers])
+        when :put
+          resource[options[:path]].put(options[:request_body], options[:headers])
+        when :delete
+          resource[options[:path]].delete(options[:headers])
+        else
+          raise GroupDocs::Errors::UnsupportedMethodError, "Unsupported HTTP method: #{options[:method].inspect}"
         end
       end
 
