@@ -32,19 +32,19 @@ describe GroupDocs::Api::Request do
     end
   end
 
-  describe '#execute' do
-    it { should respond_to(:execute) }
+  describe '#execute!' do
+    it { should respond_to(:execute!) }
 
     it 'should sign url' do
       mock_resource(:GET)
       subject.should_receive(:sign_url)
-      subject.execute
+      subject.execute!
     end
 
     it 'should send request' do
       GroupDocs.should_receive(:private_key).and_return('private_key')
       subject.should_receive(:send_request)
-      subject.execute
+      subject.execute!
     end
   end
 

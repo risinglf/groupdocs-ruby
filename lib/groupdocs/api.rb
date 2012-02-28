@@ -20,7 +20,7 @@ module GroupDocs
         prepend_version
       end
 
-      def execute
+      def execute!
         sign_url
         send_request
       end
