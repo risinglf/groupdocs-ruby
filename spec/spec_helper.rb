@@ -9,6 +9,7 @@ SimpleCov.configure do
 end
 SimpleCov.start
 
+require 'webmock/rspec'
 require 'groupdocs'
 
 #
@@ -20,9 +21,23 @@ def mock_api_request(path)
 end
 
 #
-# Mocks ResClient::Resource.
+# Mocks RestClient::Resource.
 #
 def mock_resource(method)
   subject.resource.should_receive(:[]).with(subject.options[:path]).any_number_of_times.and_return(subject.resource)
   subject.resource[subject.options[:path]].should_receive(method.downcase).with(any_args).and_return(true)
+end
+
+#
+# Mocks JSON response.
+#
+def mock_response(json)
+  subject.should_receive(:response).any_number_of_times.and_return(json)
+end
+
+#
+# Mocks API server.
+#
+def mock_api_server(json)
+  stub_request(:any, /#{GroupDocs.api_server}.*/).to_return(body: json)
 end
