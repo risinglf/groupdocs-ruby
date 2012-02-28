@@ -12,6 +12,12 @@ describe GroupDocs::Api::Request do
     end
   end
 
+  describe 'attributes' do
+    it { should respond_to(:resource) }
+    it { should respond_to(:response) }
+    it { should respond_to(:options)  }
+  end
+
   describe '#initialize' do
     it 'should allow passing options' do
       options = { method: :GET, path: '/jobs' }
@@ -37,11 +43,13 @@ describe GroupDocs::Api::Request do
 
     it 'should sign url' do
       mock_resource(:GET)
+      mock_response('!{"status":"Ok"}')
       subject.should_receive(:sign_url)
       subject.execute!
     end
 
     it 'should send request' do
+      mock_response('!{"status":"Ok"}')
       GroupDocs.should_receive(:private_key).and_return('private_key')
       subject.should_receive(:send_request)
       subject.execute!
@@ -92,6 +100,30 @@ describe GroupDocs::Api::Request do
     it 'should raise error if incorrect method has been passed' do
       subject.options[:method] = :TEST
       -> { subject.send(:send_request) }.should raise_error(GroupDocs::Errors::UnsupportedMethodError)
+    end
+  end
+
+  describe '#parse_response' do
+    it 'should remove first char from JSON unless it is not {' do
+      mock_response('!{"status":"Ok"}')
+      subject.send(:parse_response)
+      subject.response.should == '{"status":"Ok"}'
+    end
+
+    it 'should parse JSON' do
+      mock_response('{"status":"Ok"}')
+      JSON.should_receive(:parse).with(subject.response, symbolize_names: true).and_return({ status: 'Ok' })
+      subject.send(:parse_response)
+    end
+
+    it 'should return parsed JSON with symbolized keys' do
+      mock_response('{"status":"Ok"}')
+      subject.send(:parse_response).should == { status: 'Ok' }
+    end
+
+    it 'should raise error if response status is not "Ok"' do
+      mock_response('!{"status":"Fail"}')
+      -> { subject.send(:parse_response) }.should raise_error(GroupDocs::Errors::IncorrectResponseStatus)
     end
   end
 end
