@@ -2,15 +2,9 @@ require 'spec_helper'
 
 describe GroupDocs::Storage::File do
 
-  before(:all) do
-    GroupDocs.client_id = '07aaaf95f8eb33a4'
-    GroupDocs.private_key = '5cb711b3a52ffc5d90ee8a0f79206f5a'
-    GroupDocs.api_version = '2.0'
-  end
-
   it_behaves_like 'Api entity'
 
-  describe 'attributes' do
+  context 'attributes' do
     it { should respond_to(:id)           }
     it { should respond_to(:id=)          }
     it { should respond_to(:guid)         }
@@ -51,14 +45,14 @@ describe GroupDocs::Storage::File do
     end
   end
 
-  describe '#inspect' do
-    let!(:options) { { id: 1, guid: 3, name: 'Test', url: 'http://groupdocs.com/folder/Test' } }
-
-    subject { described_class.new(options) }
-
-    it 'should return object in nice presentation' do
-      subject.inspect.should ==
-        %(<##{described_class} @id=#{options[:id]} @guid=#{options[:guid]} @name="#{options[:name]}" @url="#{options[:url]}">)
+  context 'instance methods' do
+    describe '#inspect' do
+      it 'should return object in nice presentation' do
+        options = { id: 1, guid: 3, name: 'Test', url: 'http://groupdocs.com/folder/Test' }
+        subject = described_class.new(options)
+        subject.inspect.should ==
+          %(<##{described_class} @id=#{options[:id]} @guid=#{options[:guid]} @name="#{options[:name]}" @url="#{options[:url]}">)
+      end
     end
   end
 end
