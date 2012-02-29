@@ -62,7 +62,11 @@ describe GroupDocs::Storage::Folder do
 
   describe '#list!' do
     before(:each) do
-      mock_api_server <<-JSON
+      mock_api_server(json)
+    end
+
+    let(:json) do
+      <<-JSON
         {
           "status": "Ok",
           "result":
@@ -88,11 +92,11 @@ describe GroupDocs::Storage::Folder do
     end
 
     it 'should allow passing path' do
-      described_class.list!('/test')
+      -> { described_class.list!('/test') }.should_not raise_error
     end
 
     it 'should allow passing options' do
-      described_class.list!('/', { page: 1, count: 1 })
+      -> { described_class.list!('/', { page: 1, count: 1 }) }.should_not raise_error
     end
 
     it 'should return array' do
@@ -109,6 +113,31 @@ describe GroupDocs::Storage::Folder do
       described_class.list!.detect do |entity|
         entity.id == 2
       end.should be_a(GroupDocs::Storage::File)
+    end
+  end
+
+  describe '#create!' do
+    before(:each) do
+      mock_api_server(json)
+    end
+
+    let(:json) do
+      <<-JSON
+        {
+          "status": "Ok",
+          "result":
+            {
+              "adj_name": "testfolder",
+              "type": -1,
+              "id": 123
+            }
+        }
+      JSON
+    end
+
+    it 'should return folder' do
+      folder = described_class.create!('/test2')
+      folder.should be_a(GroupDocs::Storage::Folder)
     end
   end
 end
