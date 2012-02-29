@@ -9,7 +9,8 @@ module GroupDocs
 
       include GroupDocs::Api::Helpers::URL
 
-      DEFAULT_HEADERS = { accept: 'application/json' }
+      DEFAULT_HEADERS = { accept: 'application/json',
+                          content_length: 0 }
 
       attr_reader   :resource
       attr_reader   :response

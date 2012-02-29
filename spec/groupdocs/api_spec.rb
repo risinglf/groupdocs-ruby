@@ -10,6 +10,10 @@ describe GroupDocs::Api::Request do
     it 'should include "Accept: application/json"' do
       subject.should include({ accept: 'application/json' })
     end
+
+    it 'should include "Content-length: 0"' do
+      subject.should include({ content_length: 0 })
+    end
   end
 
   describe 'attributes' do
