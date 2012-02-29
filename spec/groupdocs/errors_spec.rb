@@ -12,6 +12,6 @@ describe GroupDocs::Errors::UnsupportedMethodError do
   it { should be_a(StandardError) }
 end
 
-describe GroupDocs::Errors::IncorrectResponseStatus do
+describe GroupDocs::Errors::BadResponseError do
   it { should be_a(StandardError) }
 end

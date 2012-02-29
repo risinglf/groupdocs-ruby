@@ -109,25 +109,31 @@ describe GroupDocs::Api::Request do
 
   describe '#parse_response' do
     it 'should remove first char from JSON unless it is not {' do
-      mock_response('!{"status":"Ok"}')
+      mock_response('!{"status": "Ok"}')
       subject.send(:parse_response)
-      subject.response.should == '{"status":"Ok"}'
+      subject.response.should == '{"status": "Ok"}'
     end
 
     it 'should parse JSON' do
-      mock_response('{"status":"Ok"}')
+      mock_response('{"status": "Ok"}')
       JSON.should_receive(:parse).with(subject.response, symbolize_names: true).and_return({ status: 'Ok' })
       subject.send(:parse_response)
     end
 
     it 'should return parsed JSON with symbolized keys' do
-      mock_response('{"status":"Ok"}')
+      mock_response('{"status": "Ok"}')
       subject.send(:parse_response).should == { status: 'Ok' }
     end
 
     it 'should raise error if response status is not "Ok"' do
-      mock_response('!{"status":"Fail"}')
-      -> { subject.send(:parse_response) }.should raise_error(GroupDocs::Errors::IncorrectResponseStatus)
+      json = '{"status": "Failed", "error_message": "The source path is not found."}'
+      mock_response(json)
+      -> { subject.send(:parse_response) }.should raise_error GroupDocs::Errors::BadResponseError do |error|
+        error.message.should include('Bad response!')
+        error.message.should include('Status: Failed')
+        error.message.should include('Error message: The source path is not found.')
+        error.message.should include("Body: #{json}")
+      end
     end
   end
 end

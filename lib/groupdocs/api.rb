@@ -63,8 +63,13 @@ module GroupDocs
         end
         json = JSON.parse(response, symbolize_names: true)
 
-        if json[:status] != 'Ok'
-          raise GroupDocs::Errors::IncorrectResponseStatus, "Received bad response - #{json.inspect}"
+        if json[:status] == 'Failed' && json[:error_message]
+          raise GroupDocs::Errors::BadResponseError, <<-ERR
+            Bad response!
+            Status: #{json[:status]}
+            Error message: #{json[:error_message]}
+            Body: #{response}
+          ERR
         end
 
         json
