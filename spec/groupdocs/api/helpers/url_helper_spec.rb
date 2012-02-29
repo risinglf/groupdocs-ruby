@@ -58,16 +58,16 @@ describe GroupDocs::Api::Helpers::URL do
       GroupDocs.stub(api_version: nil)
       path = '/1/files/2?new_name=invoice.docx'
       mock_api_request(path)
+      subject.options.should_not_receive(:[]=).with(:path, "/v2.0#{path}")
       subject.send(:prepend_version)
-      subject.options[:path].should == path
     end
 
     it 'should prepend API version number' do
       GroupDocs.stub(api_version: '2.0')
       path = '/1/files/2?new_name=invoice.docx'
       mock_api_request(path)
+      subject.options.should_receive(:[]=).with(:path, "/v2.0#{path}").and_return("/v2.0#{path}")
       subject.send(:prepend_version)
-      subject.options[:path].should == "/v2.0#{path}"
     end
   end
 end

@@ -60,7 +60,7 @@ module GroupDocs
         #
         def prepend_version
           if GroupDocs.api_version
-            options[:path] = ("/v#{GroupDocs.api_version}#{options[:path]}")
+            options[:path] = "/v#{GroupDocs.api_version}#{options[:path]}"
           end
         end
 
