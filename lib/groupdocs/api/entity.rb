@@ -58,7 +58,7 @@ module GroupDocs
             entity if entity.is_a?(self)
           end
 
-          objects.map do |object|
+          objects.select do |object|
             if value.is_a?(Regexp)
               object if object.send(attribute) =~ value
             else
