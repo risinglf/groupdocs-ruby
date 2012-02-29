@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe GroupDocs::Storage::Folder do
 
-  #it_behaves_like 'Api entity'
+  it_behaves_like 'Api entity'
 
   context 'attributes' do
     it { should respond_to(:id)            }
@@ -119,6 +119,23 @@ describe GroupDocs::Storage::Folder do
         renamed = subject.rename!('Test2')
         renamed.should be_a(String)
         renamed.should == 'Test2'
+      end
+    end
+
+    describe '#list!' do
+      before(:each) do
+        mock_api_server(load_json('folder_list'))
+      end
+
+      subject { described_class.new(name: 'Test1') }
+
+      it 'should allow passing options' do
+        -> { subject.list!(page: 1, count: 1) }.should_not raise_error
+      end
+
+      it 'should call list! class method and pass parameters to it' do
+        described_class.should_receive(:list!).with('/Test1', { page: 1, count: 1})
+        subject.list!(page: 1, count: 1)
       end
     end
 

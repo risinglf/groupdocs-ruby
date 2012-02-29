@@ -73,6 +73,21 @@ module GroupDocs
         move!("/#{name}").gsub(/^\//, '')
       end
 
+      #
+      # Returns an array of files and folders.
+      #
+      # @param [Hash] options Hash of options
+      # @options [Integer] :page Page to start with
+      # @options [Integer] :count How many items to list
+      # @options [String] :order_by Field name to sort by
+      # @options [Boolean] :order_asc Set to true to return in ascending order
+      #
+      # @return [Array] Array of folders and files. If nothing is listed - empty array.
+      #
+      def list!(options = {})
+        self.class.list!("/#{name}", options)
+      end
+
 
       class << self
 
