@@ -8,6 +8,12 @@ Install as usually
 
     gem install groupdocs
 
+If you want to try latest version of gem (or it's not yet published)
+
+    git clone git@github.com:p0deje/groupdocs-ruby.git
+    rake gem
+    gem install pkg/groupdocs-version.gem
+
 ## Usage
 
 ### Configuration
@@ -57,7 +63,7 @@ end
 
 Note, that all "bang" methods (ending with exclamation sign) means interaction with API server.
 
-### Finding entities
+### Find entities
 
 All entities support `#find!` and `#find_all!` methods. You can pass any attribute that object responds to and its value to find with.
 
