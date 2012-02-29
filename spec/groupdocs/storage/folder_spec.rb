@@ -50,11 +50,11 @@ describe GroupDocs::Storage::Folder do
       end
 
       it 'should allow passing path' do
-        -> { described_class.list!('/test') }.should_not raise_error
+        -> { described_class.list!('/test') }.should_not raise_error(ArgumentError)
       end
 
       it 'should allow passing options' do
-        -> { described_class.list!('/', { page: 1, count: 1 }) }.should_not raise_error
+        -> { described_class.list!('/', { page: 1, count: 1 }) }.should_not raise_error(ArgumentError)
       end
 
       it 'should return array' do
@@ -143,7 +143,7 @@ describe GroupDocs::Storage::Folder do
       subject { described_class.new(name: 'Test1') }
 
       it 'should allow passing options' do
-        -> { subject.list!(page: 1, count: 1) }.should_not raise_error
+        -> { subject.list!(page: 1, count: 1) }.should_not raise_error(ArgumentError)
       end
 
       it 'should call list! class method and pass parameters to it' do
