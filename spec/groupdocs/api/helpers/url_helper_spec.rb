@@ -21,14 +21,6 @@ describe GroupDocs::Api::Helpers::URL do
   end
 
   describe '#sign_url' do
-    before(:each) do
-      GroupDocs.private_key = 'e98ea443354183fd1fb434047232c687'
-    end
-
-    after(:all) do
-      GroupDocs.private_key = nil
-    end
-
     it 'should use defined private key' do
       mock_api_request('/1/files/2?new_name=invoice.docx')
       GroupDocs.should_receive(:private_key).and_return('e98ea443354183fd1fb434047232c687')
@@ -37,6 +29,7 @@ describe GroupDocs::Api::Helpers::URL do
 
     it 'should add signature to path' do
       path = '/1/files/2?new_name=invoice.docx'
+      GroupDocs.stub(private_key: 'e98ea443354183fd1fb434047232c687')
       mock_api_request(path)
       subject.send(:sign_url)
       subject.options[:path].should == "#{path}&signature=gw%2BLupOB3krtliSSM0dvUBSznJY"
@@ -64,7 +57,7 @@ describe GroupDocs::Api::Helpers::URL do
 
   describe '#prepend_version' do
     it 'should not modify URL if API version is not specified' do
-      GroupDocs.should_receive(:api_version).and_return(nil)
+      GroupDocs.stub(api_version: nil)
       path = '/1/files/2?new_name=invoice.docx'
       mock_api_request(path)
       subject.send(:prepend_version)
@@ -72,7 +65,7 @@ describe GroupDocs::Api::Helpers::URL do
     end
 
     it 'should prepend API version number' do
-      GroupDocs.should_receive(:api_version).any_number_of_times.and_return('2.0')
+      GroupDocs.stub(api_version: '2.0')
       path = '/1/files/2?new_name=invoice.docx'
       mock_api_request(path)
       subject.send(:prepend_version)

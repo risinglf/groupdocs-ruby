@@ -12,27 +12,37 @@ SimpleCov.start
 require 'webmock/rspec'
 require 'groupdocs'
 
+RSpec.configure do |spec|
+  spec.before(:all) do
+    GroupDocs.configure do |groupdocs|
+      groupdocs.client_id = '07aaaf95f8eb33a4'
+      groupdocs.private_key = '5cb711b3a52ffc5d90ee8a0f79206f5a'
+      groupdocs.api_version = '2.0'
+    end
+  end
+end
+
 #
 # Mocks GroupDocs::Api::Request.
 #
 def mock_api_request(path)
-  subject.should_receive(:options).any_number_of_times.and_return({})
-  subject.options.should_receive(:[]).with(:path).any_number_of_times.and_return(path.dup)
+  subject.stub(options: {})
+  subject.options.stub(:[]).with(:path).and_return(path.dup)
 end
 
 #
 # Mocks RestClient::Resource.
 #
 def mock_resource(method)
-  subject.resource.should_receive(:[]).with(subject.options[:path]).any_number_of_times.and_return(subject.resource)
-  subject.resource[subject.options[:path]].should_receive(method.downcase).with(any_args).and_return(true)
+  subject.resource.stub(:[]).with(subject.options[:path]).and_return(subject.resource)
+  subject.resource[subject.options[:path]].stub(method.downcase).with(any_args).and_return(true)
 end
 
 #
 # Mocks JSON response.
 #
 def mock_response(json)
-  subject.should_receive(:response).any_number_of_times.and_return(json)
+  subject.stub(response: json)
 end
 
 #

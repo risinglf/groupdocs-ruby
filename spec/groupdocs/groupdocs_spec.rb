@@ -13,6 +13,7 @@ describe GroupDocs do
       it { should respond_to(:client_id=) }
 
       it 'should raise error if Client ID has not been set' do
+        GroupDocs.client_id = nil
         -> { subject.client_id }.should raise_error(GroupDocs::Errors::NoClientIdError)
       end
 
@@ -27,6 +28,7 @@ describe GroupDocs do
       it { should respond_to(:private_key=) }
 
       it 'should raise error if private key has not been set' do
+        GroupDocs.private_key = nil
         -> { subject.private_key }.should raise_error(GroupDocs::Errors::NoPrivateKeyError)
       end
 
