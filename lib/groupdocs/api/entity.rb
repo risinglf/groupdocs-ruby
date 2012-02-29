@@ -35,6 +35,39 @@ module GroupDocs
         end
       end
 
+
+      class << self
+        #
+        # Returns first object matching given options.
+        #
+        # @param [Symbol] attribute
+        # @param value
+        #
+        def find!(attribute, value)
+          find_all!(attribute, value).first
+        end
+
+        #
+        # Returns all objects matching given options.
+        #
+        # @param [Symbol] attribute
+        # @param value
+        #
+        def find_all!(attribute, value)
+          objects = list!.select do |entity|
+            entity if entity.is_a?(self)
+          end
+
+          objects.map do |object|
+            if value.is_a?(Regexp)
+              object if object.send(attribute) =~ value
+            else
+              object if object.send(attribute) == value
+            end
+          end
+        end
+      end
+
     end # Entity
   end # Api
 end # GroupDocs
