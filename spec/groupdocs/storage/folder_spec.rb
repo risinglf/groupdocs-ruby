@@ -152,6 +152,15 @@ describe GroupDocs::Storage::Folder do
       end
     end
 
+    describe '#create!' do
+      it 'should call create! class method and pass parameters to it' do
+        mock_api_server(load_json('folder_create'))
+        subject = described_class.new(name: 'Test1')
+        described_class.should_receive(:create!).with('/Test1')
+        subject.create!
+      end
+    end
+
     describe '#inspect' do
       it 'should return object in nice presentation' do
         options = { id: 1, name: 'Test', url: 'http://groupdocs.com/folder/Test' }

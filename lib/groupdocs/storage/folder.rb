@@ -88,6 +88,13 @@ module GroupDocs
         self.class.list!("/#{name}", options)
       end
 
+      #
+      # Creates folder on server.
+      #
+      def create!
+        self.class.create!("/#{name}")
+      end
+
 
       class << self
 
