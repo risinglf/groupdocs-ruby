@@ -56,7 +56,7 @@ module GroupDocs
 
         GroupDocs::Api::Request.new do |request|
           request[:method] = :PUT
-          request[:headers] = { 'GroupDocs-Move' => name }
+          request[:headers] = { :'GroupDocs-Move' => name }
           request[:path] = "/storage/#{GroupDocs.client_id}/folders#{path}"
         end.execute!
 
@@ -108,7 +108,7 @@ module GroupDocs
 
         GroupDocs::Api::Request.new do |request|
           request[:method] = :PUT
-          request[:headers] = { 'GroupDocs-Copy' => name }
+          request[:headers] = { :'GroupDocs-Copy' => name }
           request[:path] = "/storage/#{GroupDocs.client_id}/folders#{path}"
         end.execute!
 
