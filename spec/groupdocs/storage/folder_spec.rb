@@ -62,7 +62,7 @@ describe GroupDocs::Storage::Folder do
 
   describe '#list!' do
     before(:each) do
-      mock_api_server <<-EOF
+      mock_api_server <<-JSON
         {
           "status": "Ok",
           "result":
@@ -84,7 +84,7 @@ describe GroupDocs::Storage::Folder do
                 ]
             }
         }
-      EOF
+      JSON
     end
 
     it 'should allow passing path' do
