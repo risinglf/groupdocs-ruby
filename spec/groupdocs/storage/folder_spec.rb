@@ -135,6 +135,25 @@ describe GroupDocs::Storage::Folder do
       end
     end
 
+    describe '#copy!' do
+      it 'should send "Groupdocs-Copy" header' do
+        mock_api_server(load_json('folder_move'), 'Groupdocs-Copy' => 'Test1')
+        subject.stub(name: 'Test1')
+        subject.copy!('/Test2')
+      end
+
+      it 'should return moved to folder path' do
+        mock_api_server(load_json('folder_move'))
+        moved = subject.copy!('/Test2')
+        moved.should be_a(String)
+        moved.should == '/Test2'
+      end
+
+      it 'should raise error if path does not start with /' do
+        -> { subject.copy!('Test2') }.should raise_error(ArgumentError)
+      end
+    end
+
     describe '#list!' do
       before(:each) do
         mock_api_server(load_json('folder_list'))
@@ -158,25 +177,6 @@ describe GroupDocs::Storage::Folder do
         subject = described_class.new(name: 'Test1')
         described_class.should_receive(:create!).with('/Test1')
         subject.create!
-      end
-    end
-
-    describe '#copy!' do
-      it 'should send "Groupdocs-Copy" header' do
-        mock_api_server(load_json('folder_move'), 'Groupdocs-Copy' => 'Test1')
-        subject.stub(name: 'Test1')
-        subject.copy!('/Test2')
-      end
-
-      it 'should return moved to folder path' do
-        mock_api_server(load_json('folder_move'))
-        moved = subject.copy!('/Test2')
-        moved.should be_a(String)
-        moved.should == '/Test2'
-      end
-
-      it 'should raise error if path does not start with /' do
-        -> { subject.copy!('Test2') }.should raise_error(ArgumentError)
       end
     end
 

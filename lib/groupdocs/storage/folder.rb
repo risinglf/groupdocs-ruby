@@ -74,6 +74,26 @@ module GroupDocs
       end
 
       #
+      # Copies folder contents to a destination path.
+      #
+      # @param [String] path Path of directory to list starting from root ('/')
+      # @return [String] Copied to folder path
+      #
+      def copy!(path)
+        unless path.chars.first == '/'
+          raise ArgumentError, "Path should start with /: #{path.inspect}"
+        end
+
+        GroupDocs::Api::Request.new do |request|
+          request[:method] = :PUT
+          request[:headers] = { :'GroupDocs-Copy' => name }
+          request[:path] = "/storage/#{GroupDocs.client_id}/folders#{path}"
+        end.execute!
+
+        path
+      end
+
+      #
       # Returns an array of files and folders.
       #
       # @param [Hash] options Hash of options
@@ -93,26 +113,6 @@ module GroupDocs
       #
       def create!
         self.class.create!("/#{name}")
-      end
-
-      #
-      # Copies folder contents to a destination path.
-      #
-      # @param [String] path Path of directory to list starting from root ('/')
-      # @return [String] Copied to folder path
-      #
-      def copy!(path)
-        unless path.chars.first == '/'
-          raise ArgumentError, "Path should start with /: #{path.inspect}"
-        end
-
-        GroupDocs::Api::Request.new do |request|
-          request[:method] = :PUT
-          request[:headers] = { :'GroupDocs-Copy' => name }
-          request[:path] = "/storage/#{GroupDocs.client_id}/folders#{path}"
-        end.execute!
-
-        path
       end
 
 
