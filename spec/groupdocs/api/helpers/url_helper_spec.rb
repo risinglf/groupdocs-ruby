@@ -5,8 +5,6 @@ describe GroupDocs::Api::Helpers::URL do
   subject { Object.new.extend(described_class) }
 
   describe '#add_params' do
-    it { should respond_to(:add_params) }
-
     it 'should add parameters to query' do
       mock_api_request('/1/files/2?new_name=invoice.docx')
       subject.options[:path].should_receive(:<<).with("&param=value")

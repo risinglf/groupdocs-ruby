@@ -16,10 +16,11 @@ describe GroupDocs::Api::Request do
     end
   end
 
-  describe 'attributes' do
+  context 'attributes' do
     it { should respond_to(:resource) }
     it { should respond_to(:response) }
     it { should respond_to(:options)  }
+    it { should respond_to(:options=) }
   end
 
   describe '#initialize' do
@@ -50,8 +51,6 @@ describe GroupDocs::Api::Request do
   end
 
   describe '#execute!' do
-    it { should respond_to(:execute!) }
-
     it 'should sign url' do
       mock_resource(:GET)
       mock_response('!{"status":"Ok"}')
