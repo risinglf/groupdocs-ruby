@@ -186,6 +186,11 @@ describe GroupDocs::Storage::Folder do
         subject.should_receive(:name).and_return('Test1')
         subject.delete!
       end
+
+      it 'should return nil' do
+        mock_api_server(load_json('folder_delete'))
+        subject.delete!.should be_nil
+      end
     end
 
     describe '#inspect' do

@@ -123,6 +123,8 @@ module GroupDocs
           request[:method] = :DELETE
           request[:path] = "/storage/#{GroupDocs.client_id}/folders/#{name}"
         end.execute!
+
+        nil
       end
 
 
