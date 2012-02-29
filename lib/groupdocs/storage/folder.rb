@@ -28,6 +28,8 @@ module GroupDocs
       #
       # Converts timestamp which is return by API server to Time object.
       #
+      # @param [Integer] timestamp Unix timestamp
+      #
       def created_on=(timestamp)
         @created_on = Time.at(timestamp)
       end
@@ -35,9 +37,42 @@ module GroupDocs
       #
       # Converts timestamp which is return by API server to Time object.
       #
+      # @param [Integer] timestamp Unix timestamp
+      #
       def modified_on=(timestamp)
         @modified_on = Time.at(timestamp)
       end
+
+      #
+      # Moves folder contents to given path.
+      #
+      # @param [String] path Destination to move contents to
+      # @return [String] Moved to folder path
+      #
+      def move!(path)
+        unless path.chars.first == '/'
+          raise ArgumentError, "Path should start with /: #{path.inspect}"
+        end
+
+        GroupDocs::Api::Request.new do |request|
+          request[:method] = :PUT
+          request[:headers] = { 'GroupDocs-Move' => name }
+          request[:path] = "/storage/#{GroupDocs.client_id}/folders#{path}"
+        end.execute!
+
+        path
+      end
+
+      #
+      # Renames folder to new one.
+      #
+      # @param [String] name New name
+      # @return [String] New name
+      #
+      def rename!(name)
+        move!("/#{name}").gsub(/^\//, '')
+      end
+
 
       class << self
 

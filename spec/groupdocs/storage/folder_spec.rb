@@ -2,15 +2,9 @@ require 'spec_helper'
 
 describe GroupDocs::Storage::Folder do
 
-  before(:all) do
-    GroupDocs.client_id = '07aaaf95f8eb33a4'
-    GroupDocs.private_key = '5cb711b3a52ffc5d90ee8a0f79206f5a'
-    GroupDocs.api_version = '2.0'
-  end
-
   it_behaves_like 'Api entity'
 
-  describe 'attributes' do
+  context 'attributes' do
     it { should respond_to(:id)            }
     it { should respond_to(:id=)           }
     it { should respond_to(:size)          }
@@ -49,95 +43,87 @@ describe GroupDocs::Storage::Folder do
     end
   end
 
-  describe '#inspect' do
-    let!(:options) { { id: 1, name: 'Test', url: 'http://groupdocs.com/folder/Test' } }
+  context 'class methods' do
+    describe '#list!' do
+       before(:each) do
+         mock_api_server(load_json('folder_list'))
+       end
 
-    subject { described_class.new(options) }
+       it 'should allow passing path' do
+         -> { described_class.list!('/test') }.should_not raise_error
+       end
 
-    it 'should return object in nice presentation' do
-      subject.inspect.should ==
-        %(<##{described_class} @id=#{options[:id]} @name="#{options[:name]}" @url="#{options[:url]}">)
-    end
+       it 'should allow passing options' do
+         -> { described_class.list!('/', { page: 1, count: 1 }) }.should_not raise_error
+       end
+
+       it 'should return array' do
+         described_class.list!.should be_an(Array)
+       end
+
+       it 'should determine folders in response' do
+         described_class.list!.detect do |entity|
+           entity.id == 1
+         end.should be_a(GroupDocs::Storage::Folder)
+       end
+
+       it 'should determine files in response' do
+         described_class.list!.detect do |entity|
+           entity.id == 2
+         end.should be_a(GroupDocs::Storage::File)
+       end
+     end
   end
 
-  describe '#list!' do
-    before(:each) do
-      mock_api_server(json)
+  context 'instance methods' do
+    describe '#create!' do
+      it 'should return folder' do
+        mock_api_server(load_json('folder_create'))
+        folder = described_class.create!('/test2')
+        folder.should be_a(GroupDocs::Storage::Folder)
+      end
     end
 
-    let(:json) do
-      <<-JSON
-        {
-          "status": "Ok",
-          "result":
-            {
-              "entities":
-                [
-                  {
-                    "id": 1,
-                    "dir": true,
-                    "created_on": 1330450135,
-                    "modified_on": 1330450135
-                  },
-                  {
-                    "id": 2,
-                    "dir": false,
-                    "created_on": 1330450135,
-                    "modified_on": 1330450135
-                  }
-                ]
-            }
-        }
-      JSON
+    describe '#move!' do
+      it 'should send "Groupdocs-Move" header' do
+        mock_api_server(load_json('folder_move'), 'Groupdocs-Move' => 'Test1')
+        subject.stub(name: 'Test1')
+        subject.move!('/Test2')
+      end
+
+      it 'should return moved to folder path' do
+        mock_api_server(load_json('folder_move'))
+        moved = subject.move!('/Test2')
+        moved.should be_a(String)
+        moved.should == '/Test2'
+      end
+
+      it 'should raise error if path does not start with /' do
+        -> { subject.move!('Test2') }.should raise_error(ArgumentError)
+      end
     end
 
-    it 'should allow passing path' do
-      -> { described_class.list!('/test') }.should_not raise_error
+    describe '#rename!' do
+      it 'use #move! to rename directory' do
+        subject.should_receive(:move!).with('/Test2').and_return('/Test2')
+        subject.rename!('Test2')
+      end
+
+      it 'should strip leading / symbol from new name' do
+        subject.stub(move!: '/Test2')
+        renamed = subject.rename!('Test2')
+        renamed.should be_a(String)
+        renamed.should == 'Test2'
+      end
     end
 
-    it 'should allow passing options' do
-      -> { described_class.list!('/', { page: 1, count: 1 }) }.should_not raise_error
-    end
-
-    it 'should return array' do
-      described_class.list!.should be_an(Array)
-    end
-
-    it 'should determine folders in response' do
-      described_class.list!.detect do |entity|
-        entity.id == 1
-      end.should be_a(GroupDocs::Storage::Folder)
-    end
-
-    it 'should determine files in response' do
-      described_class.list!.detect do |entity|
-        entity.id == 2
-      end.should be_a(GroupDocs::Storage::File)
-    end
-  end
-
-  describe '#create!' do
-    before(:each) do
-      mock_api_server(json)
-    end
-
-    let(:json) do
-      <<-JSON
-        {
-          "status": "Ok",
-          "result":
-            {
-              "adj_name": "testfolder",
-              "type": -1,
-              "id": 123
-            }
-        }
-      JSON
-    end
-
-    it 'should return folder' do
-      folder = described_class.create!('/test2')
-      folder.should be_a(GroupDocs::Storage::Folder)
+    describe '#inspect' do
+      it 'should return object in nice presentation' do
+        options = { id: 1, name: 'Test', url: 'http://groupdocs.com/folder/Test' }
+        subject = described_class.new(options)
+        subject.inspect.should ==
+          %(<##{described_class} @id=#{options[:id]} @name="#{options[:name]}" @url="#{options[:url]}">)
+      end
     end
   end
 end
