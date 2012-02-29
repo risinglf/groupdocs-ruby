@@ -117,7 +117,6 @@ module GroupDocs
 
 
       class << self
-
         #
         # Returns a list of all directories and files in the path.
         #
@@ -176,7 +175,7 @@ module GroupDocs
         # Creates folder on server.
         #
         # @param [String] path Path of folder to create starting from root ('/')
-        # @return [GroupDocs::Api::Folder] Created folder
+        # @return [GroupDocs::Storage::Folder] Created folder
         #
         def create!(path)
           json = GroupDocs::Api::Request.new do |request|
