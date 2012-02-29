@@ -1,0 +1,21 @@
+{
+  "status": "Ok",
+  "result":
+    {
+      "entities":
+        [
+          {
+            "id": 1,
+            "dir": true,
+            "created_on": 1330450135,
+            "modified_on": 1330450135
+          },
+          {
+            "id": 2,
+            "dir": false,
+            "created_on": 1330450135,
+            "modified_on": 1330450135
+          }
+        ]
+    }
+}
