@@ -8,7 +8,7 @@ describe GroupDocs::Storage::File do
     GroupDocs.api_version = '2.0'
   end
 
-  #it_behaves_like 'Api entity'
+  it_behaves_like 'Api entity'
 
   describe 'attributes' do
     it { should respond_to(:id)           }
