@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe GroupDocs::Storage::Folder do
 
-  #it_behaves_like 'Api entity'
+  it_behaves_like 'Api entity'
 
   context 'attributes' do
     it { should respond_to(:id)            }
