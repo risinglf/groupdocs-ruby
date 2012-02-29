@@ -148,28 +148,16 @@ module GroupDocs
         #
         # Creates folder on server.
         #
-        # @param [String] path Path of directory to create starting from root ('/')
+        # @param [String] path Path of folder to create starting from root ('/')
+        # @return [GroupDocs::Api::Folder] Created folder
         #
         def create!(path)
           json = GroupDocs::Api::Request.new do |request|
             request[:method] = :POST
-            request[:path] = "/storage/#{GroupDocs.client_id}/folders#{path}"
+            request[:path] = "/storage/#{GroupDocs.client_id}/paths#{path}"
           end.execute!
 
-          entity = json[:result]
-          GroupDocs::Storage::Folder.new do |folder|
-            folder.size = entity[:size]
-            folder.folder_count = entity[:folder_count]
-            folder.file_count = entity[:file_count]
-            folder.created_on = entity[:created_on]
-            folder.modified_on = entity[:modified_on]
-            folder.url = entity[:url]
-            folder.name = entity[:adj_name]
-            folder.version = entity[:version]
-            folder.type = entity[:type]
-            folder.access = entity[:access]
-            folder.id = entity[:id]
-          end
+          list!.detect { |folder| folder.id == json[:result][:id] }
         end
       end # << self
 

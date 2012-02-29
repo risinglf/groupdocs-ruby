@@ -2,10 +2,7 @@
   "status": "Ok",
   "result":
     {
-      "adj_name": "testfolder",
-      "type": -1,
-      "id": 123,
-      "created_on": 1330450135,
-      "modified_on": 1330450135
+      "id": 1,
+      "path": "Test"
     }
 }

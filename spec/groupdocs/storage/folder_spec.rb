@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe GroupDocs::Storage::Folder do
 
-  it_behaves_like 'Api entity'
+  #it_behaves_like 'Api entity'
 
   context 'attributes' do
     it { should respond_to(:id)            }
@@ -45,50 +45,63 @@ describe GroupDocs::Storage::Folder do
 
   context 'class methods' do
     describe '#list!' do
-       before(:each) do
-         mock_api_server(load_json('folder_list'))
-       end
+      before(:each) do
+        mock_api_server(load_json('folder_list'))
+      end
 
-       it 'should allow passing path' do
-         -> { described_class.list!('/test') }.should_not raise_error
-       end
+      it 'should allow passing path' do
+        -> { described_class.list!('/test') }.should_not raise_error
+      end
 
-       it 'should allow passing options' do
-         -> { described_class.list!('/', { page: 1, count: 1 }) }.should_not raise_error
-       end
+      it 'should allow passing options' do
+        -> { described_class.list!('/', { page: 1, count: 1 }) }.should_not raise_error
+      end
 
-       it 'should return array' do
-         described_class.list!.should be_an(Array)
-       end
+      it 'should return array' do
+        described_class.list!.should be_an(Array)
+      end
 
-       it 'should return empty array if nothing is listed in directory' do
-         mock_api_server('{"result": {"entities": []}, "status": "Ok"}')
-         described_class.list!.should be_empty
-       end
+      it 'should return empty array if nothing is listed in directory' do
+        mock_api_server('{"result": {"entities": []}, "status": "Ok"}')
+        described_class.list!.should be_empty
+      end
 
-       it 'should determine folders in response' do
-         described_class.list!.detect do |entity|
-           entity.id == 1
-         end.should be_a(GroupDocs::Storage::Folder)
-       end
+      it 'should determine folders in response' do
+        described_class.list!.detect do |entity|
+          entity.id == 1
+        end.should be_a(GroupDocs::Storage::Folder)
+      end
 
-       it 'should determine files in response' do
-         described_class.list!.detect do |entity|
-           entity.id == 2
-         end.should be_a(GroupDocs::Storage::File)
-       end
-     end
-  end
-
-  context 'instance methods' do
-    describe '#create!' do
-      it 'should return folder' do
-        mock_api_server(load_json('folder_create'))
-        folder = described_class.create!('/test2')
-        folder.should be_a(GroupDocs::Storage::Folder)
+      it 'should determine files in response' do
+        described_class.list!.detect do |entity|
+          entity.id == 2
+        end.should be_a(GroupDocs::Storage::File)
       end
     end
 
+    describe '#create!' do
+      before(:each) do
+        mock_api_server(load_json('folder_create'))
+      end
+
+      it 'should allow passing path' do
+        -> { described_class.create!('/Test') }.should_not raise_error(ArgumentError)
+      end
+
+      it 'should call list! class method to find new folder' do
+        described_class.should_receive(:list!).with(no_args).and_return([described_class.new(id: 1)])
+        described_class.create!('/Test')
+      end
+
+      it 'should return folder' do
+        described_class.stub(list!: [described_class.new(id: 1)])
+        folder = described_class.create!('/Test')
+        folder.should be_a(GroupDocs::Storage::Folder)
+      end
+    end
+  end
+
+  context 'instance methods' do
     describe '#move!' do
       it 'should send "Groupdocs-Move" header' do
         mock_api_server(load_json('folder_move'), 'Groupdocs-Move' => 'Test1')
