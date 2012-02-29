@@ -1,17 +1,7 @@
 require 'spec_helper'
 
-describe GroupDocs::Errors::NoClientIdError do
-  it { should be_a(StandardError) }
-end
-
-describe GroupDocs::Errors::NoPrivateKeyError do
-  it { should be_a(StandardError) }
-end
-
-describe GroupDocs::Errors::UnsupportedMethodError do
-  it { should be_a(StandardError) }
-end
-
-describe GroupDocs::Errors::BadResponseError do
-  it { should be_a(StandardError) }
+%w(NoClientIdError NoPrivateKeyError UnsupportedMethodError BadResponseError).each do |error|
+  describe GroupDocs::Errors.const_get(error) do
+    it { should be_a(StandardError) }
+  end
 end
