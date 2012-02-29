@@ -24,12 +24,14 @@ describe GroupDocs::Api::Request do
 
   describe '#initialize' do
     it 'should allow passing options' do
+      GroupDocs.stub(api_version: nil)
       options = { method: :GET, path: '/jobs' }
       request = described_class.new(options)
       request.options.should == options
     end
 
     it 'should allow passing block to configure options' do
+      GroupDocs.stub(api_version: nil)
       described_class.new do |request|
         request[:method] = :GET
         request[:path] = '/jobs'
@@ -37,8 +39,13 @@ describe GroupDocs::Api::Request do
     end
 
     it 'should create resource as API server' do
-      GroupDocs.should_receive(:api_server).and_return('https://dev-api.groupdocs.com')
+      GroupDocs.stub(api_server: 'https://dev-api.groupdocs.com')
       subject.resource.should be_a(RestClient::Resource)
+    end
+
+    it 'should prepend path with version' do
+      GroupDocs.stub(api_version: '2.0')
+      subject.options[:path].should == '/v2.0/jobs'
     end
   end
 
