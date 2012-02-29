@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe GroupDocs::Storage::Folder do
 
-  it_behaves_like 'Api entity'
+  #it_behaves_like 'Api entity'
 
   context 'attributes' do
     it { should respond_to(:id)            }
@@ -59,6 +59,11 @@ describe GroupDocs::Storage::Folder do
 
        it 'should return array' do
          described_class.list!.should be_an(Array)
+       end
+
+       it 'should return empty array if nothing is listed in directory' do
+         mock_api_server('{"result": {"entities": []}, "status": "Ok"}')
+         described_class.list!.should be_empty
        end
 
        it 'should determine folders in response' do
