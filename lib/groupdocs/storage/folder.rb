@@ -115,6 +115,16 @@ module GroupDocs
         self.class.create!("/#{name}")
       end
 
+      #
+      # Deletes folder from server.
+      #
+      def delete!
+        GroupDocs::Api::Request.new do |request|
+          request[:method] = :DELETE
+          request[:path] = "/storage/#{GroupDocs.client_id}/folders/#{name}"
+        end.execute!
+      end
+
 
       class << self
         #

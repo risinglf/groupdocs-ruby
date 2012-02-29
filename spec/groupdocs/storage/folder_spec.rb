@@ -180,6 +180,14 @@ describe GroupDocs::Storage::Folder do
       end
     end
 
+    describe '#delete!' do
+      it 'should determine path by name' do
+        mock_api_server(load_json('folder_delete'))
+        subject.should_receive(:name).and_return('Test1')
+        subject.delete!
+      end
+    end
+
     describe '#inspect' do
       it 'should return object in nice presentation' do
         options = { id: 1, name: 'Test', url: 'http://groupdocs.com/folder/Test' }
