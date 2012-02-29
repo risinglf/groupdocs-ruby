@@ -38,6 +38,15 @@ end
 #
 # Mocks API server.
 #
-def mock_api_server(json)
-  stub_request(:any, /#{GroupDocs.api_server}.*/).to_return(body: json)
+def mock_api_server(json, headers = {})
+  request = stub_request(:any, /#{GroupDocs.api_server}.*/)
+  request = request.with(headers: headers) unless headers.empty?
+  request.to_return(body: json)
+end
+
+#
+# Loads JSON file.
+#
+def load_json(name)
+  File.read("spec/support/json/#{name}.json")
 end
