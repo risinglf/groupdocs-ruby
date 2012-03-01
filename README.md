@@ -86,8 +86,8 @@ GroupDocs::Storage::Folder.find_all!(:name, /^Folder/)
 * Create new folder on server.
 
 ```ruby
-GroupDocs::Storage::Folder.create!(name: 'Folder')
-#=> <#GroupDocs::Storage::Folder @id=1 @name="Folder" @url="http://groupdocs.com">
+GroupDocs::Storage::Folder.create!('/folder')
+#=> <#GroupDocs::Storage::Folder @id=1 @name="folder" @url="http://groupdocs.com">
 ```
 
 or

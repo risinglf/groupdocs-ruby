@@ -88,6 +88,10 @@ describe GroupDocs::Storage::Folder do
         -> { described_class.create!('/Test') }.should_not raise_error(ArgumentError)
       end
 
+      it 'should raise error if path does not start with /' do
+        -> { described_class.create!('Test') }.should raise_error(ArgumentError)
+      end
+
       it 'should call list! class method to find new folder' do
         described_class.should_receive(:list!).with(no_args).and_return([described_class.new(id: 1)])
         described_class.create!('/Test')

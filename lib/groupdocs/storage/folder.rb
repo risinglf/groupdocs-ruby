@@ -190,6 +190,10 @@ module GroupDocs
         # @return [GroupDocs::Storage::Folder] Created folder
         #
         def create!(path)
+          unless path.chars.first == '/'
+            raise ArgumentError, "Path should start with /: #{path.inspect}"
+          end
+
           json = GroupDocs::Api::Request.new do |request|
             request[:method] = :POST
             request[:path] = "/storage/#{GroupDocs.client_id}/paths#{path}"
