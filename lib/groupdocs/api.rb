@@ -57,10 +57,8 @@ module GroupDocs
       end
 
       def parse_response
-        # HACK we get char in the beginning of JSON which leads to syntax error
-        unless response.chars.first == '{'
-          response.sub!(/^.{1}/, '')
-        end
+        # HACK we get weird chars in the beginning of JSON which leads to syntax errors
+        response.sub!(/^[^{]*/, '')
         json = JSON.parse(response, symbolize_names: true)
 
         if json[:status] == 'Failed' && json[:error_message]
