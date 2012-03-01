@@ -4,15 +4,20 @@ GroupDocs gem implements API wrapper for http://groupdocs.com
 
 ## Installation
 
+GroupDocs requires at least Ruby 1.9.2. Ruby 1.8.7 is not supported!
+
 Install as usually
 
     gem install groupdocs
 
 If you want to try latest version of gem (or it's not yet published)
 
+    gem install bundler # unless it's already installed
     git clone git@github.com:p0deje/groupdocs-ruby.git
-    rake gem
-    gem install pkg/groupdocs-version.gem
+    cd groupdocs-ruby/
+    git checkout master
+    bundle install --path vendor/bundle
+    bundle exec rake install
 
 ## Usage
 
