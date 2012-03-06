@@ -22,27 +22,12 @@ RSpec.configure do |spec|
   end
 end
 
-#
-# Mocks GroupDocs::Api::Request.
-#
-def mock_api_request(path)
-  subject.stub(options: {})
-  subject.options.stub(:[]).with(:path).and_return(path.dup)
-end
-
-#
-# Mocks RestClient::Resource.
-#
-def mock_resource(method)
-  subject.resource.stub(:[]).with(subject.options[:path]).and_return(subject.resource)
-  subject.resource[subject.options[:path]].stub(method.downcase).with(any_args).and_return(true)
-end
 
 #
 # Mocks JSON response.
 #
 def mock_response(json)
-  subject.stub(response: json)
+  subject.response = json
 end
 
 #
