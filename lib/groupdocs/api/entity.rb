@@ -50,15 +50,13 @@ module GroupDocs
         #
         # Returns all objects matching given options.
         #
+        # Each entity has to implement #recursively_find for this to work.
+        #
         # @param [Symbol] attribute
         # @param value
         #
         def find_all!(attribute, value)
-          objects = list!.select do |entity|
-            entity if entity.is_a?(self)
-          end
-
-          objects.select do |object|
+          recursively_find.select do |object|
             if value.is_a?(Regexp)
               object if object.send(attribute) =~ value
             else

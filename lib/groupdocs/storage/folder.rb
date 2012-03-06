@@ -50,13 +50,10 @@ module GroupDocs
       # @return [String] Moved to folder path
       #
       def move!(path)
-        unless path.chars.first == '/'
-          raise ArgumentError, "Path should start with /: #{path.inspect}"
-        end
-
+        path = prepare_path(path)
         GroupDocs::Api::Request.new do |request|
           request[:method] = :PUT
-          request[:headers] = { :'GroupDocs-Move' => name }
+          request[:headers] = { :'Groupdocs-Move' => name }
           request[:path] = "/storage/#{GroupDocs.client_id}/folders#{path}"
         end.execute!
 
@@ -70,7 +67,7 @@ module GroupDocs
       # @return [String] New name
       #
       def rename!(name)
-        move!("/#{name}").gsub(/^\//, '')
+        move!("/#{name}").sub(/^\//, '')
       end
 
       #
@@ -80,13 +77,10 @@ module GroupDocs
       # @return [String] Copied to folder path
       #
       def copy!(path)
-        unless path.chars.first == '/'
-          raise ArgumentError, "Path should start with /: #{path.inspect}"
-        end
-
+        path = prepare_path(path)
         GroupDocs::Api::Request.new do |request|
           request[:method] = :PUT
-          request[:headers] = { :'GroupDocs-Copy' => name }
+          request[:headers] = { :'Groupdocs-Copy' => name }
           request[:path] = "/storage/#{GroupDocs.client_id}/folders#{path}"
         end.execute!
 
@@ -123,8 +117,6 @@ module GroupDocs
           request[:method] = :DELETE
           request[:path] = "/storage/#{GroupDocs.client_id}/folders/#{name}"
         end.execute!
-
-        nil
       end
 
 
@@ -142,6 +134,7 @@ module GroupDocs
         # @return [Array] Array of folders and files. If nothing is listed - empty array.
         #
         def list!(path = '/', options = {})
+          path = prepare_path(path)
           api = GroupDocs::Api::Request.new do |request|
             request[:method] = :GET
             request[:path] = "/storage/#{GroupDocs.client_id}/folders#{path}"
@@ -190,10 +183,7 @@ module GroupDocs
         # @return [GroupDocs::Storage::Folder] Created folder
         #
         def create!(path)
-          unless path.chars.first == '/'
-            raise ArgumentError, "Path should start with /: #{path.inspect}"
-          end
-
+          path = prepare_path(path)
           json = GroupDocs::Api::Request.new do |request|
             request[:method] = :POST
             request[:path] = "/storage/#{GroupDocs.client_id}/paths#{path}"
@@ -205,6 +195,18 @@ module GroupDocs
 
       def inspect
         %(<##{self.class} @id=#{id} @name="#{name}" @url="#{url}">)
+      end
+
+      private
+
+      def recursively_find_all
+        raise RuntimeError, 'Not yet implemented!'
+      end
+
+      def prepare_path(path)
+        unless path.chars.first == '/'
+          raise ArgumentError, "Path should start with /: #{path.inspect}"
+        end
       end
 
     end # Folder
