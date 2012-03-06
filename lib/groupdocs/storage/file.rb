@@ -49,6 +49,7 @@ module GroupDocs
       # Downloads file to given path.
       #
       # @param [String] path Directory to download file to
+      # @return [String] Path to downloaded file
       #
       def download!(path)
         response = GroupDocs::Api::Request.new do |request|
@@ -56,9 +57,12 @@ module GroupDocs
           request[:path] = "/storage/#{GroupDocs.client_id}/files/#{id}"
         end.execute!
 
-        Object::File.open("#{path}/#{name}", 'w') do |file|
+        filepath = "#{path}/#{name}"
+        Object::File.open(filepath, 'w') do |file|
           file.write(response)
         end
+
+        filepath
       end
 
       #
@@ -66,9 +70,11 @@ module GroupDocs
       #
       # @param [String] path Full path to directory to move file to starting with "/".
       #                      You can also add filename and then moved file will use it.
+      # @return [String] Moved to file path
       #
       def move!(path)
-        path = prepare_path(path)
+        path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{path.inspect}"
+        path << Object::File.basename(name) unless path =~ /\.(\w){3,4}$/
         GroupDocs::Api::Request.new do |request|
           request[:method] = :PUT
           request[:headers] = { :'Groupdocs-Move' => id }
@@ -79,34 +85,50 @@ module GroupDocs
       end
 
       #
+      # Renames file to new one.
+      #
+      # @param [String] name New file name
+      # @return [String] New name
+      #
+      def rename!(name)
+        move!("/#{name}").sub(/^\//, '')
+      end
+
+      #
       # Moves file to given path.
       #
       # @param [String] path Full path to directory to copy file to starting with "/".
       #                      You can also add filename and then copied file will use it.
+      # @return [GroupDocs::Storage::File] Copied to file
       #
       def copy!(path)
-        path = prepare_path(path)
-        GroupDocs::Api::Request.new do |request|
+        path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{path.inspect}"
+        path << Object::File.basename(name) unless path =~ /\.(\w){3,4}$/
+        json = GroupDocs::Api::Request.new do |request|
           request[:method] = :PUT
           request[:headers] = { :'Groupdocs-Copy' => id }
           request[:path] = "/storage/#{GroupDocs.client_id}/files#{path}"
         end.execute!
 
-        path
+        GroupDocs::Storage::File.new(json[:result][:dst_file])
       end
 
       #
       # Compresses file on server to given archive type.
       #
       # @param [Symbol] type Archive type: :zip, :rar.
+      # @return [GroupDocs::Storage::File] Archive file
       #
       def compress!(type = :zip)
         json = GroupDocs::Api::Request.new do |request|
           request[:method] = :POST
-          request[:path] = "/storage/#{GroupDocs.client_id}/files/#{id}/archive/#{type}"
+          # TODO type.capitalize should be fixed on server
+          request[:path] = "/storage/#{GroupDocs.client_id}/files/#{id}/archive/#{type.capitalize}"
         end.execute!
 
-        p json
+        # HACK add filename for further download
+        json[:result][:name] = "#{name}.#{type}"
+        GroupDocs::Storage::File.new(json[:result])
       end
 
       #
@@ -127,33 +149,33 @@ module GroupDocs
         # @example
         #   GroupDocs::Storage::File.upload!('resume.pdf', '/folder/cv.pdf', description: 'My resume')
         #
-        # @param [String] file Path to file to be uploaded
-        # @param [String] path Full path to directory to upload file to starting with "/".
+        # @param [String] filepath Path to file to be uploaded
+        # @param [String] upload_path Full path to directory to upload file to starting with "/".
         #                      You can also add filename and then uploaded file will use it.
         # @param [Hash] options Hash of options
         # @options [String] :description Optional description for file
         #
         # @return [GroupDocs::Storage::File]
         #
-        def upload!(file, path = '/', options = {})
-          path = prepare_path(path)
+        def upload!(filepath, upload_path = '/', options = {})
+          upload_path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{upload_path.inspect}"
+          upload_path << Object::File.basename(filepath) unless upload_path =~ /\.(\w){3,4}$/
           api = GroupDocs::Api::Request.new do |request|
             request[:method] = :POST
-            request[:path] = "/storage/#{GroupDocs.client_id}/folders#{path}"
-            request[:request_body] = Object::File.new(file, 'rb')
-            request[:headers] = { connection: 'keep-alive', keep_alive: 300 }
+            request[:path] = "/storage/#{GroupDocs.client_id}/folders#{upload_path}"
+            request[:request_body] = Object::File.new(filepath, 'rb')
           end
           api.add_params(options)
           json = api.execute!
 
           GroupDocs::Storage::File.new do |file|
-            file.id = json[:result][:id]
-            file.guid = json[:result][:guid]
-            file.name = json[:result][:adj_name]
-            file.url = json[:result][:url]
-            file.type = json[:result][:type]
-            file.size = json [:result][:size]
-            file.version = json [:result][:version]
+            file.id        = json[:result][:id]
+            file.guid      = json[:result][:guid]
+            file.name      = json[:result][:adj_name]
+            file.url       = json[:result][:url]
+            file.type      = json[:result][:type]
+            file.size      = json[:result][:size]
+            file.version   = json[:result][:version]
             file.thumbnail = json[:result][:thumbnail]
           end
         end
@@ -167,13 +189,6 @@ module GroupDocs
 
       def recursively_find_all
         raise RuntimeError, 'Not yet implemented!'
-      end
-
-      def prepare_path(path)
-        unless path.chars.first == '/'
-          raise ArgumentError, "Path should start with /: #{path.inspect}"
-        end
-        path << Object::File.basename(file) unless path =~ /\.(\w){3,4}$/
       end
 
     end # File

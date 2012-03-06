@@ -1,0 +1,8 @@
+{
+  "status": "Ok",
+  "result":
+    {
+      "from_path": "resume.pdf",
+      "to_path": "resume2.pdf"
+    }
+}

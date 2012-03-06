@@ -50,7 +50,7 @@ module GroupDocs
       # @return [String] Moved to folder path
       #
       def move!(path)
-        path = prepare_path(path)
+        path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{path.inspect}"
         GroupDocs::Api::Request.new do |request|
           request[:method] = :PUT
           request[:headers] = { :'Groupdocs-Move' => name }
@@ -77,7 +77,7 @@ module GroupDocs
       # @return [String] Copied to folder path
       #
       def copy!(path)
-        path = prepare_path(path)
+        path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{path.inspect}"
         GroupDocs::Api::Request.new do |request|
           request[:method] = :PUT
           request[:headers] = { :'Groupdocs-Copy' => name }
@@ -134,7 +134,7 @@ module GroupDocs
         # @return [Array] Array of folders and files. If nothing is listed - empty array.
         #
         def list!(path = '/', options = {})
-          path = prepare_path(path)
+          path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{path.inspect}"
           api = GroupDocs::Api::Request.new do |request|
             request[:method] = :GET
             request[:path] = "/storage/#{GroupDocs.client_id}/folders#{path}"
@@ -145,32 +145,32 @@ module GroupDocs
           json[:result][:entities].map do |entity|
             if entity[:dir]
               GroupDocs::Storage::Folder.new do |folder|
-                folder.size = entity[:size]
+                folder.size         = entity[:size]
                 folder.folder_count = entity[:folder_count]
-                folder.file_count = entity[:file_count]
-                folder.created_on = entity[:created_on]
-                folder.modified_on = entity[:modified_on]
-                folder.url = entity[:url]
-                folder.name = entity[:name]
-                folder.version = entity[:version]
-                folder.type = entity[:type]
-                folder.access = entity[:access]
-                folder.id = entity[:id]
+                folder.file_count   = entity[:file_count]
+                folder.created_on   = entity[:created_on]
+                folder.modified_on  = entity[:modified_on]
+                folder.url          = entity[:url]
+                folder.name         = entity[:name]
+                folder.version      = entity[:version]
+                folder.type         = entity[:type]
+                folder.access       = entity[:access]
+                folder.id           = entity[:id]
               end
             else
               GroupDocs::Storage::File.new do |file|
-                file.size = entity[:size]
-                file.known = entity[:known]
-                file.thumbnail = entity[:thumbnail]
-                file.created_on = entity[:created_on]
+                file.size        = entity[:size]
+                file.known       = entity[:known]
+                file.thumbnail   = entity[:thumbnail]
+                file.created_on  = entity[:created_on]
                 file.modified_on = entity[:modified_on]
-                file.url = entity[:url]
-                file.name = entity[:name]
-                file.version = entity[:version]
-                file.type = entity[:type]
-                file.access = entity[:access]
-                file.id = entity[:id]
-                file.guid = entity[:guid]
+                file.url         = entity[:url]
+                file.name        = entity[:name]
+                file.version     = entity[:version]
+                file.type        = entity[:type]
+                file.access      = entity[:access]
+                file.id          = entity[:id]
+                file.guid        = entity[:guid]
               end
             end
           end
@@ -183,7 +183,7 @@ module GroupDocs
         # @return [GroupDocs::Storage::Folder] Created folder
         #
         def create!(path)
-          path = prepare_path(path)
+          path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{path.inspect}"
           json = GroupDocs::Api::Request.new do |request|
             request[:method] = :POST
             request[:path] = "/storage/#{GroupDocs.client_id}/paths#{path}"
@@ -201,12 +201,6 @@ module GroupDocs
 
       def recursively_find_all
         raise RuntimeError, 'Not yet implemented!'
-      end
-
-      def prepare_path(path)
-        unless path.chars.first == '/'
-          raise ArgumentError, "Path should start with /: #{path.inspect}"
-        end
       end
 
     end # Folder

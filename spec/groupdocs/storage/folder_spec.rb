@@ -108,7 +108,7 @@ describe GroupDocs::Storage::Folder do
   context 'instance methods' do
     describe '#move!' do
       it 'should send "Groupdocs-Move" header' do
-        mock_api_server(load_json('folder_move'), 'Groupdocs-Move' => 'Test1')
+        mock_api_server(load_json('folder_move'), :'Groupdocs-Move' => 'Test1')
         subject.stub(name: 'Test1')
         subject.move!('/Test2')
       end
@@ -141,7 +141,7 @@ describe GroupDocs::Storage::Folder do
 
     describe '#copy!' do
       it 'should send "Groupdocs-Copy" header' do
-        mock_api_server(load_json('folder_move'), 'Groupdocs-Copy' => 'Test1')
+        mock_api_server(load_json('folder_move'), :'Groupdocs-Copy' => 'Test1')
         subject.stub(name: 'Test1')
         subject.copy!('/Test2')
       end
@@ -189,11 +189,6 @@ describe GroupDocs::Storage::Folder do
         mock_api_server(load_json('folder_delete'))
         subject.should_receive(:name).and_return('Test1')
         subject.delete!
-      end
-
-      it 'should return nil' do
-        mock_api_server(load_json('folder_delete'))
-        subject.delete!.should be_nil
       end
     end
 
