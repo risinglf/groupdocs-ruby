@@ -18,7 +18,7 @@ module GroupDocs
           # prepare method
           options[:method] = options[:method].downcase
           # prepare response body
-          if options[:request_body] and not options[:request_body][:upload]
+          if options[:request_body] and not options[:request_body].is_a?(Object::File)
             options[:request_body] = options[:request_body].to_json
           end
         end
