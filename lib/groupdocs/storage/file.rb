@@ -56,10 +56,69 @@ module GroupDocs
           request[:path] = "/storage/#{GroupDocs.client_id}/files/#{id}"
         end.execute!
 
-        File.open("#{path}/#{name}", 'w') do |file|
+        Object::File.open("#{path}/#{name}", 'w') do |file|
           file.write(response)
         end
       end
+
+      #
+      # Moves file to given path.
+      #
+      # @param [String] path Full path to directory to move file to starting with "/".
+      #                      You can also add filename and then moved file will use it.
+      #
+      def move!(path)
+        path = prepare_path(path)
+        GroupDocs::Api::Request.new do |request|
+          request[:method] = :PUT
+          request[:headers] = { :'Groupdocs-Move' => id }
+          request[:path] = "/storage/#{GroupDocs.client_id}/files#{path}"
+        end.execute!
+
+        path
+      end
+
+      #
+      # Moves file to given path.
+      #
+      # @param [String] path Full path to directory to copy file to starting with "/".
+      #                      You can also add filename and then copied file will use it.
+      #
+      def copy!(path)
+        path = prepare_path(path)
+        GroupDocs::Api::Request.new do |request|
+          request[:method] = :PUT
+          request[:headers] = { :'Groupdocs-Copy' => id }
+          request[:path] = "/storage/#{GroupDocs.client_id}/files#{path}"
+        end.execute!
+
+        path
+      end
+
+      #
+      # Compresses file on server to given archive type.
+      #
+      # @param [Symbol] type Archive type: :zip, :rar.
+      #
+      def compress!(type = :zip)
+        json = GroupDocs::Api::Request.new do |request|
+          request[:method] = :POST
+          request[:path] = "/storage/#{GroupDocs.client_id}/files/#{id}/archive/#{type}"
+        end.execute!
+
+        p json
+      end
+
+      #
+      # Deletes file from server.
+      #
+      def delete!
+        GroupDocs::Api::Request.new do |request|
+          request[:method] = :DELETE
+          request[:path] = "/storage/#{GroupDocs.client_id}/files/#{guid}"
+        end.execute!
+      end
+
 
       class << self
         #
@@ -69,18 +128,20 @@ module GroupDocs
         #   GroupDocs::Storage::File.upload!('resume.pdf', '/folder/cv.pdf', description: 'My resume')
         #
         # @param [String] file Path to file to be uploaded
-        # @param [String] path Full path to directory to upload file to.
+        # @param [String] path Full path to directory to upload file to starting with "/".
         #                      You can also add filename and then uploaded file will use it.
         # @param [Hash] options Hash of options
         # @options [String] :description Optional description for file
         #
         # @return [GroupDocs::Storage::File]
         #
-        def upload!(file, path, options = {})
+        def upload!(file, path = '/', options = {})
+          path = prepare_path(path)
           api = GroupDocs::Api::Request.new do |request|
             request[:method] = :POST
             request[:path] = "/storage/#{GroupDocs.client_id}/folders#{path}"
-            request[:request_body] = { upload: Object::File.new(file, 'rb') }
+            request[:request_body] = Object::File.new(file, 'rb')
+            request[:headers] = { connection: 'keep-alive', keep_alive: 300 }
           end
           api.add_params(options)
           json = api.execute!
@@ -100,6 +161,19 @@ module GroupDocs
 
       def inspect
         %(<##{self.class} @id=#{id} @guid=#{guid} @name="#{name}" @url="#{url}">)
+      end
+
+      private
+
+      def recursively_find_all
+        raise RuntimeError, 'Not yet implemented!'
+      end
+
+      def prepare_path(path)
+        unless path.chars.first == '/'
+          raise ArgumentError, "Path should start with /: #{path.inspect}"
+        end
+        path << Object::File.basename(file) unless path =~ /\.(\w){3,4}$/
       end
 
     end # File
