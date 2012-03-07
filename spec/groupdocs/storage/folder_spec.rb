@@ -29,14 +29,14 @@ describe GroupDocs::Storage::Folder do
     it { should respond_to(:access=)       }
 
     describe '#created_on=' do
-      it 'should modify timestamp to Time object' do
+      it 'modifies timestamp to Time object' do
         subject.created_on = 1330450135
         subject.created_on.should be_a(Time)
       end
     end
 
     describe '#modified_on=' do
-      it 'should modify timestamp to Time object' do
+      it 'modifies timestamp to Time object' do
         subject.modified_on = 1330450135
         subject.modified_on.should be_a(Time)
       end
@@ -49,30 +49,30 @@ describe GroupDocs::Storage::Folder do
         mock_api_server(load_json('folder_list'))
       end
 
-      it 'should allow passing path' do
+      it 'allows passing path' do
         -> { described_class.list!('/test') }.should_not raise_error(ArgumentError)
       end
 
-      it 'should allow passing options' do
+      it 'allows passing options' do
         -> { described_class.list!('/', { page: 1, count: 1 }) }.should_not raise_error(ArgumentError)
       end
 
-      it 'should return array' do
+      it 'returns array' do
         described_class.list!.should be_an(Array)
       end
 
-      it 'should return empty array if nothing is listed in directory' do
+      it 'returns empty array if nothing is listed in directory' do
         mock_api_server('{"result": {"entities": []}, "status": "Ok"}')
         described_class.list!.should be_empty
       end
 
-      it 'should determine folders in response' do
+      it 'determines folders in response' do
         described_class.list!.detect do |entity|
           entity.id == 1
         end.should be_a(GroupDocs::Storage::Folder)
       end
 
-      it 'should determine files in response' do
+      it 'determines files in response' do
         described_class.list!.detect do |entity|
           entity.id == 2
         end.should be_a(GroupDocs::Storage::File)
@@ -84,20 +84,20 @@ describe GroupDocs::Storage::Folder do
         mock_api_server(load_json('folder_create'))
       end
 
-      it 'should allow passing path' do
+      it 'allows passing path' do
         -> { described_class.create!('/Test') }.should_not raise_error(ArgumentError)
       end
 
-      it 'should raise error if path does not start with /' do
+      it 'raises error if path does not start with /' do
         -> { described_class.create!('Test') }.should raise_error(ArgumentError)
       end
 
-      it 'should call list! class method to find new folder' do
+      it 'calls list! class method to find new folder' do
         described_class.should_receive(:list!).with(no_args).and_return([described_class.new(id: 1)])
         described_class.create!('/Test')
       end
 
-      it 'should return folder' do
+      it 'returns GroupDocs::Storage::Folder object' do
         described_class.stub(list!: [described_class.new(id: 1)])
         folder = described_class.create!('/Test')
         folder.should be_a(GroupDocs::Storage::Folder)
@@ -107,31 +107,31 @@ describe GroupDocs::Storage::Folder do
 
   context 'instance methods' do
     describe '#move!' do
-      it 'should send "Groupdocs-Move" header' do
+      it 'sends "Groupdocs-Move" header' do
         mock_api_server(load_json('folder_move'), :'Groupdocs-Move' => 'Test1')
         subject.stub(name: 'Test1')
         subject.move!('/Test2')
       end
 
-      it 'should return moved to folder path' do
+      it 'returns moved to folder path' do
         mock_api_server(load_json('folder_move'))
         moved = subject.move!('/Test2')
         moved.should be_a(String)
         moved.should == '/Test2'
       end
 
-      it 'should raise error if path does not start with /' do
+      it 'raises error if path does not start with /' do
         -> { subject.move!('Test2') }.should raise_error(ArgumentError)
       end
     end
 
     describe '#rename!' do
-      it 'use #move! to rename directory' do
+      it 'uses #move! to rename directory' do
         subject.should_receive(:move!).with('/Test2').and_return('/Test2')
         subject.rename!('Test2')
       end
 
-      it 'should strip leading / symbol from new name' do
+      it 'strips leading / symbol from new name' do
         subject.stub(move!: '/Test2')
         renamed = subject.rename!('Test2')
         renamed.should be_a(String)
@@ -140,20 +140,20 @@ describe GroupDocs::Storage::Folder do
     end
 
     describe '#copy!' do
-      it 'should send "Groupdocs-Copy" header' do
+      it 'sends "Groupdocs-Copy" header' do
         mock_api_server(load_json('folder_move'), :'Groupdocs-Copy' => 'Test1')
         subject.stub(name: 'Test1')
         subject.copy!('/Test2')
       end
 
-      it 'should return moved to folder path' do
+      it 'returns moved to folder path' do
         mock_api_server(load_json('folder_move'))
         moved = subject.copy!('/Test2')
         moved.should be_a(String)
         moved.should == '/Test2'
       end
 
-      it 'should raise error if path does not start with /' do
+      it 'raises error if path does not start with /' do
         -> { subject.copy!('Test2') }.should raise_error(ArgumentError)
       end
     end
@@ -165,18 +165,18 @@ describe GroupDocs::Storage::Folder do
 
       subject { described_class.new(name: 'Test1') }
 
-      it 'should allow passing options' do
+      it 'allows passing options' do
         -> { subject.list!(page: 1, count: 1) }.should_not raise_error(ArgumentError)
       end
 
-      it 'should call list! class method and pass parameters to it' do
+      it 'calls list! class method and pass parameters to it' do
         described_class.should_receive(:list!).with('/Test1', { page: 1, count: 1})
         subject.list!(page: 1, count: 1)
       end
     end
 
     describe '#create!' do
-      it 'should call create! class method and pass parameters to it' do
+      it 'calls create! class method and pass parameters to it' do
         mock_api_server(load_json('folder_create'))
         subject = described_class.new(name: 'Test1')
         described_class.should_receive(:create!).with('/Test1')
@@ -185,7 +185,7 @@ describe GroupDocs::Storage::Folder do
     end
 
     describe '#delete!' do
-      it 'should determine path by name' do
+      it 'determines path by name' do
         mock_api_server(load_json('folder_delete'))
         subject.should_receive(:name).and_return('Test1')
         subject.delete!
@@ -193,7 +193,7 @@ describe GroupDocs::Storage::Folder do
     end
 
     describe '#inspect' do
-      it 'should return object in nice presentation' do
+      it 'returns object in nice presentation' do
         options = { id: 1, name: 'Test', url: 'http://groupdocs.com/folder/Test' }
         subject = described_class.new(options)
         subject.inspect.should ==

@@ -4,13 +4,13 @@ shared_examples_for 'Api entity' do
   it { should be_a(GroupDocs::Api::Entity) }
 
   describe '#initialize' do
-    it 'should allow passing options' do
+    it 'allows passing options' do
       options = { id: 1, name: 'Test', url: 'http://groupdocs.com/folder/Test' }
       object = described_class.new(options)
       options.each { |attr, value| object.send(attr).should == value }
     end
 
-    it 'should call passed block for self' do
+    it 'calls passed block for self' do
       object = described_class.new do |obj|
         obj.id = 1
         obj.name = 'Test'
@@ -23,11 +23,11 @@ shared_examples_for 'Api entity' do
   end
 
   #describe 'find!' do
-  #  it 'should allow passing attribute and its value' do
+  #  it 'allows passing attribute and its value' do
   #    -> { described_class.find_all!(:id, 1) }.should_not raise_error(ArgumentError)
   #  end
   #
-  #  it 'should call #find_all! and return its first result' do
+  #  it 'calls #find_all! and return its first result' do
   #    found = described_class.new(id: 1)
   #    described_class.should_receive(:find_all!).with(:id, 1).and_return([found])
   #    described_class.find!(:id, 1).should == found
@@ -35,17 +35,17 @@ shared_examples_for 'Api entity' do
   #end
   #
   #describe 'find_all!' do
-  #  it 'should allow passing attribute and its value' do
+  #  it 'allows passing attribute and its value' do
   #    -> { described_class.find_all!(:id, 1) }.should_not raise_error(ArgumentError)
   #  end
   #
-  #  it 'should return an array' do
+  #  it 'returns an array' do
   #    haystack = [described_class.new(id: 1), Object.new]
   #    described_class.stub(list!: haystack)
   #    described_class.find_all!(:id, 1).should be_an(Array)
   #  end
   #
-  #  it 'should include only self class entities' do
+  #  it 'includes only self class entities' do
   #    haystack = [described_class.new(name: 'Test'), Object.new, described_class.new(name: 'Test')]
   #    described_class.stub(list!: haystack)
   #    described_class.find_all!(:name, 'Test').each do |found|
@@ -53,13 +53,13 @@ shared_examples_for 'Api entity' do
   #    end
   #  end
   #
-  #  it 'should find by exact match' do
+  #  it 'finds by exact match' do
   #    haystack = [described_class.new(name: 'Test'), Object.new]
   #    described_class.stub(list!: haystack)
   #    described_class.find_all!(:name, 'Test').length.should == 1
   #  end
   #
-  #  it 'should find by regexp match' do
+  #  it 'finds by regexp match' do
   #    haystack = [described_class.new(name: 'Test1'), Object.new, described_class.new(name: 'Test2')]
   #    described_class.stub(list!: haystack)
   #    described_class.find_all!(:name, /Test/).length.should == 2

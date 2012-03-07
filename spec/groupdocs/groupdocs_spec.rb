@@ -12,12 +12,12 @@ describe GroupDocs do
       it { should respond_to(:client_id)  }
       it { should respond_to(:client_id=) }
 
-      it 'should raise error if Client ID has not been set' do
+      it 'raises error if Client ID has not been set' do
         GroupDocs.client_id = nil
         -> { subject.client_id }.should raise_error(GroupDocs::Errors::NoClientIdError)
       end
 
-      it 'should return Client ID' do
+      it 'returns Client ID' do
         subject.client_id = client_id
         subject.client_id.should == client_id
       end
@@ -27,12 +27,12 @@ describe GroupDocs do
       it { should respond_to(:private_key)  }
       it { should respond_to(:private_key=) }
 
-      it 'should raise error if private key has not been set' do
+      it 'raises error if private key has not been set' do
         GroupDocs.private_key = nil
         -> { subject.private_key }.should raise_error(GroupDocs::Errors::NoPrivateKeyError)
       end
 
-      it 'should return private Key' do
+      it 'returns private Key' do
         subject.private_key = private_key
         subject.private_key.should == private_key
       end
@@ -41,7 +41,7 @@ describe GroupDocs do
     describe '#configure' do
       it { should respond_to(:configure) }
 
-      it 'should call block for self' do
+      it 'calls block for self' do
         subject.should_receive(:configure).and_yield(subject)
         subject.configure do |api|
           api.client_id   = client_id
@@ -49,7 +49,7 @@ describe GroupDocs do
         end
       end
 
-      it 'should save Client ID for further access' do
+      it 'saves Client ID for further access' do
         subject.should_receive(:client_id=).with(client_id).and_return(client_id)
         subject.configure do |api|
           api.client_id = client_id
@@ -57,7 +57,7 @@ describe GroupDocs do
         subject.client_id.should == client_id
       end
 
-      it 'should save Private Key for further access' do
+      it 'saves Private Key for further access' do
         subject.should_receive(:private_key=).with(private_key).and_return(private_key)
         subject.configure do |api|
           api.private_key = private_key
@@ -72,11 +72,11 @@ describe GroupDocs do
       it { should respond_to(:api_server)  }
       it { should respond_to(:api_server=) }
 
-      it 'should return default URL if it has not been overwritten' do
+      it 'returns default URL if it has not been overwritten' do
         subject.api_server.should == 'https://dev-api.groupdocs.com'
       end
 
-      it 'should return custom URL' do
+      it 'returns custom URL' do
         subject.api_server = 'https://api.groupdocs.com'
         subject.api_server.should == 'https://api.groupdocs.com'
       end
