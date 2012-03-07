@@ -20,6 +20,7 @@ module GroupDocs
           # prepare response body
           if options[:request_body] and not options[:request_body].is_a?(Object::File)
             options[:request_body] = options[:request_body].to_json
+            options[:headers][:content_length] = options[:request_body].length
           end
         end
 
