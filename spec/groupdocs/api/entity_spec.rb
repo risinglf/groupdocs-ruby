@@ -5,20 +5,15 @@ shared_examples_for 'Api entity' do
 
   describe '#initialize' do
     it 'allows passing options' do
-      options = { id: 1, name: 'Test', url: 'http://groupdocs.com/folder/Test' }
-      object = described_class.new(options)
-      options.each { |attr, value| object.send(attr).should == value }
+      object = described_class.new(name: 'Test')
+      object.name.should == 'Test'
     end
 
     it 'calls passed block for self' do
       object = described_class.new do |obj|
-        obj.id = 1
         obj.name = 'Test'
-        obj.url = 'http://groupdocs.com/folder/Test'
       end
-      object.id.should == 1
       object.name.should == 'Test'
-      object.url.should == 'http://groupdocs.com/folder/Test'
     end
   end
 
