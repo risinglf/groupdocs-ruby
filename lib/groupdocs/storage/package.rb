@@ -4,8 +4,6 @@ module GroupDocs
 
       # @attr [String] name Package name
       attr_accessor :name
-      # @attr [String] url Download package URL
-      attr_accessor :url
       # @attr [Array] objects Storage entities to be packed
       attr_accessor :objects
 
