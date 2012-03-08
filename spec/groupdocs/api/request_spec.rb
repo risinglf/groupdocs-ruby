@@ -4,18 +4,6 @@ describe GroupDocs::Api::Request do
 
   subject { described_class.new(method: :GET, path: '/folders') }
 
-  describe 'DEFAULT_HEADERS' do
-    subject { described_class::DEFAULT_HEADERS }
-
-    it 'includes "Accept: application/json"' do
-      subject.should include({ accept: 'application/json' })
-    end
-
-    it 'includes "Content-length: 0"' do
-      subject.should include({ content_length: 15 })
-    end
-  end
-
   context 'attributes' do
     it { should respond_to(:resource)  }
     it { should respond_to(:response)  }

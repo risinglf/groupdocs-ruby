@@ -6,25 +6,37 @@ describe GroupDocs::Api::Helpers::REST do
     GroupDocs::Api::Request.new(method: :GET)
   end
 
+  describe 'DEFAULT_HEADERS' do
+    subject { described_class::DEFAULT_HEADERS }
+
+    it 'includes "Accept: application/json"' do
+      subject.should include({ accept: 'application/json' })
+    end
+
+    it 'includes "Content-length: 0"' do
+      subject.should include({ content_length: 0 })
+    end
+  end
+
   describe '#prepare_request' do
     it 'merges default headers with passed' do
       subject.options[:headers] = { keep_alive: 300 }
       merged_headers = described_class::DEFAULT_HEADERS.merge({ keep_alive: 300 })
       lambda do
         subject.send(:prepare_request)
-      end.should change { subject.options[:headers] }.from({ keep_alive: 300 }).to(merged_headers)
+      end.should change { subject.options[:headers] }.to(merged_headers)
     end
 
     it 'uses default headers when not passed' do
       lambda do
         subject.send(:prepare_request)
-      end.should change { subject.options[:headers] }.from(nil).to(described_class::DEFAULT_HEADERS)
+      end.should change { subject.options[:headers] }.to(described_class::DEFAULT_HEADERS)
     end
 
     it 'downcases HTTP method' do
       lambda do
         subject.send(:prepare_request)
-      end.should change { subject.options[:method] }.from(:GET).to(:get)
+      end.should change { subject.options[:method] }.to(:get)
     end
 
     it 'coverts request body to JSON' do
@@ -32,7 +44,16 @@ describe GroupDocs::Api::Helpers::REST do
       subject.options[:request_body] = { body: 'test' }
       lambda do
         subject.send(:prepare_request)
-      end.should change { subject.options[:request_body] }.from({ body: 'test' }).to('{"body":"test"}')
+      end.should change { subject.options[:request_body] }.to('{"body":"test"}')
+    end
+
+    it 'calculates and sets Content-length' do
+      subject.options[:method] = :POST
+      subject.options[:headers] = {}
+      subject.options[:request_body] = { body: 'test' }
+      lambda do
+        subject.send(:prepare_request)
+      end.should change { subject.options[:headers][:content_length] }.to(15)
     end
   end
 
@@ -60,7 +81,7 @@ describe GroupDocs::Api::Helpers::REST do
       subject.options[:headers] = {}
       lambda do
         subject.send(:send_request)
-      end.should change(subject, :response).from(nil).to('{"status": "Ok"}')
+      end.should change(subject, :response).to('{"status": "Ok"}')
     end
   end
 

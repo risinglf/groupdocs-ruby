@@ -9,15 +9,14 @@ module GroupDocs
         private
 
         def prepare_request
-          # prepare headers
           if options[:headers].is_a?(Hash)
             options[:headers].merge!(DEFAULT_HEADERS)
           else
             options[:headers] = DEFAULT_HEADERS
           end
-          # prepare method
+
           options[:method] = options[:method].downcase
-          # prepare response body
+
           if options[:request_body] and not options[:request_body].is_a?(Object::File)
             options[:request_body] = options[:request_body].to_json
             options[:headers][:content_length] = options[:request_body].length
