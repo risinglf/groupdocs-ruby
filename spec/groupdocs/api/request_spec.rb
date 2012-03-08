@@ -12,7 +12,7 @@ describe GroupDocs::Api::Request do
     end
 
     it 'includes "Content-length: 0"' do
-      subject.should include({ content_length: 0 })
+      subject.should include({ content_length: 15 })
     end
   end
 
