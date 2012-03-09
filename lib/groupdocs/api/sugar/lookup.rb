@@ -24,7 +24,7 @@ module GroupDocs
         # @return [Array] Array of matching entities
         #
         def find_all!(attribute, value)
-          respond_to?(:all!) or raise "#{self}#all! is not implemented - aborting."
+          respond_to?(:all!) or raise NoMethodError, "#{self}#all! is not implemented - aborting."
 
           all!.select do |object|
             case value
