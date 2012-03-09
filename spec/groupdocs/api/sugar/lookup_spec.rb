@@ -17,7 +17,7 @@ shared_examples_for GroupDocs::Api::Sugar::Lookup do
       described_class.stub(all!: [folder1, folder2])
     end
 
-    it 'should raise error if class does not implement #all!' do
+    it 'raises error if class does not implement #all!' do
       described_class.stub(:respond_to?).with(:all!).and_return(false)
       lambda do
         described_class.find_all!(:id, 1)
