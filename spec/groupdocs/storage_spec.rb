@@ -11,11 +11,11 @@ describe GroupDocs::Storage do
     end
 
     it 'converts total space to MB' do
-      described_class.info![:total_space].should == "1024 MB"
+      described_class.info![:total_space].should == '1024 MB'
     end
 
     it 'converts available space to MB' do
-      described_class.info![:available_space].should == "1020 MB"
+      described_class.info![:available_space].should == '1020 MB'
     end
   end
 end
