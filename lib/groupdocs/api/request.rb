@@ -9,16 +9,46 @@ module GroupDocs
       include GroupDocs::Api::Helpers::URL
       include GroupDocs::Api::Helpers::REST
 
+      # @attr_reader [RestClient::Resource] resource Entry point for all API requests
       attr_reader   :resource
+      # @attr [String] response Response from server in JSON format
       attr_accessor :response
+      # @attr [Hash] options Hash of options
       attr_accessor :options
 
+      #
+      # Creates new API request.
+      #
+      # @example
+      #   api = GroupDocs::Api::Request.new do |request|
+      #     request[:method] = :POST
+      #     request[:path] = "/storage/#{GroupDocs.client_id}/info"
+      #   end
+      #
+      # @param [Hash] options
+      # @options [Symbol] :method HTTP method
+      # @options [String] :path Path to send request to
+      # @options [Hash] :headers Additional HTTP headers
+      # @options [any] :request_body Payload. If hash, will be converted to JSON, if File, will be send as is.
+      #
       def initialize(options = {}, &blk)
         @options = options
         blk.call(@options) if block_given?
         @resource = RestClient::Resource.new(GroupDocs.api_server)
       end
 
+      #
+      # Executes API request to server.
+      #
+      # It performs the following actions step by step:
+      #   * Prepends path with version if it's set
+      #   * Signs URL
+      #   * Prepare request (add headers, converts payload to JSON, etc.)
+      #   * Sends request to server
+      #   * Parses response
+      #
+      # @return [String] Response
+      #
       def execute!
         prepend_version
         sign_url
