@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe GroupDocs::Storage::Package do
 
-  it_behaves_like 'Api entity'
+  it_behaves_like GroupDocs::Api::Entity
 
   context 'attributes' do
     it { should respond_to(:name)     }

@@ -2,6 +2,65 @@ module GroupDocs
   module Storage
     class File < GroupDocs::Api::Entity
 
+      extend GroupDocs::Api::Sugar::Lookup
+
+      #
+      # Uploads file to API server.
+      #
+      # @example
+      #   GroupDocs::Storage::File.upload!('resume.pdf', '/folder/cv.pdf', description: 'My resume')
+      #
+      # @param [String] filepath Path to file to be uploaded
+      # @param [String] upload_path Full path to directory to upload file to starting with "/".
+      #                      You can also add filename and then uploaded file will use it.
+      # @param [Hash] options Hash of options
+      # @options [String] :description Optional description for file
+      #
+      # @return [GroupDocs::Storage::File]
+      #
+      def self.upload!(filepath, upload_path = '/', options = {})
+        upload_path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{upload_path.inspect}"
+        upload_path << Object::File.basename(filepath) unless upload_path =~ /\.(\w){3,4}$/
+        api = GroupDocs::Api::Request.new do |request|
+          request[:method] = :POST
+          request[:path] = "/storage/#{GroupDocs.client_id}/folders#{upload_path}"
+          request[:request_body] = Object::File.new(filepath, 'rb')
+        end
+        api.add_params(options)
+        json = api.execute!
+
+        GroupDocs::Storage::File.new do |file|
+          file.id        = json[:result][:id]
+          file.guid      = json[:result][:guid]
+          file.name      = json[:result][:adj_name]
+          file.url       = json[:result][:url]
+          file.type      = json[:result][:type]
+          file.size      = json[:result][:size]
+          file.version   = json[:result][:version]
+          file.thumbnail = json[:result][:thumbnail]
+        end
+      end
+
+      #
+      # Returns an array of all files on server starting with given path.
+      #
+      # @param [String] path Starting path to look for files
+      # @return [Array<GroupDocs::Storage::File>]
+      #
+      def self.all!(path = '/')
+        files = Array.new
+        folder = GroupDocs::Storage::Folder.new(name: path)
+        folder.list!.each do |entity|
+          if entity.is_a?(GroupDocs::Storage::Folder)
+            files += all!("#{path}/#{entity.name}".gsub(/[\/]{2}/, '/'))
+          else
+            files << entity
+          end
+        end
+
+        files
+      end
+
       # @attr [Integer] id
       attr_accessor :id
       # @attr [Integer] guid
@@ -141,54 +200,11 @@ module GroupDocs
         end.execute!
       end
 
-
-      class << self
-        #
-        # Uploads file to API server.
-        #
-        # @example
-        #   GroupDocs::Storage::File.upload!('resume.pdf', '/folder/cv.pdf', description: 'My resume')
-        #
-        # @param [String] filepath Path to file to be uploaded
-        # @param [String] upload_path Full path to directory to upload file to starting with "/".
-        #                      You can also add filename and then uploaded file will use it.
-        # @param [Hash] options Hash of options
-        # @options [String] :description Optional description for file
-        #
-        # @return [GroupDocs::Storage::File]
-        #
-        def upload!(filepath, upload_path = '/', options = {})
-          upload_path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{upload_path.inspect}"
-          upload_path << Object::File.basename(filepath) unless upload_path =~ /\.(\w){3,4}$/
-          api = GroupDocs::Api::Request.new do |request|
-            request[:method] = :POST
-            request[:path] = "/storage/#{GroupDocs.client_id}/folders#{upload_path}"
-            request[:request_body] = Object::File.new(filepath, 'rb')
-          end
-          api.add_params(options)
-          json = api.execute!
-
-          GroupDocs::Storage::File.new do |file|
-            file.id        = json[:result][:id]
-            file.guid      = json[:result][:guid]
-            file.name      = json[:result][:adj_name]
-            file.url       = json[:result][:url]
-            file.type      = json[:result][:type]
-            file.size      = json[:result][:size]
-            file.version   = json[:result][:version]
-            file.thumbnail = json[:result][:thumbnail]
-          end
-        end
-      end # << self
-
+      #
+      # Pretty prints entity.
+      #
       def inspect
         %(<##{self.class} @id=#{id} @guid=#{guid} @name="#{name}" @url="#{url}">)
-      end
-
-      private
-
-      def recursively_find_all
-        raise RuntimeError, 'Not yet implemented!'
       end
 
     end # File

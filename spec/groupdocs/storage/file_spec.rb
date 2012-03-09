@@ -2,7 +2,8 @@ require 'spec_helper'
 
 describe GroupDocs::Storage::File do
 
-  it_behaves_like 'Api entity'
+  it_behaves_like GroupDocs::Api::Entity
+  include_examples GroupDocs::Api::Sugar::Lookup
 
   context 'attributes' do
     it { should respond_to(:id)           }
