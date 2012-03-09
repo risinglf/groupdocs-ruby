@@ -68,9 +68,16 @@ end
 
 Note, that all "bang" methods (ending with exclamation sign) means interaction with API server.
 
-### Find entities (NOT IMPLEMENTED)
+### Find entities
 
-All entities support `#find!` and `#find_all!` methods. You can pass any attribute that object responds to and its value to find with.
+Some entities support `#all!, `#find!` and `#find_all!` methods. You can pass any attribute that object responds to and its value to find with.
+
+* List all files
+
+```ruby
+GroupDocs::Storage::File.all!
+#=> [<#GroupDocs::Storage::File @id=123 @guid=uhfsa9dry29rhfodn @name="resume.pdf" @url="http://groupdocs.com">, <#GroupDocs::Storage::File @id=456 @guid=soif97sr9u24bfosd9 @name="CV.doc" @url="http://groupdocs.com">]
+```
 
 * Find folder with name `Folder1`
 
@@ -89,3 +96,7 @@ GroupDocs::Storage::Folder.find_all!(:name, /^Folder/)
 ### Storage API
 
 Read more about examples of using Storage API on [wiki](https://github.com/p0deje/groupdocs-ruby/wiki/Storage-API).
+
+### Copyright
+
+Copyright (c) 2012 Aspose Inc.
