@@ -42,6 +42,17 @@ describe GroupDocs::Document do
       end
     end
 
+    describe '#formats!' do
+      it 'returns an array of symbols' do
+        mock_api_server(load_json('document_formats'))
+        formats = subject.formats!
+        formats.should be_an(Array)
+        formats.each do |format|
+          format.should be_a(Symbol)
+        end
+      end
+    end
+
     describe '#parse_access_mode' do
       it 'raise error if mode is unknown' do
         -> { subject.send(:parse_access_mode, 3) }.should raise_error(ArgumentError)

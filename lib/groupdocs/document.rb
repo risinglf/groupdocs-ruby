@@ -62,6 +62,22 @@ module GroupDocs
       end.execute!
     end
 
+    #
+    # Returns array of file formats document can be converted to.
+    #
+    # @return [Array<Symbol>]
+    #
+    def formats!
+      json = GroupDocs::Api::Request.new do |request|
+        request[:method] = :GET
+        request[:path] = "/doc/#{GroupDocs.client_id}/files/#{file.id}/formats"
+      end.execute!
+
+      json[:result][:types].split(';').map do |format|
+        format.downcase.to_sym
+      end
+    end
+
     private
 
     #
