@@ -182,6 +182,16 @@ describe GroupDocs::Storage::File do
       end
     end
 
+    describe '#to_document' do
+      it 'creates new GroupDocs::Document' do
+        subject.to_document.should be_a(GroupDocs::Document)
+      end
+
+      it 'passes self as file for GroupDocs::Document' do
+        subject.to_document.file.should == subject
+      end
+    end
+
     describe '#inspect' do
       it 'returns object in nice presentation' do
         options = { id: 1, guid: 3, name: 'Test', url: 'http://groupdocs.com/folder/Test' }

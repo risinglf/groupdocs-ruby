@@ -201,6 +201,15 @@ module GroupDocs
       end
 
       #
+      # Converts file to GroupDocs::Document.
+      #
+      # @return [GroupDocs::Document]
+      #
+      def to_document
+        GroupDocs::Document.new(file: self)
+      end
+
+      #
       # Pretty prints entity.
       #
       def inspect
