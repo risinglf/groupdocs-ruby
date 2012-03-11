@@ -22,8 +22,8 @@ module GroupDocs
     #
     # Returns Client ID.
     #
-    # @raise [NoClientIdError] If Client ID hasn't been set yet, raise exception.
     # @return [String] Client ID
+    # @raise [NoClientIdError] If Client ID hasn't been set yet, raise exception.
     #
     def client_id
       @client_id or raise Errors::NoClientIdError, 'Client ID has not been specified.'
@@ -32,8 +32,8 @@ module GroupDocs
     #
     # Returns Private key.
     #
-    # @raise [NoPrivateKeyError] If private key hasn't been set yet, raise exception.
     # @return [String] Private key
+    # @raise [NoPrivateKeyError] If private key hasn't been set yet, raise exception.
     #
     def private_key
       @private_key or raise Errors::NoPrivateKeyError, 'Private Key has not been specified.'
@@ -42,9 +42,7 @@ module GroupDocs
     #
     # Returns hostname of API server.
     #
-    # If it has not been explicitly specified, returns default one.
-    #
-    # @return [String] API hostname
+    # @return [String] API hostname. Default one if it has not been explicitly set
     #
     def api_server
       @api_server || 'https://dev-api.groupdocs.com'
@@ -61,7 +59,7 @@ module GroupDocs
     #     groupdocs.api_version = '2.0'
     #   end
     #
-    # @yields [GroupDocs]
+    # @yield [GroupDocs]
     #
     def configure(&blk)
       blk.call(self)

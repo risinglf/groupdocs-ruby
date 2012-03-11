@@ -26,10 +26,12 @@ module GroupDocs
       #   end
       #
       # @param [Hash] options
-      # @options [Symbol] :method HTTP method
-      # @options [String] :path Path to send request to
-      # @options [Hash] :headers Additional HTTP headers
-      # @options [any] :request_body Payload. If hash, will be converted to JSON, if File, will be send as is.
+      # @option options [Symbol] :method HTTP method. One of :GET, :DOWNLOAD, :POST, :PUT or :DELETE.
+      # @option options [String] :path Path to send request to
+      # @option options [Hash] :headers Additional HTTP headers
+      # @option options [Hash, File] :request_body Payload. If hash, will be converted to JSON, if File, will be send as is.
+      #
+      # @yieldparam [Hash] options
       #
       def initialize(options = {}, &blk)
         @options = options
@@ -47,7 +49,7 @@ module GroupDocs
       #   * Sends request to server
       #   * Parses response
       #
-      # @return [String] Response
+      # @return [Hash, String] Parsed response
       #
       def execute!
         prepend_version

@@ -14,13 +14,15 @@ module GroupDocs
       # @param [String] upload_path Full path to directory to upload file to starting with "/".
       #                      You can also add filename and then uploaded file will use it.
       # @param [Hash] options Hash of options
-      # @options [String] :description Optional description for file
-      #
+      # @option options [String] :description Optional description for file
       # @return [GroupDocs::Storage::File]
+      #
+      # @raise [ArgumentError] If path does not start with /.
       #
       def self.upload!(filepath, upload_path = '/', options = {})
         upload_path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{upload_path.inspect}"
         upload_path << Object::File.basename(filepath) unless upload_path =~ /\.(\w){3,4}$/
+
         api = GroupDocs::Api::Request.new do |request|
           request[:method] = :POST
           request[:path] = "/storage/#{GroupDocs.client_id}/folders#{upload_path}"
@@ -131,6 +133,8 @@ module GroupDocs
       #                      You can also add filename and then moved file will use it.
       # @return [String] Moved to file path
       #
+      # @raise [ArgumentError] If path does not start with /.
+      #
       def move!(path)
         path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{path.inspect}"
         path << Object::File.basename(name) unless path =~ /\.(\w){3,4}$/
@@ -160,9 +164,12 @@ module GroupDocs
       #                      You can also add filename and then copied file will use it.
       # @return [GroupDocs::Storage::File] Copied to file
       #
+      # @raise [ArgumentError] If path does not start with /.
+      #
       def copy!(path)
         path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{path.inspect}"
         path << Object::File.basename(name) unless path =~ /\.(\w){3,4}$/
+
         json = GroupDocs::Api::Request.new do |request|
           request[:method] = :PUT
           request[:headers] = { :'Groupdocs-Copy' => id }

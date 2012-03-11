@@ -8,6 +8,11 @@ module GroupDocs
 
         private
 
+        #
+        # Prepares headers, method and payload for request.
+        #
+        # @api private
+        #
         def prepare_request
           if options[:headers].is_a?(Hash)
             options[:headers].merge!(DEFAULT_HEADERS)
@@ -23,6 +28,11 @@ module GroupDocs
           end
         end
 
+        #
+        # Sends request to API server.
+        #
+        # @api private
+        #
         def send_request
           self.response = case options[:method]
             when :get, :download
@@ -38,6 +48,11 @@ module GroupDocs
           end
         end
 
+        #
+        # Parses response from API server.
+        #
+        # @api private
+        #
         def parse_response
           # for DOWNLOAD requests, just return response
           if options[:method] == :download
@@ -49,6 +64,10 @@ module GroupDocs
           end
         end
 
+        #
+        # @raise [GroupDocs::Errors::BadResponseError]
+        # @api private
+        #
         def raise_bad_request_error(json)
           raise GroupDocs::Errors::BadResponseError, <<-ERR
             Bad response!

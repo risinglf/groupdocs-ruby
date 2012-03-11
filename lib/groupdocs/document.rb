@@ -53,6 +53,7 @@ module GroupDocs
     private
 
     #
+    # @param [Integer, Symbol] mode
     # @api private
     #
     def parse_access_mode(mode)

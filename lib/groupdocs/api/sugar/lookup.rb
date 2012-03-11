@@ -7,7 +7,7 @@ module GroupDocs
         # Returns first object matching given options.
         #
         # @param [Symbol] attribute
-        # @param [any] ]value
+        # @param [Integer, String, Regexp] value
         # @return [GroupDocs::Api::Entity] Matching entity
         #
         def find!(attribute, value)
@@ -20,8 +20,10 @@ module GroupDocs
         # Each entity has to implement #all! method for this to work.
         #
         # @param [Symbol] attribute
-        # @param [any] value
+        # @param [Integer, String, Regexp] value
         # @return [Array] Array of matching entities
+        #
+        # @raise [NoMethodError] if extending class does not implement #all! class method.
         #
         def find_all!(attribute, value)
           respond_to?(:all!) or raise NoMethodError, "#{self}#all! is not implemented - aborting."

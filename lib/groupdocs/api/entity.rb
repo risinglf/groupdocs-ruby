@@ -3,7 +3,7 @@ module GroupDocs
     class Entity
 
       #
-      # Implements flexible API object creation DSL.
+      # Implements flexible API object creation.
       #
       # You can pass hash of options to automatically set attributes.
       #
@@ -22,8 +22,7 @@ module GroupDocs
       #   #=> <#GroupDocs::Storage::Folder @id=1 @name="Test" @url="http://groupdocs.com/folder/test">
       #
       # @param [Hash] options Each option is object attribute
-      # @param [Block] blk Use block to set up attributes
-      # @yields [self]
+      # @yield [self] Use block to set up attributes
       #
       def initialize(options = {}, &blk)
         if options.empty?

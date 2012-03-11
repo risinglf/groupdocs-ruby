@@ -10,6 +10,8 @@ module GroupDocs
       # @param [String] path Path of folder to create starting from root ('/')
       # @return [GroupDocs::Storage::Folder] Created folder
       #
+      # @raise [ArgumentError] If path does not start with /.
+      #
       def self.create!(path)
         path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{path.inspect}"
         json = GroupDocs::Api::Request.new do |request|
@@ -43,12 +45,13 @@ module GroupDocs
       #
       # @param [String] path Path of directory to list starting from root ('/')
       # @param [Hash] options Hash of options
-      # @options [Integer] :page Page to start with
-      # @options [Integer] :count How many items to list
-      # @options [String] :order_by Field name to sort by
-      # @options [Boolean] :order_asc Set to true to return in ascending order
+      # @option options [Integer] :page Page to start with
+      # @option options [Integer] :count How many items to list
+      # @option options [String] :order_by Field name to sort by
+      # @option options [Boolean] :order_asc Set to true to return in ascending order
+      # @return [Array<GroupDocs::Storage::Folder, GroupDocs::Storage::File>]
       #
-      # @return [Array] Array of folders and files. If nothing is listed - empty array.
+      # @raise [ArgumentError] If path does not start with /.
       #
       def self.list!(path = '/', options = {})
         path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{path.inspect}"
@@ -140,6 +143,8 @@ module GroupDocs
       # @param [String] path Destination to move contents to
       # @return [String] Moved to folder path
       #
+      # @raise [ArgumentError] If path does not start with /.
+      #
       def move!(path)
         path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{path.inspect}"
         GroupDocs::Api::Request.new do |request|
@@ -182,12 +187,11 @@ module GroupDocs
       # Returns an array of files and folders.
       #
       # @param [Hash] options Hash of options
-      # @options [Integer] :page Page to start with
-      # @options [Integer] :count How many items to list
-      # @options [String] :order_by Field name to sort by
-      # @options [Boolean] :order_asc Set to true to return in ascending order
-      #
-      # @return [Array] Array of folders and files. If nothing is listed - empty array.
+      # @option options [Integer] :page Page to start with
+      # @option options [Integer] :count How many items to list
+      # @option options [String] :order_by Field name to sort by
+      # @option options [Boolean] :order_asc Set to true to return in ascending order
+      # @return [Array<GroupDocs::Storage::Folder, GroupDocs::Storage::File>]
       #
       def list!(options = {})
         path = name =~ /^\// ? name : "/#{name}"

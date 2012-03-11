@@ -24,7 +24,6 @@ module GroupDocs
         #
         # Adds signature to path.
         #
-        # @see http://scotland.groupdocs.com/wiki/display/api/URL+Authentication+Using+Signing
         # @api private
         #
         def sign_url
@@ -47,7 +46,7 @@ module GroupDocs
         #
         # Returns separator for GET parameters.
         #
-        # @return [String] separator - either ? or &
+        # @return [String] Either ? or &
         # @api private
         #
         def separator

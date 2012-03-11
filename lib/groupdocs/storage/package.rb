@@ -10,7 +10,7 @@ module GroupDocs
       #
       # Appends object to be packed.
       #
-      # @param object GroupDocs::Storage::File or GroupDocs::Storage::Folder to be packed
+      # @param [GroupDocs::Storage::File, GroupDocs::Storage::Folder] object
       #
       def <<(object)
         @objects ||= Array.new

@@ -7,13 +7,13 @@ module GroupDocs
   module Storage
 
     #
-    # Return an array of information about user's storage.
+    # Returns hash of information about user's storage.
     #
     # @example
     #   GroupDocs::Storage.info!
     #   #=> { total_space: "1024 MB", available_space: "1020 MB", document_credits: 5000, available_credits: 4964 }
     #
-    # @return [Array]
+    # @return [Hash]
     #
     def self.info!
       json = GroupDocs::Api::Request.new do |request|
