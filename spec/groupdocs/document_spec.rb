@@ -25,6 +25,19 @@ describe GroupDocs::Document do
     it { should respond_to(:file=) }
   end
 
+  context 'class methods' do
+    describe '#all!' do
+      it 'calls GroupDocs::Storage::File.all! and converts each file to document' do
+        file1 = GroupDocs::Storage::File.new
+        file2 = GroupDocs::Storage::File.new
+        GroupDocs::Storage::File.should_receive(:all!).and_return([file1, file2])
+        file1.should_receive(:to_document).and_return(described_class.new(file: file1))
+        file2.should_receive(:to_document).and_return(described_class.new(file: file2))
+        described_class.all!
+      end
+    end
+  end
+
   context 'instance methods' do
     describe '#access_mode!' do
       it 'returns access mode in human readable presentation' do
