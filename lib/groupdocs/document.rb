@@ -17,10 +17,6 @@ module GroupDocs
     # @attr [GroupDocs::Storage::File] file
     attr_accessor :file
 
-    # TODO
-    attr_accessor :name
-    attr_accessor :id
-
     #
     # Creates new GroupDocs::Document.
     #
@@ -103,6 +99,18 @@ module GroupDocs
           metadata.last_view[:viewed_on] = Time.at(json[:result][:last_view][:viewed_on])
         end
       end
+    end
+
+    #
+    # Try to pass all unknown methods to file.
+    #
+
+    def method_missing(method, *args, &blk)
+      file.respond_to?(method) ? file.send(method, *args, &blk) : super
+    end
+
+    def respond_to?(method)
+      super or file.respond_to?(method)
     end
 
     private

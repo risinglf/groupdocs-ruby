@@ -80,6 +80,30 @@ describe GroupDocs::Document do
       end
     end
 
+    describe '#method_missing' do
+      it 'passes unknown methods to file object' do
+        -> { subject.name }.should_not raise_error(NoMethodError)
+      end
+
+      it 'raises NoMethodError if neither self nor file responds to method' do
+        -> { subject.unknown_method }.should raise_error(NoMethodError)
+      end
+    end
+
+    describe '#respond_to?' do
+      it 'returns true if self responds to method' do
+        subject.respond_to?(:metadata!).should be_true
+      end
+
+      it 'returns true if file object responds to method' do
+        subject.respond_to?(:name).should be_true
+      end
+
+      it 'returns false if neither self nor file responds to method' do
+        subject.respond_to?(:unknown).should be_false
+      end
+    end
+
     describe '#parse_access_mode' do
       it 'raise error if mode is unknown' do
         -> { subject.send(:parse_access_mode, 3) }.should raise_error(ArgumentError)
@@ -110,6 +134,5 @@ describe GroupDocs::Document do
         subject.send(:parse_access_mode, :public).should == 2
       end
     end
-
   end
 end
