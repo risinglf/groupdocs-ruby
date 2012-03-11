@@ -22,10 +22,12 @@ module GroupDocs
           request[:path] = "/storage/#{GroupDocs.client_id}"
         end.execute!
 
-        { total_space:       "#{json[:result][:total_space] / 1048576} MB",
+        {
+          total_space:       "#{json[:result][:total_space] / 1048576} MB",
           available_space:   "#{json[:result][:avail_space] / 1048576} MB",
           document_credits:  json[:result][:doc_credits],
-          available_credits: json[:result][:avail_credits] }
+          available_credits: json[:result][:avail_credits]
+        }
       end
 
     end # << self
