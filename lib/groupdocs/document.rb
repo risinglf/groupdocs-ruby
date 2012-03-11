@@ -10,10 +10,10 @@ module GroupDocs
     #
     # Creates new GroupDocs::Document.
     #
-    # You're encouraged to create documents directly. Instead, use #to_document
+    # You should avoid creating documents directly. Instead, use #to_document
     # instance method of GroupDocs::Storage::File.
     #
-    # @raise [ArgumentError] If file is not passed or is not an instance of GroupDocs::Storage::File.
+    # @raise [ArgumentError] If file is not passed or is not an instance of GroupDocs::Storage::File
     #
     def initialize(options = {}, &blk)
       super(options, &blk)
@@ -24,7 +24,7 @@ module GroupDocs
     #
     # Returns access mode of document.
     #
-    # @return [Symbol] One of :private, :restricted or :public access modes.
+    # @return [Symbol] One of :private, :restricted or :public access modes
     #
     def access_mode!
       json = GroupDocs::Api::Request.new do |request|
@@ -40,8 +40,8 @@ module GroupDocs
     #
     # Please note that even thought it is not "bang" method, it still send requests to API server.
     #
-    # @param [Symbol] mode One of :private, :restricted or :public access modes.
-    # @return [Symbol] Set access mode.
+    # @param [Symbol] mode One of :private, :restricted or :public access modes
+    # @return [Symbol] Set access mode
     #
     def access_mode=(mode)
       GroupDocs::Api::Request.new do |request|
