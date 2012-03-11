@@ -1,6 +1,8 @@
 module GroupDocs
   class Document < GroupDocs::Api::Entity
 
+    require 'groupdocs/document/metadata'
+
     extend GroupDocs::Api::Sugar::Lookup
 
     #
@@ -75,6 +77,31 @@ module GroupDocs
 
       json[:result][:types].split(';').map do |format|
         format.downcase.to_sym
+      end
+    end
+
+    #
+    # Returns document metadata.
+    #
+    # @return [GroupDocs::Document::MetaData]
+    #
+    def metadata!
+      json = GroupDocs::Api::Request.new do |request|
+        request[:method] = :GET
+        request[:path] = "/doc/#{GroupDocs.client_id}/files/#{file.id}/metadata"
+      end.execute!
+
+      MetaData.new do |metadata|
+        metadata.id = json[:result][:id]
+        metadata.guid = json[:result][:guid]
+        metadata.page_count = json[:result][:page_count]
+        metadata.views_count = json[:result][:views_count]
+        metadata.last_view = json[:result][:last_view]
+        if metadata.last_view
+          metadata.last_view[:document] = self
+          metadata.last_view[:short_url] = json[:result][:last_view][:short_url]
+          metadata.last_view[:viewed_on] = Time.at(json[:result][:last_view][:viewed_on])
+        end
       end
     end
 

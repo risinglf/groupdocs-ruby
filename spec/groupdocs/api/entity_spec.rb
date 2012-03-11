@@ -12,30 +12,37 @@ shared_examples_for GroupDocs::Api::Entity do
 
   it { should be_a(GroupDocs::Api::Entity) }
 
+  let(:attr) do
+    attr = described_class.instance_methods.detect do |m|
+      m != :file= && m =~ /.+=/
+    end
+    attr.to_s.sub(/=/, '')
+  end
+
   describe '#initialize' do
     it 'allows passing options' do
       if described_class == GroupDocs::Document
-        object = described_class.new(name: 'Test', file: GroupDocs::Storage::File.new)
+        object = described_class.new(:file => GroupDocs::Storage::File.new, :"#{attr}" => 'Test', )
       else
-        object = described_class.new(name: 'Test')
+        object = described_class.new(:"#{attr}" => 'Test')
       end
 
-      object.name.should == 'Test'
+      object.send(attr).should == 'Test'
     end
 
     it 'calls passed block for self' do
       if described_class == GroupDocs::Document
         object = described_class.new do |obj|
-          obj.name = 'Test'
           obj.file = GroupDocs::Storage::File.new
+          obj.send(:"#{attr}=", 'Test')
         end
       else
         object = described_class.new do |obj|
-          obj.name = 'Test'
+          obj.send(:"#{attr}=", 'Test')
         end
       end
 
-      object.name.should == 'Test'
+      object.send(attr).should == 'Test'
     end
   end
 end
