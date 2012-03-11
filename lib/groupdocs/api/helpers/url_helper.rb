@@ -11,7 +11,6 @@ module GroupDocs
         # Appends path with parameters.
         #
         # @param [Hash] params
-        # @api private
         #
         def add_params(params)
           params.each do |param, value|
