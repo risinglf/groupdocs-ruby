@@ -2,6 +2,7 @@ require 'groupdocs/version'
 require 'groupdocs/errors'
 require 'groupdocs/api'
 require 'groupdocs/storage'
+require 'groupdocs/document'
 
 module GroupDocs
   class << self
