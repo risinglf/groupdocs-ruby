@@ -3,6 +3,7 @@ require 'spec_helper'
 describe GroupDocs::Document do
 
   it_behaves_like GroupDocs::Api::Entity
+  include_examples GroupDocs::Api::Sugar::Lookup
 
   subject do
     file = GroupDocs::Storage::File.new

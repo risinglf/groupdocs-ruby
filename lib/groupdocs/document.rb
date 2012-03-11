@@ -1,11 +1,23 @@
 module GroupDocs
   class Document < GroupDocs::Api::Entity
 
+    extend GroupDocs::Api::Sugar::Lookup
+
+    #
+    # Returns an array of all documents on server.
+    #
+    # @return [Array<GroupDocs::Storage::Document>]
+    #
+    def self.all!
+      GroupDocs::Storage::File.all!.map(&:to_document)
+    end
+
     # @attr [GroupDocs::Storage::File] file
     attr_accessor :file
 
     # TODO
     attr_accessor :name
+    attr_accessor :id
 
     #
     # Creates new GroupDocs::Document.

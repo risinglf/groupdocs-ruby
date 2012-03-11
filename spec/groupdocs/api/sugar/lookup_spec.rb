@@ -2,9 +2,16 @@ require 'spec_helper'
 
 shared_examples_for GroupDocs::Api::Sugar::Lookup do
 
+  let(:found) do
+    if described_class == GroupDocs::Document
+      described_class.new(id: 1, file: GroupDocs::Storage::File.new)
+    else
+      described_class.new(id: 1)
+    end
+  end
+
   describe 'find!' do
     it 'calls #find_all! and return its first result' do
-      found = described_class.new(id: 1)
       described_class.should_receive(:find_all!).with(:id, 1).and_return([found])
       described_class.find!(:id, 1).should == found
     end
@@ -29,7 +36,7 @@ shared_examples_for GroupDocs::Api::Sugar::Lookup do
     end
 
     it 'calls #all! and search within it' do
-      described_class.should_receive(:all!).and_return([described_class.new(name: 'Test')])
+      described_class.should_receive(:all!).and_return([found])
       described_class.find_all!(:name, 'Test')
     end
 
