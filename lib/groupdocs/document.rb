@@ -124,6 +124,24 @@ module GroupDocs
     end
 
     #
+    # Creates thumbnails of specific pages.
+    #
+    # @param [Hash] options
+    # @option options [Integer] :page_number Starting page
+    # @option options [Integer] :page_count Number of pages
+    # @option options [Integer] :quality From 1 to 100
+    # @option options [Boolean] :use_pdf
+    #
+    def thumbnail!(options = {})
+      api = GroupDocs::Api::Request.new do |request|
+        request[:method] = :POST
+        request[:path] = "/doc/#{GroupDocs.client_id}/files/#{file.guid}/thumbnails"
+      end
+      api.add_params(options)
+      api.execute!
+    end
+
+    #
     # Try to pass all unknown methods to file.
     #
 

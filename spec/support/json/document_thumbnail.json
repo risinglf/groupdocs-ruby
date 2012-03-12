@@ -1,0 +1,17 @@
+{
+  "result":
+    {
+      "page_count": 2,
+      "page_size":
+      {
+        "Width": 815,
+        "Height": 1055
+      },
+      "url": "https://dev-api.groupdocs.com/v2.0/shared/files/29163f82befebe2e5c90f180a3841ec014d0f8ce0d7e54b4b203b9988b55d607",
+      "doc_type": 3,
+      "id": 1,
+      "guid": "29163f82befebe2e5c90f180a3841ec014d0f8ce0d7e54b4b203b9988b55d607"
+    },
+  "status": "Ok",
+  "error_message": null
+}

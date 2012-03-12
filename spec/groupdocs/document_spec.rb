@@ -104,6 +104,15 @@ describe GroupDocs::Document do
       end
     end
 
+    describe '#thumbnail!' do
+      it 'accepts options hash' do
+        mock_api_server(load_json('document_thumbnail'))
+        lambda do
+          subject.thumbnail!(page_number: 1, page_count: 2, use_pdf: true)
+        end.should_not raise_error
+      end
+    end
+
     describe '#method_missing' do
       it 'passes unknown methods to file object' do
         -> { subject.name }.should_not raise_error(NoMethodError)
@@ -130,7 +139,7 @@ describe GroupDocs::Document do
 
     describe '#parse_access_mode' do
       it 'raise error if mode is unknown' do
-        -> { subject.send(:parse_access_mode, 3) }.should raise_error(ArgumentError)
+        -> { subject.send(:parse_access_mode, 3)        }.should raise_error(ArgumentError)
         -> { subject.send(:parse_access_mode, :unknown) }.should raise_error(ArgumentError)
       end
 
