@@ -12,5 +12,15 @@ module GroupDocs
     # @attr [Hash] last_view
     attr_accessor :last_view
 
+    #
+    # Coverts passed hash to GroupDocs::Document::View object.
+    #
+    # @param [Hash] options
+    # @return [GroupDocs::Document::View]
+    #
+    def last_view=(options)
+      @last_view = GroupDocs::Document::View.new(options)
+    end
+
   end # Document::Metadata
 end # GroupDocs

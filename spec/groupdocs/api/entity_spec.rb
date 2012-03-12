@@ -5,8 +5,9 @@ shared_examples_for GroupDocs::Api::Entity do
   before(:each) do
     # make sure `id` attribute exists
     described_class.class_eval('attr_accessor :id')
-    # add file for GroupDocs::Document because otherwise it raises error
-    if described_class == GroupDocs::Document
+    # stub required attributes
+    case described_class.name
+    when 'GroupDocs::Document'
       described_class.any_instance.stub(file: GroupDocs::Storage::File.new)
     end
   end

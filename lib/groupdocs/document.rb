@@ -4,6 +4,7 @@ module GroupDocs
     require 'groupdocs/document/field'
     require 'groupdocs/document/metadata'
     require 'groupdocs/document/rectangle'
+    require 'groupdocs/document/view'
 
     extend GroupDocs::Api::Sugar::Lookup
 
@@ -14,6 +15,28 @@ module GroupDocs
     #
     def self.all!
       GroupDocs::Storage::File.all!.map(&:to_document)
+    end
+
+    #
+    # Returns an array of views for document.
+    #
+    # @param [Hash] options
+    # @option options [Integer] :page_index Page to start with
+    # @option options [Integer] :page_size Total number of entries
+    #
+    # @return [Array<GroupDocs::Document::View>]
+    #
+    def self.views!(options = { page_index: 0 })
+      api = GroupDocs::Api::Request.new do |request|
+        request[:method] = :GET
+        request[:path] = "/doc/#{GroupDocs.client_id}/views"
+      end
+      api.add_params(options)
+      json = api.execute!
+
+      json[:result][:views].map do |view|
+        GroupDocs::Document::View.new(view)
+      end
     end
 
     # @attr [GroupDocs::Storage::File] file
@@ -94,11 +117,9 @@ module GroupDocs
         metadata.guid = json[:result][:guid]
         metadata.page_count = json[:result][:page_count]
         metadata.views_count = json[:result][:views_count]
-        metadata.last_view = json[:result][:last_view]
-        if metadata.last_view
-          metadata.last_view[:document] = self
-          metadata.last_view[:short_url] = json[:result][:last_view][:short_url]
-          metadata.last_view[:viewed_on] = Time.at(json[:result][:last_view][:viewed_on])
+        if json[:result][:last_view]
+          metadata.last_view = json[:result][:last_view]
+          metadata.last_view.document = self
         end
       end
     end
@@ -131,6 +152,8 @@ module GroupDocs
     # @option options [Integer] :page_count Number of pages
     # @option options [Integer] :quality From 1 to 100
     # @option options [Boolean] :use_pdf
+    #
+    # @todo what should it return?
     #
     def thumbnail!(options = {})
       api = GroupDocs::Api::Request.new do |request|

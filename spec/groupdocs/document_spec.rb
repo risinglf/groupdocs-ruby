@@ -26,6 +26,17 @@ describe GroupDocs::Document do
   end
 
   context 'class methods' do
+    describe '#views!' do
+      it 'returns an array of GroupDocs::Document::View objects' do
+        mock_api_server(load_json('document_views'))
+        views = described_class.views!
+        views.should be_an(Array)
+        views.each do |view|
+          view.should be_a(GroupDocs::Document::View)
+        end
+      end
+    end
+
     describe '#all!' do
       it 'calls GroupDocs::Storage::File.all! and converts each file to document' do
         file1 = GroupDocs::Storage::File.new
@@ -66,7 +77,7 @@ describe GroupDocs::Document do
       end
     end
 
-    describe '#metdata!' do
+    describe '#metadata!' do
       before(:each) do
         mock_api_server(load_json('document_metadata'))
       end
@@ -75,21 +86,17 @@ describe GroupDocs::Document do
         subject.metadata!.should be_a(GroupDocs::Document::MetaData)
       end
 
-      it 'sets last view hash if document was viewed at least once' do
-        subject.metadata!.last_view.should be_a(Hash)
+      it 'sets last view as GroupDocs::Document::View if document was viewed at least once' do
+        subject.metadata!.last_view.should be_a(GroupDocs::Document::View)
       end
 
-      it 'uses self document in last view document' do
-        subject.metadata!.last_view[:document].should == subject
+      it 'uses self document in last view object' do
+        subject.metadata!.last_view.document.should == subject
       end
 
       it 'does not set last view if document has never been viewed' do
         mock_api_server('{"status": "Ok", "result": {"last_view": null }}')
         subject.metadata!.last_view.should be_nil
-      end
-
-      it 'converts viewed on to Time object' do
-        subject.metadata!.last_view[:viewed_on].should be_a(Time)
       end
     end
 
