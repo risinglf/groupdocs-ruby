@@ -93,6 +93,17 @@ describe GroupDocs::Document do
       end
     end
 
+    describe '#fields!' do
+      it 'returns array of GroupDocs::Document::Field objects' do
+        mock_api_server(load_json('document_fields'))
+        fields = subject.fields!
+        fields.should be_an(Array)
+        fields.each do |field|
+          field.should be_a(GroupDocs::Document::Field)
+        end
+      end
+    end
+
     describe '#method_missing' do
       it 'passes unknown methods to file object' do
         -> { subject.name }.should_not raise_error(NoMethodError)

@@ -104,6 +104,26 @@ module GroupDocs
     end
 
     #
+    # Returns an array of document fields.
+    #
+    # @param [Hash] options
+    # @option options [Boolean] :include_geometry Set to true if fields location and size should be returned
+    # @return [Array<GroupDocs::Document::Field>]
+    #
+    def fields!(options = {})
+      api = GroupDocs::Api::Request.new do |request|
+        request[:method] = :GET
+        request[:path] = "/doc/#{GroupDocs.client_id}/files/#{file.guid}/fields"
+      end
+      api.add_params(options)
+      json = api.execute!
+
+      json[:result][:fields].map do |field|
+        Field.new(field)
+      end
+    end
+
+    #
     # Try to pass all unknown methods to file.
     #
 
