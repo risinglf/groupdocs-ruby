@@ -1,6 +1,7 @@
 module GroupDocs
   class Document < GroupDocs::Api::Entity
 
+    require 'groupdocs/document/field'
     require 'groupdocs/document/metadata'
     require 'groupdocs/document/rectangle'
 
