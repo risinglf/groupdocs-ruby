@@ -44,6 +44,7 @@ module GroupDocs
       #
       # It performs the following actions step by step:
       #   * Prepends path with version if it's set
+      #   * URL encodes path
       #   * Signs URL
       #   * Prepare request (add headers, converts payload to JSON, etc.)
       #   * Sends request to server
@@ -53,6 +54,7 @@ module GroupDocs
       #
       def execute!
         prepend_version
+        url_encode_path
         sign_url
         prepare_request
         send_request

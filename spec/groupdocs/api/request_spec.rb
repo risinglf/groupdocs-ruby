@@ -48,6 +48,11 @@ describe GroupDocs::Api::Request do
       subject.execute!
     end
 
+    it 'URL encodes path' do
+      subject.should_receive(:url_encode_path)
+      subject.execute!
+    end
+
     it 'signs url' do
       subject.should_receive(:sign_url)
       subject.execute!

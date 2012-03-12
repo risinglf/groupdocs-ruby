@@ -1,5 +1,6 @@
 require 'base64'
 require 'hmac-sha1'
+require 'uri'
 require 'cgi'
 
 module GroupDocs
@@ -19,6 +20,15 @@ module GroupDocs
         end
 
         private
+
+        #
+        # URL encodes path.
+        #
+        # @api private
+        #
+        def url_encode_path
+          options[:path] = URI.escape(options[:path])
+        end
 
         #
         # Adds signature to path.

@@ -19,6 +19,14 @@ describe GroupDocs::Api::Helpers::URL do
     end
   end
 
+  describe '#url_encode_path' do
+    it 'URL encodes path' do
+      subject.options[:path] = '/folder/Test 123'
+      subject.options.should_receive(:[]=).with(:path, '/folder/Test%20123')
+      subject.send(:url_encode_path)
+    end
+  end
+
   describe '#sign_url' do
     it 'uses defined private key' do
       GroupDocs.should_receive(:private_key).and_return('e98ea443354183fd1fb434047232c687')
