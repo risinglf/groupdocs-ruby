@@ -29,7 +29,7 @@ module GroupDocs
           blk.call(self) if block_given?
         else
           options.each do |attr, value|
-            send(:"#{attr}=", value)
+            send(:"#{attr}=", value) if respond_to?(:"#{attr}=")
           end
         end
       end
