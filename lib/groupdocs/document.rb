@@ -89,7 +89,7 @@ module GroupDocs
         request[:path] = "/doc/#{GroupDocs.client_id}/files/#{file.id}/metadata"
       end.execute!
 
-      MetaData.new do |metadata|
+      GroupDocs::Document::MetaData.new do |metadata|
         metadata.id = json[:result][:id]
         metadata.guid = json[:result][:guid]
         metadata.page_count = json[:result][:page_count]
@@ -119,7 +119,7 @@ module GroupDocs
       json = api.execute!
 
       json[:result][:fields].map do |field|
-        Field.new(field)
+        GroupDocs::Document::Field.new(field)
       end
     end
 
