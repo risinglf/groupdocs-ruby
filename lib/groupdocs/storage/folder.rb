@@ -10,7 +10,7 @@ module GroupDocs
       # @param [String] path Path of folder to create starting from root ('/')
       # @return [GroupDocs::Storage::Folder] Created folder
       #
-      # @raise [ArgumentError] If path does not start with /.
+      # @raise [ArgumentError] If path does not start with /
       #
       def self.create!(path)
         path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{path.inspect}"
@@ -51,7 +51,7 @@ module GroupDocs
       # @option options [Boolean] :order_asc Set to true to return in ascending order
       # @return [Array<GroupDocs::Storage::Folder, GroupDocs::Storage::File>]
       #
-      # @raise [ArgumentError] If path does not start with /.
+      # @raise [ArgumentError] If path does not start with /
       #
       def self.list!(path = '/', options = {})
         path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{path.inspect}"
@@ -118,7 +118,7 @@ module GroupDocs
       # @param [String] path Destination to move contents to
       # @return [String] Moved to folder path
       #
-      # @raise [ArgumentError] If path does not start with /.
+      # @raise [ArgumentError] If path does not start with /
       #
       def move!(path)
         path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{path.inspect}"
@@ -144,8 +144,10 @@ module GroupDocs
       #
       # Copies folder contents to a destination path.
       #
-      # @param [String] path Path of directory to list starting from root ('/')
+      # @param [String] path Path of directory to copy to starting from root ('/')
       # @return [String] Copied to folder path
+      #
+      # @raise [ArgumentError] If path does not start with /
       #
       def copy!(path)
         path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{path.inspect}"
