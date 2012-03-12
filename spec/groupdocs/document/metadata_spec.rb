@@ -16,5 +16,4 @@ describe GroupDocs::Document::MetaData do
     it { should respond_to(:last_view)    }
     it { should respond_to(:last_view=)   }
   end
-
 end
