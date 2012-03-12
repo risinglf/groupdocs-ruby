@@ -94,12 +94,12 @@ describe GroupDocs::Storage::Folder do
       end
 
       it 'calls list! class method to find new folder' do
-        described_class.should_receive(:list!).with(no_args).and_return([described_class.new(id: 1)])
+        described_class.should_receive(:find!).with(:id, 1).and_return([described_class.new(id: 1)])
         described_class.create!('/Test')
       end
 
       it 'returns GroupDocs::Storage::Folder object' do
-        described_class.stub(list!: [described_class.new(id: 1)])
+        described_class.stub(find!: described_class.new(id: 1))
         folder = described_class.create!('/Test')
         folder.should be_a(GroupDocs::Storage::Folder)
       end

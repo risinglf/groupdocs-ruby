@@ -19,7 +19,7 @@ module GroupDocs
           request[:path] = "/storage/#{GroupDocs.client_id}/paths#{path}"
         end.execute!
 
-        list!.detect { |folder| folder.id == json[:result][:id] }
+        find!(:id, json[:result][:id])
       end
 
       #
