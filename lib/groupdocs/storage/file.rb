@@ -31,16 +31,7 @@ module GroupDocs
         api.add_params(options)
         json = api.execute!
 
-        GroupDocs::Storage::File.new do |file|
-          file.id        = json[:result][:id]
-          file.guid      = json[:result][:guid]
-          file.name      = json[:result][:adj_name]
-          file.url       = json[:result][:url]
-          file.type      = json[:result][:type]
-          file.size      = json[:result][:size]
-          file.version   = json[:result][:version]
-          file.thumbnail = json[:result][:thumbnail]
-        end
+        GroupDocs::Storage::File.new(json[:result])
       end
 
       #
@@ -87,6 +78,9 @@ module GroupDocs
       attr_accessor :type
       # @attr [Integer] access
       attr_accessor :access
+
+      # Compatibility with response JSON
+      alias_method :adj_name=, :name=
 
       #
       # Converts timestamp which is return by API server to Time object.

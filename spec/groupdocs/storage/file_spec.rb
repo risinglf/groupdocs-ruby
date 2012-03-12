@@ -31,6 +31,10 @@ describe GroupDocs::Storage::File do
     it { should respond_to(:access)       }
     it { should respond_to(:access=)      }
 
+    it 'compatible with response JSON' do
+      subject.should respond_to(:adj_name=)
+    end
+
     describe '#created_on=' do
       it 'modifies timestamp to Time object' do
         subject.created_on = 1330450135

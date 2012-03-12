@@ -64,34 +64,9 @@ module GroupDocs
 
         json[:result][:entities].map do |entity|
           if entity[:dir]
-            GroupDocs::Storage::Folder.new do |folder|
-              folder.size         = entity[:size]
-              folder.folder_count = entity[:folder_count]
-              folder.file_count   = entity[:file_count]
-              folder.created_on   = entity[:created_on]
-              folder.modified_on  = entity[:modified_on]
-              folder.url          = entity[:url]
-              folder.name         = entity[:name]
-              folder.version      = entity[:version]
-              folder.type         = entity[:type]
-              folder.access       = entity[:access]
-              folder.id           = entity[:id]
-            end
+            GroupDocs::Storage::Folder.new(entity)
           else
-            GroupDocs::Storage::File.new do |file|
-              file.size        = entity[:size]
-              file.known       = entity[:known]
-              file.thumbnail   = entity[:thumbnail]
-              file.created_on  = entity[:created_on]
-              file.modified_on = entity[:modified_on]
-              file.url         = entity[:url]
-              file.name        = entity[:name]
-              file.version     = entity[:version]
-              file.type        = entity[:type]
-              file.access      = entity[:access]
-              file.id          = entity[:id]
-              file.guid        = entity[:guid]
-            end
+            GroupDocs::Storage::File.new(entity)
           end
         end
       end
