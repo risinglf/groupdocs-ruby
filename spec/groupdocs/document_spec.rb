@@ -27,8 +27,16 @@ describe GroupDocs::Document do
 
   context 'class methods' do
     describe '#views!' do
-      it 'returns an array of GroupDocs::Document::View objects' do
+      before(:each) do
         mock_api_server(load_json('document_views'))
+      end
+
+      it 'adds page index option by default' do
+        GroupDocs::Api::Request.any_instance.should_receive(:add_params).with({ page_index: 0 })
+        described_class.views!
+      end
+
+      it 'returns an array of GroupDocs::Document::View objects' do
         views = described_class.views!
         views.should be_an(Array)
         views.each do |view|
