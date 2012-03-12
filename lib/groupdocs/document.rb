@@ -2,6 +2,7 @@ module GroupDocs
   class Document < GroupDocs::Api::Entity
 
     require 'groupdocs/document/metadata'
+    require 'groupdocs/document/rectangle'
 
     extend GroupDocs::Api::Sugar::Lookup
 
