@@ -47,6 +47,14 @@ describe GroupDocs::Api::Helpers::REST do
       end.should change { subject.options[:request_body] }.to('{"body":"test"}')
     end
 
+    it 'does not convert request body to JSON if payload is file' do
+      file = Object::File.new(__FILE__, 'rb')
+      subject.options[:method] = :POST
+      subject.options[:request_body] = file
+      subject.send(:prepare_request)
+      subject.options[:request_body].should == file
+    end
+
     it 'calculates and sets Content-length' do
       subject.options[:method] = :POST
       subject.options[:headers] = {}
