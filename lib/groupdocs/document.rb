@@ -167,16 +167,32 @@ module GroupDocs
     #
     # Sets document sharers to given emails.
     #
+    # If empty array or nil passed, clears sharers.
+    #
     # Please note that even thought it is not "bang" method, it still send requests to API server.
     #
     # @param [Array] emails List of email addresses to share with
     #
     def sharers=(emails)
+      if emails.nil? || emails.empty?
+        sharers_clear
+      else
+        GroupDocs::Api::Request.new do |request|
+          request[:method] = :PUT
+          request[:path] = "/doc/#{GroupDocs.client_id}/files/#{file.id}/sharers"
+          request[:request_body] = emails
+        end.execute!
+      end
+    end
+
+    #
+    # Clears sharers list.
+    #
+    def sharers_clear
       GroupDocs::Api::Request.new do |request|
-        request[:method] = :PUT
+        request[:method] = :DELETE
         request[:path] = "/doc/#{GroupDocs.client_id}/files/#{file.id}/sharers"
-        request[:request_body] = emails
-      end.execute!
+      end.execute![:result][:shared_users]
     end
 
     #

@@ -129,11 +129,28 @@ describe GroupDocs::Document do
     end
 
     describe '#sharers=' do
-      it 'accepts emails array and returns it' do
-        mock_api_server(load_json('document_thumbnail'))
+      it 'accepts emails array' do
+        mock_api_server(load_json('document_sharers_set'))
         lambda do
           subject.sharers = %w(test1@email.com test2@email.com)
         end.should_not raise_error
+      end
+
+      it 'clears sharers if empty array is passed' do
+        subject.should_receive(:sharers_clear)
+        subject.sharers = []
+      end
+
+      it 'clears sharers if nil is passed' do
+        subject.should_receive(:sharers_clear)
+        subject.sharers = nil
+      end
+    end
+
+    describe '#sharers_clear' do
+      it 'clears sharers list and returns nil' do
+        mock_api_server(load_json('document_sharers_remove'))
+        subject.sharers_clear.should be_nil
       end
     end
 
