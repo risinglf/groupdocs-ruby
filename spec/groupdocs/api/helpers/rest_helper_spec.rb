@@ -55,6 +55,15 @@ describe GroupDocs::Api::Helpers::REST do
         subject.send(:prepare_request)
       end.should change { subject.options[:headers][:content_length] }.to(15)
     end
+
+    it 'sets Content-Type header if necessary' do
+      subject.options[:method] = :POST
+      subject.options[:headers] = {}
+      subject.options[:request_body] = { body: 'test' }
+      lambda do
+        subject.send(:prepare_request)
+      end.should change { subject.options[:headers][:content_type] }.to('application/json')
+    end
   end
 
   describe '#send_request' do
