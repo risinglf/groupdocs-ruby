@@ -188,6 +188,8 @@ module GroupDocs
     #
     # Clears sharers list.
     #
+    # @return nil
+    #
     def sharers_clear
       GroupDocs::Api::Request.new do |request|
         request[:method] = :DELETE
