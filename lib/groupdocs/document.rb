@@ -165,6 +165,21 @@ module GroupDocs
     end
 
     #
+    # Sets document sharers to given emails.
+    #
+    # Please note that even thought it is not "bang" method, it still send requests to API server.
+    #
+    # @param [Array] emails List of email addresses to share with
+    #
+    def sharers=(emails)
+      GroupDocs::Api::Request.new do |request|
+        request[:method] = :PUT
+        request[:path] = "/doc/#{GroupDocs.client_id}/files/#{file.id}/sharers"
+        request[:request_body] = emails
+      end.execute!
+    end
+
+    #
     # Try to pass all unknown methods to file.
     #
 

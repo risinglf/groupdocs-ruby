@@ -128,6 +128,15 @@ describe GroupDocs::Document do
       end
     end
 
+    describe '#sharers=' do
+      it 'accepts emails array and returns it' do
+        mock_api_server(load_json('document_thumbnail'))
+        lambda do
+          subject.sharers = %w(test1@email.com test2@email.com)
+        end.should_not raise_error
+      end
+    end
+
     describe '#method_missing' do
       it 'passes unknown methods to file object' do
         -> { subject.name }.should_not raise_error(NoMethodError)
