@@ -22,7 +22,7 @@ module GroupDocs
 
           options[:method] = options[:method].downcase
 
-          if options[:request_body] and not options[:request_body].is_a?(Object::File)
+          if options[:request_body] && !options[:request_body].is_a?(Object::File)
             options[:request_body] = options[:request_body].to_json
             options[:headers][:content_type]= 'application/json'
             options[:headers][:content_length] = options[:request_body].length
