@@ -154,6 +154,16 @@ describe GroupDocs::Document do
       end
     end
 
+    describe '#inspect' do
+      it 'returns object in nice presentation' do
+        file_opts = { id: 1, guid: 'sdyf8a8f', name: 'Test.pdf', url: 'https://groupdocs.com' }
+        options = { file: GroupDocs::Storage::File.new(file_opts) }
+        subject = described_class.new(options)
+        subject.inspect.should ==
+          %(<##{described_class} @file=#{options[:file].inspect}">)
+      end
+    end
+
     describe '#method_missing' do
       it 'passes unknown methods to file object' do
         -> { subject.name }.should_not raise_error(NoMethodError)
