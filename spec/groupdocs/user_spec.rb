@@ -36,7 +36,7 @@ describe GroupDocs::User do
     it { should respond_to(:signed_up_on)   }
     it { should respond_to(:signed_up_on=)  }
 
-    it 'compatible with response JSON' do
+    it 'is compatible with response JSON' do
       subject.should respond_to(:pkey=)
       subject.should respond_to(:pswd_salt=)
       subject.should respond_to(:signedupOn=)
