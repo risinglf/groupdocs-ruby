@@ -42,7 +42,7 @@ describe GroupDocs::User do
       subject.should respond_to(:signedupOn=)
     end
 
-    describe '#signed_up_on==' do
+    describe '#signed_up_on=' do
       it 'modifies timestamp to Time object' do
         subject.signed_up_on = 1330450135
         subject.signed_up_on.should be_a(Time)
