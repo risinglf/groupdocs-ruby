@@ -175,7 +175,7 @@ module GroupDocs
     #
     def sharers=(emails)
       if emails.nil? || emails.empty?
-        sharers_clear
+        sharers_clear!
       else
         GroupDocs::Api::Request.new do |request|
           request[:method] = :PUT
@@ -190,7 +190,7 @@ module GroupDocs
     #
     # @return nil
     #
-    def sharers_clear
+    def sharers_clear!
       GroupDocs::Api::Request.new do |request|
         request[:method] = :DELETE
         request[:path] = "/doc/#{GroupDocs.client_id}/files/#{file.id}/sharers"
