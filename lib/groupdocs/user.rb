@@ -33,7 +33,7 @@ module GroupDocs
     attr_accessor :signed_up_on
 
     # Compatibility with response JSON
-    alias_method :pkey=,       :public_key=
+    alias_method :pkey=,       :private_key=
     alias_method :pswd_salt=,  :password_salt=
     alias_method :signedupOn=, :signed_up_on=
 
