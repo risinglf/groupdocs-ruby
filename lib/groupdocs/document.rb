@@ -165,6 +165,22 @@ module GroupDocs
     end
 
     #
+    # Returns an array of users a document is shared with.
+    #
+    # @return [Array<GroupDocs::User>]
+    #
+    def sharers!
+      json = GroupDocs::Api::Request.new do |request|
+        request[:method] = :GET
+        request[:path] = "/doc/#{GroupDocs.client_id}/files/#{file.id}/accessinfo"
+      end.execute!
+
+      json[:result][:sharers].map do |user|
+        GroupDocs::User.new(user)
+      end
+    end
+
+    #
     # Sets document sharers to given emails.
     #
     # If empty array or nil passed, clears sharers.

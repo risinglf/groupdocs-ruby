@@ -60,7 +60,7 @@ describe GroupDocs::Document do
   context 'instance methods' do
     describe '#access_mode!' do
       it 'returns access mode in human readable presentation' do
-        mock_api_server('{"status": "Ok", "result": {"access": 0 }}')
+        mock_api_server(load_json('document_access_info_get'))
         subject.should_receive(:parse_access_mode).with(0).and_return(:private)
         subject.access_mode!.should == :private
       end
@@ -125,6 +125,17 @@ describe GroupDocs::Document do
         lambda do
           subject.thumbnail!(page_number: 1, page_count: 2, use_pdf: true)
         end.should_not raise_error
+      end
+    end
+
+    describe '#sharers!' do
+      it 'returns an array of GroupDocs::User objects' do
+        mock_api_server(load_json('document_access_info_get'))
+        users = subject.sharers!
+        users.should be_an(Array)
+        users.each do |user|
+          user.should be_a(GroupDocs::User)
+        end
       end
     end
 
