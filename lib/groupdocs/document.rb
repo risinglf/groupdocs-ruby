@@ -198,6 +198,25 @@ module GroupDocs
     end
 
     #
+    # Converts document to given format.
+    #
+    # @param [Symbol] format
+    # @param [Hash] options
+    # @option options [Boolean] :email_results Set to true if converted document should be emailed
+    # @return [GroupDocs::Job] Created job
+    #
+    def convert!(format, options = {})
+      api = GroupDocs::Api::Request.new do |request|
+        request[:method] = :POST
+        request[:path] = "/#{GroupDocs.client_id}/files/#{file.guid}?new_type=#{format}"
+      end
+      api.add_params(options)
+      json = api.execute!
+
+      GroupDocs::Job.new(id: json[:result][:job_id])
+    end
+
+    #
     # Pretty prints entity.
     #
     def inspect

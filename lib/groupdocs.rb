@@ -1,8 +1,9 @@
 require 'groupdocs/version'
 require 'groupdocs/errors'
 require 'groupdocs/api'
-require 'groupdocs/storage'
 require 'groupdocs/document'
+require 'groupdocs/job'
+require 'groupdocs/storage'
 require 'groupdocs/user'
 
 module GroupDocs

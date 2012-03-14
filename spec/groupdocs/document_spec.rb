@@ -154,6 +154,22 @@ describe GroupDocs::Document do
       end
     end
 
+    describe '#convert!' do
+      before(:each) do
+        mock_api_server(load_json('document_convert'))
+      end
+
+      it 'accepts options hash' do
+        lambda do
+          subject.convert!(:pdf, email_results: true)
+        end.should_not raise_error
+      end
+
+      it 'returns GroupDocs::Job object' do
+        subject.convert!(:pdf).should be_a(GroupDocs::Job)
+      end
+    end
+
     describe '#inspect' do
       it 'returns object in nice presentation' do
         file_opts = { id: 1, guid: 'sdyf8a8f', name: 'Test.pdf', url: 'https://groupdocs.com' }
