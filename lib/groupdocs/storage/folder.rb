@@ -193,6 +193,55 @@ module GroupDocs
       end
 
       #
+      # Returns an array of users a folder is shared with.
+      #
+      # @return [Array<GroupDocs::User>]
+      #
+      def sharers!
+        json = GroupDocs::Api::Request.new do |request|
+          request[:method] = :GET
+          request[:path] = "/doc/#{GroupDocs.client_id}/folders/#{id}/sharers"
+        end.execute!
+
+        json[:result][:shared_users].map do |user|
+          GroupDocs::User.new(user)
+        end
+      end
+
+      #
+      # Sets folder sharers to given emails.
+      #
+      # If empty array or nil passed, clears sharers.
+      #
+      # Please note that even thought it is not "bang" method, it still send requests to API server.
+      #
+      # @param [Array] emails List of email addresses to share with
+      #
+      def sharers=(emails)
+        if emails.nil? || emails.empty?
+          sharers_clear!
+        else
+          GroupDocs::Api::Request.new do |request|
+            request[:method] = :PUT
+            request[:path] = "/doc/#{GroupDocs.client_id}/folders/#{id}/sharers"
+            request[:request_body] = emails
+          end.execute!
+        end
+      end
+
+      #
+      # Clears sharers list.
+      #
+      # @return nil
+      #
+      def sharers_clear!
+        GroupDocs::Api::Request.new do |request|
+          request[:method] = :DELETE
+          request[:path] = "/doc/#{GroupDocs.client_id}/folders/#{id}/sharers"
+        end.execute![:result][:shared_users]
+      end
+
+      #
       # Pretty prints entity.
       #
       def inspect

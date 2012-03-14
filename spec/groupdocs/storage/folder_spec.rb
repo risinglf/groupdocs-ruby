@@ -193,6 +193,43 @@ describe GroupDocs::Storage::Folder do
       end
     end
 
+    describe '#sharers!' do
+      it 'returns an array of GroupDocs::User objects' do
+        mock_api_server(load_json('folder_sharers_get'))
+        users = subject.sharers!
+        users.should be_an(Array)
+        users.each do |user|
+          user.should be_a(GroupDocs::User)
+        end
+      end
+    end
+
+    describe '#sharers=' do
+      it 'accepts emails array' do
+        mock_api_server(load_json('folder_sharers_set'))
+        lambda do
+          subject.sharers = %w(test1@email.com test2@email.com)
+        end.should_not raise_error
+      end
+
+      it 'clears sharers if empty array is passed' do
+        subject.should_receive(:sharers_clear!)
+        subject.sharers = []
+      end
+
+      it 'clears sharers if nil is passed' do
+        subject.should_receive(:sharers_clear!)
+        subject.sharers = nil
+      end
+    end
+
+    describe '#sharers_clear!' do
+      it 'clears sharers list and returns nil' do
+        mock_api_server(load_json('folder_sharers_remove'))
+        subject.sharers_clear!.should be_nil
+      end
+    end
+
     describe '#inspect' do
       it 'returns object in nice presentation' do
         options = { id: 1, name: 'Test', url: 'http://groupdocs.com/folder/Test' }
