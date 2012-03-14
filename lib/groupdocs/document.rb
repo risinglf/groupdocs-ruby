@@ -18,7 +18,7 @@ module GroupDocs
     end
 
     #
-    # Returns an array of views for document.
+    # Returns an array of views for all documents.
     #
     # @param [Hash] options
     # @option options [Integer] :page_index Page to start with
