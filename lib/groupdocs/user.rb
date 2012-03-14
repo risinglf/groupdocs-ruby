@@ -13,8 +13,8 @@ module GroupDocs
     attr_accessor :last_name
     # @attr [String] primary_email
     attr_accessor :primary_email
-    # @attr [String] public_key
-    attr_accessor :public_key
+    # @attr [String] private_key
+    attr_accessor :private_key
     # @attr [String] password_salt
     attr_accessor :password_salt
     # @attr [Integer] claimed_id

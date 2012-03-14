@@ -17,8 +17,8 @@ describe GroupDocs::User do
     it { should respond_to(:last_name=)     }
     it { should respond_to(:primary_email)  }
     it { should respond_to(:primary_email=) }
-    it { should respond_to(:public_key)     }
-    it { should respond_to(:public_key=)    }
+    it { should respond_to(:private_key)    }
+    it { should respond_to(:private_key=)   }
     it { should respond_to(:password_salt)  }
     it { should respond_to(:password_salt=) }
     it { should respond_to(:claimed_id)     }
