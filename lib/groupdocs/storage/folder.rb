@@ -241,13 +241,6 @@ module GroupDocs
         end.execute![:result][:shared_users]
       end
 
-      #
-      # Pretty prints entity.
-      #
-      def inspect
-        %(<##{self.class} @id=#{id} @name="#{name}" @url="#{url}">)
-      end
-
     end # Folder
   end # Storage
 end # GroupDocs

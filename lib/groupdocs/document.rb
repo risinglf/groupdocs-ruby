@@ -233,13 +233,6 @@ module GroupDocs
     end
 
     #
-    # Pretty prints entity.
-    #
-    def inspect
-      %(<##{self.class} @file=#{file.inspect}">)
-    end
-
-    #
     # Try to pass all unknown methods to file.
     #
 

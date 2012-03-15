@@ -195,14 +195,5 @@ describe GroupDocs::Storage::File do
         subject.to_document.file.should == subject
       end
     end
-
-    describe '#inspect' do
-      it 'returns object in nice presentation' do
-        options = { id: 1, guid: 3, name: 'Test', url: 'http://groupdocs.com/folder/Test' }
-        subject = described_class.new(options)
-        subject.inspect.should ==
-          %(<##{described_class} @id=#{options[:id]} @guid=#{options[:guid]} @name="#{options[:name]}" @url="#{options[:url]}">)
-      end
-    end
   end
 end

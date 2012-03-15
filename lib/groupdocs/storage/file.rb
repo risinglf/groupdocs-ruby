@@ -210,13 +210,6 @@ module GroupDocs
         GroupDocs::Document.new(file: self)
       end
 
-      #
-      # Pretty prints entity.
-      #
-      def inspect
-        %(<##{self.class} @id=#{id} @guid=#{guid} @name="#{name}" @url="#{url}">)
-      end
-
     end # File
   end # Storage
 end # GroupDocs

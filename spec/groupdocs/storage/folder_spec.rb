@@ -229,14 +229,5 @@ describe GroupDocs::Storage::Folder do
         subject.sharers_clear!.should be_nil
       end
     end
-
-    describe '#inspect' do
-      it 'returns object in nice presentation' do
-        options = { id: 1, name: 'Test', url: 'http://groupdocs.com/folder/Test' }
-        subject = described_class.new(options)
-        subject.inspect.should ==
-          %(<##{described_class} @id=#{options[:id]} @name="#{options[:name]}" @url="#{options[:url]}">)
-      end
-    end
   end
 end
