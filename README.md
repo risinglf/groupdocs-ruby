@@ -47,14 +47,14 @@ All entities can be initialized in several ways.
 folder = GroupDocs::Storage::Folder.new
 folder.name = 'Folder'
 folder.inspect
-#=> <#GroupDocs::Storage::Folder @id=nil @name="Folder" @url="">
+#=> <#GroupDocs::Storage::Folder:0x0000000171f432 @id=nil @name="Folder" @url="">
 ```
 
 * Hash of attributes are passed to object constructor.
 
 ```ruby
 GroupDocs::Storage::Folder.new(name: 'Folder')
-#=> <#GroupDocs::Storage::Folder @id=nil @name="Folder" @url="">
+#=> <#GroupDocs::Storage::Folder:0x0000000171f432 @id=nil @name="Folder" @url="">
 ```
 
 * Block is passed to object constructor.
@@ -63,7 +63,7 @@ GroupDocs::Storage::Folder.new(name: 'Folder')
 GroupDocs::Storage::Folder.new do |folder|
   folder.name = 'Folder'
 end
-#=> <#GroupDocs::Storage::Folder @id=nil @name="Folder" @url="">
+#=> <#GroupDocs::Storage::Folder:0x0000000171f432 @id=nil @name="Folder" @url="">
 ```
 
 Note, that all "bang" methods (ending with exclamation sign) means interaction with API server.
@@ -76,21 +76,21 @@ Some entities support `#all!, `#find!` and `#find_all!` methods. You can pass an
 
 ```ruby
 GroupDocs::Storage::File.all!
-#=> [<#GroupDocs::Storage::File @id=123 @guid=uhfsa9dry29rhfodn @name="resume.pdf" @url="http://groupdocs.com">, <#GroupDocs::Storage::File @id=456 @guid=soif97sr9u24bfosd9 @name="CV.doc" @url="http://groupdocs.com">]
+#=> [<#GroupDocs::Storage::File:0x0000000171f432 @id=123 @guid=uhfsa9dry29rhfodn @name="resume.pdf" @url="http://groupdocs.com">, <#GroupDocs::Storage::File:0x0000000171f498 @id=456 @guid=soif97sr9u24bfosd9 @name="CV.doc" @url="http://groupdocs.com">]
 ```
 
 * Find folder with name `Folder1`
 
 ```ruby
 GroupDocs::Storage::Folder.find!(:name, 'Folder1')
-#=> <#GroupDocs::Storage::Folder @id=1 @name="Folder1" @url="http://groupdocs.com">
+#=> <#GroupDocs::Storage::Folder:0x0000000171f432 @id=1 @name="Folder1" @url="http://groupdocs.com">
 ```
 
 * Find all folders which name starts with `Folder`
 
 ```ruby
 GroupDocs::Storage::Folder.find_all!(:name, /^Folder/)
-#=> [<#GroupDocs::Storage::Folder @id=1 @name="Folder1" @url="http://groupdocs.com">, <#GroupDocs::Storage::Folder @id=2 @name="Folder2" @url="http://groupdocs.com">]
+#=> [<#GroupDocs::Storage::Folder:0x0000000171f432 @id=1 @name="Folder1" @url="http://groupdocs.com">, <#GroupDocs::Storage::Folder:0x0000000171f467 @id=2 @name="Folder2" @url="http://groupdocs.com">]
 ```
 
 ### Storage API
