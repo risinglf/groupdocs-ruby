@@ -10,9 +10,6 @@ module GroupDocs
     # @attr [GroupDocs::Document::Rectangle] rectangle
     attr_accessor :rectangle
 
-    # Compatibility with response JSON
-    alias_method :rect=, :rectangle=
-
     #
     # Coverts passed hash to GroupDocs::Document::Rectangle object.
     #
@@ -27,6 +24,9 @@ module GroupDocs
         rectangle.h = options[:Height]
       end
     end
+
+    # Compatibility with response JSON
+    alias_method :rect=, :rectangle=
 
   end # Document::Field
 end # GroupDocs

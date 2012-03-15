@@ -32,11 +32,6 @@ module GroupDocs
     # @attr [Time] signed_up_on
     attr_accessor :signed_up_on
 
-    # Compatibility with response JSON
-    alias_method :pkey=,       :private_key=
-    alias_method :pswd_salt=,  :password_salt=
-    alias_method :signedupOn=, :signed_up_on=
-
     #
     # Converts timestamp which is return by API server to Time object.
     #
@@ -45,6 +40,11 @@ module GroupDocs
     def signed_up_on=(timestamp)
       @signed_up_on = Time.at(timestamp)
     end
+
+    # Compatibility with response JSON
+    alias_method :pkey=,       :private_key=
+    alias_method :pswd_salt=,  :password_salt=
+    alias_method :signedupOn=, :signed_up_on=
 
   end # User
 end # GroupDocs
