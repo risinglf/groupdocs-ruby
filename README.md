@@ -97,6 +97,10 @@ GroupDocs::Storage::Folder.find_all!(:name, /^Folder/)
 
 Read more about examples of using Storage API on [wiki](https://github.com/p0deje/groupdocs-ruby/wiki/Storage-API).
 
+### Document API
+
+Read more about examples of using Document API on [wiki](https://github.com/p0deje/groupdocs-ruby/wiki/Document-API).
+
 ### Copyright
 
 Copyright (c) 2012 Aspose Inc.
