@@ -26,10 +26,10 @@ module GroupDocs
       end.execute!
 
       {
-        total_space:       "#{json[:result][:total_space] / 1048576} MB",
-        available_space:   "#{json[:result][:avail_space] / 1048576} MB",
-        document_credits:  json[:result][:doc_credits],
-        available_credits: json[:result][:avail_credits]
+        total_space:       "#{json[:total_space] / 1048576} MB",
+        available_space:   "#{json[:avail_space] / 1048576} MB",
+        document_credits:  json[:doc_credits],
+        available_credits: json[:avail_credits]
       }
     end
 

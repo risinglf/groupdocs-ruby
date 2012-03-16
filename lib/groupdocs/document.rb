@@ -41,7 +41,7 @@ module GroupDocs
       api.add_params(options)
       json = api.execute!
 
-      json[:result][:views].map do |view|
+      json[:views].map do |view|
         GroupDocs::Document::View.new(view)
       end
     end
@@ -78,7 +78,7 @@ module GroupDocs
         request[:path] = "/doc/{{client_id}}/files/#{file.id}/accessinfo"
       end.execute!
 
-      parse_access_mode(json[:result][:access])
+      parse_access_mode(json[:access])
     end
 
     #
@@ -97,7 +97,7 @@ module GroupDocs
         request[:path] = "/doc/{{client_id}}/files/#{file.id}/accessinfo?mode=#{parse_access_mode(mode)}"
       end.execute!
 
-      parse_access_mode(json[:result][:access])
+      parse_access_mode(json[:access])
     end
     # note that aliased version cannot accept access credentials hash
     alias_method :access_mode=, :access_mode_set!
@@ -117,7 +117,7 @@ module GroupDocs
         request[:path] = "/doc/{{client_id}}/files/#{file.id}/formats"
       end.execute!
 
-      json[:result][:types].split(';').map do |format|
+      json[:types].split(';').map do |format|
         format.downcase.to_sym
       end
     end
@@ -138,12 +138,12 @@ module GroupDocs
       end.execute!
 
       GroupDocs::Document::MetaData.new do |metadata|
-        metadata.id = json[:result][:id]
-        metadata.guid = json[:result][:guid]
-        metadata.page_count = json[:result][:page_count]
-        metadata.views_count = json[:result][:views_count]
-        if json[:result][:last_view]
-          metadata.last_view = json[:result][:last_view]
+        metadata.id = json[:id]
+        metadata.guid = json[:guid]
+        metadata.page_count = json[:page_count]
+        metadata.views_count = json[:views_count]
+        if json[:last_view]
+          metadata.last_view = json[:last_view]
           metadata.last_view.document = self
         end
       end
@@ -168,7 +168,7 @@ module GroupDocs
       api.add_params(options)
       json = api.execute!
 
-      json[:result][:fields].map do |field|
+      json[:fields].map do |field|
         GroupDocs::Document::Field.new(field)
       end
     end
@@ -212,7 +212,7 @@ module GroupDocs
         request[:path] = "/doc/{{client_id}}/files/#{file.id}/accessinfo"
       end.execute!
 
-      json[:result][:sharers].map do |user|
+      json[:sharers].map do |user|
         GroupDocs::User.new(user)
       end
     end
@@ -239,7 +239,7 @@ module GroupDocs
           request[:request_body] = emails
         end.execute!
 
-        json[:result][:shared_users].map do |user|
+        json[:shared_users].map do |user|
           GroupDocs::User.new(user)
         end
       end
@@ -260,7 +260,7 @@ module GroupDocs
         request[:access] = access
         request[:method] = :DELETE
         request[:path] = "/doc/{{client_id}}/files/#{file.id}/sharers"
-      end.execute![:result][:shared_users]
+      end.execute![:shared_users]
     end
 
     #
@@ -280,7 +280,7 @@ module GroupDocs
       api.add_params(options)
       json = api.execute!
 
-      GroupDocs::Job.new(id: json[:result][:job_id])
+      GroupDocs::Job.new(id: json[:job_id])
     end
 
     #

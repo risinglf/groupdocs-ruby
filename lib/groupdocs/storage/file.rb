@@ -35,7 +35,7 @@ module GroupDocs
         api.add_params(options)
         json = api.execute!
 
-        GroupDocs::Storage::File.new(json[:result])
+        GroupDocs::Storage::File.new(json)
       end
 
       #
@@ -193,7 +193,7 @@ module GroupDocs
           request[:path] = "/storage/{{client_id}}/files#{path}"
         end.execute!
 
-        GroupDocs::Storage::File.new(json[:result][:dst_file])
+        GroupDocs::Storage::File.new(json[:dst_file])
       end
 
       #
@@ -214,8 +214,8 @@ module GroupDocs
         end.execute!
 
         # HACK add filename for further download
-        json[:result][:name] = "#{name}.#{type}"
-        GroupDocs::Storage::File.new(json[:result])
+        json[:name] = "#{name}.#{type}"
+        GroupDocs::Storage::File.new(json)
       end
 
       #

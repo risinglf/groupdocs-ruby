@@ -34,7 +34,7 @@ module GroupDocs
           request[:request_body] = @objects.map(&:name)
         end.execute!
 
-        json[:result][:url]
+        json[:url]
       end
 
     end # Package

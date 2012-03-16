@@ -24,7 +24,7 @@ module GroupDocs
           request[:path] = "/storage/{{client_id}}/paths#{path}"
         end.execute!
 
-        find!(:id, json[:result][:id], access)
+        find!(:id, json[:id], access)
       end
 
       #
@@ -76,7 +76,7 @@ module GroupDocs
         api.add_params(options)
         json = api.execute!
 
-        json[:result][:entities].map do |entity|
+        json[:entities].map do |entity|
           if entity[:dir]
             GroupDocs::Storage::Folder.new(entity)
           else
@@ -246,7 +246,7 @@ module GroupDocs
           request[:path] = "/doc/{{client_id}}/folders/#{id}/sharers"
         end.execute!
 
-        json[:result][:shared_users].map do |user|
+        json[:shared_users].map do |user|
           GroupDocs::User.new(user)
         end
       end
@@ -273,7 +273,7 @@ module GroupDocs
             request[:request_body] = emails
           end.execute!
 
-          json[:result][:shared_users].map do |user|
+          json[:shared_users].map do |user|
             GroupDocs::User.new(user)
           end
         end
@@ -294,7 +294,7 @@ module GroupDocs
           request[:access] = access
           request[:method] = :DELETE
           request[:path] = "/doc/{{client_id}}/folders/#{id}/sharers"
-        end.execute![:result][:shared_users]
+        end.execute![:shared_users]
       end
 
     end # Folder

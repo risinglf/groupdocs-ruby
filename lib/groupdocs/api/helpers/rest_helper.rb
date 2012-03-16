@@ -61,7 +61,7 @@ module GroupDocs
           # for all other requests, parse JSON
           else
             json = JSON.parse(response, symbolize_names: true)
-            json[:status] == 'Ok' ? json : raise_bad_request_error(json)
+            json[:status] == 'Ok' ? json[:result] : raise_bad_request_error(json)
           end
         end
 
