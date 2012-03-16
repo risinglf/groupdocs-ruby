@@ -12,10 +12,11 @@ module GroupDocs
       #
       # @param [GroupDocs::Storage::File, GroupDocs::Storage::Folder] object
       #
-      def <<(object)
+      def add(object)
         @objects ||= Array.new
         @objects << object
       end
+      alias_method :<<, :add
 
       #
       # Creates package on server.

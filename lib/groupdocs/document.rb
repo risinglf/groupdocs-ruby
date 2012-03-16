@@ -97,6 +97,8 @@ module GroupDocs
         request[:path] = "/doc/{{client_id}}/files/#{file.id}/accessinfo?mode=#{parse_access_mode(mode)}"
       end.execute!
     end
+    # note that aliased version cannot accept access credentials hash
+    alias_method :access_mode=, :access_mode_set!
 
     #
     # Returns array of file formats document can be converted to.
@@ -235,6 +237,8 @@ module GroupDocs
         end.execute!
       end
     end
+    # note that aliased version cannot accept access credentials hash
+    alias_method :sharers=, :sharers_set!
 
     #
     # Clears sharers list.

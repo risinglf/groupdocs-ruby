@@ -102,6 +102,11 @@ describe GroupDocs::Document do
         subject.should_receive(:parse_access_mode).with(:private).and_return(0)
         subject.access_mode_set!(:private)
       end
+
+      it 'is aliased to #access_mode=' do
+        subject.should respond_to(:access_mode=)
+        subject.method(:access_mode=).should == subject.method(:access_mode_set!)
+      end
     end
 
     describe '#formats!' do
@@ -236,6 +241,11 @@ describe GroupDocs::Document do
       it 'clears sharers if nil is passed' do
         subject.should_receive(:sharers_clear!)
         subject.sharers_set!(nil)
+      end
+
+      it 'is aliased to #sharers=' do
+        subject.should respond_to(:sharers=)
+        subject.method(:sharers=).should == subject.method(:sharers_set!)
       end
     end
 

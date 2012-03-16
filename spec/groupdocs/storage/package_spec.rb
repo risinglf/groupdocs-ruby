@@ -12,11 +12,16 @@ describe GroupDocs::Storage::Package do
   end
 
   context 'instance methods' do
-    describe '#<<' do
+    describe '#add' do
       it 'adds objects to be packed later' do
         subject.objects = ['object 1']
         subject.objects.should_receive(:<<).with('object 2')
-        subject << 'object 2'
+        subject.add('object 2')
+      end
+
+      it 'is aliased to #<<' do
+        subject.should respond_to(:<<)
+        subject.method(:<<).should == subject.method(:add)
       end
     end
 
