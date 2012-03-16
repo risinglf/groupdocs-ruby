@@ -16,6 +16,7 @@ describe GroupDocs::Document::Field do
 
     it 'is compatible with response JSON' do
       subject.should respond_to(:rect=)
+      subject.method(:rect=).should == subject.method(:rectangle=)
     end
 
     describe '#rectangle=' do

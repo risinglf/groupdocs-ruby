@@ -33,6 +33,7 @@ describe GroupDocs::Storage::File do
 
     it 'is compatible with response JSON' do
       subject.should respond_to(:adj_name=)
+      subject.method(:adj_name=).should == subject.method(:name=)
     end
 
     describe '#created_on=' do

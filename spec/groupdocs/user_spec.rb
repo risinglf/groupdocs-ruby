@@ -40,6 +40,9 @@ describe GroupDocs::User do
       subject.should respond_to(:pkey=)
       subject.should respond_to(:pswd_salt=)
       subject.should respond_to(:signedupOn=)
+      subject.method(:pkey=).should == subject.method(:private_key=)
+      subject.method(:pswd_salt=).should == subject.method(:password_salt=)
+      subject.method(:signedupOn=).should == subject.method(:signed_up_on=)
     end
 
     describe '#signed_up_on=' do
