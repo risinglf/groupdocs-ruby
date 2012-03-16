@@ -260,17 +260,22 @@ module GroupDocs
       # @param [Hash] access Access credentials
       # @options access [String] :client_id
       # @options access [String] :private_key
+      # @return [Array<GroupDocs::User>]
       #
       def sharers_set!(emails, access = {})
         if emails.nil? || emails.empty?
           sharers_clear!(access)
         else
-          GroupDocs::Api::Request.new do |request|
+          json = GroupDocs::Api::Request.new do |request|
             request[:access] = access
             request[:method] = :PUT
             request[:path] = "/doc/{{client_id}}/folders/#{id}/sharers"
             request[:request_body] = emails
           end.execute!
+
+          json[:result][:shared_users].map do |user|
+            GroupDocs::User.new(user)
+          end
         end
       end
       # note that aliased version cannot accept access credentials hash

@@ -98,9 +98,14 @@ describe GroupDocs::Document do
         end.should_not raise_error(ArgumentError)
       end
 
-      it 'sets corresponding access mode' do
+      it 'sets corresponding access mode and determines set' do
         subject.should_receive(:parse_access_mode).with(:private).and_return(0)
+        subject.should_receive(:parse_access_mode).with(0).and_return(:private)
         subject.access_mode_set!(:private)
+      end
+
+      it 'returns set of access modes' do
+        subject.access_mode_set!(:private).should == :private
       end
 
       it 'is aliased to #access_mode=' do
@@ -227,10 +232,12 @@ describe GroupDocs::Document do
         end.should_not raise_error(ArgumentError)
       end
 
-      it 'accepts emails array' do
-        lambda do
-          subject.sharers_set!(%w(test1@email.com test2@email.com))
-        end.should_not raise_error(ArgumentError)
+      it 'returns an array of GroupDocs::User objects' do
+        users = subject.sharers_set!(%w(test1@email.com))
+        users.should be_an(Array)
+        users.each do |user|
+          user.should be_a(GroupDocs::User)
+        end
       end
 
       it 'clears sharers if empty array is passed' do

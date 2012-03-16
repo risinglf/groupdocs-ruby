@@ -91,11 +91,13 @@ module GroupDocs
     # @return [Symbol] Set access mode
     #
     def access_mode_set!(mode, access = {})
-      GroupDocs::Api::Request.new do |request|
+      json = GroupDocs::Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
         request[:path] = "/doc/{{client_id}}/files/#{file.id}/accessinfo?mode=#{parse_access_mode(mode)}"
       end.execute!
+
+      parse_access_mode(json[:result][:access])
     end
     # note that aliased version cannot accept access credentials hash
     alias_method :access_mode=, :access_mode_set!
@@ -224,17 +226,22 @@ module GroupDocs
     # @param [Hash] access Access credentials
     # @options access [String] :client_id
     # @options access [String] :private_key
+    # @return [Array<GroupDocs::User>]
     #
     def sharers_set!(emails, access = {})
       if emails.nil? || emails.empty?
         sharers_clear!(access)
       else
-        GroupDocs::Api::Request.new do |request|
+        json = GroupDocs::Api::Request.new do |request|
           request[:access] = access
           request[:method] = :PUT
           request[:path] = "/doc/{{client_id}}/files/#{file.id}/sharers"
           request[:request_body] = emails
         end.execute!
+
+        json[:result][:shared_users].map do |user|
+          GroupDocs::User.new(user)
+        end
       end
     end
     # note that aliased version cannot accept access credentials hash

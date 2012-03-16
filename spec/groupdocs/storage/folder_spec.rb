@@ -273,10 +273,12 @@ describe GroupDocs::Storage::Folder do
         end.should_not raise_error(ArgumentError)
       end
 
-      it 'accepts emails array' do
-        lambda do
-          subject.sharers_set!(%w(test1@email.com test2@email.com))
-        end.should_not raise_error(ArgumentError)
+      it 'returns an array of GroupDocs::User objects' do
+        users = subject.sharers_set!(%w(test1@email.com))
+        users.should be_an(Array)
+        users.each do |user|
+          user.should be_a(GroupDocs::User)
+        end
       end
 
       it 'clears sharers if empty array is passed' do
