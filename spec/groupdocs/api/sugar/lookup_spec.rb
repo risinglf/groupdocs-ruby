@@ -12,7 +12,7 @@ shared_examples_for GroupDocs::Api::Sugar::Lookup do
 
   describe 'find!' do
     it 'calls #find_all! and return its first result' do
-      described_class.should_receive(:find_all!).with(:id, 1).and_return([found])
+      described_class.should_receive(:find_all!).with(:id, 1, {}).and_return([found])
       described_class.find!(:id, 1).should == found
     end
   end

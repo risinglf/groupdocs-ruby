@@ -2,42 +2,33 @@ require 'spec_helper'
 
 describe GroupDocs do
 
-  subject { GroupDocs }
+  subject { described_class }
+  let(:client_id)   { '07aaaf95f8eb33a4' }
+  let(:private_key) { '5cb711b3a52ffc5d90ee8a0f79206f5a' }
 
-  context 'user access' do
-    let(:client_id)   { '07aaaf95f8eb33a4' }
-    let(:private_key) { '5cb711b3a52ffc5d90ee8a0f79206f5a' }
+  context 'attributes' do
+    it { should respond_to(:client_id)    }
+    it { should respond_to(:client_id=)   }
+    it { should respond_to(:private_key)  }
+    it { should respond_to(:private_key=) }
+    it { should respond_to(:api_server)   }
+    it { should respond_to(:api_server=)  }
+    it { should respond_to(:api_version)  }
+    it { should respond_to(:api_version=) }
 
-    describe '#client_id' do
-      it { should respond_to(:client_id)  }
-      it { should respond_to(:client_id=) }
-
-      it 'raises error if Client ID has not been set' do
-        GroupDocs.client_id = nil
-        -> { subject.client_id }.should raise_error(GroupDocs::Errors::NoClientIdError)
+    describe '#api_server' do
+      it 'returns default URL if it has not been overwritten' do
+        subject.api_server.should == 'https://dev-api.groupdocs.com'
       end
 
-      it 'returns Client ID' do
-        subject.client_id = client_id
-        subject.client_id.should == client_id
-      end
-    end
-
-    describe '#private_key' do
-      it { should respond_to(:private_key)  }
-      it { should respond_to(:private_key=) }
-
-      it 'raises error if private key has not been set' do
-        GroupDocs.private_key = nil
-        -> { subject.private_key }.should raise_error(GroupDocs::Errors::NoPrivateKeyError)
-      end
-
-      it 'returns private Key' do
-        subject.private_key = private_key
-        subject.private_key.should == private_key
+      it 'returns custom overwritten URL' do
+        subject.api_server = 'https://api.groupdocs.com'
+        subject.api_server.should == 'https://api.groupdocs.com'
       end
     end
+  end
 
+  context 'class methods' do
     describe '#configure' do
       it { should respond_to(:configure) }
 
@@ -66,25 +57,4 @@ describe GroupDocs do
       end
     end
   end
-
-  context 'API settings' do
-    describe '#api_server' do
-      it { should respond_to(:api_server)  }
-      it { should respond_to(:api_server=) }
-
-      it 'returns default URL if it has not been overwritten' do
-        subject.api_server.should == 'https://dev-api.groupdocs.com'
-      end
-
-      it 'returns custom URL' do
-        subject.api_server = 'https://api.groupdocs.com'
-        subject.api_server.should == 'https://api.groupdocs.com'
-      end
-    end
-
-    describe '#api_version' do
-      it { should respond_to(:api_version)  }
-      it { should respond_to(:api_version=) }
-    end
-  end
-end # GroupDocs
+end

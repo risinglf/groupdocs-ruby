@@ -35,6 +35,19 @@ GroupDocs.configure do |groupdocs|
   groupdocs.api_server = 'https://dev-api.groupdocs.com'
   groupdocs.api_version = '2.0'
 end
+
+GroupDocs::Storage::Folder.create!('/folder')
+#=> <#GroupDocs::Storage::Folder:0x0000000171f432 @id=1 @name="folder" @url="http://groupdocs.com">
+```
+
+You can also pass access credentials to particular requests
+
+```ruby
+GroupDocs::Storage::Folder.create!('/folder', client_id: 'your_client_id', private_key: 'your_private_key')
+#=> <#GroupDocs::Storage::Folder:0x0000000171f432 @id=1 @name="folder" @url="http://groupdocs.com">
+
+GroupDocs::Document.find!(:name, 'CV.doc', client_id: 'your_client_id', private_key: 'your_private_key')
+#=> <#GroupDocs::Storage::Folder:0x0000000171f432 @id=1 @name="Folder1" @url="http://groupdocs.com">
 ```
 
 ### Entities

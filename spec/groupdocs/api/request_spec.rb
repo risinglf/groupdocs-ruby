@@ -14,18 +14,23 @@ describe GroupDocs::Api::Request do
 
   describe '#initialize' do
     it 'allows passing options' do
-      GroupDocs.stub(api_version: nil)
       options = { method: :GET, path: '/folders' }
       request = described_class.new(options)
       request.options.should == options
     end
 
     it 'allows passing block to configure options' do
-      GroupDocs.stub(api_version: nil)
       described_class.new do |request|
+        request[:access] = { client_id: 'client_id', private_key: 'private_key' }
         request[:method] = :GET
         request[:path] = '/folders'
-      end.options.should == { method: :GET, path: '/folders' }
+      end.options.should == { method: :GET, path: '/folders', access: { client_id: 'client_id', private_key: 'private_key' }}
+    end
+
+    it 'sets access hash to empty if it was not passed' do
+      access = subject.options[:access]
+      access.should be_a(Hash)
+      access.should be_empty
     end
 
     it 'creates resource as API server' do
@@ -41,6 +46,11 @@ describe GroupDocs::Api::Request do
       subject.options[:path] = '/folders'
       subject.options[:headers] = {}
       mock_api_server('{"status":"Ok"}')
+    end
+
+    it 'parses path' do
+      subject.should_receive(:parse_path)
+      subject.execute!
     end
 
     it 'prepends path with version' do

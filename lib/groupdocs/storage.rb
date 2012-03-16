@@ -13,12 +13,16 @@ module GroupDocs
     #   GroupDocs::Storage.info!
     #   #=> { total_space: "1024 MB", available_space: "1020 MB", document_credits: 5000, available_credits: 4964 }
     #
+    # @param [Hash] access Access credentials
+    # @options access [String] :client_id
+    # @options access [String] :private_key
     # @return [Hash]
     #
-    def self.info!
+    def self.info!(access = {})
       json = GroupDocs::Api::Request.new do |request|
+        request[:access] = access
         request[:method] = :GET
-        request[:path] = "/storage/#{GroupDocs.client_id}"
+        request[:path] = '/storage/{{client_id}}'
       end.execute!
 
       {

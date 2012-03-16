@@ -19,6 +19,16 @@ describe GroupDocs::Api::Helpers::URL do
     end
   end
 
+  describe '#parse_path' do
+    it 'replaces {{client_id}} with real client ID' do
+      subject.options[:path] = '/doc/{{client_id}}/files/123'
+      subject.should_receive(:client_id).and_return('real_client_id')
+      lambda do
+        subject.send(:parse_path)
+      end.should change { subject.options[:path] }.to('/doc/real_client_id/files/123')
+    end
+  end
+
   describe '#url_encode_path' do
     it 'URL encodes path' do
       subject.options[:path] = '/folder/Test 123'
@@ -29,18 +39,19 @@ describe GroupDocs::Api::Helpers::URL do
 
   describe '#sign_url' do
     it 'uses defined private key' do
-      GroupDocs.should_receive(:private_key).and_return('e98ea443354183fd1fb434047232c687')
+      subject.should_receive(:private_key).and_return('e98ea443354183fd1fb434047232c687')
       subject.send(:sign_url)
     end
 
     it 'adds signature to path' do
-      GroupDocs.stub(private_key: 'e98ea443354183fd1fb434047232c687')
+      subject.options[:access] = { private_key: 'e98ea443354183fd1fb434047232c687' }
       GroupDocs.stub(api_version: nil)
       subject.send(:sign_url)
       subject.options[:path].should == '/1/files/2?new_name=invoice.docx&signature=gw%2BLupOB3krtliSSM0dvUBSznJY'
     end
 
     it 'determines correct URL separator' do
+      subject.options[:access] = { private_key: 'e98ea443354183fd1fb434047232c687' }
       subject.should_receive(:separator)
       subject.send(:sign_url)
     end

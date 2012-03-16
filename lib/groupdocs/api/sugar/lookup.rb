@@ -8,10 +8,13 @@ module GroupDocs
         #
         # @param [Symbol] attribute
         # @param [Integer, String, Regexp] value
+        # @param [Hash] access Access credentials
+        # @options access [String] :client_id
+        # @options access [String] :private_key
         # @return [GroupDocs::Api::Entity] Matching entity
         #
-        def find!(attribute, value)
-          find_all!(attribute, value).first
+        def find!(attribute, value, access = {})
+          find_all!(attribute, value, access).first
         end
 
         #
@@ -21,14 +24,17 @@ module GroupDocs
         #
         # @param [Symbol] attribute
         # @param [Integer, String, Regexp] value
+        # @param [Hash] access Access credentials
+        # @options access [String] :client_id
+        # @options access [String] :private_key
         # @return [Array] Array of matching entities
         #
         # @raise [NoMethodError] if extending class does not implement #all! class method.
         #
-        def find_all!(attribute, value)
+        def find_all!(attribute, value, access = {})
           respond_to?(:all!) or raise NoMethodError, "#{self}#all! is not implemented - aborting."
 
-          all!.select do |object|
+          all!('/', access).select do |object|
             case value
             when Regexp then object.send(attribute) =~ value
             else object.send(attribute) == value

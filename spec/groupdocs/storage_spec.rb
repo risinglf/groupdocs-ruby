@@ -6,6 +6,12 @@ describe GroupDocs::Storage do
       mock_api_server(load_json('storage_info'))
     end
 
+    it 'accepts access credentials hash' do
+      lambda do
+        described_class.info!(client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
     it 'returns a hash of information' do
       described_class.info!.should be_a(Hash)
     end

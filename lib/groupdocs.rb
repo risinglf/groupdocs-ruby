@@ -9,37 +9,17 @@ require 'groupdocs/user'
 module GroupDocs
   class << self
 
-    # @attr_writer [String] client_id Client ID
-    attr_writer :client_id
+    # @attr [String] client_id Client ID
+    attr_accessor :client_id
 
-    # @attr_writer [String] private_key Private key
-    attr_writer :private_key
+    # @attr [String] private_key Private key
+    attr_accessor :private_key
 
-    # @attr_writer [String] api_server API server
-    attr_writer :api_server
+    # @attr [String] api_server API server
+    attr_accessor :api_server
 
     # @attr [String] api_version Version of API server
     attr_accessor :api_version
-
-    #
-    # Returns Client ID.
-    #
-    # @return [String] Client ID
-    # @raise [NoClientIdError] If Client ID hasn't been set yet, raise exception.
-    #
-    def client_id
-      @client_id or raise Errors::NoClientIdError, 'Client ID has not been specified.'
-    end
-
-    #
-    # Returns Private key.
-    #
-    # @return [String] Private key
-    # @raise [NoPrivateKeyError] If private key hasn't been set yet, raise exception.
-    #
-    def private_key
-      @private_key or raise Errors::NoPrivateKeyError, 'Private Key has not been specified.'
-    end
 
     #
     # Returns hostname of API server.

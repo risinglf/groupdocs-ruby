@@ -11,10 +11,14 @@ module GroupDocs
     #
     # Returns an array of all documents on server.
     #
+    # @param [String] path Starting path to look for documents
+    # @param [Hash] access Access credentials
+    # @options access [String] :client_id
+    # @options access [String] :private_key
     # @return [Array<GroupDocs::Storage::Document>]
     #
-    def self.all!
-      GroupDocs::Storage::File.all!.map(&:to_document)
+    def self.all!(path = '/', access = {})
+      GroupDocs::Storage::File.all!(path, access).map(&:to_document)
     end
 
     #
@@ -23,13 +27,16 @@ module GroupDocs
     # @param [Hash] options
     # @option options [Integer] :page_index Page to start with
     # @option options [Integer] :page_size Total number of entries
-    #
+    # @param [Hash] access Access credentials
+    # @options access [String] :client_id
+    # @options access [String] :private_key
     # @return [Array<GroupDocs::Document::View>]
     #
-    def self.views!(options = { page_index: 0 })
+    def self.views!(options = { page_index: 0 }, access = {})
       api = GroupDocs::Api::Request.new do |request|
+        request[:access] = access
         request[:method] = :GET
-        request[:path] = "/doc/#{GroupDocs.client_id}/views"
+        request[:path] = "/doc/{{client_id}}/views"
       end
       api.add_params(options)
       json = api.execute!
@@ -59,12 +66,16 @@ module GroupDocs
     #
     # Returns access mode of document.
     #
+    # @param [Hash] access Access credentials
+    # @options access [String] :client_id
+    # @options access [String] :private_key
     # @return [Symbol] One of :private, :restricted or :public access modes
     #
-    def access_mode!
+    def access_mode!(access = {})
       json = GroupDocs::Api::Request.new do |request|
+        request[:access] = access
         request[:method] = :GET
-        request[:path] = "/doc/#{GroupDocs.client_id}/files/#{file.id}/accessinfo"
+        request[:path] = "/doc/{{client_id}}/files/#{file.id}/accessinfo"
       end.execute!
 
       parse_access_mode(json[:result][:access])
@@ -73,27 +84,33 @@ module GroupDocs
     #
     # Sets access mode of document.
     #
-    # Please note that even thought it is not "bang" method, it still send requests to API server.
-    #
     # @param [Symbol] mode One of :private, :restricted or :public access modes
+    # @param [Hash] access Access credentials
+    # @options access [String] :client_id
+    # @options access [String] :private_key
     # @return [Symbol] Set access mode
     #
-    def access_mode=(mode)
+    def access_mode_set!(mode, access = {})
       GroupDocs::Api::Request.new do |request|
+        request[:access] = access
         request[:method] = :PUT
-        request[:path] = "/doc/#{GroupDocs.client_id}/files/#{file.id}/accessinfo?mode=#{parse_access_mode(mode)}"
+        request[:path] = "/doc/{{client_id}}/files/#{file.id}/accessinfo?mode=#{parse_access_mode(mode)}"
       end.execute!
     end
 
     #
     # Returns array of file formats document can be converted to.
     #
+    # @param [Hash] access Access credentials
+    # @options access [String] :client_id
+    # @options access [String] :private_key
     # @return [Array<Symbol>]
     #
-    def formats!
+    def formats!(access = {})
       json = GroupDocs::Api::Request.new do |request|
+        request[:access] = access
         request[:method] = :GET
-        request[:path] = "/doc/#{GroupDocs.client_id}/files/#{file.id}/formats"
+        request[:path] = "/doc/{{client_id}}/files/#{file.id}/formats"
       end.execute!
 
       json[:result][:types].split(';').map do |format|
@@ -104,12 +121,16 @@ module GroupDocs
     #
     # Returns document metadata.
     #
+    # @param [Hash] access Access credentials
+    # @options access [String] :client_id
+    # @options access [String] :private_key
     # @return [GroupDocs::Document::MetaData]
     #
-    def metadata!
+    def metadata!(access = {})
       json = GroupDocs::Api::Request.new do |request|
+        request[:access] = access
         request[:method] = :GET
-        request[:path] = "/doc/#{GroupDocs.client_id}/files/#{file.id}/metadata"
+        request[:path] = "/doc/{{client_id}}/files/#{file.id}/metadata"
       end.execute!
 
       GroupDocs::Document::MetaData.new do |metadata|
@@ -129,12 +150,16 @@ module GroupDocs
     #
     # @param [Hash] options
     # @option options [Boolean] :include_geometry Set to true if fields location and size should be returned
+    # @param [Hash] access Access credentials
+    # @options access [String] :client_id
+    # @options access [String] :private_key
     # @return [Array<GroupDocs::Document::Field>]
     #
-    def fields!(options = {})
+    def fields!(options = {}, access = {})
       api = GroupDocs::Api::Request.new do |request|
+        request[:access] = access
         request[:method] = :GET
-        request[:path] = "/doc/#{GroupDocs.client_id}/files/#{file.guid}/fields"
+        request[:path] = "/doc/{{client_id}}/files/#{file.guid}/fields"
       end
       api.add_params(options)
       json = api.execute!
@@ -152,13 +177,17 @@ module GroupDocs
     # @option options [Integer] :page_count Number of pages
     # @option options [Integer] :quality From 1 to 100
     # @option options [Boolean] :use_pdf
+    # @param [Hash] access Access credentials
+    # @options access [String] :client_id
+    # @options access [String] :private_key
     #
     # @todo what should it return?
     #
-    def thumbnail!(options = {})
+    def thumbnail!(options = {}, access = {})
       api = GroupDocs::Api::Request.new do |request|
+        request[:access] = access
         request[:method] = :POST
-        request[:path] = "/doc/#{GroupDocs.client_id}/files/#{file.guid}/thumbnails"
+        request[:path] = "/doc/{{client_id}}/files/#{file.guid}/thumbnails"
       end
       api.add_params(options)
       api.execute!
@@ -167,12 +196,16 @@ module GroupDocs
     #
     # Returns an array of users a document is shared with.
     #
+    # @param [Hash] access Access credentials
+    # @options access [String] :client_id
+    # @options access [String] :private_key
     # @return [Array<GroupDocs::User>]
     #
-    def sharers!
+    def sharers!(access = {})
       json = GroupDocs::Api::Request.new do |request|
+        request[:access] = access
         request[:method] = :GET
-        request[:path] = "/doc/#{GroupDocs.client_id}/files/#{file.id}/accessinfo"
+        request[:path] = "/doc/{{client_id}}/files/#{file.id}/accessinfo"
       end.execute!
 
       json[:result][:sharers].map do |user|
@@ -185,17 +218,19 @@ module GroupDocs
     #
     # If empty array or nil passed, clears sharers.
     #
-    # Please note that even thought it is not "bang" method, it still send requests to API server.
-    #
     # @param [Array] emails List of email addresses to share with
+    # @param [Hash] access Access credentials
+    # @options access [String] :client_id
+    # @options access [String] :private_key
     #
-    def sharers=(emails)
+    def sharers_set!(emails, access = {})
       if emails.nil? || emails.empty?
-        sharers_clear!
+        sharers_clear!(access)
       else
         GroupDocs::Api::Request.new do |request|
+          request[:access] = access
           request[:method] = :PUT
-          request[:path] = "/doc/#{GroupDocs.client_id}/files/#{file.id}/sharers"
+          request[:path] = "/doc/{{client_id}}/files/#{file.id}/sharers"
           request[:request_body] = emails
         end.execute!
       end
@@ -204,12 +239,16 @@ module GroupDocs
     #
     # Clears sharers list.
     #
+    # @param [Hash] access Access credentials
+    # @options access [String] :client_id
+    # @options access [String] :private_key
     # @return nil
     #
-    def sharers_clear!
+    def sharers_clear!(access = {})
       GroupDocs::Api::Request.new do |request|
+        request[:access] = access
         request[:method] = :DELETE
-        request[:path] = "/doc/#{GroupDocs.client_id}/files/#{file.id}/sharers"
+        request[:path] = "/doc/{{client_id}}/files/#{file.id}/sharers"
       end.execute![:result][:shared_users]
     end
 
@@ -221,10 +260,11 @@ module GroupDocs
     # @option options [Boolean] :email_results Set to true if converted document should be emailed
     # @return [GroupDocs::Job] Created job
     #
-    def convert!(format, options = {})
+    def convert!(format, options = {}, access = {})
       api = GroupDocs::Api::Request.new do |request|
+        request[:access] = access
         request[:method] = :POST
-        request[:path] = "/#{GroupDocs.client_id}/files/#{file.guid}?new_type=#{format}"
+        request[:path] = "/{{client_id}}/files/#{file.guid}?new_type=#{format}"
       end
       api.add_params(options)
       json = api.execute!

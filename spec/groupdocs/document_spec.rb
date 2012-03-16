@@ -31,6 +31,12 @@ describe GroupDocs::Document do
         mock_api_server(load_json('document_views'))
       end
 
+      it 'accepts access credentials hash' do
+        lambda do
+          described_class.views!({}, client_id: 'client_id', private_key: 'private_key')
+        end.should_not raise_error(ArgumentError)
+      end
+
       it 'adds page index option by default' do
         GroupDocs::Api::Request.any_instance.should_receive(:add_params).with({ page_index: 0 })
         described_class.views!
@@ -46,10 +52,16 @@ describe GroupDocs::Document do
     end
 
     describe '#all!' do
+      it 'accepts access credentials hash' do
+        lambda do
+          described_class.all!('/', client_id: 'client_id', private_key: 'private_key')
+        end.should_not raise_error(ArgumentError)
+      end
+
       it 'calls GroupDocs::Storage::File.all! and converts each file to document' do
         file1 = GroupDocs::Storage::File.new
         file2 = GroupDocs::Storage::File.new
-        GroupDocs::Storage::File.should_receive(:all!).and_return([file1, file2])
+        GroupDocs::Storage::File.should_receive(:all!).with('/', {}).and_return([file1, file2])
         file1.should_receive(:to_document).and_return(described_class.new(file: file1))
         file2.should_receive(:to_document).and_return(described_class.new(file: file2))
         described_class.all!
@@ -59,24 +71,51 @@ describe GroupDocs::Document do
 
   context 'instance methods' do
     describe '#access_mode!' do
-      it 'returns access mode in human readable presentation' do
+      before(:each) do
         mock_api_server(load_json('document_access_info_get'))
+      end
+
+      it 'accepts access credentials hash' do
+        lambda do
+          subject.access_mode!(client_id: 'client_id', private_key: 'private_key')
+        end.should_not raise_error(ArgumentError)
+      end
+
+      it 'returns access mode in human readable presentation' do
         subject.should_receive(:parse_access_mode).with(0).and_return(:private)
         subject.access_mode!.should == :private
       end
     end
 
-    describe '#access_mode=' do
-      it 'sets corresponding access mode' do
+    describe '#access_mode_set!' do
+      before(:each) do
         mock_api_server('{"status": "Ok", "result": {"access": 0 }}')
+      end
+
+      it 'accepts access credentials hash' do
+        lambda do
+          subject.access_mode_set!(:private, client_id: 'client_id', private_key: 'private_key')
+        end.should_not raise_error(ArgumentError)
+      end
+
+      it 'sets corresponding access mode' do
         subject.should_receive(:parse_access_mode).with(:private).and_return(0)
-        subject.access_mode = :private
+        subject.access_mode_set!(:private)
       end
     end
 
     describe '#formats!' do
-      it 'returns an array of symbols' do
+      before(:each) do
         mock_api_server(load_json('document_formats'))
+      end
+
+      it 'accepts access credentials hash' do
+        lambda do
+          subject.formats!(client_id: 'client_id', private_key: 'private_key')
+        end.should_not raise_error(ArgumentError)
+      end
+
+      it 'returns an array of symbols' do
         formats = subject.formats!
         formats.should be_an(Array)
         formats.each do |format|
@@ -90,11 +129,17 @@ describe GroupDocs::Document do
         mock_api_server(load_json('document_metadata'))
       end
 
-      it 'returns GroupDocs::Document::MetaData' do
+      it 'accepts access credentials hash' do
+        lambda do
+          subject.metadata!(client_id: 'client_id', private_key: 'private_key')
+        end.should_not raise_error(ArgumentError)
+      end
+
+      it 'returns GroupDocs::Document::MetaData object' do
         subject.metadata!.should be_a(GroupDocs::Document::MetaData)
       end
 
-      it 'sets last view as GroupDocs::Document::View if document was viewed at least once' do
+      it 'sets last view as GroupDocs::Document::View object if document was viewed at least once' do
         subject.metadata!.last_view.should be_a(GroupDocs::Document::View)
       end
 
@@ -109,8 +154,17 @@ describe GroupDocs::Document do
     end
 
     describe '#fields!' do
-      it 'returns array of GroupDocs::Document::Field objects' do
+      before(:each) do
         mock_api_server(load_json('document_fields'))
+      end
+
+      it 'accepts access credentials hash' do
+        lambda do
+          subject.fields!(client_id: 'client_id', private_key: 'private_key')
+        end.should_not raise_error(ArgumentError)
+      end
+
+      it 'returns array of GroupDocs::Document::Field objects' do
         fields = subject.fields!
         fields.should be_an(Array)
         fields.each do |field|
@@ -120,17 +174,35 @@ describe GroupDocs::Document do
     end
 
     describe '#thumbnail!' do
-      it 'accepts options hash' do
+      before(:each) do
         mock_api_server(load_json('document_thumbnail'))
+      end
+
+      it 'accepts access credentials hash' do
+        lambda do
+          subject.thumbnail!({}, client_id: 'client_id', private_key: 'private_key')
+        end.should_not raise_error(ArgumentError)
+      end
+
+      it 'accepts options hash' do
         lambda do
           subject.thumbnail!(page_number: 1, page_count: 2, use_pdf: true)
-        end.should_not raise_error
+        end.should_not raise_error(ArgumentError)
       end
     end
 
     describe '#sharers!' do
-      it 'returns an array of GroupDocs::User objects' do
+      before(:each) do
         mock_api_server(load_json('document_access_info_get'))
+      end
+
+      it 'accepts access credentials hash' do
+        lambda do
+          subject.sharers!(client_id: 'client_id', private_key: 'private_key')
+        end.should_not raise_error(ArgumentError)
+      end
+
+      it 'returns an array of GroupDocs::User objects' do
         users = subject.sharers!
         users.should be_an(Array)
         users.each do |user|
@@ -139,28 +211,46 @@ describe GroupDocs::Document do
       end
     end
 
-    describe '#sharers=' do
-      it 'accepts emails array' do
+    describe '#sharers_set!' do
+      before(:each) do
         mock_api_server(load_json('document_sharers_set'))
+      end
+
+      it 'accepts access credentials hash' do
         lambda do
-          subject.sharers = %w(test1@email.com test2@email.com)
-        end.should_not raise_error
+          subject.sharers_set!(%w(test1@email.com), client_id: 'client_id', private_key: 'private_key')
+        end.should_not raise_error(ArgumentError)
+      end
+
+      it 'accepts emails array' do
+        lambda do
+          subject.sharers_set!(%w(test1@email.com test2@email.com))
+        end.should_not raise_error(ArgumentError)
       end
 
       it 'clears sharers if empty array is passed' do
         subject.should_receive(:sharers_clear!)
-        subject.sharers = []
+        subject.sharers_set!([])
       end
 
       it 'clears sharers if nil is passed' do
         subject.should_receive(:sharers_clear!)
-        subject.sharers = nil
+        subject.sharers_set!(nil)
       end
     end
 
     describe '#sharers_clear!' do
-      it 'clears sharers list and returns nil' do
+      before(:each) do
         mock_api_server(load_json('document_sharers_remove'))
+      end
+
+      it 'accepts access credentials hash' do
+        lambda do
+          subject.sharers_clear!(client_id: 'client_id', private_key: 'private_key')
+        end.should_not raise_error(ArgumentError)
+      end
+
+      it 'clears sharers list and returns nil' do
         subject.sharers_clear!.should be_nil
       end
     end
@@ -170,10 +260,16 @@ describe GroupDocs::Document do
         mock_api_server(load_json('document_convert'))
       end
 
+      it 'accepts access credentials hash' do
+        lambda do
+          subject.convert!(:pdf, {}, client_id: 'client_id', private_key: 'private_key')
+        end.should_not raise_error(ArgumentError)
+      end
+
       it 'accepts options hash' do
         lambda do
           subject.convert!(:pdf, email_results: true)
-        end.should_not raise_error
+        end.should_not raise_error(ArgumentError)
       end
 
       it 'returns GroupDocs::Job object' do

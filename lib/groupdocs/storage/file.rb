@@ -15,17 +15,21 @@ module GroupDocs
       #                      You can also add filename and then uploaded file will use it.
       # @param [Hash] options Hash of options
       # @option options [String] :description Optional description for file
+      # @param [Hash] access Access credentials
+      # @options access [String] :client_id
+      # @options access [String] :private_key
       # @return [GroupDocs::Storage::File]
       #
-      # @raise [ArgumentError] If path does not start with /.
+      # @raise [ArgumentError] If path does not start with /
       #
-      def self.upload!(filepath, upload_path = '/', options = {})
+      def self.upload!(filepath, upload_path = '/', options = {}, access = {})
         upload_path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{upload_path.inspect}"
         upload_path << Object::File.basename(filepath) unless upload_path =~ /\.(\w){3,4}$/
 
         api = GroupDocs::Api::Request.new do |request|
+          request[:access] = access
           request[:method] = :POST
-          request[:path] = "/storage/#{GroupDocs.client_id}/folders#{upload_path}"
+          request[:path] = "/storage/{{client_id}}/folders#{upload_path}"
           request[:request_body] = Object::File.new(filepath, 'rb')
         end
         api.add_params(options)
@@ -38,14 +42,17 @@ module GroupDocs
       # Returns an array of all files on server starting with given path.
       #
       # @param [String] path Starting path to look for files
+      # @param [Hash] access Access credentials
+      # @options access [String] :client_id
+      # @options access [String] :private_key
       # @return [Array<GroupDocs::Storage::File>]
       #
-      def self.all!(path = '/')
+      def self.all!(path = '/', access = {})
         files = Array.new
         folder = GroupDocs::Storage::Folder.new(name: path)
-        folder.list!.each do |entity|
+        folder.list!({}, access).each do |entity|
           if entity.is_a?(GroupDocs::Storage::Folder)
-            files += all!("#{path}/#{entity.name}".gsub(/[\/]{2}/, '/'))
+            files += all!("#{path}/#{entity.name}".gsub(/[\/]{2}/, '/'), access)
           else
             files << entity
           end
@@ -104,12 +111,16 @@ module GroupDocs
       # Downloads file to given path.
       #
       # @param [String] path Directory to download file to
+      # @param [Hash] access Access credentials
+      # @options access [String] :client_id
+      # @options access [String] :private_key
       # @return [String] Path to downloaded file
       #
-      def download!(path)
+      def download!(path, access = {})
         response = GroupDocs::Api::Request.new do |request|
+          request[:access] = access
           request[:method] = :DOWNLOAD
-          request[:path] = "/storage/#{GroupDocs.client_id}/files/#{id}"
+          request[:path] = "/storage/{{client_id}}/files/#{id}"
         end.execute!
 
         filepath = "#{path}/#{name}"
@@ -125,17 +136,22 @@ module GroupDocs
       #
       # @param [String] path Full path to directory to move file to starting with "/".
       #                      You can also add filename and then moved file will use it.
+      # @param [Hash] access Access credentials
+      # @options access [String] :client_id
+      # @options access [String] :private_key
       # @return [String] Moved to file path
       #
-      # @raise [ArgumentError] If path does not start with /.
+      # @raise [ArgumentError] If path does not start with /
       #
-      def move!(path)
+      def move!(path, access = {})
         path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{path.inspect}"
+
         path << Object::File.basename(name) unless path =~ /\.(\w){3,4}$/
         GroupDocs::Api::Request.new do |request|
+          request[:access] = access
           request[:method] = :PUT
           request[:headers] = { :'Groupdocs-Move' => id }
-          request[:path] = "/storage/#{GroupDocs.client_id}/files#{path}"
+          request[:path] = "/storage/{{client_id}}/files#{path}"
         end.execute!
 
         path
@@ -145,10 +161,13 @@ module GroupDocs
       # Renames file to new one.
       #
       # @param [String] name New file name
+      # @param [Hash] access Access credentials
+      # @options access [String] :client_id
+      # @options access [String] :private_key
       # @return [String] New name
       #
-      def rename!(name)
-        move!("/#{name}").sub(/^\//, '')
+      def rename!(name, access = {})
+        move!("/#{name}", access).sub(/^\//, '')
       end
 
       #
@@ -156,18 +175,22 @@ module GroupDocs
       #
       # @param [String] path Full path to directory to copy file to starting with "/".
       #                      You can also add filename and then copied file will use it.
+      # @param [Hash] access Access credentials
+      # @options access [String] :client_id
+      # @options access [String] :private_key
       # @return [GroupDocs::Storage::File] Copied to file
       #
-      # @raise [ArgumentError] If path does not start with /.
+      # @raise [ArgumentError] If path does not start with /
       #
-      def copy!(path)
+      def copy!(path, access = {})
         path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{path.inspect}"
-        path << Object::File.basename(name) unless path =~ /\.(\w){3,4}$/
+        path << "/#{Object::File.basename(name)}" unless path =~ /\.(\w){3,4}$/
 
         json = GroupDocs::Api::Request.new do |request|
+          request[:access] = access
           request[:method] = :PUT
           request[:headers] = { :'Groupdocs-Copy' => id }
-          request[:path] = "/storage/#{GroupDocs.client_id}/files#{path}"
+          request[:path] = "/storage/{{client_id}}/files#{path}"
         end.execute!
 
         GroupDocs::Storage::File.new(json[:result][:dst_file])
@@ -177,13 +200,17 @@ module GroupDocs
       # Compresses file on server to given archive type.
       #
       # @param [Symbol] type Archive type: :zip, :rar.
+      # @param [Hash] access Access credentials
+      # @options access [String] :client_id
+      # @options access [String] :private_key
       # @return [GroupDocs::Storage::File] Archive file
       #
-      def compress!(type = :zip)
+      def compress!(type = :zip, access = {})
         json = GroupDocs::Api::Request.new do |request|
+          request[:access] = access
           request[:method] = :POST
           # TODO type.capitalize should be fixed on server
-          request[:path] = "/storage/#{GroupDocs.client_id}/files/#{id}/archive/#{type.capitalize}"
+          request[:path] = "/storage/{{client_id}}/files/#{id}/archive/#{type.capitalize}"
         end.execute!
 
         # HACK add filename for further download
@@ -194,10 +221,15 @@ module GroupDocs
       #
       # Deletes file from server.
       #
-      def delete!
+      # @param [Hash] access Access credentials
+      # @options access [String] :client_id
+      # @options access [String] :private_key
+      #
+      def delete!(access = {})
         GroupDocs::Api::Request.new do |request|
+          request[:access] = access
           request[:method] = :DELETE
-          request[:path] = "/storage/#{GroupDocs.client_id}/files/#{guid}"
+          request[:path] = "/storage/{{client_id}}/files/#{guid}"
         end.execute!
       end
 

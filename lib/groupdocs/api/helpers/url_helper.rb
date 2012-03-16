@@ -22,6 +22,15 @@ module GroupDocs
         private
 
         #
+        # Parses path replacing {client_id} with real one.
+        #
+        # @api private
+        #
+        def parse_path
+          options[:path] = options[:path].sub(/\{\{client_id\}\}/, client_id)
+        end
+
+        #
         # URL encodes path.
         #
         # @api private
@@ -37,7 +46,7 @@ module GroupDocs
         #
         def sign_url
           # calculate a hash of the path with private key
-          hash = HMAC::SHA1.new(GroupDocs.private_key)
+          hash = HMAC::SHA1.new(private_key)
           hash << options[:path]
           hash = hash.digest
           # convert hash to base64

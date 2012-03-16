@@ -20,14 +20,17 @@ module GroupDocs
       #
       # Creates package on server.
       #
+      # @param [Hash] access Access credentials
+      # @options access [String] :client_id
+      # @options access [String] :private_key
       # @return [String] URL of package for downloading
       #
-      def create!
+      def create!(access = {})
         json = GroupDocs::Api::Request.new do |request|
+          request[:access] = access
           request[:method] = :POST
-          request[:path] = "/storage/#{GroupDocs.client_id}/packages/#{name}.zip"
+          request[:path] = "/storage/{{client_id}}/packages/#{name}.zip"
           request[:request_body] = @objects.map(&:name)
-          request[:headers] = { content_type: 'application/json' }
         end.execute!
 
         json[:result][:url]
