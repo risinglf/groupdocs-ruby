@@ -111,7 +111,7 @@ describe GroupDocs::Api::Helpers::REST do
       end.should_not change(subject, :response)
     end
 
-    it 'returns JSON result key value and save it to response' do
+    it 'returns JSON result key value' do
       mock_response('{"status": "Ok", "result": { "entities": [] }}')
       parsed_json = { status: 'Ok', result: { entities: [] } }
       JSON.should_receive(:parse).with(subject.response, symbolize_names: true).and_return(parsed_json)
