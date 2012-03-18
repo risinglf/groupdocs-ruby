@@ -6,6 +6,16 @@ describe GroupDocs::Api::Helpers::Access do
     GroupDocs::Api::Request.new(method: :GET)
   end
 
+  describe 'MODES' do
+    it 'contains hash of access modes' do
+      described_class::MODES.should == {
+        private:    0,
+        restricted: 1,
+        public:     2,
+      }
+    end
+  end
+
   describe '#client_id' do
     it 'returns passed to method client ID' do
       subject.options[:access] = { client_id: 'method_client_id' }
