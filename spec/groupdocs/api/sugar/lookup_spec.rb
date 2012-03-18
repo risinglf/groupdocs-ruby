@@ -2,6 +2,11 @@ require 'spec_helper'
 
 shared_examples_for GroupDocs::Api::Sugar::Lookup do
 
+  before(:each) do
+    # make sure `name` attribute exists
+    described_class.class_eval('attr_accessor :name')
+  end
+
   let(:found) do
     if described_class == GroupDocs::Document
       described_class.new(id: 1, file: GroupDocs::Storage::File.new)
