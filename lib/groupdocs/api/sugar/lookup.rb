@@ -9,8 +9,8 @@ module GroupDocs
         # @param [Symbol] attribute
         # @param [Integer, String, Regexp] value
         # @param [Hash] access Access credentials
-        # @options access [String] :client_id
-        # @options access [String] :private_key
+        # @option access [String] :client_id
+        # @option access [String] :private_key
         # @return [GroupDocs::Api::Entity] Matching entity
         #
         def find!(attribute, value, access = {})
@@ -25,8 +25,8 @@ module GroupDocs
         # @param [Symbol] attribute
         # @param [Integer, String, Regexp] value
         # @param [Hash] access Access credentials
-        # @options access [String] :client_id
-        # @options access [String] :private_key
+        # @option access [String] :client_id
+        # @option access [String] :private_key
         # @return [Array] Array of matching entities
         #
         # @raise [NoMethodError] if extending class does not implement #all! class method.

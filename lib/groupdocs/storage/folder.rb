@@ -10,8 +10,8 @@ module GroupDocs
       #
       # @param [String] path Path of folder to create starting wiht "/"
       # @param [Hash] access Access credentials
-      # @options access [String] :client_id
-      # @options access [String] :private_key
+      # @option access [String] :client_id
+      # @option access [String] :private_key
       # @return [GroupDocs::Storage::Folder] Created folder
       #
       # @raise [ArgumentError] If path does not start with /
@@ -33,8 +33,8 @@ module GroupDocs
       #
       # @param [String] path Starting path to look for folders
       # @param [Hash] access Access credentials
-      # @options access [String] :client_id
-      # @options access [String] :private_key
+      # @option access [String] :client_id
+      # @option access [String] :private_key
       # @return [Array<GroupDocs::Storage::Folder>]
       #
       def self.all!(path = '/', access = {})
@@ -60,8 +60,8 @@ module GroupDocs
       # @option options [String] :order_by Field name to sort by
       # @option options [Boolean] :order_asc Set to true to return in ascending order
       # @param [Hash] access Access credentials
-      # @options access [String] :client_id
-      # @options access [String] :private_key
+      # @option access [String] :client_id
+      # @option access [String] :private_key
       # @return [Array<GroupDocs::Storage::Folder, GroupDocs::Storage::File>]
       #
       # @raise [ArgumentError] If path does not start with /
@@ -141,8 +141,8 @@ module GroupDocs
       #
       # @param [String] path Destination to move contents to
       # @param [Hash] access Access credentials
-      # @options access [String] :client_id
-      # @options access [String] :private_key
+      # @option access [String] :client_id
+      # @option access [String] :private_key
       # @return [String] Moved to folder path
       #
       # @raise [ArgumentError] If path does not start with /
@@ -165,8 +165,8 @@ module GroupDocs
       #
       # @param [String] name New name
       # @param [Hash] access Access credentials
-      # @options access [String] :client_id
-      # @options access [String] :private_key
+      # @option access [String] :client_id
+      # @option access [String] :private_key
       # @return [String] New name
       #
       def rename!(name, access = {})
@@ -178,8 +178,8 @@ module GroupDocs
       #
       # @param [String] path Path of directory to copy to starting from root ('/')
       # @param [Hash] access Access credentials
-      # @options access [String] :client_id
-      # @options access [String] :private_key
+      # @option access [String] :client_id
+      # @option access [String] :private_key
       # @return [String] Copied to folder path
       #
       # @raise [ArgumentError] If path does not start with /
@@ -206,8 +206,8 @@ module GroupDocs
       # @option options [String] :order_by Field name to sort by
       # @option options [Boolean] :order_asc Set to true to return in ascending order
       # @param [Hash] access Access credentials
-      # @options access [String] :client_id
-      # @options access [String] :private_key
+      # @option access [String] :client_id
+      # @option access [String] :private_key
       # @return [Array<GroupDocs::Storage::Folder, GroupDocs::Storage::File>]
       #
       def list!(options = {}, access = {})
@@ -219,8 +219,8 @@ module GroupDocs
       # Creates folder on server.
       #
       # @param [Hash] access Access credentials
-      # @options access [String] :client_id
-      # @options access [String] :private_key
+      # @option access [String] :client_id
+      # @option access [String] :private_key
       #
       def create!(access = {})
         self.class.create!("/#{name}", access)
@@ -230,8 +230,8 @@ module GroupDocs
       # Deletes folder from server.
       #
       # @param [Hash] access Access credentials
-      # @options access [String] :client_id
-      # @options access [String] :private_key
+      # @option access [String] :client_id
+      # @option access [String] :private_key
       #
       def delete!(access = {})
         GroupDocs::Api::Request.new do |request|
@@ -245,8 +245,8 @@ module GroupDocs
       # Returns an array of users a folder is shared with.
       #
       # @param [Hash] access Access credentials
-      # @options access [String] :client_id
-      # @options access [String] :private_key
+      # @option access [String] :client_id
+      # @option access [String] :private_key
       # @return [Array<GroupDocs::User>]
       #
       def sharers!(access = {})
@@ -268,8 +268,8 @@ module GroupDocs
       #
       # @param [Array] emails List of email addresses to share with
       # @param [Hash] access Access credentials
-      # @options access [String] :client_id
-      # @options access [String] :private_key
+      # @option access [String] :client_id
+      # @option access [String] :private_key
       # @return [Array<GroupDocs::User>]
       #
       def sharers_set!(emails, access = {})
@@ -295,8 +295,8 @@ module GroupDocs
       # Clears sharers list.
       #
       # @param [Hash] access Access credentials
-      # @options access [String] :client_id
-      # @options access [String] :private_key
+      # @option access [String] :client_id
+      # @option access [String] :private_key
       # @return nil
       #
       def sharers_clear!(access = {})

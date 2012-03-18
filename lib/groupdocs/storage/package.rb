@@ -22,8 +22,8 @@ module GroupDocs
       # Creates package on server.
       #
       # @param [Hash] access Access credentials
-      # @options access [String] :client_id
-      # @options access [String] :private_key
+      # @option access [String] :client_id
+      # @option access [String] :private_key
       # @return [String] URL of package for downloading
       #
       def create!(access = {})

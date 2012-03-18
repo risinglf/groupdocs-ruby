@@ -14,8 +14,8 @@ module GroupDocs
     #   #=> { total_space: "1024 MB", available_space: "1020 MB", document_credits: 5000, available_credits: 4964 }
     #
     # @param [Hash] access Access credentials
-    # @options access [String] :client_id
-    # @options access [String] :private_key
+    # @option access [String] :client_id
+    # @option access [String] :private_key
     # @return [Hash]
     #
     def self.info!(access = {})

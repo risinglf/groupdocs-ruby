@@ -16,8 +16,8 @@ module GroupDocs
       # @param [Hash] options Hash of options
       # @option options [String] :description Optional description for file
       # @param [Hash] access Access credentials
-      # @options access [String] :client_id
-      # @options access [String] :private_key
+      # @option access [String] :client_id
+      # @option access [String] :private_key
       # @return [GroupDocs::Storage::File]
       #
       # @raise [ArgumentError] If path does not start with /
@@ -43,8 +43,8 @@ module GroupDocs
       #
       # @param [String] path Starting path to look for files
       # @param [Hash] access Access credentials
-      # @options access [String] :client_id
-      # @options access [String] :private_key
+      # @option access [String] :client_id
+      # @option access [String] :private_key
       # @return [Array<GroupDocs::Storage::File>]
       #
       def self.all!(path = '/', access = {})
@@ -112,8 +112,8 @@ module GroupDocs
       #
       # @param [String] path Directory to download file to
       # @param [Hash] access Access credentials
-      # @options access [String] :client_id
-      # @options access [String] :private_key
+      # @option access [String] :client_id
+      # @option access [String] :private_key
       # @return [String] Path to downloaded file
       #
       def download!(path, access = {})
@@ -137,8 +137,8 @@ module GroupDocs
       # @param [String] path Full path to directory to move file to starting with "/".
       #                      You can also add filename and then moved file will use it.
       # @param [Hash] access Access credentials
-      # @options access [String] :client_id
-      # @options access [String] :private_key
+      # @option access [String] :client_id
+      # @option access [String] :private_key
       # @return [String] Moved to file path
       #
       # @raise [ArgumentError] If path does not start with /
@@ -162,8 +162,8 @@ module GroupDocs
       #
       # @param [String] name New file name
       # @param [Hash] access Access credentials
-      # @options access [String] :client_id
-      # @options access [String] :private_key
+      # @option access [String] :client_id
+      # @option access [String] :private_key
       # @return [String] New name
       #
       def rename!(name, access = {})
@@ -176,8 +176,8 @@ module GroupDocs
       # @param [String] path Full path to directory to copy file to starting with "/".
       #                      You can also add filename and then copied file will use it.
       # @param [Hash] access Access credentials
-      # @options access [String] :client_id
-      # @options access [String] :private_key
+      # @option access [String] :client_id
+      # @option access [String] :private_key
       # @return [GroupDocs::Storage::File] Copied to file
       #
       # @raise [ArgumentError] If path does not start with /
@@ -201,8 +201,8 @@ module GroupDocs
       #
       # @param [Symbol] type Archive type: :zip, :rar.
       # @param [Hash] access Access credentials
-      # @options access [String] :client_id
-      # @options access [String] :private_key
+      # @option access [String] :client_id
+      # @option access [String] :private_key
       # @return [GroupDocs::Storage::File] Archive file
       #
       def compress!(type = :zip, access = {})
@@ -222,8 +222,8 @@ module GroupDocs
       # Deletes file from server.
       #
       # @param [Hash] access Access credentials
-      # @options access [String] :client_id
-      # @options access [String] :private_key
+      # @option access [String] :client_id
+      # @option access [String] :private_key
       #
       def delete!(access = {})
         GroupDocs::Api::Request.new do |request|

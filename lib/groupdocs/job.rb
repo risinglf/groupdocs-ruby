@@ -11,8 +11,8 @@ module GroupDocs
     # @option options [Integer] :page Page to start with
     # @option options [Integer] :count How many items to list
     # @param [Hash] access Access credentials
-    # @options access [String] :client_id
-    # @options access [String] :private_key
+    # @option access [String] :client_id
+    # @option access [String] :private_key
     # @return [Array<GroupDocs::Job>]
     #
     def self.all!(options = {}, access = {})
@@ -50,8 +50,8 @@ module GroupDocs
     # Returns an array of documents associated to job.
     #
     # @param [Hash] access Access credentials
-    # @options access [String] :client_id
-    # @options access [String] :private_key
+    # @option access [String] :client_id
+    # @option access [String] :private_key
     # @return [Array<GroupDocs::Document>]
     #
     # @todo receive 404
@@ -71,8 +71,8 @@ module GroupDocs
     # @param [Hash] options
     # @option options [Array] :output_formats Array of output formats to override
     # @param [Hash] access Access credentials
-    # @options access [String] :client_id
-    # @options access [String] :private_key
+    # @option access [String] :client_id
+    # @option access [String] :private_key
     # @raise [ArgumentError] If document is not a GroupDocs::Document object
     #
     # @todo receive "Document not found"

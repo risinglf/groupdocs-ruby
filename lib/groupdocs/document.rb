@@ -15,8 +15,8 @@ module GroupDocs
     #
     # @param [String] path Starting path to look for documents
     # @param [Hash] access Access credentials
-    # @options access [String] :client_id
-    # @options access [String] :private_key
+    # @option access [String] :client_id
+    # @option access [String] :private_key
     # @return [Array<GroupDocs::Storage::Document>]
     #
     def self.all!(path = '/', access = {})
@@ -30,8 +30,8 @@ module GroupDocs
     # @option options [Integer] :page_index Page to start with
     # @option options [Integer] :page_size Total number of entries
     # @param [Hash] access Access credentials
-    # @options access [String] :client_id
-    # @options access [String] :private_key
+    # @option access [String] :client_id
+    # @option access [String] :private_key
     # @return [Array<GroupDocs::Document::View>]
     #
     def self.views!(options = { page_index: 0 }, access = {})
@@ -85,8 +85,8 @@ module GroupDocs
     # Returns access mode of document.
     #
     # @param [Hash] access Access credentials
-    # @options access [String] :client_id
-    # @options access [String] :private_key
+    # @option access [String] :client_id
+    # @option access [String] :private_key
     # @return [Symbol] One of :private, :restricted or :public access modes
     #
     def access_mode!(access = {})
@@ -104,8 +104,8 @@ module GroupDocs
     #
     # @param [Symbol] mode One of :private, :restricted or :public access modes
     # @param [Hash] access Access credentials
-    # @options access [String] :client_id
-    # @options access [String] :private_key
+    # @option access [String] :client_id
+    # @option access [String] :private_key
     # @return [Symbol] Set access mode
     #
     def access_mode_set!(mode, access = {})
@@ -124,8 +124,8 @@ module GroupDocs
     # Returns array of file formats document can be converted to.
     #
     # @param [Hash] access Access credentials
-    # @options access [String] :client_id
-    # @options access [String] :private_key
+    # @option access [String] :client_id
+    # @option access [String] :private_key
     # @return [Array<Symbol>]
     #
     def formats!(access = {})
@@ -144,8 +144,8 @@ module GroupDocs
     # Returns document metadata.
     #
     # @param [Hash] access Access credentials
-    # @options access [String] :client_id
-    # @options access [String] :private_key
+    # @option access [String] :client_id
+    # @option access [String] :private_key
     # @return [GroupDocs::Document::MetaData]
     #
     def metadata!(access = {})
@@ -173,8 +173,8 @@ module GroupDocs
     # @param [Hash] options
     # @option options [Boolean] :include_geometry Set to true if fields location and size should be returned
     # @param [Hash] access Access credentials
-    # @options access [String] :client_id
-    # @options access [String] :private_key
+    # @option access [String] :client_id
+    # @option access [String] :private_key
     # @return [Array<GroupDocs::Document::Field>]
     #
     def fields!(options = {}, access = {})
@@ -200,8 +200,8 @@ module GroupDocs
     # @option options [Integer] :quality From 1 to 100
     # @option options [Boolean] :use_pdf
     # @param [Hash] access Access credentials
-    # @options access [String] :client_id
-    # @options access [String] :private_key
+    # @option access [String] :client_id
+    # @option access [String] :private_key
     #
     # @todo what should it return?
     #
@@ -219,8 +219,8 @@ module GroupDocs
     # Returns an array of users a document is shared with.
     #
     # @param [Hash] access Access credentials
-    # @options access [String] :client_id
-    # @options access [String] :private_key
+    # @option access [String] :client_id
+    # @option access [String] :private_key
     # @return [Array<GroupDocs::User>]
     #
     def sharers!(access = {})
@@ -242,8 +242,8 @@ module GroupDocs
     #
     # @param [Array] emails List of email addresses to share with
     # @param [Hash] access Access credentials
-    # @options access [String] :client_id
-    # @options access [String] :private_key
+    # @option access [String] :client_id
+    # @option access [String] :private_key
     # @return [Array<GroupDocs::User>]
     #
     def sharers_set!(emails, access = {})
@@ -269,8 +269,8 @@ module GroupDocs
     # Clears sharers list.
     #
     # @param [Hash] access Access credentials
-    # @options access [String] :client_id
-    # @options access [String] :private_key
+    # @option access [String] :client_id
+    # @option access [String] :private_key
     # @return nil
     #
     def sharers_clear!(access = {})
