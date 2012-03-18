@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe GroupDocs::Storage do
-  describe '#info!' do
+  describe '.info!' do
     before(:each) do
       mock_api_server(load_json('storage_info'))
     end

@@ -10,14 +10,14 @@ shared_examples_for GroupDocs::Api::Sugar::Lookup do
     end
   end
 
-  describe 'find!' do
+  describe '.find!' do
     it 'calls #find_all! and return its first result' do
       described_class.should_receive(:find_all!).with(:id, 1, {}).and_return([found])
       described_class.find!(:id, 1).should == found
     end
   end
 
-  describe 'find_all!' do
+  describe '.find_all!' do
     before(:each) do
       folder1 = stub(list!: [], id: 1, name: 'Test')
       folder2 = stub(list!: [folder1], id: 2, name: 'Test2')
