@@ -7,6 +7,7 @@ module GroupDocs
     require 'groupdocs/document/view'
 
     extend GroupDocs::Api::Sugar::Lookup
+    include GroupDocs::Api::Helpers::Access
 
     #
     # Returns an array of all documents on server.
@@ -293,26 +294,6 @@ module GroupDocs
 
     def respond_to?(method)
       super or file.respond_to?(method)
-    end
-
-    private
-
-    #
-    # @param [Integer, Symbol] mode
-    # @api private
-    #
-    def parse_access_mode(mode)
-      modes =  {
-        private:    0,
-        restricted: 1,
-        public:     2
-      }
-
-      if mode.is_a?(Integer)
-        modes.invert[mode]
-      else
-        modes[mode]
-      end or raise ArgumentError, "Unknown access mode: #{mode.inspect}."
     end
 
   end # Document

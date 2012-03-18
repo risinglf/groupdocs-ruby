@@ -3,6 +3,7 @@ module GroupDocs
     class Folder < GroupDocs::Api::Entity
 
       extend GroupDocs::Api::Sugar::Lookup
+      include GroupDocs::Api::Helpers::Access
 
       #
       # Creates folder on server.
@@ -124,6 +125,15 @@ module GroupDocs
       #
       def modified_on=(timestamp)
         @modified_on = Time.at(timestamp)
+      end
+
+      #
+      # Converts access mode to human-readable format.
+      #
+      # @param [Integer] mode
+      #
+      def access=(mode)
+        @access = parse_access_mode(mode)
       end
 
       #

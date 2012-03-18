@@ -110,6 +110,14 @@ describe GroupDocs::Storage::Folder do
     end
   end
 
+  describe '#access=' do
+    it 'saves access in human readable presentation' do
+      subject.should_receive(:parse_access_mode).with(0).and_return(:private)
+      subject.access = 0
+      subject.access.should == :private
+    end
+  end
+
   describe '#move!' do
     it 'accepts access credentials hash' do
       lambda do
