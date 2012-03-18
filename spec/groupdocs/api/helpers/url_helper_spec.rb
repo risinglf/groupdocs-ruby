@@ -12,6 +12,13 @@ describe GroupDocs::Api::Helpers::URL do
       subject.add_params({ param: 'value' })
     end
 
+    it 'joins values with comma if it is array' do
+      subject.options[:path] = '/1/files/2'
+      value = [1, 2]
+      value.should_receive(:join).with(?,).and_return('1,2')
+      subject.add_params({ param: value })
+    end
+
     it 'determines correct URL separator' do
       subject.options[:path] = '/1/files/2'
       subject.should_receive(:separator)

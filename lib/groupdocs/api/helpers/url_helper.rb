@@ -15,6 +15,7 @@ module GroupDocs
         #
         def add_params(params)
           params.each do |param, value|
+            value = value.join(?,) if value.is_a?(Array)
             options[:path] << "#{separator}#{param}=#{value}"
           end
         end
