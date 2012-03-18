@@ -22,7 +22,24 @@ module GroupDocs
         # @param [Integer] status
         #
         def status=(status)
-          @status = STATUSES.invert[status]
+          @status = parse_status(status)
+        end
+
+        private
+
+        #
+        # Converts status from/to human-readable format.
+        #
+        # @param [Integer, Symbol] status
+        # @return [Symbol, Integer]
+        # @api private
+        #
+        def parse_status(status)
+          if status.is_a?(Integer)
+            STATUSES.invert[status]
+          else
+            STATUSES[status]
+          end or raise ArgumentError, "Unknown status: #{status.inspect}."
         end
 
       end # Status
