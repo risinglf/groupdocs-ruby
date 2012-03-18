@@ -4,6 +4,7 @@ describe GroupDocs::Document do
 
   it_behaves_like GroupDocs::Api::Entity
   include_examples GroupDocs::Api::Sugar::Lookup
+  include_examples GroupDocs::Api::Helpers::Status
 
   subject do
     file = GroupDocs::Storage::File.new
@@ -52,8 +53,24 @@ describe GroupDocs::Document do
     end
   end
 
-  it { should respond_to(:file)  }
-  it { should respond_to(:file=) }
+  it { should respond_to(:file)          }
+  it { should respond_to(:file=)         }
+  it { should respond_to(:process_date)  }
+  it { should respond_to(:process_date=) }
+  it { should respond_to(:outputs)       }
+  it { should respond_to(:outputs=)      }
+
+  it 'is compatible with response JSON' do
+    subject.should respond_to(:proc_date=)
+    subject.method(:proc_date=).should == subject.method(:process_date=)
+  end
+
+  describe '#process_date=' do
+    it 'modifies timestamp to Time object' do
+      subject.process_date = 1330450135
+      subject.process_date.should be_a(Time)
+    end
+  end
 
   describe '#initialize' do
     it 'raises error if file is not specified' do

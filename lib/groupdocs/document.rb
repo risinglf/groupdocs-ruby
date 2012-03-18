@@ -8,6 +8,7 @@ module GroupDocs
 
     extend GroupDocs::Api::Sugar::Lookup
     include GroupDocs::Api::Helpers::Access
+    include GroupDocs::Api::Helpers::Status
 
     #
     # Returns an array of all documents on server.
@@ -49,6 +50,22 @@ module GroupDocs
 
     # @attr [GroupDocs::Storage::File] file
     attr_accessor :file
+    # @attr [Time] process_date
+    attr_accessor :process_date
+    # @attr [Array] outputs
+    attr_accessor :outputs
+
+    #
+    # Converts timestamp which is return by API server to Time object.
+    #
+    # @param [Integer] timestamp Unix timestamp
+    #
+    def process_date=(timestamp)
+      @process_date = Time.at(timestamp)
+    end
+
+    # Compatibility with response JSON
+    alias_method :proc_date=, :process_date=
 
     #
     # Creates new GroupDocs::Document.
