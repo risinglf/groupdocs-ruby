@@ -3,7 +3,6 @@ require 'spec_helper'
 describe GroupDocs::Job do
 
   it_behaves_like GroupDocs::Api::Entity
-  include_examples GroupDocs::Api::Sugar::Lookup
   include_examples GroupDocs::Api::Helpers::Status
 
   describe '.all!' do
@@ -58,6 +57,10 @@ describe GroupDocs::Job do
   end
 
   describe '#add_document!' do
+    it 'raises error if document is not an instance of GroupDocs::Document' do
+      -> { subject.add_document!('Document') }.should raise_error(ArgumentError)
+    end
+
     pending 'Receive "Document not found" response'
   end
 end

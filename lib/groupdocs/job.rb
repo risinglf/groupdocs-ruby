@@ -1,7 +1,6 @@
 module GroupDocs
   class Job < GroupDocs::Api::Entity
 
-    extend GroupDocs::Api::Sugar::Lookup
     include GroupDocs::Api::Helpers::Status
 
     #
@@ -86,6 +85,29 @@ module GroupDocs
         request[:method] = :PUT
         request[:path] = "/{{client_id}}/jobs/#{id}/files/#{document.file.id}"
       end
+      api.add_params(options)
+      json = api.execute!
+    end
+
+    #
+    # Updates job settings and/or status.
+    #
+    # @param [Hash] options
+    # @option options [Boolean] :email_results
+    # @option options [Symbol] :status
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    # @todo first need to implement #create
+    #
+    def update!(options, access = {})
+      api = GroupDocs::Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/{{client_id}}/jobs/#{id}"
+      end
+      options[:status] = parse_status(options[:status]) if options[:status]
       api.add_params(options)
       json = api.execute!
     end
