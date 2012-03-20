@@ -47,7 +47,7 @@ describe GroupDocs::Job do
       documents = subject.documents
       documents.should be_an(Array)
       documents.each do |document|
-        document.should be_a(GroupDocs::Document )
+        document.should be_a(GroupDocs::Document)
       end
     end
   end
