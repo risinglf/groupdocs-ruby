@@ -63,4 +63,28 @@ describe GroupDocs::Job do
 
     pending 'Receive "Document not found" response'
   end
+
+  describe '#add_url!' do
+    before(:each) do
+      mock_api_server(load_json('job_add_url'))
+    end
+
+    let(:url) { 'http://www.google.com' }
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.add_url!(url, {}, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'accepts options hash' do
+      lambda do
+        subject.add_url!(url, out_formats: %W(pdf txt))
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns document ID' do
+      subject.add_url!(url).should be_an(Integer)
+    end
+  end
 end

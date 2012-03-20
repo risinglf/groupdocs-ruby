@@ -28,6 +28,35 @@ module GroupDocs
       end
     end
 
+    #
+    # Creates new draft job.
+    #
+    # @param [Hash] options
+    # @option options [Integer] :actions
+    # @option options [Boolean] :emails_results
+    # @option options [Array] :out_formats
+    # @option options [Boolean] :url_only
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [GroupDocs::Job]
+    #
+    # @todo 400 Bad Request
+    #
+    def self.create!(options = {}, access = {})
+      if options[:out_formats]
+        options[:out_formats] = options[:out_formats].join(?;)
+      end
+
+      api = GroupDocs::Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :POST
+        request[:path] = '/{{client_id}}/jobs'
+        request[:request_body] = options
+      end
+      json = api.execute!
+    end
+
     # @attr [Integer] id
     attr_accessor :id
     # @attr [Array<GroupDocs::Document] documents
@@ -87,6 +116,29 @@ module GroupDocs
       end
       api.add_params(options)
       json = api.execute!
+    end
+
+    #
+    # Adds URL of web page or document to be converted.
+    #
+    # @param [String] url Absolute URL
+    # @param [Hash] options
+    # @option options [Array] :output_formats Array of output formats to override
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Integer] Document ID
+    #
+    def add_url!(url, options = {}, access = {})
+      api = GroupDocs::Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/{{client_id}}/jobs/#{id}/urls?absolute_url=#{url}"
+      end
+      api.add_params(options)
+      json = api.execute!
+
+      json[:document_id]
     end
 
     #

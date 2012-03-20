@@ -64,6 +64,7 @@ module GroupDocs
         url_encode_path
         sign_url
         prepare_request
+        # p options
         send_request
         parse_response
       end
