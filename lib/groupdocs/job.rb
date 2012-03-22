@@ -32,7 +32,7 @@ module GroupDocs
     # Creates new draft job.
     #
     # @param [Hash] options
-    # @option options [Integer] :actions
+    # @option options [Integer] :actions Array of actions to be performed. Required
     # @option options [Boolean] :emails_results
     # @option options [Array] :out_formats
     # @option options [Boolean] :url_only
@@ -41,12 +41,10 @@ module GroupDocs
     # @option access [String] :private_key
     # @return [GroupDocs::Job]
     #
-    # @todo 400 Bad Request
-    #
-    def self.create!(options = {}, access = {})
-      if options[:out_formats]
-        options[:out_formats] = options[:out_formats].join(?;)
-      end
+    def self.create!(options, access = {})
+      options[:actions] or raise ArgumentError, 'options[:actions] is required.'
+      options[:actions] = GroupDocs::Api::Helpers::Actions.convert_actions(options[:actions])
+      options[:out_formats] = options[:out_formats].join(?;) if options[:out_formats]
 
       api = GroupDocs::Api::Request.new do |request|
         request[:access] = access
@@ -55,6 +53,8 @@ module GroupDocs
         request[:request_body] = options
       end
       json = api.execute!
+
+      GroupDocs::Job.new(id: json[:job_id])
     end
 
     # @attr [Integer] id
@@ -82,14 +82,17 @@ module GroupDocs
     # @option access [String] :private_key
     # @return [Array<GroupDocs::Document>]
     #
-    # @todo receive 404
-    #
     def documents!(access = {})
       json = GroupDocs::Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
-        request[:path] = "/{{client_id}}/jobs/#{id}"
+        request[:path] = "/{{client_id}}/jobs/#{id}/documents"
       end.execute!
+
+      json[:documents].map do |document|
+        document.merge!(file: GroupDocs::Storage::File.new(document))
+        GroupDocs::Document.new(document)
+      end
     end
 
     #
@@ -101,9 +104,8 @@ module GroupDocs
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
+    # @return [Integer] Document ID
     # @raise [ArgumentError] If document is not a GroupDocs::Document object
-    #
-    # @todo receive "Document not found"
     #
     def add_document!(document, options = {}, access = {})
       document.is_a?(GroupDocs::Document) or raise ArgumentError,
@@ -112,10 +114,38 @@ module GroupDocs
       api = GroupDocs::Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
-        request[:path] = "/{{client_id}}/jobs/#{id}/files/#{document.file.id}"
+        request[:path] = "/{{client_id}}/jobs/#{id}/files/#{document.file.guid}"
       end
       api.add_params(options)
       json = api.execute!
+
+      json[:document_id]
+    end
+
+    #
+    # Adds datasource to job document.
+    #
+    # @param [GroupDocs::Document] document
+    # @param [GroupDocs::DataSource] datasource
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @raise [ArgumentError] If document is not a GroupDocs::Document object
+    # @raise [ArgumentError] If datasource is not a GroupDocs::DataSource object
+    #
+    # @todo Finish it along with Assembly API
+    #
+    def add_datasource!(document, datasource, access = {})
+      document.is_a?(GroupDocs::Document) or raise ArgumentError,
+        "Document should be GroupDocs::Document object. Received: #{document.inspect}"
+      datasource.is_a?(GroupDocs::DataSource) or raise ArgumentError,
+        "Datasource should be GroupDocs::DataSource object. Received: #{datasource.inspect}"
+
+      GroupDocs::Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/{{client_id}}/jobs/#{id}/files/#{document.file.guid}/datasources/#{datasource.id}"
+      end.execute!
     end
 
     #
@@ -151,15 +181,16 @@ module GroupDocs
     # @option access [String] :client_id
     # @option access [String] :private_key
     #
-    # @todo first need to implement #create
+    # @todo Receive 400 Bad Request
     #
     def update!(options, access = {})
+      options[:status] = parse_status(options[:status]) if options[:status]
+
       api = GroupDocs::Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
         request[:path] = "/{{client_id}}/jobs/#{id}"
       end
-      options[:status] = parse_status(options[:status]) if options[:status]
       api.add_params(options)
       json = api.execute!
     end

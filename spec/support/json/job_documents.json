@@ -1,0 +1,39 @@
+{
+  "result":
+    {
+      "job_status": 5,
+      "documents":
+      [
+        {
+          "status": 2,
+          "output_formats": "pdf",
+          "outputs":
+          [
+            {
+              "ftype": 19,
+              "error": null,
+              "url": "http://groupdocs.com",
+              "name": "Test.pdf"
+            }
+          ],
+          "id": 123
+        },
+        {
+          "status": 1,
+          "output_formats": "tiff",
+          "outputs":
+          [
+            {
+              "ftype": 15,
+              "error": null,
+              "url": "http://groupdocs.com",
+              "name": "CV.doc"
+            }
+          ],
+          "id": 345
+        }
+      ]
+    },
+  "status": "Ok",
+  "error_message": null
+}
