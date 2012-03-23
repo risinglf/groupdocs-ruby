@@ -83,7 +83,7 @@ Note, that all "bang" methods (ending with exclamation sign) means interaction w
 
 ### Find entities
 
-Some entities support `#all!, `#find!` and `#find_all!` methods. You can pass any attribute that object responds to and its value to find with.
+Some entities support `#all!`, `#find!` and `#find_all!` methods. You can pass any attribute that object responds to and its value to find with.
 
 * List all files
 
