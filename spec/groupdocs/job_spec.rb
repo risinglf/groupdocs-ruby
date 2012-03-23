@@ -192,7 +192,5 @@ describe GroupDocs::Job do
       subject.should_receive(:parse_status).with(:draft).and_return(-1)
       subject.update!(status: :draft)
     end
-
-    pending 'Receive 400 Bad Request'
   end
 end

@@ -181,18 +181,15 @@ module GroupDocs
     # @option access [String] :client_id
     # @option access [String] :private_key
     #
-    # @todo Receive 400 Bad Request
-    #
     def update!(options, access = {})
       options[:status] = parse_status(options[:status]) if options[:status]
 
-      api = GroupDocs::Api::Request.new do |request|
+      GroupDocs::Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
         request[:path] = "/{{client_id}}/jobs/#{id}"
-      end
-      api.add_params(options)
-      json = api.execute!
+        request[:request_body] = options
+      end.execute!
     end
 
   end # Job
