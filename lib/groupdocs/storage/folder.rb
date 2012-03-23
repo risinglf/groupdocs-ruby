@@ -39,7 +39,7 @@ module GroupDocs
       #
       def self.all!(path = '/', access = {})
         folders = Array.new
-        folder = GroupDocs::Storage::Folder.new(name: path)
+        folder = GroupDocs::Storage::Folder.new(path: path)
         folder.list!({}, access).each do |entity|
           if entity.is_a?(GroupDocs::Storage::Folder)
             folders << entity
@@ -68,22 +68,7 @@ module GroupDocs
       #
       def self.list!(path = '/', options = {}, access = {})
         path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{path.inspect}"
-
-        api = GroupDocs::Api::Request.new do |request|
-          request[:access] = access
-          request[:method] = :GET
-          request[:path] = "/storage/{{client_id}}/folders#{path}"
-        end
-        api.add_params(options)
-        json = api.execute!
-
-        json[:entities].map do |entity|
-          if entity[:dir]
-            GroupDocs::Storage::Folder.new(entity)
-          else
-            GroupDocs::Storage::File.new(entity)
-          end
-        end
+        new(path: path).list!(options, access)
       end
 
       # @attr [Integer] id
@@ -102,6 +87,8 @@ module GroupDocs
       attr_accessor :url
       # @attr [String] name
       attr_accessor :name
+      # @attr [String] path
+      attr_accessor :path
       # @attr [Integer] version
       attr_accessor :version
       # @attr [Integer] type
@@ -211,8 +198,21 @@ module GroupDocs
       # @return [Array<GroupDocs::Storage::Folder, GroupDocs::Storage::File>]
       #
       def list!(options = {}, access = {})
-        path = name =~ /^\// ? name : "/#{name}"
-        self.class.list!(path, options, access)
+        api = GroupDocs::Api::Request.new do |request|
+          request[:access] = access
+          request[:method] = :GET
+          request[:path] = "/storage/{{client_id}}/folders#{path.gsub(/[\/]{2}/, '/')}"
+        end
+        api.add_params(options)
+        json = api.execute!
+
+        json[:entities].map do |entity|
+          if entity[:dir]
+            GroupDocs::Storage::Folder.new(entity)
+          else
+            GroupDocs::Storage::File.new(entity)
+          end
+        end
       end
 
       #

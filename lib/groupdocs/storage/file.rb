@@ -49,7 +49,7 @@ module GroupDocs
       #
       def self.all!(path = '/', access = {})
         files = Array.new
-        folder = GroupDocs::Storage::Folder.new(name: path)
+        folder = GroupDocs::Storage::Folder.new(path: path)
         folder.list!({}, access).each do |entity|
           if entity.is_a?(GroupDocs::Storage::Folder)
             files += all!("#{path}/#{entity.name}".gsub(/[\/]{2}/, '/'), access)
