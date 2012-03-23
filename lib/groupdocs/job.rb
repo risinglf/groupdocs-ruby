@@ -105,6 +105,7 @@ module GroupDocs
     # @option access [String] :client_id
     # @option access [String] :private_key
     # @return [Integer] Document ID
+    #
     # @raise [ArgumentError] If document is not a GroupDocs::Document object
     #
     def add_document!(document, options = {}, access = {})
@@ -130,6 +131,7 @@ module GroupDocs
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
+    #
     # @raise [ArgumentError] If document is not a GroupDocs::Document object
     # @raise [ArgumentError] If datasource is not a GroupDocs::DataSource object
     #
