@@ -48,28 +48,14 @@ describe GroupDocs::Storage::Folder do
     end
 
     it 'allows passing options' do
-      -> { described_class.list!('/', { page: 1, count: 1 }) }.should_not raise_error(ArgumentError)
+      -> { described_class.list!('/', page: 1, count: 1) }.should_not raise_error(ArgumentError)
     end
 
-    it 'returns array' do
-      described_class.list!.should be_an(Array)
-    end
-
-    it 'returns empty array if nothing is listed in directory' do
-      mock_api_server('{"result": {"entities": []}, "status": "Ok"}')
-      described_class.list!.should be_empty
-    end
-
-    it 'determines folders in response' do
-      described_class.list!.detect do |entity|
-        entity.id == 1
-      end.should be_a(GroupDocs::Storage::Folder)
-    end
-
-    it 'determines files in response' do
-      described_class.list!.detect do |entity|
-        entity.id == 2
-      end.should be_a(GroupDocs::Storage::File)
+    it 'creates new instance of GroupDocs::Storage::Folder and calls #list!' do
+      folder = stub('folder')
+      GroupDocs::Storage::Folder.should_receive(:new).with(path: '/').and_return(folder)
+      folder.should_receive(:list!).with({}, {})
+      described_class.list!
     end
   end
 
@@ -191,7 +177,7 @@ describe GroupDocs::Storage::Folder do
   describe '#list!' do
     before(:each) do
       mock_api_server(load_json('folder_list'))
-      subject.stub(name: 'Test1')
+      subject.stub(path: '/Test1')
     end
 
     it 'accepts access credentials hash' do
@@ -204,9 +190,25 @@ describe GroupDocs::Storage::Folder do
       -> { subject.list!(page: 1, count: 1) }.should_not raise_error(ArgumentError)
     end
 
-    it 'calls list! class method and pass parameters to it' do
-      described_class.should_receive(:list!).with('/Test1', { page: 1, count: 1}, {})
-      subject.list!(page: 1, count: 1)
+    it 'returns array' do
+      subject.list!.should be_an(Array)
+    end
+
+    it 'returns empty array if nothing is listed in directory' do
+      mock_api_server('{"result": {"entities": []}, "status": "Ok"}')
+      subject.list!.should be_empty
+    end
+
+    it 'determines folders in response' do
+      subject.list!.detect do |entity|
+        entity.id == 1
+      end.should be_a(GroupDocs::Storage::Folder)
+    end
+
+    it 'determines files in response' do
+      subject.list!.detect do |entity|
+        entity.id == 2
+      end.should be_a(GroupDocs::Storage::File)
     end
   end
 
