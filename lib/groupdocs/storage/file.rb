@@ -145,8 +145,8 @@ module GroupDocs
       #
       def move!(path, access = {})
         path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{path.inspect}"
-
         path << Object::File.basename(name) unless path =~ /\.(\w){3,4}$/
+
         GroupDocs::Api::Request.new do |request|
           request[:access] = access
           request[:method] = :PUT
@@ -209,8 +209,7 @@ module GroupDocs
         json = GroupDocs::Api::Request.new do |request|
           request[:access] = access
           request[:method] = :POST
-          # TODO type.capitalize should be fixed on server
-          request[:path] = "/storage/{{client_id}}/files/#{id}/archive/#{type.capitalize}"
+          request[:path] = "/storage/{{client_id}}/files/#{id}/archive/#{type}"
         end.execute!
 
         # HACK add filename for further download

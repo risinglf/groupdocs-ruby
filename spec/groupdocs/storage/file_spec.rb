@@ -205,7 +205,7 @@ describe GroupDocs::Storage::File do
       end.should_not raise_error(ArgumentError)
     end
 
-    it 'returns archived file ' do
+    it 'returns archived file' do
       subject.stub(name: 'resume.pdf')
       subject.compress!(:zip).should be_a(GroupDocs::Storage::File)
     end

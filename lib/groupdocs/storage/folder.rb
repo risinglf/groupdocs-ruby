@@ -8,7 +8,7 @@ module GroupDocs
       #
       # Creates folder on server.
       #
-      # @param [String] path Path of folder to create starting wiht "/"
+      # @param [String] path Path of folder to create starting with "/"
       # @param [Hash] access Access credentials
       # @option access [String] :client_id
       # @option access [String] :private_key
@@ -25,7 +25,7 @@ module GroupDocs
           request[:path] = "/storage/{{client_id}}/paths#{path}"
         end.execute!
 
-        find!(:id, json[:id], access)
+        GroupDocs::Storage::Folder.new(json)
       end
 
       #
