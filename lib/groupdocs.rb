@@ -1,7 +1,7 @@
 require 'groupdocs/version'
 require 'groupdocs/errors'
 require 'groupdocs/api'
-require 'groupdocs/datasource'
+require 'groupdocs/assembly'
 require 'groupdocs/document'
 require 'groupdocs/job'
 require 'groupdocs/storage'

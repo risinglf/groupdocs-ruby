@@ -141,7 +141,7 @@ describe GroupDocs::Job do
     end
 
     let(:datasource) do
-      GroupDocs::DataSource.new
+      GroupDocs::Assembly::DataSource.new
     end
 
     it 'accepts access credentials hash' do
