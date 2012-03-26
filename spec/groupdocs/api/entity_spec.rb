@@ -36,24 +36,28 @@ describe GroupDocs::Api::Entity do
   before(:each) do
     # make sure necessary attribute exist
     described_class.class_eval('attr_accessor :id, :test')
+    subject.id = 1
   end
 
   describe '#to_hash' do
     it 'converts object attributes to hash' do
-      subject.id = 1
       subject.test = 'Test'
       subject.to_hash.should == { id: 1, test: 'Test' }
     end
 
-    it 'converts attribute to hash if it is object too' do
-      subject.id = 1
-      subject.test = described_class.new(id: 1)
+    it 'converts attribute to hash if it is object' do
+      object = described_class.new(id: 1)
+      object.should_receive(:to_hash).and_return({ id: 1 })
+      subject.test = object
       subject.to_hash.should == { id: 1, test: { id: 1 } }
     end
 
-    it 'converts attribute to hash if it is array too' do
-      subject.id = 1
-      subject.test = [described_class.new(id: 1), described_class.new(id: 2)]
+    it 'converts attribute to hash if it is array' do
+      object1 = described_class.new(id: 1)
+      object2 = described_class.new(id: 2)
+      object1.should_receive(:to_hash).and_return({ id: 1 })
+      object2.should_receive(:to_hash).and_return({ id: 2 })
+      subject.test = [object1, object2]
       subject.to_hash.should == { id: 1, test: [{ id: 1 }, { id: 2 }] }
     end
   end
