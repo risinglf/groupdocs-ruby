@@ -34,6 +34,36 @@ module GroupDocs
         end
       end
 
+      #
+      # Recursively converts object and all its attributes to hash.
+      #
+      # @example Convert simple object to hash
+      #   object = GroupDocs::Storage::File.new(id: 1, name, 'Test.pdf')
+      #   object.to_hash
+      #   #=> { id: 1, name: 'Test.pdf' }
+      #
+      # @return [Hash]
+      #
+      def to_hash
+        hash = {}
+        instance_variables.each do |var|
+          key = var.to_s.delete(?@).to_sym
+          value = instance_variable_get(var)
+          hash[key] = case value
+            when GroupDocs::Api::Entity
+              value.to_hash
+            when Array
+              value.map do |i|
+                i.to_hash if i.respond_to?(:to_hash)
+              end
+            else
+              value
+            end
+        end
+
+        hash
+      end
+
     end # Entity
   end # Api
 end # GroupDocs
