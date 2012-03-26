@@ -25,7 +25,7 @@ module GroupDocs
         # @raise [ArgumentError] if action is unknown
         # @api private
         #
-        def self.convert_actions(actions)
+        def convert_actions(actions)
           actions.is_a?(Array) or raise ArgumentError, "Actions should be an array, received: #{actions.inspect}"
           actions = actions.map(&:to_sym)
 

@@ -2,6 +2,10 @@ require 'spec_helper'
 
 describe GroupDocs::Api::Helpers::Actions do
 
+  subject do
+    Object.extend(described_class)
+  end
+
   describe 'ACTIONS' do
     it 'contains hash of actions' do
       described_class::ACTIONS.should == {
@@ -21,20 +25,25 @@ describe GroupDocs::Api::Helpers::Actions do
 
   describe '.convert_actions' do
     it 'raises error if actions is not an array' do
-      -> { described_class.convert_actions(:convert) }.should raise_error(ArgumentError)
+      -> { subject.convert_actions(:convert) }.should raise_error(ArgumentError)
     end
 
     it 'raises error if action is unknown' do
-      -> { described_class.convert_actions(%w(unknown)) }.should raise_error(ArgumentError)
+      -> { subject.convert_actions(%w(unknown)) }.should raise_error(ArgumentError)
     end
 
     it 'converts each action to Symbol' do
-      pending 'http://stackoverflow.com/questions/9823121/rspec-mock-ampersand-symbol-parameters'
+      actions = %w(none convert)
+      actions.each do |action|
+        symbol = action.to_sym
+        action.should_receive(:to_sym).and_return(symbol)
+      end
+      subject.convert_actions(actions)
     end
 
     it 'returns correct byte flag' do
       actions = %w(none convert combine compress_zip compress_rar trace convert_body bind_data print import_annotations)
-      flag = described_class.convert_actions(actions)
+      flag = subject.convert_actions(actions)
       flag.should be_an(Integer)
       flag.should == 511
     end

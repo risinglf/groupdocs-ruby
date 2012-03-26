@@ -49,7 +49,7 @@ describe GroupDocs::Job do
     end
 
     it 'convert actions to byte flag' do
-      GroupDocs::Api::Helpers::Actions.should_receive(:convert_actions).with(actions).and_return(5)
+      described_class.should_receive(:convert_actions).with(actions).and_return(5)
       described_class.create!(actions: actions)
     end
 

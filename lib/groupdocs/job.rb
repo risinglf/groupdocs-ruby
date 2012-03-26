@@ -1,6 +1,7 @@
 module GroupDocs
   class Job < GroupDocs::Api::Entity
 
+    extend GroupDocs::Api::Helpers::Actions
     include GroupDocs::Api::Helpers::Status
 
     #
@@ -43,7 +44,7 @@ module GroupDocs
     #
     def self.create!(options, access = {})
       options[:actions] or raise ArgumentError, 'options[:actions] is required.'
-      options[:actions] = GroupDocs::Api::Helpers::Actions.convert_actions(options[:actions])
+      options[:actions] = convert_actions(options[:actions])
       options[:out_formats] = options[:out_formats].join(?;) if options[:out_formats]
 
       api = GroupDocs::Api::Request.new do |request|
