@@ -32,5 +32,5 @@ module GroupDocs
       end
     end
 
-  end # Document::Metadata
+  end # Document::View
 end # GroupDocs
