@@ -287,6 +287,9 @@ module GroupDocs
     # @param [Symbol] format
     # @param [Hash] options
     # @option options [Boolean] :email_results Set to true if converted document should be emailed
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
     # @return [GroupDocs::Job] Created job
     #
     def convert!(format, options = {}, access = {})
@@ -299,6 +302,27 @@ module GroupDocs
       json = api.execute!
 
       GroupDocs::Job.new(id: json[:job_id])
+    end
+
+    #
+    # Adds questionnaire to document.
+    #
+    # @param [GroupDocs::Assembly::Questionnaire] questionnaire
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    # @raise [ArgumentError] if page is not GroupDocs::Assembly::Questionnaire object
+    #
+    def add_questionnaire!(questionnaire, access = {})
+      questionnaire.is_a?(GroupDocs::Assembly::Questionnaire) or raise ArgumentError,
+        "Questionnaire should be GroupDocs::Assembly::Questionnaire object, received: #{questionnaire.inspect}"
+
+      GroupDocs::Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/merge/{{client_id}}/files/#{file.guid}/questionnaires/#{questionnaire.id}"
+      end.execute!
     end
 
     #
