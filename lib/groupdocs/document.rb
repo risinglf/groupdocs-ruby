@@ -312,7 +312,7 @@ module GroupDocs
     # @option access [String] :client_id
     # @option access [String] :private_key
     #
-    # @raise [ArgumentError] if page is not GroupDocs::Assembly::Questionnaire object
+    # @raise [ArgumentError] if questionnaire is not GroupDocs::Assembly::Questionnaire object
     #
     def add_questionnaire!(questionnaire, access = {})
       questionnaire.is_a?(GroupDocs::Assembly::Questionnaire) or raise ArgumentError,
@@ -334,7 +334,7 @@ module GroupDocs
     # @option access [String] :private_key
     # @return [GroupDocs::Assembly::Questionnaire]
     #
-    # @raise [ArgumentError] if page is not GroupDocs::Assembly::Questionnaire object
+    # @raise [ArgumentError] if questionnaire is not GroupDocs::Assembly::Questionnaire object
     #
     def create_questionnaire!(questionnaire, access = {})
       questionnaire.is_a?(GroupDocs::Assembly::Questionnaire) or raise ArgumentError,
@@ -349,6 +349,27 @@ module GroupDocs
 
       questionnaire.id = json[:questionnaire_id]
       questionnaire
+    end
+
+    #
+    # Deletes questionnaire from document.
+    #
+    # @param [GroupDocs::Assembly::Questionnaire] questionnaire
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    # @raise [ArgumentError] if questionnaire is not GroupDocs::Assembly::Questionnaire object
+    #
+    def delete_questionnaire!(questionnaire, access = {})
+      questionnaire.is_a?(GroupDocs::Assembly::Questionnaire) or raise ArgumentError,
+        "Questionnaire should be GroupDocs::Assembly::Questionnaire object, received: #{questionnaire.inspect}"
+
+      GroupDocs::Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :DELETE
+        request[:path] = "/merge/{{client_id}}/files/#{file.guid}/questionnaires/#{questionnaire.id}"
+      end.execute!
     end
 
     #

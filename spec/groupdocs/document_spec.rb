@@ -357,6 +357,22 @@ describe GroupDocs::Document do
     end
   end
 
+  describe '#delete_questionnaire!' do
+    let(:questionnaire) do
+      GroupDocs::Assembly::Questionnaire.new(id: 1)
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.delete_questionnaire!(questionnaire, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'raises error if questionnaire is not GroupDocs::Assembly::Questionnaire object' do
+      -> { subject.delete_questionnaire!('Questionnaire') }.should raise_error(ArgumentError)
+    end
+  end
+
   describe '#method_missing' do
     it 'passes unknown methods to file object' do
       -> { subject.name }.should_not raise_error(NoMethodError)
