@@ -2,8 +2,30 @@ module GroupDocs
   module Assembly
     class Questionnaire < GroupDocs::Api::Entity
 
+      require 'groupdocs/assembly/questionnaire/execution'
       require 'groupdocs/assembly/questionnaire/page'
       require 'groupdocs/assembly/questionnaire/question'
+
+      #
+      # Returns an array of executions.
+      #
+      # @param [Hash] access Access credentials
+      # @option access [String] :client_id
+      # @option access [String] :private_key
+      # @return [Array<GroupDocs::Assembly::Questionnaire::Execution>]
+      #
+      def self.executions!(access = {})
+        json = GroupDocs::Api::Request.new do |request|
+          request[:access] = access
+          request[:method] = :GET
+          request[:path] = '/merge/{{client_id}}/questionnaires/executions'
+        end.execute!
+
+        json[:executions].map do |execution|
+          GroupDocs::Assembly::Questionnaire::Execution.new(execution)
+        end
+      end
+
 
       # @attr [Integer] id
       attr_accessor :id
