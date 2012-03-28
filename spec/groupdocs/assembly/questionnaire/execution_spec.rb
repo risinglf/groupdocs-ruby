@@ -4,6 +4,19 @@ describe GroupDocs::Assembly::Questionnaire::Execution do
 
   it_behaves_like GroupDocs::Api::Entity
 
+  describe 'STATUSES' do
+    it 'contains hash of execution statuses' do
+      described_class::STATUSES.should == {
+        draft:     0,
+        submitted: 1,
+        executed:  2,
+        approved:  3,
+        rejected:  4,
+        closed:    5,
+      }
+    end
+  end
+
   it { should respond_to(:id)               }
   it { should respond_to(:id=)              }
   it { should respond_to(:ownerId)          }
@@ -48,5 +61,12 @@ describe GroupDocs::Assembly::Questionnaire::Execution do
     subject.method(:datasource_id=).should    == subject.method(:datasourceId=)
     subject.method(:document_id).should       == subject.method(:documentId)
     subject.method(:document_id=).should      == subject.method(:documentId=)
+  end
+
+  describe '#status' do
+    it 'returns status in human-readable format' do
+      subject.status = 2
+      subject.status.should == :executed
+    end
   end
 end

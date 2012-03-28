@@ -2,6 +2,15 @@ module GroupDocs
   module Assembly
     class Questionnaire::Execution < GroupDocs::Api::Entity
 
+      STATUSES = {
+        draft:     0,
+        submitted: 1,
+        executed:  2,
+        approved:  3,
+        rejected:  4,
+        closed:    5,
+      }
+
       # @attr [Integer] id
       attr_accessor :id
       # @attr [Integer] ownerId
@@ -34,6 +43,15 @@ module GroupDocs
       alias_method :datasource_id=,     :datasourceId=
       alias_method :document_id,        :documentId
       alias_method :document_id=,       :documentId=
+
+      #
+      # Returns execution status in human-readable format.
+      #
+      # @return [Symbol]
+      #
+      def status
+        STATUSES.invert[@status]
+      end
 
     end # Questionnaire::Execution
   end # Assembly
