@@ -58,7 +58,7 @@ module GroupDocs
         json = GroupDocs::Api::Request.new do |request|
           request[:access] = access
           request[:method] = :POST
-          request[:path] = '/doc/{{client_id}}/datasources'
+          request[:path] = '/merge/{{client_id}}/datasources'
           request[:request_body] = to_hash
         end.execute!
 
