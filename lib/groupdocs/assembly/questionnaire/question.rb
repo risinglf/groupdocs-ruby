@@ -2,6 +2,11 @@ module GroupDocs
   module Assembly
     class Questionnaire::Question < GroupDocs::Api::Entity
 
+      TYPES = {
+        simple:          0,
+        multiple_choice: 1,
+      }
+
       # @attr [String] field
       attr_accessor :field
       # @attr [String] text
@@ -32,6 +37,25 @@ module GroupDocs
 
         @answers ||= Array.new
         @answers << answer
+      end
+
+      #
+      # Updates type with machine-readable format.
+      #
+      # @param [Symbol] type
+      #
+      def type=(type)
+        type = TYPES[type] if type.is_a?(Symbol)
+        @type = type
+      end
+
+      #
+      # Returns field type in human-readable format.
+      #
+      # @return [Symbol]
+      #
+      def type
+        TYPES.invert[@type]
       end
 
     end # Questionnaire::Question
