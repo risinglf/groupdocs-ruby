@@ -63,6 +63,18 @@ describe GroupDocs::Assembly::Questionnaire::Execution do
     subject.method(:document_id=).should      == subject.method(:documentId=)
   end
 
+  describe '#status=' do
+    it 'saves status in machine readable format if symbol is passed' do
+      subject.status = :executed
+      subject.instance_variable_get(:@status).should == 2
+    end
+
+    it 'does nothing if parameter is not symbol' do
+      subject.status = 2
+      subject.instance_variable_get(:@status).should == 2
+    end
+  end
+
   describe '#status' do
     it 'returns status in human-readable format' do
       subject.status = 2

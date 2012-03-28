@@ -45,6 +45,16 @@ module GroupDocs
       alias_method :document_id=,       :documentId=
 
       #
+      # Updates status with machine-readable format.
+      #
+      # @param [Symbol] status
+      #
+      def status=(status)
+        status = STATUSES[status] if status.is_a?(Symbol)
+        @status = status
+      end
+
+      #
       # Returns execution status in human-readable format.
       #
       # @return [Symbol]
