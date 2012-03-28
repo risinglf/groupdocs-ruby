@@ -15,6 +15,16 @@ module GroupDocs
       attr_accessor :values
 
       #
+      # Updates type with machine-readable format.
+      #
+      # @param [Symbol] type
+      #
+      def type=(type)
+        type = TYPES[type] if type.is_a?(Symbol)
+        @type = type
+      end
+
+      #
       # Returns field type in human-readable format.
       #
       # @return [Symbol]
