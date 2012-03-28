@@ -40,4 +40,27 @@ describe GroupDocs::Assembly::DataSource do
       subject.fields.should == [field]
     end
   end
+
+  describe '#add!' do
+    before(:each) do
+      mock_api_server(load_json('datasource_add'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.add!(client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'uses hashed version of self as request body' do
+      subject.should_receive(:to_hash)
+      subject.add!
+    end
+
+    it 'adds ID of datasource from response to self' do
+      lambda do
+        subject.add!
+      end.should change(subject, :id)
+    end
+  end
 end

@@ -47,6 +47,24 @@ module GroupDocs
         @fields << field
       end
 
+      #
+      # Adds datasource.
+      #
+      # @param [Hash] access Access credentials
+      # @option access [String] :client_id
+      # @option access [String] :private_key
+      #
+      def add!(access = {})
+        json = GroupDocs::Api::Request.new do |request|
+          request[:access] = access
+          request[:method] = :POST
+          request[:path] = '/doc/{{client_id}}/datasources'
+          request[:request_body] = to_hash
+        end.execute!
+
+        self.id = json[:datasource_id]
+      end
+
     end # DataSource
   end # Assembly
 end # GroupDocs
