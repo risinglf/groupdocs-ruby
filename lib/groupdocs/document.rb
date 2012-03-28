@@ -342,7 +342,7 @@ module GroupDocs
 
       json = GroupDocs::Api::Request.new do |request|
         request[:access] = access
-        request[:method] = :PUT
+        request[:method] = :POST
         request[:path] = "/merge/{{client_id}}/files/#{file.guid}/questionnaires"
         request[:request_body] = questionnaire.to_hash
       end.execute!
