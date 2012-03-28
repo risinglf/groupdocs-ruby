@@ -64,6 +64,26 @@ module GroupDocs
         hash
       end
 
+      #
+      # Inspects object using accessors instead of instance variables values.
+      #
+      def inspect
+        variables = instance_variables.map do |variable|
+          value = send(variable.to_s.delete(?@).to_sym)
+          value = ":#{value}" if value.is_a?(Symbol)
+          "#{variable}=#{value}"
+        end
+
+        inspected =  to_s
+        unless variables.empty?
+          inspected.gsub!(/>$/, '')
+          inspected << " #{variables.join(' ,')}"
+          inspected << ?>
+        end
+
+        inspected
+      end
+
     end # Entity
   end # Api
 end # GroupDocs
