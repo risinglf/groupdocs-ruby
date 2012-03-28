@@ -63,7 +63,7 @@ describe GroupDocs::Api::Entity do
   end
 
   describe '#inspect' do
-    it 'uses accessors instead of variables' do
+    it 'uses accessors instead of instance variables' do
       subject.instance_variable_set(:@test, 1)
       subject.instance_eval('def test; { fire: 1 }.invert[@test] end')
       subject.inspect.should include('@test=:fire')
