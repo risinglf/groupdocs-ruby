@@ -67,6 +67,8 @@ module GroupDocs
       #
       # Inspects object using accessors instead of instance variables values.
       #
+      # @api private
+      #
       def inspect
         variables = instance_variables.map do |variable|
           value = send(variable.to_s.delete(?@).to_sym)
