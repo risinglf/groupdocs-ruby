@@ -26,7 +26,6 @@ module GroupDocs
         end
       end
 
-
       # @attr [Integer] id
       attr_accessor :id
       # @attr [String] name
