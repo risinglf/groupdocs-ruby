@@ -74,7 +74,7 @@ module GroupDocs
           "#{variable}=#{value}"
         end
 
-        inspected =  to_s
+        inspected = self.to_s
         unless variables.empty?
           inspected.gsub!(/>$/, '')
           inspected << " #{variables.join(' ,')}"
