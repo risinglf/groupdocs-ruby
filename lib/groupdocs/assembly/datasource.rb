@@ -113,6 +113,28 @@ module GroupDocs
         self.id = json[:datasource_id]
       end
 
+      #
+      # Updates datasource.
+      #
+      # @example
+      #   field = GroupDocs::Assembly::DataSource::Field.new(field: 'test', values: %w(test test))
+      #   datasource = GroupDocs::Assembly::DataSource.get!(180)
+      #   datasource.add_field(field)
+      #   datasource.update!
+      #
+      # @param [Hash] access Access credentials
+      # @option access [String] :client_id
+      # @option access [String] :private_key
+      #
+      def update!(access = {})
+        GroupDocs::Api::Request.new do |request|
+          request[:access] = access
+          request[:method] = :PUT
+          request[:path] = "/merge/{{client_id}}/datasources/#{id}"
+          request[:request_body] = to_hash
+        end.execute!
+      end
+
     end # DataSource
   end # Assembly
 end # GroupDocs
