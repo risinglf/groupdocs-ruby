@@ -68,5 +68,16 @@ describe GroupDocs::Api::Entity do
       subject.instance_eval('def test; { fire: 1 }.invert[@test] end')
       subject.inspect.should include('@test=:fire')
     end
+
+    it 'uses only not-nil instance variables' do
+      subject.instance_variable_set(:@test, nil)
+      subject.inspect.should_not include('@test')
+    end
+  end
+
+  describe '#variable_to_accessor' do
+    it 'converts instance variable symbol to accessor method symbol' do
+      subject.send(:variable_to_accessor, :@test).should == :test
+    end
   end
 end
