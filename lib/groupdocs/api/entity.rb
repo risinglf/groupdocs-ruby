@@ -73,13 +73,14 @@ module GroupDocs
         variables = instance_variables.map do |variable|
           value = send(variable.to_s.delete(?@).to_sym)
           value = ":#{value}" if value.is_a?(Symbol)
+          value = "nil" if value.nil?
           "#{variable}=#{value}"
         end
 
         inspected = self.to_s
         unless variables.empty?
           inspected.gsub!(/>$/, '')
-          inspected << " #{variables.join(' ,')}"
+          inspected << " #{variables.join(', ')}"
           inspected << ?>
         end
 
