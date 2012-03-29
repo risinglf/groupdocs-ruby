@@ -4,8 +4,35 @@ module GroupDocs
 
       require 'groupdocs/assembly/datasource/field'
 
+      #
+      # Returns datasource with given ID.
+      #
+      # @param [Integer] id
+      # @param [Hash] options
+      # @option options [Array] :field Array of field names to be returned. All by default
+      # @param [Hash] access Access credentials
+      # @option access [String] :client_id
+      # @option access [String] :private_key
+      # @return [GroupDocs::Assembly::DataSource, nil]
+      #
+      def self.get!(id, options = {}, access = {})
+        api = GroupDocs::Api::Request.new do |request|
+          request[:access] = access
+          request[:method] = :GET
+          request[:path] = "/merge/{{client_id}}/datasources/#{id}"
+        end
+        api.add_params(options)
+        json = api.execute!
+
+        GroupDocs::Assembly::DataSource.new(json[:datasource])
+      rescue GroupDocs::Errors::BadResponseError
+        nil
+      end
+
       # @attr [Integer] id
       attr_accessor :id
+      # @attr [String] descr
+      attr_accessor :descr
       # @attr [Integer] questionnaire_id
       attr_accessor :questionnaire_id
       # @attr [Time] created_on
@@ -14,6 +41,10 @@ module GroupDocs
       attr_accessor :modified_on
       # @attr [Array<GroupDocs::Assembly::DataSource::Field>] fields
       attr_accessor :fields
+
+      # Human-readable accessors
+      alias_method :description,  :descr
+      alias_method :description=, :descr=
 
       #
       # Converts timestamp which is return by API server to Time object.
@@ -34,6 +65,17 @@ module GroupDocs
       end
 
       #
+      # Converts each field to GroupDocs::Assembly::DataSource::Field object.
+      #
+      # @param [Array<Hash>] fields
+      #
+      def fields=(fields)
+        @fields = fields.map do |field|
+          GroupDocs::Assembly::DataSource::Field.new(field)
+        end
+      end
+
+      #
       # Adds field to datasource.
       #
       # @param [GroupDocs::Assembly::DataSource::Field] question
@@ -49,6 +91,12 @@ module GroupDocs
 
       #
       # Adds datasource.
+      #
+      # @example
+      #   field = GroupDocs::Assembly::DataSource::Field.new(field: 'test', values: %w(test test))
+      #   datasource = GroupDocs::Assembly::DataSource.new
+      #   datasource.add_field(field)
+      #   datasource.add!
       #
       # @param [Hash] access Access credentials
       # @option access [String] :client_id

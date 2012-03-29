@@ -14,6 +14,9 @@ module GroupDocs
       # @attr [Array<String>] values
       attr_accessor :values
 
+      # Compatibility with response JSON
+      alias_method :name=, :field=
+
       #
       # Updates type with machine-readable format.
       #

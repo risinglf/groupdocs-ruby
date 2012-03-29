@@ -20,6 +20,11 @@ describe GroupDocs::Assembly::DataSource::Field do
   it { should respond_to(:values)  }
   it { should respond_to(:values=) }
 
+  it 'is compatible with response JSON' do
+    subject.should respond_to(:name=)
+    subject.method(:name=).should == subject.method(:field=)
+  end
+
   describe '#type=' do
     it 'saves type in machine readable format if symbol is passed' do
       subject.type = :binary
