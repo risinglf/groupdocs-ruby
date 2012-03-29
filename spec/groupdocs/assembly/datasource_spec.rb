@@ -127,4 +127,16 @@ describe GroupDocs::Assembly::DataSource do
       subject.add!
     end
   end
+
+  describe '#remove!' do
+    before(:each) do
+      mock_api_server(load_json('datasource_remove'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.remove!(client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
 end

@@ -135,6 +135,24 @@ module GroupDocs
         end.execute!
       end
 
+      #
+      # Removes datasource.
+      #
+      # @param [Hash] access Access credentials
+      # @option access [String] :client_id
+      # @option access [String] :private_key
+      #
+      def remove!(access = {})
+        GroupDocs::Api::Request.new do |request|
+          request[:access] = access
+          request[:method] = :DELETE
+          request[:path] = "/merge/{{client_id}}/datasources/#{id}"
+        end.execute!
+      # TODO: fix this in API
+      rescue RestClient::BadRequest
+        nil
+      end
+
     end # DataSource
   end # Assembly
 end # GroupDocs
