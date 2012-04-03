@@ -65,6 +65,19 @@ module GroupDocs
       alias_method :description=, :descr=
 
       #
+      # Converts each page to GroupDocs::Assembly::DataSource::Page object.
+      #
+      # @param [Array<Hash>] pages
+      #
+      def pages=(pages)
+        if pages
+          @pages = pages.map do |page|
+            GroupDocs::Assembly::Questionnaire::Page.new(page)
+          end
+        end
+      end
+
+      #
       # Adds page to questionnaire.
       #
       # @param [GroupDocs::Assembly::Questionnaire::Page] page
@@ -76,19 +89,6 @@ module GroupDocs
 
         @pages ||= Array.new
         @pages << page
-      end
-
-      #
-      # Properly adds array of page hashes to questionnaire.
-      #
-      # @param [Array<Hash>] pages
-      #
-      def pages=(pages)
-        if pages
-          pages.each do |page|
-            add_page(GroupDocs::Assembly::Questionnaire::Page.new(page))
-          end
-        end
       end
 
       #

@@ -59,6 +59,23 @@ describe GroupDocs::Assembly::Questionnaire do
     subject.method(:description=).should == subject.method(:descr=)
   end
 
+  describe '#pages=' do
+    it 'converts each page to GroupDocs::Assembly::Questionnaire::Page object' do
+      subject.pages = [{ number: 1, title: 'Page1' }, { number: 2, title: 'Page2' }]
+      pages = subject.pages
+      pages.should be_an(Array)
+      pages.each do |page|
+        page.should be_a(GroupDocs::Assembly::Questionnaire::Page)
+      end
+    end
+
+    it 'does nothing if nil is passed' do
+      lambda do
+        subject.pages = nil
+      end.should_not change(subject, :pages)
+    end
+  end
+
   describe '#add_page' do
     it 'raises error if page is not GroupDocs::Assembly::Questionnaire::Page object' do
       -> { subject.add_page('Page') }.should raise_error(ArgumentError)
@@ -69,26 +86,6 @@ describe GroupDocs::Assembly::Questionnaire do
       lambda do
         subject.add_page(page)
       end.should change(subject, :pages).to([page])
-    end
-  end
-
-  describe '#pages=' do
-    it 'creates GroupDocs::Assembly::Questionnaire::Page from page hash' do
-      page = { number: 1, title: 'Page' }
-      object = GroupDocs::Assembly::Questionnaire::Page.new(page)
-      GroupDocs::Assembly::Questionnaire::Page.should_receive(:new).with(page).and_return(object)
-      subject.pages = [page]
-    end
-
-    it 'adds pages by calling #add_page method' do
-      pages = [{ number: 1, title: 'Page' }, { number: 2, title: 'Page' }]
-      subject.should_receive(:add_page).exactly(2)
-      subject.pages = pages
-    end
-
-    it 'does nothing if pages is nil' do
-      subject.should_not_receive(:add_page)
-      subject.pages = nil
     end
   end
 
