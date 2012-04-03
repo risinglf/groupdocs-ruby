@@ -65,7 +65,7 @@ module GroupDocs
       alias_method :description=, :descr=
 
       #
-      # Converts each page to GroupDocs::Assembly::DataSource::Page object.
+      # Converts each page to GroupDocs::Assembly::Questionnaire::Page object.
       #
       # @param [Array<Hash>] pages
       #
