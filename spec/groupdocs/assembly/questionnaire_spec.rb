@@ -14,6 +14,31 @@ describe GroupDocs::Assembly::Questionnaire do
     subject.method(:description=).should == subject.method(:descr=)
   end
 
+  describe '.get!' do
+    before(:each) do
+      mock_api_server(load_json('questionnaires_get'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        described_class.get!(client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns an array of GroupDocs::Assembly::Questionnaire objects' do
+      questionnaires = described_class.get!
+      questionnaires.should be_an(Array)
+      questionnaires.each do |questionnaire|
+        questionnaire.should be_a(GroupDocs::Assembly::Questionnaire)
+      end
+    end
+
+    it 'should be aliased to .all!' do
+      described_class.should respond_to(:all!)
+      described_class.method(:all!).should == described_class.method(:get!)
+    end
+  end
+
   describe '.executions!' do
     before(:each) do
       mock_api_server(load_json('questionnaire_executions'))

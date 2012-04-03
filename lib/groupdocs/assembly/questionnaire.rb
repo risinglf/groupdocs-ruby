@@ -7,6 +7,31 @@ module GroupDocs
       require 'groupdocs/assembly/questionnaire/question'
 
       #
+      # Returns an array of questionnaires.
+      #
+      # @param [Hash] access Access credentials
+      # @option access [String] :client_id
+      # @option access [String] :private_key
+      # @return [Array<GroupDocs::Assembly::Questionnaire]
+      #
+      def self.get!(access = {})
+        json = GroupDocs::Api::Request.new do |request|
+          request[:access] = access
+          request[:method] = :GET
+          request[:path] = '/merge/{{client_id}}/questionnaires'
+        end.execute!
+
+        json[:questionnaires].map do |questionnaire|
+          GroupDocs::Assembly::Questionnaire.new(questionnaire)
+        end
+      end
+
+      # Support DSL
+      class << self
+        alias_method :all!, :get!
+      end # << self
+
+      #
       # Returns an array of executions.
       #
       # @param [Hash] access Access credentials
