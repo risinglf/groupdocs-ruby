@@ -29,7 +29,7 @@ describe GroupDocs::Assembly::Questionnaire::Page do
   end
 
   describe '#add_question' do
-    it 'raises error if page is not GroupDocs::Assembly::Questionnaire::Page object' do
+    it 'raises error if question is not GroupDocs::Assembly::Questionnaire::Page object' do
       -> { subject.add_question('Page') }.should raise_error(ArgumentError)
     end
 
