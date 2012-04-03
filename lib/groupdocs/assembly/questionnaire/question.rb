@@ -2,6 +2,8 @@ module GroupDocs
   module Assembly
     class Questionnaire::Question < GroupDocs::Api::Entity
 
+      require 'groupdocs/assembly/questionnaire/question/answer'
+
       TYPES = {
         simple:          0,
         multiple_choice: 1,
@@ -21,19 +23,27 @@ module GroupDocs
       attr_accessor :answers
 
       #
+      # Converts each answer to GroupDocs::Assembly::Questionnaire::Question::Answer object.
+      #
+      # @param [Array<Hash>] answers
+      #
+      def answers=(answers)
+        if answers
+          @answers = answers.map do |answer|
+            GroupDocs::Assembly::Questionnaire::Question::Answer.new(answer)
+          end
+        end
+      end
+
+      #
       # Adds answer to the question.
       #
-      # @example
-      #   question.add_answer(text: 'My answer', value: 'Unique value')
-      #
-      # @param [Hash] answer
-      # @raise [ArgumentError] if answer is not of view { text: 'Answer' value: 'Value' }
+      # @param [GroupDocs::Assembly::Questionnaire::Question::Answer] answer
+      # @raise [ArgumentError] if answer is not GroupDocs::Assembly::Questionnaire::Question::Answer object
       #
       def add_answer(answer)
-        answer.is_a?(Hash) or raise ArgumentError,
-          "Answer should be a hash, received: #{answer.inspect}"
-        (answer[:text] && answer[:value]) or raise ArgumentError,
-          "Answer should include :text and :value, received: #{answer.inspect}"
+        answer.is_a?(GroupDocs::Assembly::Questionnaire::Question::Answer) or raise ArgumentError,
+          "Answer should be GroupDocs::Assembly::Questionnaire::Question::Answer object, received: #{answer.inspect}"
 
         @answers ||= Array.new
         @answers << answer

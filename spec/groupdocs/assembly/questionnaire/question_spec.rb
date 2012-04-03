@@ -26,21 +26,30 @@ describe GroupDocs::Assembly::Questionnaire::Question do
   it { should respond_to(:answers)     }
   it { should respond_to(:answers=)    }
 
+  describe '#answers=' do
+    it 'converts each answer to GroupDocs::Assembly::Questionnaire::Question::Answer object' do
+      subject.answers = [{ text: 'Text1', value: 'Value1' }, { text: 'Text2', value: 'Value2' }]
+      answers = subject.answers
+      answers.should be_an(Array)
+      answers.each do |answer|
+        answer.should be_a(GroupDocs::Assembly::Questionnaire::Question::Answer)
+      end
+    end
+
+    it 'does nothing if nil is passed' do
+      lambda do
+        subject.answers = nil
+      end.should_not change(subject, :answers)
+    end
+  end
+
   describe '#add_answer' do
-    it 'raises error if answer is not Hash object' do
+    it 'raises error if answer is not GroupDocs::Assembly::Questionnaire::Question::Answer object' do
       -> { subject.add_answer('Answer') }.should raise_error(ArgumentError)
     end
 
-    it 'raises error if answer does not have :text' do
-      -> { subject.add_answer(value: 'Value') }.should raise_error(ArgumentError)
-    end
-
-    it 'raises error if answer does not have :value' do
-      -> { subject.add_answer(text: 'Value') }.should raise_error(ArgumentError)
-    end
-
     it 'saves answer' do
-      answer = { text: 'Text', value: 'Value' }
+      answer = GroupDocs::Assembly::Questionnaire::Question::Answer.new(text: 'Text', value: 'Value')
       subject.add_answer(answer)
       subject.answers.should == [answer]
     end
