@@ -4,16 +4,6 @@ describe GroupDocs::Assembly::Questionnaire do
 
   it_behaves_like GroupDocs::Api::Entity
 
-  it { should respond_to(:pages)  }
-  it { should respond_to(:pages=) }
-
-  it 'has human-readable accessors' do
-    subject.should respond_to(:description)
-    subject.should respond_to(:description=)
-    subject.method(:description).should  == subject.method(:descr)
-    subject.method(:description=).should == subject.method(:descr=)
-  end
-
   describe '.get!' do
     before(:each) do
       mock_api_server(load_json('questionnaires_get'))
@@ -59,6 +49,16 @@ describe GroupDocs::Assembly::Questionnaire do
     end
   end
 
+  it { should respond_to(:pages)  }
+  it { should respond_to(:pages=) }
+
+  it 'has human-readable accessors' do
+    subject.should respond_to(:description)
+    subject.should respond_to(:description=)
+    subject.method(:description).should  == subject.method(:descr)
+    subject.method(:description=).should == subject.method(:descr=)
+  end
+
   describe '#add_page' do
     it 'raises error if page is not GroupDocs::Assembly::Questionnaire::Page object' do
       -> { subject.add_page('Page') }.should raise_error(ArgumentError)
@@ -69,6 +69,26 @@ describe GroupDocs::Assembly::Questionnaire do
       lambda do
         subject.add_page(page)
       end.should change(subject, :pages).to([page])
+    end
+  end
+
+  describe '#pages=' do
+    it 'creates GroupDocs::Assembly::Questionnaire::Page from page hash' do
+      page = { number: 1, title: 'Page' }
+      object = GroupDocs::Assembly::Questionnaire::Page.new(page)
+      GroupDocs::Assembly::Questionnaire::Page.should_receive(:new).with(page).and_return(object)
+      subject.pages = [page]
+    end
+
+    it 'adds pages by calling #add_page method' do
+      pages = [{ number: 1, title: 'Page' }, { number: 2, title: 'Page' }]
+      subject.should_receive(:add_page).exactly(2)
+      subject.pages = pages
+    end
+
+    it 'does nothing if pages is nil' do
+      subject.should_not_receive(:add_page)
+      subject.pages = nil
     end
   end
 

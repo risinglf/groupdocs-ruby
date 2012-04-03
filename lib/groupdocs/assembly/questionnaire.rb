@@ -79,6 +79,19 @@ module GroupDocs
       end
 
       #
+      # Properly adds array of page hashes to questionnaire.
+      #
+      # @param [Array<Hash>] pages
+      #
+      def pages=(pages)
+        if pages
+          pages.each do |page|
+            add_page(GroupDocs::Assembly::Questionnaire::Page.new(page))
+          end
+        end
+      end
+
+      #
       # Creates questionnaire.
       #
       # @param [Hash] access Access credentials
