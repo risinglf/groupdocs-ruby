@@ -10,6 +10,19 @@ module GroupDocs
       attr_accessor :questions
 
       #
+      # Converts each question to GroupDocs::Assembly::Questionnaire::Question object.
+      #
+      # @param [Array<Hash>] questions
+      #
+      def questions=(questions)
+        if questions
+          @questions = questions.map do |question|
+            GroupDocs::Assembly::Questionnaire::Question.new(question)
+          end
+        end
+      end
+
+      #
       # Adds question to page.
       #
       # @param [GroupDocs::Assembly::Questionnaire::Question] question
