@@ -96,6 +96,22 @@ module GroupDocs
         self.id = json[:questionnaire_id]
       end
 
+      #
+      # Updates questionnaire.
+      #
+      # @param [Hash] access Access credentials
+      # @option access [String] :client_id
+      # @option access [String] :private_key
+      #
+      def update!(access = {})
+        GroupDocs::Api::Request.new do |request|
+          request[:access] = access
+          request[:method] = :PUT
+          request[:path] = "/merge/{{client_id}}/questionnaires/#{id}"
+          request[:request_body] = to_hash
+        end.execute!
+      end
+
     end # Questionnaire
   end # Assembly
 end # GroupDocs
