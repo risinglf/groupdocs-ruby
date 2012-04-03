@@ -74,6 +74,12 @@ describe GroupDocs::Assembly::DataSource do
         field.should be_a(GroupDocs::Assembly::DataSource::Field)
       end
     end
+
+    it 'does nothing if nil is passed' do
+      lambda do
+        subject.fields = nil
+      end.should_not change(subject, :fields)
+    end
   end
 
   describe '#add_field' do

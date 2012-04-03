@@ -70,8 +70,10 @@ module GroupDocs
       # @param [Array<Hash>] fields
       #
       def fields=(fields)
-        @fields = fields.map do |field|
-          GroupDocs::Assembly::DataSource::Field.new(field)
+        if fields
+          @fields = fields.map do |field|
+            GroupDocs::Assembly::DataSource::Field.new(field)
+          end
         end
       end
 
