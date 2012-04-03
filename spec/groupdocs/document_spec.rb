@@ -306,6 +306,26 @@ describe GroupDocs::Document do
     end
   end
 
+  describe '#questionnaires!' do
+    before(:each) do
+      mock_api_server(load_json('document_questionnaires'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.questionnaires!(client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns an array of GroupDocs::Assembly::Questionnaire objects' do
+      questionnaires = subject.questionnaires!
+      questionnaires.should be_an(Array)
+      questionnaires.each do |questionnaire|
+        questionnaire.should be_a(GroupDocs::Assembly::Questionnaire)
+      end
+    end
+  end
+
   describe '#add_questionnaire!' do
     let(:questionnaire) do
       GroupDocs::Assembly::Questionnaire.new(id: 1)

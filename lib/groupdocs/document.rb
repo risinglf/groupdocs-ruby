@@ -305,6 +305,26 @@ module GroupDocs
     end
 
     #
+    # Returns an array of questionnaires.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<GroupDocs::Assembly::Questionnaire]
+    #
+    def questionnaires!(access = {})
+      json = GroupDocs::Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/merge/{{client_id}}/files/#{file.guid}/questionnaires"
+      end.execute!
+
+      json[:questionnaires].map do |questionnaire|
+        GroupDocs::Assembly::Questionnaire.new(questionnaire)
+      end
+    end
+
+    #
     # Adds questionnaire to document.
     #
     # @param [GroupDocs::Assembly::Questionnaire] questionnaire
