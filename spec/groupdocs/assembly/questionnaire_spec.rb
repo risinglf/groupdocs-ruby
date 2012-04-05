@@ -148,4 +148,24 @@ describe GroupDocs::Assembly::Questionnaire do
       end.should_not raise_error(ArgumentError)
     end
   end
+
+  describe '#datasources!' do
+    before(:each) do
+      mock_api_server(load_json('questionnaire_datasources'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.datasources!(client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns array of GroupDocs::Assembly::DataSource objects' do
+      datasources = subject.datasources!
+      datasources.should be_an(Array)
+      datasources.each do |datasource|
+        datasource.should be_a(GroupDocs::Assembly::DataSource)
+      end
+    end
+  end
 end

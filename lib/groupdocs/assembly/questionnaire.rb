@@ -147,6 +147,26 @@ module GroupDocs
         nil
       end
 
+      #
+      # Returns array of datasources for questionnaire.
+      #
+      # @param [Hash] access Access credentials
+      # @option access [String] :client_id
+      # @option access [String] :private_key
+      # @return [Array<GroupDocs::Assembly::DataSource>]
+      #
+      def datasources!(access = {})
+        json = GroupDocs::Api::Request.new do |request|
+          request[:access] = access
+          request[:method] = :GET
+          request[:path] = "/merge/{{client_id}}/questionnaires/#{id}/datasources"
+        end.execute!
+
+        json[:datasources].map do |datasource|
+          GroupDocs::Assembly::DataSource.new(datasource)
+        end
+      end
+
     end # Questionnaire
   end # Assembly
 end # GroupDocs
