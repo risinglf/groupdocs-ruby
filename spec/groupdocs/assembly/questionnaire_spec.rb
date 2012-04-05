@@ -4,28 +4,39 @@ describe GroupDocs::Assembly::Questionnaire do
 
   it_behaves_like GroupDocs::Api::Entity
 
-  describe '.get!' do
+  describe '.all!' do
     before(:each) do
       mock_api_server(load_json('questionnaires_get'))
     end
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.get!(client_id: 'client_id', private_key: 'private_key')
+        described_class.all!(client_id: 'client_id', private_key: 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'returns an array of GroupDocs::Assembly::Questionnaire objects' do
-      questionnaires = described_class.get!
+      questionnaires = described_class.all!
       questionnaires.should be_an(Array)
       questionnaires.each do |questionnaire|
         questionnaire.should be_a(GroupDocs::Assembly::Questionnaire)
       end
     end
+  end
 
-    it 'should be aliased to .all!' do
-      described_class.should respond_to(:all!)
-      described_class.method(:all!).should == described_class.method(:get!)
+  describe '.get!' do
+    before(:each) do
+      mock_api_server(load_json('questionnaire_get'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        described_class.get!(1, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns GroupDocs::Assembly::Questionnaire object' do
+      described_class.get!(1).should be_a(GroupDocs::Assembly::Questionnaire)
     end
   end
 

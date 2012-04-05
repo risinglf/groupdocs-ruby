@@ -9,14 +9,14 @@ module GroupDocs
       include GroupDocs::Api::Helpers::Access
 
       #
-      # Returns an array of questionnaires.
+      # Returns an array of all questionnaires.
       #
       # @param [Hash] access Access credentials
       # @option access [String] :client_id
       # @option access [String] :private_key
-      # @return [Array<GroupDocs::Assembly::Questionnaire]
+      # @return [Array<GroupDocs::Assembly::Questionnaire>]
       #
-      def self.get!(access = {})
+      def self.all!(access = {})
         json = GroupDocs::Api::Request.new do |request|
           request[:access] = access
           request[:method] = :GET
@@ -28,10 +28,26 @@ module GroupDocs
         end
       end
 
-      # Support DSL
-      class << self
-        alias_method :all!, :get!
-      end # << self
+      #
+      # Returns questionnaire by identifier.
+      #
+      # @param [Integer] id
+      # @param [Hash] access Access credentials
+      # @option access [String] :client_id
+      # @option access [String] :private_key
+      # @return [GroupDocs::Assembly::Questionnaire, nil]
+      #
+      def self.get!(id, access = {})
+        json = GroupDocs::Api::Request.new do |request|
+          request[:access] = access
+          request[:method] = :GET
+          request[:path] = "/merge/{{client_id}}/questionnaires/#{id}"
+        end.execute!
+
+        GroupDocs::Assembly::Questionnaire.new(json[:questionnaire])
+      rescue RestClient::BadRequest
+        nil
+      end
 
       #
       # Returns an array of executions.
