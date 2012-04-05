@@ -81,4 +81,22 @@ describe GroupDocs::Assembly::Questionnaire::Execution do
       subject.status.should == :executed
     end
   end
+
+  describe '#set_status!' do
+    before(:each) do
+      mock_api_server(load_json('questionnaire_execution_status_set'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.set_status!(:submitted, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'updates status of execution object' do
+      lambda do
+        subject.set_status!(:submitted)
+      end.should change(subject, :status).to(:submitted)
+    end
+  end
 end

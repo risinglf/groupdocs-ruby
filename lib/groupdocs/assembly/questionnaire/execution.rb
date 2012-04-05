@@ -47,7 +47,9 @@ module GroupDocs
       #
       # Updates status with machine-readable format.
       #
-      # @param [Symbol] status
+      # If you want to update status on server, use #set_status! method.
+      #
+      # @param [Symbol, Integer] status
       #
       def status=(status)
         status = STATUSES[status] if status.is_a?(Symbol)
@@ -61,6 +63,25 @@ module GroupDocs
       #
       def status
         STATUSES.invert[@status]
+      end
+
+      #
+      # Updates status of execution on server.
+      #
+      # @param [Symbol] status
+      # @param [Hash] access Access credentials
+      # @option access [String] :client_id
+      # @option access [String] :private_key
+      #
+      def set_status!(status, access = {})
+        GroupDocs::Api::Request.new do |request|
+          request[:access] = access
+          request[:method] = :PUT
+          request[:path] = "/merge/{{client_id}}/questionnaires/executions/#{id}/status"
+          request[:request_body] = STATUSES[status]
+        end.execute!
+
+        self.status = status
       end
 
     end # Questionnaire::Execution
