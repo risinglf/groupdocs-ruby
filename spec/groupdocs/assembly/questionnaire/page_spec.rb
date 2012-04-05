@@ -12,13 +12,21 @@ describe GroupDocs::Assembly::Questionnaire::Page do
   it { should respond_to(:title=)     }
 
   describe '#questions=' do
-    it 'converts each question to GroupDocs::Assembly::Questionnaire::Question object' do
+    it 'converts each question to GroupDocs::Assembly::Questionnaire::Question object if hash is passed' do
       subject.questions = [{ field: 'Field1', text: 'Text1', def_answer: 'A1' }]
       questions = subject.questions
       questions.should be_an(Array)
       questions.each do |question|
         question.should be_a(GroupDocs::Assembly::Questionnaire::Question)
       end
+    end
+
+    it 'saves each question if it is GroupDocs::Questionnaire::Question object' do
+      question1 = GroupDocs::Assembly::Questionnaire::Question.new(field: 'field1')
+      question2 = GroupDocs::Assembly::Questionnaire::Question.new(field: 'field2')
+      subject.questions = [question1, question2]
+      subject.questions.should include(question1)
+      subject.questions.should include(question2)
     end
 
     it 'does nothing if nil is passed' do

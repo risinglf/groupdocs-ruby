@@ -36,6 +36,14 @@ describe GroupDocs::Assembly::Questionnaire::Question do
       end
     end
 
+    it 'saves each answer if it is GroupDocs::Questionnaire::Question::Answer object' do
+      answer1 = GroupDocs::Assembly::Questionnaire::Question::Answer.new(text: 'text1')
+      answer2 = GroupDocs::Assembly::Questionnaire::Question::Answer.new(text: 'text2')
+      subject.answers = [answer1, answer2]
+      subject.answers.should include(answer1)
+      subject.answers.should include(answer2)
+    end
+
     it 'does nothing if nil is passed' do
       lambda do
         subject.answers = nil

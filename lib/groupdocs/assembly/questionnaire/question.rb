@@ -30,7 +30,11 @@ module GroupDocs
       def answers=(answers)
         if answers
           @answers = answers.map do |answer|
-            GroupDocs::Assembly::Questionnaire::Question::Answer.new(answer)
+            if answer.is_a?(GroupDocs::Assembly::Questionnaire::Question::Answer)
+              answer
+            else
+              GroupDocs::Assembly::Questionnaire::Question::Answer.new(answer)
+            end
           end
         end
       end

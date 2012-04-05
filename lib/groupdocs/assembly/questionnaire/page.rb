@@ -12,12 +12,16 @@ module GroupDocs
       #
       # Converts each question to GroupDocs::Assembly::Questionnaire::Question object.
       #
-      # @param [Array<Hash>] questions
+      # @param [Array<GroupDocs::Assembly::Questionnaire::Question, Hash>] questions
       #
       def questions=(questions)
         if questions
           @questions = questions.map do |question|
-            GroupDocs::Assembly::Questionnaire::Question.new(question)
+            if question.is_a?(GroupDocs::Assembly::Questionnaire::Question)
+              question
+            else
+              GroupDocs::Assembly::Questionnaire::Question.new(question)
+            end
           end
         end
       end
