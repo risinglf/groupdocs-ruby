@@ -72,12 +72,16 @@ module GroupDocs
       #
       def inspect
         not_nil_variables = instance_variables.select do |variable|
-          not send(variable.to_s.delete(?@).to_sym).nil?
+          !send(variable.to_s.delete(?@).to_sym).nil?
         end
 
         variables = not_nil_variables.map  do |variable|
-          value = send(variable.to_s.delete(?@).to_sym)
-          value = ":#{value}" if value.is_a?(Symbol)
+          value = send(variable_to_accessor(variable))
+          value = case value
+                  when Symbol then ":#{value}"
+                  when String then "\"#{value}\""
+                  else value
+                  end
           "#{variable}=#{value}"
         end
 
