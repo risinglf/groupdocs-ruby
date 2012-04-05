@@ -64,9 +64,12 @@ describe GroupDocs::Api::Entity do
 
   describe '#inspect' do
     it 'uses accessors instead of instance variables' do
-      subject.instance_variable_set(:@test, 1)
-      subject.instance_eval('def test; { fire: 1 }.invert[@test] end')
-      subject.inspect.should include('@test=:fire')
+      subject.instance_variable_set(:@test1, 1)
+      subject.instance_variable_set(:@test2, 1)
+      subject.instance_eval('def test1; { fire: 1 }.invert[@test1] end')
+      subject.instance_eval('def test2; { 1 => "fire" }[@test2] end')
+      subject.inspect.should include('@test1=:fire')
+      subject.inspect.should include('@test2="fire"')
     end
 
     it 'uses only not-nil instance variables' do

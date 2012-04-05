@@ -38,6 +38,11 @@ describe GroupDocs::Questionnaire do
     it 'returns GroupDocs::Questionnaire object' do
       described_class.get!(1).should be_a(GroupDocs::Questionnaire)
     end
+
+    it 'returns nil if BadRequestError was raised' do
+      GroupDocs::Api::Request.any_instance.should_receive(:execute!).and_raise(RestClient::BadRequest)
+      described_class.get!(1).should be_nil
+    end
   end
 
   describe '.executions!' do
