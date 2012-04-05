@@ -84,6 +84,22 @@ module GroupDocs
         self.status = status
       end
 
+      #
+      # Updates execution on server.
+      #
+      # @param [Hash] access Access credentials
+      # @option access [String] :client_id
+      # @option access [String] :private_key
+      #
+      def update!(access = {})
+        GroupDocs::Api::Request.new do |request|
+          request[:access] = access
+          request[:method] = :PUT
+          request[:path] = "/merge/{{client_id}}/questionnaires/executions/#{id}"
+          request[:request_body] = to_hash
+        end.execute!
+      end
+
     end # Questionnaire::Execution
   end # Assembly
 end # GroupDocs
