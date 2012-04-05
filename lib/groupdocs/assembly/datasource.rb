@@ -67,7 +67,7 @@ module GroupDocs
       #
       # Converts each field to GroupDocs::Assembly::DataSource::Field object.
       #
-      # @param [Array<Hash>] fields
+      # @param [Array<GroupDocs::Assembly::DataSource::Field, Hash>] fields
       #
       def fields=(fields)
         if fields

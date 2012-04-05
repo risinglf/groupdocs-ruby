@@ -67,12 +67,16 @@ module GroupDocs
       #
       # Converts each page to GroupDocs::Assembly::Questionnaire::Page object.
       #
-      # @param [Array<Hash>] pages
+      # @param [Array<GroupDocs::Assembly::Questionnaire::Page, Hash>] pages
       #
       def pages=(pages)
         if pages
           @pages = pages.map do |page|
-            GroupDocs::Assembly::Questionnaire::Page.new(page)
+            if page.is_a?(GroupDocs::Assembly::Questionnaire::Page)
+              page
+            else
+              GroupDocs::Assembly::Questionnaire::Page.new(page)
+            end
           end
         end
       end

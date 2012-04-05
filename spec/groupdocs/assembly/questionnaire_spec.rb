@@ -60,13 +60,21 @@ describe GroupDocs::Assembly::Questionnaire do
   end
 
   describe '#pages=' do
-    it 'converts each page to GroupDocs::Assembly::Questionnaire::Page object' do
+    it 'converts each page to GroupDocs::Assembly::Questionnaire::Page object if hash is passed' do
       subject.pages = [{ number: 1, title: 'Page1' }, { number: 2, title: 'Page2' }]
       pages = subject.pages
       pages.should be_an(Array)
       pages.each do |page|
         page.should be_a(GroupDocs::Assembly::Questionnaire::Page)
       end
+    end
+
+    it 'saves each page if it is GroupDocs::Assembly::Questionnaire::Page object' do
+      page1 = GroupDocs::Assembly::Questionnaire::Page.new(number: 1)
+      page2 = GroupDocs::Assembly::Questionnaire::Page.new(number: 2)
+      subject.pages = [page1, page2]
+      subject.pages.should include(page1)
+      subject.pages.should include(page2)
     end
 
     it 'does nothing if nil is passed' do
