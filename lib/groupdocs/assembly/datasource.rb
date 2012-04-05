@@ -72,7 +72,11 @@ module GroupDocs
       def fields=(fields)
         if fields
           @fields = fields.map do |field|
-            GroupDocs::Assembly::DataSource::Field.new(field)
+            if field.is_a?(GroupDocs::Assembly::DataSource::Field)
+              field
+            else
+              GroupDocs::Assembly::DataSource::Field.new(field)
+            end
           end
         end
       end

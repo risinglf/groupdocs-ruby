@@ -66,13 +66,21 @@ describe GroupDocs::Assembly::DataSource do
   end
 
   describe '#fields=' do
-    it 'converts each field to GroupDocs::Assembly::DataSource::Field object' do
+    it 'converts each field to GroupDocs::Assembly::DataSource::Field object if hash is passed' do
       subject.fields = [{ name: 'field1', values: %w(value1 value2), type: 1 }]
       fields = subject.fields
       fields.should be_an(Array)
       fields.each do |field|
         field.should be_a(GroupDocs::Assembly::DataSource::Field)
       end
+    end
+
+    it 'saves each field if it is GroupDocs::Assembly::DataSource::Field object' do
+      field1 = GroupDocs::Assembly::DataSource::Field.new(name: 'field1')
+      field2 = GroupDocs::Assembly::DataSource::Field.new(name: 'field2')
+      subject.fields = [field1, field2]
+      subject.fields.should include(field1)
+      subject.fields.should include(field2)
     end
 
     it 'does nothing if nil is passed' do
