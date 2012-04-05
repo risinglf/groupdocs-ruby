@@ -4,7 +4,7 @@ module GroupDocs
     require 'groupdocs/datasource/field'
 
     #
-    # Returns datasource with given ID.
+    # Returns datasource by given identifier.
     #
     # @param [Integer] id
     # @param [Hash] options
