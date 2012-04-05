@@ -167,6 +167,29 @@ module GroupDocs
         end
       end
 
+      #
+      # Creates new questionnaire execution.
+      #
+      # @param [GroupDocs::Assembly::Questionnaire::Execution] execution
+      # @param [Hash] access Access credentials
+      # @option access [String] :client_id
+      # @option access [String] :private_key
+      #
+      def create_execution!(execution, access = {})
+        execution.is_a?(GroupDocs::Assembly::Questionnaire::Execution) or raise ArgumentError,
+          "Execution should be GroupDocs::Assembly::Questionnaire::Execution object, received: #{execution.inspect}"
+        execution.questionnaire_id = self.id
+
+        json = GroupDocs::Api::Request.new do |request|
+          request[:access] = access
+          request[:method] = :POST
+          request[:path] = "/merge/{{client_id}}/questionnaires/#{id}/executions"
+          request[:request_body] = execution.to_hash
+        end.execute!
+
+        # TODO finish receive 400 Bad Request because it's not clear where to get request body
+      end
+
     end # Questionnaire
   end # Assembly
 end # GroupDocs
