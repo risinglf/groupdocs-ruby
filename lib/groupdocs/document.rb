@@ -305,12 +305,43 @@ module GroupDocs
     end
 
     #
+    # Creates new job to merge datasource into document.
+    #
+    # @param [GroupDocs::Assembly::DataSource] datasource
+    # @param [Hash] options
+    # @option options [Boolean] :new_type New file format type
+    # @option options [Boolean] :email_results Set to true if converted document should be emailed
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    # @raise [ArgumentError] if datasource is not GroupDocs::Assembly::DataSource object
+    # @raise [ArgumentError] if options does not contain :new_type and/or :email_results
+    #
+    def datasource!(datasource, options = {}, access = {})
+      datasource.is_a?(GroupDocs::Assembly::DataSource) or raise ArgumentError,
+        "Datasource should be GroupDocs::Assembly::DataSource object, received: #{datasource.inspect}"
+      (options[:new_type] && !options[:email_results].nil?) or raise ArgumentError,
+        "Both :new_type and :email_results should be passed, received: #{options.inspect}"
+
+      api = GroupDocs::Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :POST
+        request[:path] = "/{{client_id}}/files/#{file.id}/datasources/#{datasource.id}"
+      end
+      api.add_params(options)
+      json = api.execute!
+
+      # TODO finish receive 404 not found
+    end
+
+    #
     # Returns an array of questionnaires.
     #
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
-    # @return [Array<GroupDocs::Assembly::Questionnaire]
+    # @return [Array<GroupDocs::Assembly::Questionnaire>]
     #
     def questionnaires!(access = {})
       json = GroupDocs::Api::Request.new do |request|
