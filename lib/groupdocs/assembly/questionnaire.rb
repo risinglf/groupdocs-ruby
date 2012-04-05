@@ -6,6 +6,8 @@ module GroupDocs
       require 'groupdocs/assembly/questionnaire/page'
       require 'groupdocs/assembly/questionnaire/question'
 
+      include GroupDocs::Api::Helpers::Access
+
       #
       # Returns an array of questionnaires.
       #
@@ -170,24 +172,33 @@ module GroupDocs
       #
       # Creates new questionnaire execution.
       #
+      # @example
+      #   execution = GroupDocs::Assembly::Questionnaire::Execution.new
+      #   questionnaire = GroupDocs::Assembly::Questionnaire.all!.first
+      #   execution = questionnaire.create_execution!(execution, 'user@email.com')
+      #
       # @param [GroupDocs::Assembly::Questionnaire::Execution] execution
+      # @param [String] email
       # @param [Hash] access Access credentials
       # @option access [String] :client_id
       # @option access [String] :private_key
+      # @return [GroupDocs::Assembly::Questionnaire::Execution] updated execution
       #
-      def create_execution!(execution, access = {})
+      def create_execution!(execution, email, access = {})
         execution.is_a?(GroupDocs::Assembly::Questionnaire::Execution) or raise ArgumentError,
           "Execution should be GroupDocs::Assembly::Questionnaire::Execution object, received: #{execution.inspect}"
-        execution.questionnaire_id = self.id
 
         json = GroupDocs::Api::Request.new do |request|
           request[:access] = access
           request[:method] = :POST
           request[:path] = "/merge/{{client_id}}/questionnaires/#{id}/executions"
-          request[:request_body] = execution.to_hash
+          request[:request_body] = execution.to_hash.merge(executive: { primary_email: email })
         end.execute!
 
-        # TODO finish receive 400 Bad Request because it's not clear where to get request body
+        execution.id = json[:execution_id]
+        execution.questionnaire_id = json[:questionnaire_id]
+
+        execution
       end
 
     end # Questionnaire

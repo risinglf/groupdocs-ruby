@@ -168,4 +168,34 @@ describe GroupDocs::Assembly::Questionnaire do
       end
     end
   end
+
+  describe '#create_execution!' do
+    before(:each) do
+      mock_api_server(load_json('questionnaire_execution_create'))
+    end
+
+    let(:execution) { GroupDocs::Assembly::Questionnaire::Execution.new }
+    let(:email)     { 'email@email.com' }
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.create_execution!(execution, email, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'raises error if execution is not GroupDocs::Assembly::Questionnaire::Execution object' do
+      -> { subject.create_execution!('Execution', email) }.should raise_error(ArgumentError)
+    end
+
+    it 'uses hashed version of execution along with executive payload' do
+      hash = {}
+      execution.should_receive(:to_hash).and_return(hash)
+      hash.should_receive(:merge).with({ executive: { primary_email: email } })
+      subject.create_execution!(execution, email)
+    end
+
+    it 'returns GroupDocs::Assembly::Questionnaire::Execution object' do
+      subject.create_execution!(execution, email).should be_a(GroupDocs::Assembly::Questionnaire::Execution)
+    end
+  end
 end
