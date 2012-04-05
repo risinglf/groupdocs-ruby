@@ -118,6 +118,10 @@ Read more about examples of using Job API on [wiki](https://github.com/p0deje/gr
 
 Read more about examples of using Storage API on [wiki](https://github.com/p0deje/groupdocs-ruby/wiki/Storage-API).
 
+### Assembly API
+
+Read more about examples of using Assembly API on [wiki](https://github.com/p0deje/groupdocs-ruby/wiki/Assembly-API).
+
 ### Copyright
 
 Copyright (c) 2012 Aspose Inc.
