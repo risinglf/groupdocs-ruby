@@ -51,15 +51,15 @@ module GroupDocs
           value = instance_variable_get(variable)
 
           hash[key] = case value
-            when GroupDocs::Api::Entity
-              value.to_hash
-            when Array
-              value.map do |i|
-                i.to_hash if i.respond_to?(:to_hash)
-              end
-            else
-              value
-            end
+                      when GroupDocs::Api::Entity
+                        value.to_hash
+                      when Array
+                        value.map do |i|
+                          i.to_hash if i.respond_to?(:to_hash)
+                        end
+                      else
+                        value
+                      end
         end
 
         hash
@@ -72,17 +72,18 @@ module GroupDocs
       #
       def inspect
         not_nil_variables = instance_variables.select do |variable|
-          !send(variable.to_s.delete(?@).to_sym).nil?
+          !send(variable_to_accessor(variable)).nil?
         end
 
         variables = not_nil_variables.map  do |variable|
-          value = send(variable_to_accessor(variable))
+          accessor = variable_to_accessor(variable)
+          value = send(accessor)
           value = case value
                   when Symbol then ":#{value}"
                   when String then "\"#{value}\""
                   else value
                   end
-          "#{variable}=#{value}"
+          "@#{accessor}=#{value}"
         end
 
         inspected = self.to_s
@@ -98,11 +99,13 @@ module GroupDocs
       private
 
       #
-      # Converts instance variable symbol to accessor method.
+      # Converts instance variable symbol to accessor method symbol.
       # @api private
       #
       def variable_to_accessor(variable)
-        variable.to_s.delete(?@).to_sym
+        word = variable.to_s.delete(?@)
+        word.gsub!(/[A-Z]/) { |letter| "_#{letter.downcase}" }
+        word.to_sym
       end
 
     end # Entity
