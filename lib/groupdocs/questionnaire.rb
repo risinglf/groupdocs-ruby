@@ -49,7 +49,7 @@ module GroupDocs
     end
 
     #
-    # Returns an array of executions.
+    # Returns an array of all executions.
     #
     # @param [Hash] access Access credentials
     # @option access [String] :client_id

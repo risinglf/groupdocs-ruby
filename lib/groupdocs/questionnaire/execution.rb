@@ -10,6 +10,18 @@ module GroupDocs
       closed:    5,
     }
 
+    #
+    # Returns an array of all executions.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<GroupDocs::Questionnaire::Execution>]
+    #
+    def self.all!(access = {})
+      GroupDocs::Questionnaire.executions!(access)
+    end
+
     # @attr [Integer] id
     attr_accessor :id
     # @attr [Integer] ownerId
