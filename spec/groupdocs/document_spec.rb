@@ -393,6 +393,39 @@ describe GroupDocs::Document do
     end
   end
 
+  describe '#datasource!' do
+    before(:each) do
+      mock_api_server(load_json('document_datasource'))
+    end
+
+    let(:datasource) do
+      GroupDocs::Assembly::DataSource.new(id: 1)
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.datasource!(datasource, { new_type: 1, email_results: false }, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'raises error if datasource is not GroupDocs::Assembly::Datasource object' do
+      -> { subject.datasource!('Datasource') }.should raise_error(ArgumentError)
+    end
+
+    it 'raises error if :new_type option is not passed' do
+      -> { subject.datasource!(datasource, email_results: false) }.should raise_error(ArgumentError)
+    end
+
+    it 'raises error if :email_results option is not passed' do
+      -> { subject.datasource!(datasource, new_type: :doc) }.should raise_error(ArgumentError)
+    end
+
+    it 'returns GroupDocs::Job object' do
+      job = subject.datasource!(datasource, new_type: :doc, email_results: false)
+      job.should be_a(GroupDocs::Job)
+    end
+  end
+
   describe '#method_missing' do
     it 'passes unknown methods to file object' do
       -> { subject.name }.should_not raise_error(NoMethodError)

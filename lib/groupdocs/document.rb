@@ -314,25 +314,26 @@ module GroupDocs
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
+    # @return [GroupDocs::Job]
     #
     # @raise [ArgumentError] if datasource is not GroupDocs::Assembly::DataSource object
     # @raise [ArgumentError] if options does not contain :new_type and/or :email_results
     #
-    def datasource!(datasource, options = {}, access = {})
+    def datasource!(datasource, options, access = {})
       datasource.is_a?(GroupDocs::Assembly::DataSource) or raise ArgumentError,
         "Datasource should be GroupDocs::Assembly::DataSource object, received: #{datasource.inspect}"
-      (options[:new_type] && !options[:email_results].nil?) or raise ArgumentError,
+      (options[:new_type].nil? || options[:email_results].nil?) and raise ArgumentError,
         "Both :new_type and :email_results should be passed, received: #{options.inspect}"
 
       api = GroupDocs::Api::Request.new do |request|
         request[:access] = access
         request[:method] = :POST
-        request[:path] = "/{{client_id}}/files/#{file.id}/datasources/#{datasource.id}"
+        request[:path] = "/merge/{{client_id}}/files/#{file.guid}/datasources/#{datasource.id}"
       end
       api.add_params(options)
       json = api.execute!
 
-      # TODO finish receive 404 not found
+      GroupDocs::Job.new(id: json[:job_id])
     end
 
     #
