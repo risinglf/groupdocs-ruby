@@ -317,18 +317,18 @@ describe GroupDocs::Document do
       end.should_not raise_error(ArgumentError)
     end
 
-    it 'returns an array of GroupDocs::Assembly::Questionnaire objects' do
+    it 'returns an array of GroupDocs::Questionnaire objects' do
       questionnaires = subject.questionnaires!
       questionnaires.should be_an(Array)
       questionnaires.each do |questionnaire|
-        questionnaire.should be_a(GroupDocs::Assembly::Questionnaire)
+        questionnaire.should be_a(GroupDocs::Questionnaire)
       end
     end
   end
 
   describe '#add_questionnaire!' do
     let(:questionnaire) do
-      GroupDocs::Assembly::Questionnaire.new(id: 1)
+      GroupDocs::Questionnaire.new(id: 1)
     end
 
     it 'accepts access credentials hash' do
@@ -337,7 +337,7 @@ describe GroupDocs::Document do
       end.should_not raise_error(ArgumentError)
     end
 
-    it 'raises error if questionnaire is not GroupDocs::Assembly::Questionnaire object' do
+    it 'raises error if questionnaire is not GroupDocs::Questionnaire object' do
       -> { subject.add_questionnaire!('Questionnaire') }.should raise_error(ArgumentError)
     end
   end
@@ -348,7 +348,7 @@ describe GroupDocs::Document do
     end
 
     let(:questionnaire) do
-      GroupDocs::Assembly::Questionnaire.new(name: 'Q1')
+      GroupDocs::Questionnaire.new(name: 'Q1')
     end
 
     it 'accepts access credentials hash' do
@@ -357,12 +357,12 @@ describe GroupDocs::Document do
       end.should_not raise_error(ArgumentError)
     end
 
-    it 'raises error if questionnaire is not GroupDocs::Assembly::Questionnaire object' do
+    it 'raises error if questionnaire is not GroupDocs::Questionnaire object' do
       -> { subject.create_questionnaire!('Questionnaire') }.should raise_error(ArgumentError)
     end
 
-    it 'returns GroupDocs::Assembly::Questionnaire object' do
-      subject.create_questionnaire!(questionnaire).should be_a(GroupDocs::Assembly::Questionnaire)
+    it 'returns GroupDocs::Questionnaire object' do
+      subject.create_questionnaire!(questionnaire).should be_a(GroupDocs::Questionnaire)
     end
 
     it 'uses hashed version of questionnaire as request body' do
@@ -379,7 +379,7 @@ describe GroupDocs::Document do
 
   describe '#delete_questionnaire!' do
     let(:questionnaire) do
-      GroupDocs::Assembly::Questionnaire.new(id: 1)
+      GroupDocs::Questionnaire.new(id: 1)
     end
 
     it 'accepts access credentials hash' do
@@ -388,7 +388,7 @@ describe GroupDocs::Document do
       end.should_not raise_error(ArgumentError)
     end
 
-    it 'raises error if questionnaire is not GroupDocs::Assembly::Questionnaire object' do
+    it 'raises error if questionnaire is not GroupDocs::Questionnaire object' do
       -> { subject.delete_questionnaire!('Questionnaire') }.should raise_error(ArgumentError)
     end
   end
@@ -399,7 +399,7 @@ describe GroupDocs::Document do
     end
 
     let(:datasource) do
-      GroupDocs::Assembly::DataSource.new(id: 1)
+      GroupDocs::DataSource.new(id: 1)
     end
 
     it 'accepts access credentials hash' do
@@ -408,7 +408,7 @@ describe GroupDocs::Document do
       end.should_not raise_error(ArgumentError)
     end
 
-    it 'raises error if datasource is not GroupDocs::Assembly::Datasource object' do
+    it 'raises error if datasource is not GroupDocs::Datasource object' do
       -> { subject.datasource!('Datasource') }.should raise_error(ArgumentError)
     end
 

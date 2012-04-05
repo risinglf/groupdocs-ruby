@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe GroupDocs::Assembly::Questionnaire::Question do
+describe GroupDocs::Questionnaire::Question do
 
   it_behaves_like GroupDocs::Api::Entity
 
@@ -27,18 +27,18 @@ describe GroupDocs::Assembly::Questionnaire::Question do
   it { should respond_to(:answers=)    }
 
   describe '#answers=' do
-    it 'converts each answer to GroupDocs::Assembly::Questionnaire::Question::Answer object' do
+    it 'converts each answer to GroupDocs::Questionnaire::Question::Answer object' do
       subject.answers = [{ text: 'Text1', value: 'Value1' }, { text: 'Text2', value: 'Value2' }]
       answers = subject.answers
       answers.should be_an(Array)
       answers.each do |answer|
-        answer.should be_a(GroupDocs::Assembly::Questionnaire::Question::Answer)
+        answer.should be_a(GroupDocs::Questionnaire::Question::Answer)
       end
     end
 
     it 'saves each answer if it is GroupDocs::Questionnaire::Question::Answer object' do
-      answer1 = GroupDocs::Assembly::Questionnaire::Question::Answer.new(text: 'text1')
-      answer2 = GroupDocs::Assembly::Questionnaire::Question::Answer.new(text: 'text2')
+      answer1 = GroupDocs::Questionnaire::Question::Answer.new(text: 'text1')
+      answer2 = GroupDocs::Questionnaire::Question::Answer.new(text: 'text2')
       subject.answers = [answer1, answer2]
       subject.answers.should include(answer1)
       subject.answers.should include(answer2)
@@ -52,12 +52,12 @@ describe GroupDocs::Assembly::Questionnaire::Question do
   end
 
   describe '#add_answer' do
-    it 'raises error if answer is not GroupDocs::Assembly::Questionnaire::Question::Answer object' do
+    it 'raises error if answer is not GroupDocs::Questionnaire::Question::Answer object' do
       -> { subject.add_answer('Answer') }.should raise_error(ArgumentError)
     end
 
     it 'saves answer' do
-      answer = GroupDocs::Assembly::Questionnaire::Question::Answer.new(text: 'Text', value: 'Value')
+      answer = GroupDocs::Questionnaire::Question::Answer.new(text: 'Text', value: 'Value')
       subject.add_answer(answer)
       subject.answers.should == [answer]
     end

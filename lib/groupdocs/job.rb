@@ -134,15 +134,15 @@ module GroupDocs
     # @option access [String] :private_key
     #
     # @raise [ArgumentError] If document is not a GroupDocs::Document object
-    # @raise [ArgumentError] If datasource is not a GroupDocs::Assembly::DataSource object
+    # @raise [ArgumentError] If datasource is not a GroupDocs::DataSource object
     #
     # @todo Finish it along with Assembly API
     #
     def add_datasource!(document, datasource, access = {})
       document.is_a?(GroupDocs::Document) or raise ArgumentError,
         "Document should be GroupDocs::Document object. Received: #{document.inspect}"
-      datasource.is_a?(GroupDocs::Assembly::DataSource) or raise ArgumentError,
-        "Datasource should be GroupDocs::Assembly::DataSource object. Received: #{datasource.inspect}"
+      datasource.is_a?(GroupDocs::DataSource) or raise ArgumentError,
+        "Datasource should be GroupDocs::DataSource object. Received: #{datasource.inspect}"
 
       GroupDocs::Api::Request.new do |request|
         request[:access] = access

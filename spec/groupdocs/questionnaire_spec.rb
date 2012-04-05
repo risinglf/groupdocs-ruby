@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe GroupDocs::Assembly::Questionnaire do
+describe GroupDocs::Questionnaire do
 
   it_behaves_like GroupDocs::Api::Entity
 
@@ -15,11 +15,11 @@ describe GroupDocs::Assembly::Questionnaire do
       end.should_not raise_error(ArgumentError)
     end
 
-    it 'returns an array of GroupDocs::Assembly::Questionnaire objects' do
+    it 'returns an array of GroupDocs::Questionnaire objects' do
       questionnaires = described_class.all!
       questionnaires.should be_an(Array)
       questionnaires.each do |questionnaire|
-        questionnaire.should be_a(GroupDocs::Assembly::Questionnaire)
+        questionnaire.should be_a(GroupDocs::Questionnaire)
       end
     end
   end
@@ -35,8 +35,8 @@ describe GroupDocs::Assembly::Questionnaire do
       end.should_not raise_error(ArgumentError)
     end
 
-    it 'returns GroupDocs::Assembly::Questionnaire object' do
-      described_class.get!(1).should be_a(GroupDocs::Assembly::Questionnaire)
+    it 'returns GroupDocs::Questionnaire object' do
+      described_class.get!(1).should be_a(GroupDocs::Questionnaire)
     end
   end
 
@@ -51,11 +51,11 @@ describe GroupDocs::Assembly::Questionnaire do
       end.should_not raise_error(ArgumentError)
     end
 
-    it 'returns an array of GroupDocs::Assembly::Questionnaire::Execution objects' do
+    it 'returns an array of GroupDocs::Questionnaire::Execution objects' do
       executions = described_class.executions!
       executions.should be_an(Array)
       executions.each do |execution|
-        execution.should be_a(GroupDocs::Assembly::Questionnaire::Execution)
+        execution.should be_a(GroupDocs::Questionnaire::Execution)
       end
     end
   end
@@ -71,18 +71,18 @@ describe GroupDocs::Assembly::Questionnaire do
   end
 
   describe '#pages=' do
-    it 'converts each page to GroupDocs::Assembly::Questionnaire::Page object if hash is passed' do
+    it 'converts each page to GroupDocs::Questionnaire::Page object if hash is passed' do
       subject.pages = [{ number: 1, title: 'Page1' }, { number: 2, title: 'Page2' }]
       pages = subject.pages
       pages.should be_an(Array)
       pages.each do |page|
-        page.should be_a(GroupDocs::Assembly::Questionnaire::Page)
+        page.should be_a(GroupDocs::Questionnaire::Page)
       end
     end
 
-    it 'saves each page if it is GroupDocs::Assembly::Questionnaire::Page object' do
-      page1 = GroupDocs::Assembly::Questionnaire::Page.new(number: 1)
-      page2 = GroupDocs::Assembly::Questionnaire::Page.new(number: 2)
+    it 'saves each page if it is GroupDocs::Questionnaire::Page object' do
+      page1 = GroupDocs::Questionnaire::Page.new(number: 1)
+      page2 = GroupDocs::Questionnaire::Page.new(number: 2)
       subject.pages = [page1, page2]
       subject.pages.should include(page1)
       subject.pages.should include(page2)
@@ -96,12 +96,12 @@ describe GroupDocs::Assembly::Questionnaire do
   end
 
   describe '#add_page' do
-    it 'raises error if page is not GroupDocs::Assembly::Questionnaire::Page object' do
+    it 'raises error if page is not GroupDocs::Questionnaire::Page object' do
       -> { subject.add_page('Page') }.should raise_error(ArgumentError)
     end
 
     it 'adds page to pages instance variable' do
-      page = GroupDocs::Assembly::Questionnaire::Page.new
+      page = GroupDocs::Questionnaire::Page.new
       lambda do
         subject.add_page(page)
       end.should change(subject, :pages).to([page])
@@ -171,11 +171,11 @@ describe GroupDocs::Assembly::Questionnaire do
       end.should_not raise_error(ArgumentError)
     end
 
-    it 'returns array of GroupDocs::Assembly::DataSource objects' do
+    it 'returns array of GroupDocs::DataSource objects' do
       datasources = subject.datasources!
       datasources.should be_an(Array)
       datasources.each do |datasource|
-        datasource.should be_a(GroupDocs::Assembly::DataSource)
+        datasource.should be_a(GroupDocs::DataSource)
       end
     end
   end
@@ -185,7 +185,7 @@ describe GroupDocs::Assembly::Questionnaire do
       mock_api_server(load_json('questionnaire_execution_create'))
     end
 
-    let(:execution) { GroupDocs::Assembly::Questionnaire::Execution.new }
+    let(:execution) { GroupDocs::Questionnaire::Execution.new }
     let(:email)     { 'email@email.com' }
 
     it 'accepts access credentials hash' do
@@ -194,7 +194,7 @@ describe GroupDocs::Assembly::Questionnaire do
       end.should_not raise_error(ArgumentError)
     end
 
-    it 'raises error if execution is not GroupDocs::Assembly::Questionnaire::Execution object' do
+    it 'raises error if execution is not GroupDocs::Questionnaire::Execution object' do
       -> { subject.create_execution!('Execution', email) }.should raise_error(ArgumentError)
     end
 
@@ -205,8 +205,8 @@ describe GroupDocs::Assembly::Questionnaire do
       subject.create_execution!(execution, email)
     end
 
-    it 'returns GroupDocs::Assembly::Questionnaire::Execution object' do
-      subject.create_execution!(execution, email).should be_a(GroupDocs::Assembly::Questionnaire::Execution)
+    it 'returns GroupDocs::Questionnaire::Execution object' do
+      subject.create_execution!(execution, email).should be_a(GroupDocs::Questionnaire::Execution)
     end
   end
 end

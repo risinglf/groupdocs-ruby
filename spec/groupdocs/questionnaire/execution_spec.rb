@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe GroupDocs::Assembly::Questionnaire::Execution do
+describe GroupDocs::Questionnaire::Execution do
 
   it_behaves_like GroupDocs::Api::Entity
 

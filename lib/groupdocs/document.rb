@@ -307,7 +307,7 @@ module GroupDocs
     #
     # Creates new job to merge datasource into document.
     #
-    # @param [GroupDocs::Assembly::DataSource] datasource
+    # @param [GroupDocs::DataSource] datasource
     # @param [Hash] options
     # @option options [Boolean] :new_type New file format type
     # @option options [Boolean] :email_results Set to true if converted document should be emailed
@@ -316,12 +316,12 @@ module GroupDocs
     # @option access [String] :private_key
     # @return [GroupDocs::Job]
     #
-    # @raise [ArgumentError] if datasource is not GroupDocs::Assembly::DataSource object
+    # @raise [ArgumentError] if datasource is not GroupDocs::DataSource object
     # @raise [ArgumentError] if options does not contain :new_type and/or :email_results
     #
     def datasource!(datasource, options, access = {})
-      datasource.is_a?(GroupDocs::Assembly::DataSource) or raise ArgumentError,
-        "Datasource should be GroupDocs::Assembly::DataSource object, received: #{datasource.inspect}"
+      datasource.is_a?(GroupDocs::DataSource) or raise ArgumentError,
+        "Datasource should be GroupDocs::DataSource object, received: #{datasource.inspect}"
       (options[:new_type].nil? || options[:email_results].nil?) and raise ArgumentError,
         "Both :new_type and :email_results should be passed, received: #{options.inspect}"
 
@@ -342,7 +342,7 @@ module GroupDocs
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
-    # @return [Array<GroupDocs::Assembly::Questionnaire>]
+    # @return [Array<GroupDocs::Questionnaire>]
     #
     def questionnaires!(access = {})
       json = GroupDocs::Api::Request.new do |request|
@@ -352,23 +352,23 @@ module GroupDocs
       end.execute!
 
       json[:questionnaires].map do |questionnaire|
-        GroupDocs::Assembly::Questionnaire.new(questionnaire)
+        GroupDocs::Questionnaire.new(questionnaire)
       end
     end
 
     #
     # Adds questionnaire to document.
     #
-    # @param [GroupDocs::Assembly::Questionnaire] questionnaire
+    # @param [GroupDocs::Questionnaire] questionnaire
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
     #
-    # @raise [ArgumentError] if questionnaire is not GroupDocs::Assembly::Questionnaire object
+    # @raise [ArgumentError] if questionnaire is not GroupDocs::Questionnaire object
     #
     def add_questionnaire!(questionnaire, access = {})
-      questionnaire.is_a?(GroupDocs::Assembly::Questionnaire) or raise ArgumentError,
-        "Questionnaire should be GroupDocs::Assembly::Questionnaire object, received: #{questionnaire.inspect}"
+      questionnaire.is_a?(GroupDocs::Questionnaire) or raise ArgumentError,
+        "Questionnaire should be GroupDocs::Questionnaire object, received: #{questionnaire.inspect}"
 
       GroupDocs::Api::Request.new do |request|
         request[:access] = access
@@ -380,17 +380,17 @@ module GroupDocs
     #
     # Creates questionnaire and adds it to document.
     #
-    # @param [GroupDocs::Assembly::Questionnaire] questionnaire
+    # @param [GroupDocs::Questionnaire] questionnaire
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
-    # @return [GroupDocs::Assembly::Questionnaire]
+    # @return [GroupDocs::Questionnaire]
     #
-    # @raise [ArgumentError] if questionnaire is not GroupDocs::Assembly::Questionnaire object
+    # @raise [ArgumentError] if questionnaire is not GroupDocs::Questionnaire object
     #
     def create_questionnaire!(questionnaire, access = {})
-      questionnaire.is_a?(GroupDocs::Assembly::Questionnaire) or raise ArgumentError,
-        "Questionnaire should be GroupDocs::Assembly::Questionnaire object, received: #{questionnaire.inspect}"
+      questionnaire.is_a?(GroupDocs::Questionnaire) or raise ArgumentError,
+        "Questionnaire should be GroupDocs::Questionnaire object, received: #{questionnaire.inspect}"
 
       json = GroupDocs::Api::Request.new do |request|
         request[:access] = access
@@ -406,16 +406,16 @@ module GroupDocs
     #
     # Deletes questionnaire from document.
     #
-    # @param [GroupDocs::Assembly::Questionnaire] questionnaire
+    # @param [GroupDocs::Questionnaire] questionnaire
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
     #
-    # @raise [ArgumentError] if questionnaire is not GroupDocs::Assembly::Questionnaire object
+    # @raise [ArgumentError] if questionnaire is not GroupDocs::Questionnaire object
     #
     def delete_questionnaire!(questionnaire, access = {})
-      questionnaire.is_a?(GroupDocs::Assembly::Questionnaire) or raise ArgumentError,
-        "Questionnaire should be GroupDocs::Assembly::Questionnaire object, received: #{questionnaire.inspect}"
+      questionnaire.is_a?(GroupDocs::Questionnaire) or raise ArgumentError,
+        "Questionnaire should be GroupDocs::Questionnaire object, received: #{questionnaire.inspect}"
 
       GroupDocs::Api::Request.new do |request|
         request[:access] = access

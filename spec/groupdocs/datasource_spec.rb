@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe GroupDocs::Assembly::DataSource do
+describe GroupDocs::DataSource do
 
   it_behaves_like GroupDocs::Api::Entity
 
@@ -21,8 +21,8 @@ describe GroupDocs::Assembly::DataSource do
       end.should_not raise_error(ArgumentError)
     end
 
-    it 'returns GroupDocs::Assembly::DataSource object if datasource is found' do
-      described_class.get!(1).should be_a(GroupDocs::Assembly::DataSource)
+    it 'returns GroupDocs::DataSource object if datasource is found' do
+      described_class.get!(1).should be_a(GroupDocs::DataSource)
     end
 
     it 'returns nil if datasource was not found' do
@@ -66,18 +66,18 @@ describe GroupDocs::Assembly::DataSource do
   end
 
   describe '#fields=' do
-    it 'converts each field to GroupDocs::Assembly::DataSource::Field object if hash is passed' do
+    it 'converts each field to GroupDocs::DataSource::Field object if hash is passed' do
       subject.fields = [{ name: 'field1', values: %w(value1 value2), type: 1 }]
       fields = subject.fields
       fields.should be_an(Array)
       fields.each do |field|
-        field.should be_a(GroupDocs::Assembly::DataSource::Field)
+        field.should be_a(GroupDocs::DataSource::Field)
       end
     end
 
-    it 'saves each field if it is GroupDocs::Assembly::DataSource::Field object' do
-      field1 = GroupDocs::Assembly::DataSource::Field.new(name: 'field1')
-      field2 = GroupDocs::Assembly::DataSource::Field.new(name: 'field2')
+    it 'saves each field if it is GroupDocs::DataSource::Field object' do
+      field1 = GroupDocs::DataSource::Field.new(name: 'field1')
+      field2 = GroupDocs::DataSource::Field.new(name: 'field2')
       subject.fields = [field1, field2]
       subject.fields.should include(field1)
       subject.fields.should include(field2)
@@ -91,12 +91,12 @@ describe GroupDocs::Assembly::DataSource do
   end
 
   describe '#add_field' do
-    it 'raises error if field is not GroupDocs::Assembly::DataSource::Field object' do
+    it 'raises error if field is not GroupDocs::DataSource::Field object' do
       -> { subject.add_field('Field') }.should raise_error(ArgumentError)
     end
 
     it 'saves field' do
-      field = GroupDocs::Assembly::DataSource::Field.new
+      field = GroupDocs::DataSource::Field.new
       subject.add_field(field)
       subject.fields.should == [field]
     end
