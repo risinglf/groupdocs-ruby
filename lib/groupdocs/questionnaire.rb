@@ -189,8 +189,9 @@ module GroupDocs
     #
     # @example
     #   execution = GroupDocs::Questionnaire::Execution.new
-    #   questionnaire = GroupDocs::Questionnaire.all!.first
+    #   questionnaire = GroupDocs::Questionnaire.get!(1)
     #   execution = questionnaire.create_execution!(execution, 'user@email.com')
+    #   #=> #<GroupDocs::Questionnaire::Execution @id=1, @questionnaire_id=1>
     #
     # @param [GroupDocs::Questionnaire::Execution] execution
     # @param [String] email
