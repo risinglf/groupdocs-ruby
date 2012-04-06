@@ -145,7 +145,7 @@ module GroupDocs
       #
       def move!(path, access = {})
         path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{path.inspect}"
-        path << Object::File.basename(name) unless path =~ /\.(\w){3,4}$/
+        path << "/#{Object::File.basename(name)}" unless path =~ /\.(\w){3,4}$/
 
         GroupDocs::Api::Request.new do |request|
           request[:access] = access
