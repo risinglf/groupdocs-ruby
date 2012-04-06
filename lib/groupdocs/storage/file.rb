@@ -24,7 +24,7 @@ module GroupDocs
       #
       def self.upload!(filepath, upload_path = '/', options = {}, access = {})
         upload_path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{upload_path.inspect}"
-        upload_path << Object::File.basename(filepath) unless upload_path =~ /\.(\w){3,4}$/
+        upload_path << "/#{Object::File.basename(filepath)}" unless upload_path =~ /\.(\w){3,4}$/
 
         api = GroupDocs::Api::Request.new do |request|
           request[:access] = access
@@ -147,7 +147,7 @@ module GroupDocs
         path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{path.inspect}"
         path << "/#{Object::File.basename(name)}" unless path =~ /\.(\w){3,4}$/
 
-        GroupDocs::Api::Request.new do |request|
+        json = GroupDocs::Api::Request.new do |request|
           request[:access] = access
           request[:method] = :PUT
           request[:headers] = { :'Groupdocs-Move' => id }

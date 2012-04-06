@@ -28,7 +28,7 @@ describe GroupDocs::Storage::File do
 
     it 'appends filename to upload path if it is not passed' do
       upload_path = '/upload_path'
-      upload_path.should_receive(:<<).with(File.basename(__FILE__))
+      upload_path.should_receive(:<<).with("/#{File.basename(__FILE__)}")
       described_class.upload!(__FILE__, upload_path)
     end
 
@@ -136,7 +136,7 @@ describe GroupDocs::Storage::File do
       path = '/Folder'
       name = File.basename(__FILE__)
       subject.stub(name: name)
-      path.should_receive(:<<).with(name)
+      path.should_receive(:<<).with("/#{name}")
       subject.move!(path)
     end
   end

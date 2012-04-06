@@ -2,7 +2,13 @@
   "status": "Ok",
   "result":
     {
-      "from_path": "resume.pdf",
-      "to_path": "resume2.pdf"
+      "src_file":
+        {
+          "name": "resume.pdf"
+        },
+      "dst_file":
+        {
+          "name": "resume2.pdf"
+        }
     }
 }
