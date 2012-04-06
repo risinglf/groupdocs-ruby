@@ -29,7 +29,7 @@ module GroupDocs
         api = GroupDocs::Api::Request.new do |request|
           request[:access] = access
           request[:method] = :POST
-          request[:path] = "/storage/{{client_id}}/folders#{upload_path}"
+          request[:path] = "/storage/{{client_id}}/folders#{upload_path.gsub(/[\/]{2}/, '/')}"
           request[:request_body] = Object::File.new(filepath, 'rb')
         end
         api.add_params(options)
