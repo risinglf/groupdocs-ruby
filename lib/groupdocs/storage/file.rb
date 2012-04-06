@@ -154,7 +154,7 @@ module GroupDocs
           request[:path] = "/storage/{{client_id}}/files#{path}"
         end.execute!
 
-        path
+        GroupDocs::Storage::File.new(json[:dst_file])
       end
 
       #

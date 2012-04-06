@@ -108,6 +108,10 @@ describe GroupDocs::Storage::File do
   end
 
   describe '#move!' do
+    before(:each) do
+      mock_api_server(load_json('file_move'))
+    end
+
     it 'accepts access credentials hash' do
       lambda do
         subject.move!('/resume.pdf', client_id: 'client_id', private_key: 'private_key')
@@ -124,15 +128,11 @@ describe GroupDocs::Storage::File do
       subject.move!('/resume2.pdf')
     end
 
-    it 'returns moved to file path' do
-      mock_api_server(load_json('file_move'))
-      moved = subject.move!('/resume2.pdf')
-      moved.should be_a(String)
-      moved.should == '/resume2.pdf'
+    it 'returns moved to file' do
+      subject.move!('/resume2.pdf').should be_a(GroupDocs::Storage::File)
     end
 
     it 'appends filename to move to path if it is not passed' do
-      mock_api_server(load_json('file_move'))
       path = '/Folder'
       name = File.basename(__FILE__)
       subject.stub(name: name)
@@ -162,6 +162,10 @@ describe GroupDocs::Storage::File do
   end
 
   describe '#copy!' do
+    before(:each) do
+      mock_api_server(load_json('file_copy'))
+    end
+
     it 'accepts access credentials hash' do
       lambda do
         subject.copy!('/resume.pdf', client_id: 'client_id', private_key: 'private_key')
@@ -179,13 +183,10 @@ describe GroupDocs::Storage::File do
     end
 
     it 'returns copied to file' do
-      mock_api_server(load_json('file_copy'))
-      copied = subject.copy!('/resume2.pdf')
-      copied.should be_a(GroupDocs::Storage::File)
+      subject.copy!('/resume2.pdf').should be_a(GroupDocs::Storage::File)
     end
 
     it 'appends filename to copy to path if it is not passed' do
-      mock_api_server(load_json('file_copy'))
       path = '/Folder'
       name = File.basename(__FILE__)
       subject.stub(name: name)
