@@ -149,15 +149,8 @@ describe GroupDocs::Storage::File do
     end
 
     it 'uses #move! to rename file' do
-      subject.should_receive(:move!).with('/resume2.pdf', {}).and_return('/resume2.pdf')
+      subject.should_receive(:move!).with('/resume2.pdf', {})
       subject.rename!('resume2.pdf')
-    end
-
-    it 'strips leading / symbol from new name' do
-      subject.stub(move!: '/resume2.pdf')
-      renamed = subject.rename!('resume2.pdf')
-      renamed.should be_a(String)
-      renamed.should == 'resume2.pdf'
     end
   end
 

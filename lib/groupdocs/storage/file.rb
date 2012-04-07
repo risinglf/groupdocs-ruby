@@ -139,7 +139,7 @@ module GroupDocs
       # @param [Hash] access Access credentials
       # @option access [String] :client_id
       # @option access [String] :private_key
-      # @return [String] Moved to file path
+      # @return [GroupDocs::Storage::File] Moved to file
       #
       # @raise [ArgumentError] If path does not start with /
       #
@@ -164,10 +164,10 @@ module GroupDocs
       # @param [Hash] access Access credentials
       # @option access [String] :client_id
       # @option access [String] :private_key
-      # @return [String] New name
+      # @return [GroupDocs::Storage::File] Renamed file
       #
       def rename!(name, access = {})
-        move!("/#{name}", access).sub(/^\//, '')
+        move!("/#{name}", access)
       end
 
       #
