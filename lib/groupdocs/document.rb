@@ -404,7 +404,7 @@ module GroupDocs
     end
 
     #
-    # Deletes questionnaire from document.
+    # Detaches questionnaire from document.
     #
     # @param [GroupDocs::Questionnaire] questionnaire
     # @param [Hash] access Access credentials
@@ -413,7 +413,7 @@ module GroupDocs
     #
     # @raise [ArgumentError] if questionnaire is not GroupDocs::Questionnaire object
     #
-    def delete_questionnaire!(questionnaire, access = {})
+    def remove_questionnaire!(questionnaire, access = {})
       questionnaire.is_a?(GroupDocs::Questionnaire) or raise ArgumentError,
         "Questionnaire should be GroupDocs::Questionnaire object, received: #{questionnaire.inspect}"
 
