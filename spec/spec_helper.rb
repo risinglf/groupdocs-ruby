@@ -8,6 +8,9 @@ SimpleCov.start
 require 'webmock/rspec'
 require 'groupdocs'
 
+# shared examples
+Dir['spec/support/shared_examples/**/*.rb'].each { |file| file = file.sub(/spec\//, ''); require file }
+
 RSpec.configure do |spec|
   spec.before(:all) do
     GroupDocs.configure do |groupdocs|

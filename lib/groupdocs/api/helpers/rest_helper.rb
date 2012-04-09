@@ -3,8 +3,10 @@ module GroupDocs
     module Helpers
       module REST
 
-        DEFAULT_HEADERS = { accept: 'application/json',
-                            content_length: 0 }
+        DEFAULT_HEADERS = {
+          accept:         'application/json',
+          content_length: 0
+        }
 
         private
 
