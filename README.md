@@ -1,6 +1,6 @@
 ## GroupDocs [![Build Status](https://secure.travis-ci.org/p0deje/groupdocs-ruby.png)](http://travis-ci.org/p0deje/groupdocs-ruby)
 
-GroupDocs gem implements API wrapper for http://groupdocs.com
+Simple gem which implements API wrapper for [GroupDocs](http://groupdocs.com).
 
 ## Installation
 
