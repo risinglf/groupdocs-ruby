@@ -19,7 +19,7 @@ module GroupDocs
           if options[:headers].is_a?(Hash)
             options[:headers].merge!(DEFAULT_HEADERS)
           else
-            options[:headers] = DEFAULT_HEADERS
+            options[:headers] = DEFAULT_HEADERS.dup
           end
 
           options[:method] = options[:method].downcase

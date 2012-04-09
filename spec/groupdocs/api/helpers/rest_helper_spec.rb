@@ -10,13 +10,10 @@ describe GroupDocs::Api::Helpers::REST do
     subject { described_class::DEFAULT_HEADERS }
 
     it 'includes "Accept: application/json"' do
-      p GroupDocs::Api::Helpers::REST::DEFAULT_HEADERS
       subject.should include(accept: 'application/json')
     end
 
     it 'includes "Content-length: 0"' do
-          p described_class
-      p subject
       subject.should include(content_length: 0)
     end
   end
