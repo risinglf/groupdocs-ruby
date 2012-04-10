@@ -1,0 +1,11 @@
+{
+  "result":
+    {
+      "id": 1,
+      "annotationGuid": 2,
+      "replyGuid": null,
+      "sessionGuid": 3
+    },
+  "status": "Ok",
+  "error_message": null
+}
