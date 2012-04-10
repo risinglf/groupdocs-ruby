@@ -10,18 +10,18 @@ describe GroupDocs::Api::Helpers::REST do
     subject { described_class::DEFAULT_HEADERS }
 
     it 'includes "Accept: application/json"' do
-      subject.should include({ accept: 'application/json' })
+      subject.should include(accept: 'application/json')
     end
 
     it 'includes "Content-length: 0"' do
-      subject.should include({ content_length: 0 })
+      subject.should include(content_length: 0)
     end
   end
 
   describe '#prepare_request' do
     it 'merges default headers with passed' do
       subject.options[:headers] = { keep_alive: 300 }
-      merged_headers = described_class::DEFAULT_HEADERS.merge({ keep_alive: 300 })
+      merged_headers = described_class::DEFAULT_HEADERS.merge(keep_alive: 300)
       lambda do
         subject.send(:prepare_request)
       end.should change { subject.options[:headers] }.to(merged_headers)

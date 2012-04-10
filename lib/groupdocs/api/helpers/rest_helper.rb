@@ -3,8 +3,10 @@ module GroupDocs
     module Helpers
       module REST
 
-        DEFAULT_HEADERS = { accept: 'application/json',
-                            content_length: 0 }
+        DEFAULT_HEADERS = {
+          accept:         'application/json',
+          content_length: 0
+        }
 
         private
 
@@ -17,7 +19,7 @@ module GroupDocs
           if options[:headers].is_a?(Hash)
             options[:headers].merge!(DEFAULT_HEADERS)
           else
-            options[:headers] = DEFAULT_HEADERS
+            options[:headers] = DEFAULT_HEADERS.dup
           end
 
           options[:method] = options[:method].downcase
