@@ -124,5 +124,29 @@ module GroupDocs
       end
     end
 
+    #
+    # Sets annotation collaborators to given emails.
+    #
+    # @param [Array] emails List of collaborators' email addresses
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<GroupDocs::User>]
+    #
+    def collaborators_set!(emails, access = {})
+      json = GroupDocs::Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/ant/{{client_id}}/files/#{document.file.guid}/collaborators"
+        request[:request_body] = emails
+      end.execute!
+
+      json[:collaborators].map do |collaborator|
+        GroupDocs::User.new(collaborator)
+      end
+    end
+    # note that aliased version cannot accept access credentials hash
+    alias_method :collaborators=, :collaborators_set!
+
   end # Document::Annotation
 end # GroupDocs
