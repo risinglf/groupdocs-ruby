@@ -26,7 +26,7 @@ module GroupDocs
       #
       def initialize(options = {}, &blk)
         if options.empty?
-          blk.call(self) if block_given?
+          yield self if block_given?
         else
           options.each do |attr, value|
             send(:"#{attr}=", value) if respond_to?(:"#{attr}=")

@@ -35,7 +35,7 @@ module GroupDocs
     #
     # Calls block for configuration of GroupDocs.
     #
-    # @example Configure GroupDocs
+    # @example
     #   GroupDocs.configure do |groupdocs|
     #     groupdocs.client_id = '07aaaf95f8eb33a4'
     #     groupdocs.private_key = '5cb711b3a52ffc5d90ee8a0f79206f5a'
@@ -46,7 +46,7 @@ module GroupDocs
     # @yield [GroupDocs]
     #
     def configure(&blk)
-      blk.call(self)
+      yield self
     end
 
   end # << self

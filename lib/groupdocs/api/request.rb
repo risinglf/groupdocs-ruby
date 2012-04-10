@@ -39,7 +39,7 @@ module GroupDocs
       #
       def initialize(options = {}, &blk)
         @options = options
-        blk.call(@options) if block_given?
+        yield @options if block_given?
         @options[:access] ||= {}
         @resource = RestClient::Resource.new(GroupDocs.api_server)
       end
