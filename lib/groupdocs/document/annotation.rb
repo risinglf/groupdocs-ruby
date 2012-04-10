@@ -35,7 +35,7 @@ module GroupDocs
     alias_method :document_guid=,   :documentGuid=
     alias_method :reply_guid,       :replyGuid
     alias_method :reply_guid=,      :replyGuid=
-    # alias_method :created_on,       :createdOn
+    alias_method :created_on,       :createdOn
     alias_method :created_on=,      :createdOn=
 
     #
