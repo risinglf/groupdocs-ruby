@@ -133,13 +133,13 @@ describe GroupDocs::Document::Annotation do
     it 'updated self with response values' do
       lambda do
         subject.create!
-      end.should change do
+      end.should change {
         subject.id
         subject.document_guid
         subject.annotation_guid
         subject.reply_guid
         subject.session_guid
-      end
+      }
     end
   end
 end
