@@ -1,6 +1,7 @@
 module GroupDocs
   class Document < GroupDocs::Api::Entity
 
+    require 'groupdocs/document/annotation'
     require 'groupdocs/document/field'
     require 'groupdocs/document/metadata'
     require 'groupdocs/document/rectangle'
@@ -421,6 +422,22 @@ module GroupDocs
         request[:access] = access
         request[:method] = :DELETE
         request[:path] = "/merge/{{client_id}}/files/#{file.guid}/questionnaires/#{questionnaire.id}"
+      end.execute!
+    end
+
+    #
+    # Returns an array of annotations.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<GroupDocs::Document::Annotation>]
+    #
+    def annotations!(access = {})
+      json = GroupDocs::Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/ant/{{client_id}}/files/#{file.guid}/annotations"
       end.execute!
     end
 
