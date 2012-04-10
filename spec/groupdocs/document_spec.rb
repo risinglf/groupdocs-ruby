@@ -426,6 +426,26 @@ describe GroupDocs::Document do
     end
   end
 
+  describe '#annotations!' do
+    before(:each) do
+      mock_api_server(load_json('annotation_list'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.annotations!(client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns array of GroupDocs::Document::Annotation objects' do
+      annotations = subject.annotations!
+      annotations.should be_an(Array)
+      annotations.each do |annotation|
+        annotation.should be_a(GroupDocs::Document::Annotation)
+      end
+    end
+  end
+
   describe '#method_missing' do
     it 'passes unknown methods to file object' do
       -> { subject.name }.should_not raise_error(NoMethodError)
