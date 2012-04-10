@@ -1,6 +1,8 @@
 module GroupDocs
   class Document::Annotation < GroupDocs::Api::Entity
 
+    require 'groupdocs/document/annotation/reply'
+
     # @attr [GroupDocs::Document] document
     attr_accessor :document
     # @attr [Integer] id
@@ -55,6 +57,37 @@ module GroupDocs
     #
     def box=(options)
       @box = GroupDocs::Document::Rectangle.new(options)
+    end
+
+    #
+    # Converts each reply to GroupDocs::Document::Annotation::Reply object.
+    #
+    # @param [Array<GroupDocs::Document::Annotation::Reply, Hash>] replies
+    #
+    def replies=(replies)
+      if replies
+        @replies = replies.map do |reply|
+          if reply.is_a?(GroupDocs::Document::Annotation::Reply)
+            reply
+          else
+            GroupDocs::Document::Annotation::Reply.new(reply)
+          end
+        end
+      end
+    end
+
+    #
+    # Adds reply to annotation.
+    #
+    # @param [GroupDocs::Document::Annotation::Reply] reply
+    # @raise [ArgumentError] if reply is not GroupDocs::Document::Annotation::Reply object
+    #
+    def add_reply(reply)
+      reply.is_a?(GroupDocs::Document::Annotation::Reply) or raise ArgumentError,
+        "Reply should be GroupDocs::Document::Annotation::Reply object, received: #{reply.inspect}"
+
+      @replies ||= Array.new
+      @replies << reply
     end
 
     #

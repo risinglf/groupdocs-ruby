@@ -77,6 +77,43 @@ describe GroupDocs::Document::Annotation do
     end
   end
 
+  describe '#replies=' do
+    it 'converts each reply to GroupDocs::Document::Annotation::Reply object if hash is passed' do
+      subject.replies = [{  }]
+      replies = subject.replies
+      replies.should be_an(Array)
+      replies.each do |reply|
+        reply.should be_a(GroupDocs::Document::Annotation::Reply)
+      end
+    end
+
+    it 'saves each reply if it is GroupDocs::Document::Annotation::Reply object' do
+      reply1 = GroupDocs::Document::Annotation::Reply.new
+      reply2 = GroupDocs::Document::Annotation::Reply.new
+      subject.replies = [reply1, reply2]
+      subject.replies.should include(reply1)
+      subject.replies.should include(reply2)
+    end
+
+    it 'does nothing if nil is passed' do
+      lambda do
+        subject.replies = nil
+      end.should_not change(subject, :replies)
+    end
+  end
+
+  describe '#add_reply' do
+    it 'raises error if reply is not GroupDocs::Document::Annotation::Reply object' do
+      -> { subject.add_reply('Reply') }.should raise_error(ArgumentError)
+    end
+
+    it 'saves reply' do
+      reply = GroupDocs::Document::Annotation::Reply.new
+      subject.add_reply(reply)
+      subject.replies.should == [reply]
+    end
+  end
+
   describe '#create!' do
     pending
   end
