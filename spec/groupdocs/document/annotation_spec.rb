@@ -52,7 +52,7 @@ describe GroupDocs::Document::Annotation do
     subject.method(:document_guid=).should   == subject.method(:documentGuid=)
     subject.method(:reply_guid).should       == subject.method(:replyGuid)
     subject.method(:reply_guid=).should      == subject.method(:replyGuid=)
-    subject.method(:created_on).should       == subject.method(:createdOn)
+    # Annotation#created_on is overwritten
     subject.method(:created_on=).should      == subject.method(:createdOn=)
   end
 
@@ -63,6 +63,13 @@ describe GroupDocs::Document::Annotation do
 
     it 'raises error if document is not an instance of GroupDocs::Document' do
       -> { described_class.new(document: '') }.should raise_error(ArgumentError)
+    end
+  end
+
+  describe '#created_on' do
+    it 'returns converted to Time object Unix timestamp' do
+      subject.created_on = 1332950825
+      subject.created_on.should be_a(Time)
     end
   end
 

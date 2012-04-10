@@ -7,15 +7,15 @@ module GroupDocs
     attr_accessor :document
     # @attr [Integer] id
     attr_accessor :id
-    # @attr [Integer] annotationGuid
+    # @attr [String] annotationGuid
     attr_accessor :annotationGuid
-    # @attr [Integer] sessionGuid
+    # @attr [String] sessionGuid
     attr_accessor :sessionGuid
-    # @attr [Integer] documentGuid
+    # @attr [String] documentGuid
     attr_accessor :documentGuid
-    # @attr [Integer] replyGuid
+    # @attr [String] replyGuid
     attr_accessor :replyGuid
-    # @attr [Integer] createdOn
+    # @attr [Time] createdOn
     attr_accessor :createdOn
     # @attr [Symbol] type
     attr_accessor :type
@@ -35,7 +35,7 @@ module GroupDocs
     alias_method :document_guid=,   :documentGuid=
     alias_method :reply_guid,       :replyGuid
     alias_method :reply_guid=,      :replyGuid=
-    alias_method :created_on,       :createdOn
+    # alias_method :created_on,       :createdOn
     alias_method :created_on=,      :createdOn=
 
     #
@@ -47,6 +47,15 @@ module GroupDocs
       super(options, &blk)
       document.is_a?(GroupDocs::Document) or raise ArgumentError,
         "You have to pass GroupDocs::Document object: #{document.inspect}."
+    end
+
+    #
+    # Converts timestamp which is return by API server to Time object.
+    #
+    # @return [Time]
+    #
+    def created_on
+      Time.at(@createdOn)
     end
 
     #
