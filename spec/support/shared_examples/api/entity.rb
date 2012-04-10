@@ -6,6 +6,9 @@ shared_examples_for GroupDocs::Api::Entity do
     case described_class.name
     when 'GroupDocs::Document'
       described_class.any_instance.stub(file: GroupDocs::Storage::File.new)
+    when 'GroupDocs::Document::Annotation'
+      GroupDocs::Document.any_instance.stub(file: GroupDocs::Storage::File.new)
+      described_class.any_instance.stub(document: GroupDocs::Document.new)
     end
   end
 
