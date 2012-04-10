@@ -1,0 +1,32 @@
+{
+  "result":
+    {
+      "sessionGuid": 3,
+      "annotations":
+        [
+          {
+            "guid": "81ff0db3df8347fb",
+            "documentGuid": null,
+            "sessionGuid": null,
+            "box":
+              {
+                "X": 0.8938259,
+                "Y": 0.31941694,
+                "Width": 0.0457534268,
+                "Height": 0.01388945
+              },
+            "annotationPosition":
+              {
+                "X": null,
+                "Y": null
+              },
+            "type": 0,
+            "access":null,
+            "createdOn": 1334028956687,
+            "replies": []
+          }
+        ]
+    },
+  "status": "Ok",
+  "error_message": null
+}
