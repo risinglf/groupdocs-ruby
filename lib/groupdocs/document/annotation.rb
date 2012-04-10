@@ -9,6 +9,8 @@ module GroupDocs
     attr_accessor :annotationGuid
     # @attr [Integer] sessionGuid
     attr_accessor :sessionGuid
+    # @attr [Integer] documentGuid
+    attr_accessor :documentGuid
     # @attr [Integer] replyGuid
     attr_accessor :replyGuid
     # @attr [Integer] createdOn
@@ -27,6 +29,8 @@ module GroupDocs
     alias_method :annotation_guid=, :annotationGuid=
     alias_method :session_guid,     :sessionGuid
     alias_method :session_guid=,    :sessionGuid=
+    alias_method :document_guid,    :documentGuid
+    alias_method :document_guid=,   :documentGuid=
     alias_method :reply_guid,       :replyGuid
     alias_method :reply_guid=,      :replyGuid=
     alias_method :created_on,       :createdOn
@@ -41,6 +45,16 @@ module GroupDocs
       super(options, &blk)
       document.is_a?(GroupDocs::Document) or raise ArgumentError,
         "You have to pass GroupDocs::Document object: #{document.inspect}."
+    end
+
+    #
+    # Coverts passed hash to GroupDocs::Document::Rectangle object.
+    #
+    # @param [Hash] options
+    # @return [GroupDocs::Document::Rectangle]
+    #
+    def box=(options)
+      @box = GroupDocs::Document::Rectangle.new(options)
     end
 
     #
@@ -63,10 +77,9 @@ module GroupDocs
         request[:request_body] = to_hash
       end.execute!
 
-      self.id              = json[:id]
-      self.annotation_guid = json[:annotationGuid]
-      self.session_guid    = json[:sessionGuid]
-      self.reply_guid      = json[:replyGuid]
+      json.each do |field, value|
+        send(:"#{field}=", value) if respond_to?(:"#{field}=")
+      end
     end
 
   end # Document::Annotation

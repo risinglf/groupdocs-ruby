@@ -17,12 +17,7 @@ module GroupDocs
     # @return [GroupDocs::Document::Rectangle]
     #
     def rectangle=(options)
-      @rectangle = GroupDocs::Document::Rectangle.new do |rectangle|
-        rectangle.x = options[:X]
-        rectangle.y = options[:Y]
-        rectangle.w = options[:Width]
-        rectangle.h = options[:Height]
-      end
+      @rectangle = GroupDocs::Document::Rectangle.new(options)
     end
 
     # Compatibility with response JSON
