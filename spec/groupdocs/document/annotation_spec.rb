@@ -115,6 +115,31 @@ describe GroupDocs::Document::Annotation do
   end
 
   describe '#create!' do
-    pending
+    before(:each) do
+      mock_api_server(load_json('annotation_create'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.create!(client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'uses hashed version of self as request body' do
+      subject.should_receive(:to_hash).and_return({})
+      subject.create!
+    end
+
+    it 'updated self with response values' do
+      lambda do
+        subject.create!
+      end.should change do
+        subject.id
+        subject.document_guid
+        subject.annotation_guid
+        subject.reply_guid
+        subject.session_guid
+      end
+    end
   end
 end
