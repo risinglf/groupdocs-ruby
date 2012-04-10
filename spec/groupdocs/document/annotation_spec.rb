@@ -10,32 +10,30 @@ describe GroupDocs::Document::Annotation do
     described_class.new(document: document)
   end
 
-  it { should respond_to(:document)        }
-  it { should respond_to(:document=)       }
-  it { should respond_to(:id)              }
-  it { should respond_to(:id=)             }
-  it { should respond_to(:annotationGuid)  }
-  it { should respond_to(:annotationGuid=) }
-  it { should respond_to(:sessionGuid)     }
-  it { should respond_to(:sessionGuid=)    }
-  it { should respond_to(:documentGuid)    }
-  it { should respond_to(:documentGuid=)   }
-  it { should respond_to(:replyGuid)       }
-  it { should respond_to(:replyGuid=)      }
-  it { should respond_to(:createdOn)       }
-  it { should respond_to(:createdOn=)      }
-  it { should respond_to(:type)            }
-  it { should respond_to(:type=)           }
-  it { should respond_to(:access)          }
-  it { should respond_to(:access=)         }
-  it { should respond_to(:box)             }
-  it { should respond_to(:box=)            }
-  it { should respond_to(:replies)         }
-  it { should respond_to(:replies=)        }
+  it { should respond_to(:document)      }
+  it { should respond_to(:document=)     }
+  it { should respond_to(:id)            }
+  it { should respond_to(:id=)           }
+  it { should respond_to(:guid)          }
+  it { should respond_to(:guid=)         }
+  it { should respond_to(:sessionGuid)   }
+  it { should respond_to(:sessionGuid=)  }
+  it { should respond_to(:documentGuid)  }
+  it { should respond_to(:documentGuid=) }
+  it { should respond_to(:replyGuid)     }
+  it { should respond_to(:replyGuid=)    }
+  it { should respond_to(:createdOn)     }
+  it { should respond_to(:createdOn=)    }
+  it { should respond_to(:type)          }
+  it { should respond_to(:type=)         }
+  it { should respond_to(:access)        }
+  it { should respond_to(:access=)       }
+  it { should respond_to(:box)           }
+  it { should respond_to(:box=)          }
+  it { should respond_to(:replies)       }
+  it { should respond_to(:replies=)      }
 
   it 'has human-readable accessors' do
-    subject.should respond_to(:annotation_guid)
-    subject.should respond_to(:annotation_guid=)
     subject.should respond_to(:session_guid)
     subject.should respond_to(:session_guid=)
     subject.should respond_to(:document_guid)
@@ -44,8 +42,6 @@ describe GroupDocs::Document::Annotation do
     subject.should respond_to(:reply_guid=)
     subject.should respond_to(:created_on)
     subject.should respond_to(:created_on=)
-    subject.method(:annotation_guid).should  == subject.method(:annotationGuid)
-    subject.method(:annotation_guid=).should == subject.method(:annotationGuid=)
     subject.method(:session_guid).should     == subject.method(:sessionGuid)
     subject.method(:session_guid=).should    == subject.method(:sessionGuid=)
     subject.method(:document_guid).should    == subject.method(:documentGuid)
@@ -54,6 +50,11 @@ describe GroupDocs::Document::Annotation do
     subject.method(:reply_guid=).should      == subject.method(:replyGuid=)
     # Annotation#created_on is overwritten
     subject.method(:created_on=).should      == subject.method(:createdOn=)
+  end
+
+  it 'is compatible with response JSON' do
+    subject.should respond_to(:annotationGuid=)
+    subject.method(:annotationGuid=).should == subject.method(:guid=)
   end
 
   describe '#initialize' do
@@ -142,8 +143,8 @@ describe GroupDocs::Document::Annotation do
         subject.create!
       end.should change {
         subject.id
+        subject.guid
         subject.document_guid
-        subject.annotation_guid
         subject.reply_guid
         subject.session_guid
       }
@@ -172,6 +173,18 @@ describe GroupDocs::Document::Annotation do
     it 'is aliased to #collaborators=' do
       subject.should respond_to(:collaborators=)
       subject.method(:collaborators=).should == subject.method(:collaborators_set!)
+    end
+  end
+
+  describe '#remove!' do
+    before(:each) do
+      mock_api_server(load_json('annotation_remove'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.remove!(client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
     end
   end
 end

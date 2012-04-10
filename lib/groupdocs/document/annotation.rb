@@ -7,8 +7,8 @@ module GroupDocs
     attr_accessor :document
     # @attr [Integer] id
     attr_accessor :id
-    # @attr [String] annotationGuid
-    attr_accessor :annotationGuid
+    # @attr [String] guid
+    attr_accessor :guid
     # @attr [String] sessionGuid
     attr_accessor :sessionGuid
     # @attr [String] documentGuid
@@ -26,9 +26,10 @@ module GroupDocs
     # @attr [Array<GroupDocs::Document::Annotation::Reply>] replies
     attr_accessor :replies
 
+    # Compatibility with response JSON
+    alias_method :annotationGuid=, :guid=
+
     # Human-readable accessors
-    alias_method :annotation_guid,  :annotationGuid
-    alias_method :annotation_guid=, :annotationGuid=
     alias_method :session_guid,     :sessionGuid
     alias_method :session_guid=,    :sessionGuid=
     alias_method :document_guid,    :documentGuid
@@ -147,6 +148,21 @@ module GroupDocs
     end
     # note that aliased version cannot accept access credentials hash
     alias_method :collaborators=, :collaborators_set!
+
+    #
+    # Removes annotation.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def remove!(access = {})
+      GroupDocs::Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :DELETE
+        request[:path] = "/ant/{{client_id}}/annotations/#{guid}"
+      end.execute!
+    end
 
   end # Document::Annotation
 end # GroupDocs
