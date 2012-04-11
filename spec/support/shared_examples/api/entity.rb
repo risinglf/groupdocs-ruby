@@ -9,6 +9,10 @@ shared_examples_for GroupDocs::Api::Entity do
     when 'GroupDocs::Document::Annotation'
       GroupDocs::Document.any_instance.stub(file: GroupDocs::Storage::File.new)
       described_class.any_instance.stub(document: GroupDocs::Document.new)
+    when 'GroupDocs::Document::Annotation::Reply'
+      GroupDocs::Document.any_instance.stub(file: GroupDocs::Storage::File.new)
+      GroupDocs::Document::Annotation.any_instance.stub(document: GroupDocs::Document.new)
+      described_class.any_instance.stub(annotation: GroupDocs::Document::Annotation.new)
     end
   end
 

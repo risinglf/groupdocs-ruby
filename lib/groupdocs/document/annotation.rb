@@ -80,6 +80,7 @@ module GroupDocs
           if reply.is_a?(GroupDocs::Document::Annotation::Reply)
             reply
           else
+            reply.merge!(annotation: self)
             GroupDocs::Document::Annotation::Reply.new(reply)
           end
         end

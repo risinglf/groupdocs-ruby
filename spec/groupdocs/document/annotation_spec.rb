@@ -92,12 +92,13 @@ describe GroupDocs::Document::Annotation do
       replies.should be_an(Array)
       replies.each do |reply|
         reply.should be_a(GroupDocs::Document::Annotation::Reply)
+        reply.annotation.should == subject
       end
     end
 
     it 'saves each reply if it is GroupDocs::Document::Annotation::Reply object' do
-      reply1 = GroupDocs::Document::Annotation::Reply.new
-      reply2 = GroupDocs::Document::Annotation::Reply.new
+      reply1 = GroupDocs::Document::Annotation::Reply.new(annotation: subject)
+      reply2 = GroupDocs::Document::Annotation::Reply.new(annotation: subject)
       subject.replies = [reply1, reply2]
       subject.replies.should include(reply1)
       subject.replies.should include(reply2)
@@ -116,7 +117,7 @@ describe GroupDocs::Document::Annotation do
     end
 
     it 'saves reply' do
-      reply = GroupDocs::Document::Annotation::Reply.new
+      reply = GroupDocs::Document::Annotation::Reply.new(annotation: subject)
       subject.add_reply(reply)
       subject.replies.should == [reply]
     end
