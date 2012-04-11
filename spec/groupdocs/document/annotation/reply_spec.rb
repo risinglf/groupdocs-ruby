@@ -120,10 +120,8 @@ describe GroupDocs::Document::Annotation::Reply do
       end.should_not raise_error(ArgumentError)
     end
 
-    it 'prefers annotation_guid over annotation.guid' do
-      subject.annotation_guid = 'abc'
-      subject.annotation.guid = 'def'
-      subject.annotation.should_not_receive(:guid)
+    it 'gets annotation guid' do
+      subject.should_receive(:get_annotation_guid)
       subject.create!
     end
 
@@ -146,6 +144,31 @@ describe GroupDocs::Document::Annotation::Reply do
       lambda do
         subject.edit!(client_id: 'client_id', private_key: 'private_key')
       end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '#remove!' do
+    before(:each) do
+      mock_api_server('{"result": {}, "status": "Ok", "error_message": null}')
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.remove!(client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '#get_annotation_guid' do
+    it 'prefers annotation_guid over annotation.guid' do
+      subject.annotation_guid = 'abc'
+      subject.annotation.guid = 'def'
+      subject.send(:get_annotation_guid).should == 'abc'
+    end
+
+    it 'returns annotation.guid if annotation_guid is not set' do
+      subject.annotation.guid = 'def'
+      subject.send(:get_annotation_guid).should == 'def'
     end
   end
 end

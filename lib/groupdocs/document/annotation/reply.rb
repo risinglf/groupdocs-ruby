@@ -101,12 +101,10 @@ module GroupDocs
     # @raise [NameError] if annotation or annotation_guid are not set
     #
     def create!(access = {})
-      ann_guid = annotation_guid || annotation.guid
-
       json = GroupDocs::Api::Request.new do |request|
         request[:access] = access
         request[:method] = :POST
-        request[:path] = "/ant/{{client_id}}/annotations/#{ann_guid}/replies"
+        request[:path] = "/ant/{{client_id}}/annotations/#{get_annotation_guid}/replies"
         request[:request_body] = text
       end.execute!
 
@@ -135,6 +133,34 @@ module GroupDocs
         request[:path] = "/ant/{{client_id}}/replies/#{guid}"
         request[:request_body] = text
       end.execute!
+    end
+
+    #
+    # Removes reply.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    # @todo currently not implemeneted in API
+    #
+    def remove!(access = {})
+      GroupDocs::Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :DELETE
+        request[:path] = "/ant/{{client_id}}/replies/#{guid}"
+      end.execute!
+    end
+
+    private
+
+    #
+    # Returns annotation guid.
+    #
+    # @returns [String]
+    #
+    def get_annotation_guid
+      annotation_guid || annotation.guid
     end
 
   end # Document::Annotation::Reply
