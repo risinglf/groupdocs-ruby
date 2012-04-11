@@ -165,5 +165,21 @@ module GroupDocs
       end.execute!
     end
 
+    #
+    # Return an array of replies..
+    #
+    # @param [Hash] options
+    # @option options [Time] :after
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<GroupDocs::Document::Annotation::Reply>]
+    #
+    # @raise [ArgumentError] If :after option is passed but it's not an instance of Time
+    #
+    def replies!(options = {}, access = {})
+      GroupDocs::Document::Annotation::Reply.get!(self, options, access)
+    end
+
   end # Document::Annotation
 end # GroupDocs

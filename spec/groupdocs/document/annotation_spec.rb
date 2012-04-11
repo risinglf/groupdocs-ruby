@@ -188,4 +188,11 @@ describe GroupDocs::Document::Annotation do
       end.should_not raise_error(ArgumentError)
     end
   end
+
+  describe '#replies!' do
+    it 'calls GroupDocs::Document::Annotation::Reply.get!' do
+      GroupDocs::Document::Annotation::Reply.should_receive(:get!).with(subject, {}, {})
+      subject.replies!
+    end
+  end
 end
