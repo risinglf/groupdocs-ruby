@@ -447,7 +447,7 @@ module GroupDocs
     end
 
     #
-    # Try to pass all unknown methods to file.
+    # Pass all unknown methods to file.
     #
 
     def method_missing(method, *args, &blk)

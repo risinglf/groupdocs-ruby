@@ -101,17 +101,40 @@ module GroupDocs
     # @raise [NameError] if annotation or annotation_guid are not set
     #
     def create!(access = {})
-      guid = annotation_guid || annotation.guid
+      ann_guid = annotation_guid || annotation.guid
 
       json = GroupDocs::Api::Request.new do |request|
         request[:access] = access
         request[:method] = :POST
-        request[:path] = "/ant/{{client_id}}/annotations/#{guid}/replies"
+        request[:path] = "/ant/{{client_id}}/annotations/#{ann_guid}/replies"
         request[:request_body] = text
       end.execute!
 
       self.guid            = json[:replyGuid]
       self.annotation_guid = json[:annotationGuid]
+    end
+
+    #
+    # Edits reply.
+    #
+    # @example
+    #   document = GroupDocs::Document.find!(:name, 'CV.doc')
+    #   annotation = document.annotations!.first
+    #   reply = annotation.replies!.first
+    #   reply.text = "New reply text"
+    #   reply.edit!
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def edit!(access = {})
+      GroupDocs::Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/ant/{{client_id}}/replies/#{guid}"
+        request[:request_body] = text
+      end.execute!
     end
 
   end # Document::Annotation::Reply
