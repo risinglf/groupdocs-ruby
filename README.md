@@ -106,6 +106,10 @@ GroupDocs::Storage::Folder.find_all!(:name, /^Folder/)
 #=> [<#GroupDocs::Storage::Folder:0x0000000171f432 @id=1 @name="Folder1" @url="http://groupdocs.com">, <#GroupDocs::Storage::Folder:0x0000000171f467 @id=2 @name="Folder2" @url="http://groupdocs.com">]
 ```
 
+### Annotation API
+
+Read more about examples of using Annotation API on [wiki](https://github.com/p0deje/groupdocs-ruby/wiki/Annotation-API).
+
 ### Assembly API
 
 Read more about examples of using Assembly API on [wiki](https://github.com/p0deje/groupdocs-ruby/wiki/Assembly-API).
