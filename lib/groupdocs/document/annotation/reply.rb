@@ -51,6 +51,13 @@ module GroupDocs
     #
     # Creates reply.
     #
+    # @example
+    #   document = GroupDocs::Document.find!(:name, 'CV.doc')
+    #   annotation = GroupDocs::Document::Annotation.new(document: document)
+    #   reply = GroupDocs::Document::Annotation::Reply.new(annotation: annotation)
+    #   reply.text = "Reply text"
+    #   reply.create!
+    #
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
