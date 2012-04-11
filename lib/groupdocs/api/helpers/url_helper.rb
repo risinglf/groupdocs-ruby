@@ -57,7 +57,7 @@ module GroupDocs
           # URL encode hash
           hash = CGI.escape(hash)
           # covert all hexademical characters to upper case
-          hash = hash.gsub(/(%[A-Fa-f0-9]{1,2})/) { $1.upcase }
+          hash = hash.gsub(/(%[A-Fa-f0-9]{1,2})/) { |group| group.upcase }
 
           options[:path] << "#{separator}signature=#{hash}"
         end
