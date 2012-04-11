@@ -29,7 +29,7 @@ module GroupDocs
     # @return [String] API hostname. Default one if it has not been explicitly set
     #
     def api_server
-      @api_server || 'https://dev-api.groupdocs.com'
+      @api_server || 'https://api.groupdocs.com'
     end
 
     #

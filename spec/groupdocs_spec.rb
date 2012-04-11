@@ -45,12 +45,12 @@ describe GroupDocs do
 
   describe '#api_server' do
     it 'returns default URL if it has not been overwritten' do
-      subject.api_server.should == 'https://dev-api.groupdocs.com'
+      subject.api_server.should == 'https://api.groupdocs.com'
     end
 
     it 'returns custom overwritten URL' do
-      subject.api_server = 'https://api.groupdocs.com'
-      subject.api_server.should == 'https://api.groupdocs.com'
+      subject.api_server = 'https://dev-api.groupdocs.com'
+      subject.api_server.should == 'https://dev-api.groupdocs.com'
     end
   end
 end
