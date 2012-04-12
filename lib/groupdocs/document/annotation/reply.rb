@@ -142,7 +142,7 @@ module GroupDocs
     # @option access [String] :client_id
     # @option access [String] :private_key
     #
-    # @todo currently not implemeneted in API
+    # @todo currently not implemented in API
     #
     def remove!(access = {})
       GroupDocs::Api::Request.new do |request|
