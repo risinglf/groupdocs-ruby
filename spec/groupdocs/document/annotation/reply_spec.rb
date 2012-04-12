@@ -107,6 +107,11 @@ describe GroupDocs::Document::Annotation::Reply do
       subject.replied_on = 1332950825
       subject.replied_on.should be_a(Time)
     end
+
+    it 'divides timestamp by 1000 because it is in milliseconds' do
+      subject.replied_on = 1332950825000
+      subject.replied_on.should == Time.at(1332950825)
+    end
   end
 
   describe '#create!' do

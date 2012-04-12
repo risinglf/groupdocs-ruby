@@ -81,7 +81,7 @@ module GroupDocs
     # @return [Time]
     #
     def replied_on
-      Time.at(@repliedOn)
+      Time.at(@repliedOn / 1000)
     end
 
     #
