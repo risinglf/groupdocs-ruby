@@ -462,6 +462,30 @@ describe GroupDocs::Document do
     end
   end
 
+  describe '#compare!' do
+    before(:each) do
+      mock_api_server(load_json('comparison_compare'))
+    end
+
+    let(:document) do
+      GroupDocs::Document.new(file: GroupDocs::Storage::File.new)
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.compare!(document, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'raises error if document is not GroupDocs::Document object' do
+      -> { subject.compare!('Document') }.should raise_error(ArgumentError)
+    end
+
+    it 'returns GroupDocs::Job object' do
+      subject.compare!(document).should be_a(GroupDocs::Job)
+    end
+  end
+
   describe '#method_missing' do
     it 'passes unknown methods to file object' do
       -> { subject.name }.should_not raise_error(NoMethodError)

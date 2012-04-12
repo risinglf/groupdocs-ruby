@@ -455,11 +455,39 @@ module GroupDocs
     # @return [Hash]
     #
     def details!(access = {})
-      GroupDocs::Api::Request.new do |request|
+      api = GroupDocs::Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
-        request[:path] = "/comparison/{{client_id}}/comparison/document?guid=#{file.guid}"
-      end.execute!
+        request[:path] = "/comparison/{{client_id}}/comparison/document"
+      end
+      api.add_params(guid: file.guid)
+      api.execute!
+    end
+
+    #
+    # Schedules a job for comparing document with given.
+    #
+    # @param [GroupDocs::Document] document
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [GroupDocs::Job]
+    #
+    # @raise [ArgumentError] if document is not GroupDocs::Document object
+    #
+    def compare!(document, access = {})
+      document.is_a?(GroupDocs::Document) or raise ArgumentError,
+        "Document should be GroupDocs::Document object, received: #{document.inspect}"
+
+      api = GroupDocs::Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/comparison/{{client_id}}/comparison/compare"
+      end
+      api.add_params(source: file.guid, target: document.file.guid)
+      json = api.execute!
+
+      GroupDocs::Job.new(id: json[:job_id])
     end
 
     #
