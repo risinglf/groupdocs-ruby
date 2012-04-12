@@ -67,15 +67,15 @@ describe GroupDocs::Storage::File do
     subject.method(:adj_name=).should == subject.method(:name=)
   end
 
-  describe '#created_on=' do
-    it 'modifies timestamp to Time object' do
+  describe '#created_on' do
+    it 'converts timestamp to Time object' do
       subject.created_on = 1330450135
       subject.created_on.should be_a(Time)
     end
   end
 
-  describe '#modified_on=' do
-    it 'modifies timestamp to Time object' do
+  describe '#modified_on' do
+    it 'returns converted to Time object Unix timestamp' do
       subject.modified_on = 1330450135
       subject.modified_on.should be_a(Time)
     end

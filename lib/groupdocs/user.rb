@@ -35,10 +35,10 @@ module GroupDocs
     #
     # Converts timestamp which is return by API server to Time object.
     #
-    # @param [Integer] timestamp Unix timestamp
+    # @return [Time]
     #
-    def signed_up_on=(timestamp)
-      @signed_up_on = Time.at(timestamp)
+    def signed_up_on
+      Time.at(@signed_up_on)
     end
 
     # Compatibility with response JSON

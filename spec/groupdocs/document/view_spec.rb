@@ -27,8 +27,8 @@ describe GroupDocs::Document::View do
     end
   end
 
-  describe '#viewed_on=' do
-    it 'modifies timestamp to Time object' do
+  describe '#viewed_on' do
+    it 'returns converted to Time object Unix timestamp' do
       subject.viewed_on = 1330450135
       subject.viewed_on.should be_a(Time)
     end

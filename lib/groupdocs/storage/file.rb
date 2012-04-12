@@ -92,19 +92,19 @@ module GroupDocs
       #
       # Converts timestamp which is return by API server to Time object.
       #
-      # @param [Integer] timestamp Unix timestamp
+      # @return [Time]
       #
-      def created_on=(timestamp)
-        @created_on = Time.at(timestamp)
+      def created_on
+        Time.at(@created_on)
       end
 
       #
       # Converts timestamp which is return by API server to Time object.
       #
-      # @param [Integer] timestamp Unix timestamp
+      # @return [Time]
       #
-      def modified_on=(timestamp)
-        @modified_on = Time.at(timestamp)
+      def modified_on
+        Time.at(@modified_on)
       end
 
       #

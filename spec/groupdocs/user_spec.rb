@@ -44,8 +44,8 @@ describe GroupDocs::User do
     subject.method(:signedupOn=).should == subject.method(:signed_up_on=)
   end
 
-  describe '#signed_up_on=' do
-    it 'modifies timestamp to Time object' do
+  describe '#signed_up_on' do
+    it 'returns converted to Time object Unix timestamp' do
       subject.signed_up_on = 1330450135
       subject.signed_up_on.should be_a(Time)
     end

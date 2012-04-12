@@ -59,10 +59,10 @@ module GroupDocs
     #
     # Converts timestamp which is return by API server to Time object.
     #
-    # @param [Integer] timestamp Unix timestamp
+    # @return [Time]
     #
-    def process_date=(timestamp)
-      @process_date = Time.at(timestamp)
+    def process_date
+      Time.at(@process_date)
     end
 
     # Compatibility with response JSON
@@ -492,6 +492,16 @@ module GroupDocs
       json = api.execute!
 
       GroupDocs::Job.new(id: json[:job_id])
+    end
+
+    def changes!(access = {})
+      api = GroupDocs::Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/comparison/{{client_id}}/comparison/changes"
+      end
+      api.add_params(resultFileId: file.guid)
+      json = api.execute!
     end
 
     #

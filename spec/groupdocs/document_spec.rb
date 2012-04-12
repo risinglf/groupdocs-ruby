@@ -65,8 +65,8 @@ describe GroupDocs::Document do
     subject.method(:proc_date=).should == subject.method(:process_date=)
   end
 
-  describe '#process_date=' do
-    it 'modifies timestamp to Time object' do
+  describe '#process_date' do
+    it 'returns converted to Time object Unix timestamp' do
       subject.process_date = 1330450135
       subject.process_date.should be_a(Time)
     end

@@ -19,10 +19,10 @@ module GroupDocs
         #
         # Sets status of the entity.
         #
-        # @param [Integer] status
+        # @return [Symbol]
         #
-        def status=(status)
-          @status = parse_status(status)
+        def status
+          parse_status(@status)
         end
 
         private

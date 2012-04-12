@@ -35,6 +35,10 @@ describe GroupDocs::DataSource::Field do
       subject.type = 1
       subject.instance_variable_get(:@type).should == 1
     end
+
+    it 'raises error if type is unknown' do
+      -> { subject.type = :unknown }.should raise_error(ArgumentError)
+    end
   end
 
   describe '#type' do

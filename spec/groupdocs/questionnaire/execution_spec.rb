@@ -86,6 +86,10 @@ describe GroupDocs::Questionnaire::Execution do
       subject.status = 2
       subject.instance_variable_get(:@status).should == 2
     end
+
+    it 'raises error if status is unknown' do
+      -> { subject.status = :unknown }.should raise_error(ArgumentError)
+    end
   end
 
   describe '#status' do

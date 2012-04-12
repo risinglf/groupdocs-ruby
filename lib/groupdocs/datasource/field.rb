@@ -20,9 +20,14 @@ module GroupDocs
     # Updates type with machine-readable format.
     #
     # @param [Symbol] type
+    # @raise [ArgumentError] if type is unknown
     #
     def type=(type)
-      type = TYPES[type] if type.is_a?(Symbol)
+      if type.is_a?(Symbol)
+        TYPES.keys.include?(type) or raise ArgumentError, "Unknown type: #{type.inspect}"
+        type = TYPES[type]
+      end
+
       @type = type
     end
 

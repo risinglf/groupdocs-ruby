@@ -11,10 +11,10 @@ module GroupDocs
     #
     # Converts timestamp which is return by API server to Time object.
     #
-    # @param [Integer] timestamp Unix timestamp
+    # @return [Time]
     #
-    def viewed_on=(timestamp)
-      @viewed_on = Time.at(timestamp)
+    def viewed_on
+      Time.at(@viewed_on)
     end
 
     #

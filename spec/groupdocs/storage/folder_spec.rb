@@ -77,22 +77,22 @@ describe GroupDocs::Storage::Folder do
   it { should respond_to(:access)        }
   it { should respond_to(:access=)       }
 
-  describe '#created_on=' do
-    it 'modifies timestamp to Time object' do
+  describe '#created_on' do
+    it 'returns converted to Time object Unix timestamp' do
       subject.created_on = 1330450135
       subject.created_on.should be_a(Time)
     end
   end
 
-  describe '#modified_on=' do
-    it 'modifies timestamp to Time object' do
+  describe '#modified_on' do
+    it 'returns converted to Time object Unix timestamp' do
       subject.modified_on = 1330450135
       subject.modified_on.should be_a(Time)
     end
   end
 
-  describe '#access=' do
-    it 'saves access in human readable presentation' do
+  describe '#access' do
+    it 'returns converted to human-readable format access mode' do
       subject.should_receive(:parse_access_mode).with(0).and_return(:private)
       subject.access = 0
       subject.access.should == :private

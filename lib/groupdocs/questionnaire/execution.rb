@@ -61,9 +61,14 @@ module GroupDocs
     # If you want to update status on server, use #set_status! method.
     #
     # @param [Symbol, Integer] status
+    # @raise [ArgumentError] if status is unknown
     #
     def status=(status)
-      status = STATUSES[status] if status.is_a?(Symbol)
+      if status.is_a?(Symbol)
+        STATUSES.keys.include?(status) or raise ArgumentError, "Unknown status: #{status.inspect}"
+        status = STATUSES[status]
+      end
+
       @status = status
     end
 
