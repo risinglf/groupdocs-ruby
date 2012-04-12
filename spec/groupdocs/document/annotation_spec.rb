@@ -67,6 +67,25 @@ describe GroupDocs::Document::Annotation do
     end
   end
 
+  describe '#type=' do
+    it 'saves type in machine readable format if symbol is passed' do
+      subject.type = :area
+      subject.instance_variable_get(:@type).should == 1
+    end
+
+    it 'does nothing if parameter is not symbol' do
+      subject.type = 1
+      subject.instance_variable_get(:@type).should == 1
+    end
+  end
+
+  describe '#type' do
+    it 'returns type in human-readable format' do
+      subject.type = 1
+      subject.type.should == :area
+    end
+  end
+
   describe '#created_on' do
     it 'returns converted to Time object Unix timestamp' do
       subject.created_on = 1332950825

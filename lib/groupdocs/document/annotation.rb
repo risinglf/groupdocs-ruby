@@ -1,6 +1,12 @@
 module GroupDocs
   class Document::Annotation < GroupDocs::Api::Entity
 
+    TYPES = {
+      text:  0,
+      area:  1,
+      point: 2,
+    }
+
     require 'groupdocs/document/annotation/reply'
 
     # @attr [GroupDocs::Document] document
@@ -48,6 +54,25 @@ module GroupDocs
       super(options, &blk)
       document.is_a?(GroupDocs::Document) or raise ArgumentError,
         "You have to pass GroupDocs::Document object: #{document.inspect}."
+    end
+
+    #
+    # Updates type with machine-readable format.
+    #
+    # @param [Symbol] type
+    #
+    def type=(type)
+      type = TYPES[type] if type.is_a?(Symbol)
+      @type = type
+    end
+
+    #
+    # Returns field type in human-readable format.
+    #
+    # @return [Symbol]
+    #
+    def type
+      TYPES.invert[@type]
     end
 
     #
