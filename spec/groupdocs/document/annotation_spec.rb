@@ -72,6 +72,11 @@ describe GroupDocs::Document::Annotation do
       subject.created_on = 1332950825
       subject.created_on.should be_a(Time)
     end
+
+    it 'divides timestamp by 1000 because it is in milliseconds' do
+      subject.created_on = 1332950825000
+      subject.created_on.should == Time.at(1332950825)
+    end
   end
 
   describe '#box=' do

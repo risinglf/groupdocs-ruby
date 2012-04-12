@@ -56,7 +56,7 @@ module GroupDocs
     # @return [Time]
     #
     def created_on
-      Time.at(@createdOn)
+      Time.at(@createdOn / 1000)
     end
 
     #
