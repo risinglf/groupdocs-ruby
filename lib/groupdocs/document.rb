@@ -447,6 +447,22 @@ module GroupDocs
     end
 
     #
+    # Returns document details.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Hash]
+    #
+    def details!(access = {})
+      GroupDocs::Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/comparison/{{client_id}}/comparison/document?guid=#{file.guid}"
+      end.execute!
+    end
+
+    #
     # Pass all unknown methods to file.
     #
 

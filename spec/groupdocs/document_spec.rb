@@ -446,6 +446,22 @@ describe GroupDocs::Document do
     end
   end
 
+  describe '#details!' do
+    before(:each) do
+      mock_api_server(load_json('comparison_document'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.details!(client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns hash of document details' do
+      subject.details!.should be_a(Hash)
+    end
+  end
+
   describe '#method_missing' do
     it 'passes unknown methods to file object' do
       -> { subject.name }.should_not raise_error(NoMethodError)
