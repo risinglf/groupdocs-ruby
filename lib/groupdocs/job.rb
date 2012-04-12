@@ -167,10 +167,12 @@ module GroupDocs
     # @return [Integer] Document ID
     #
     def add_url!(url, options = {}, access = {})
+      options.merge!(absolute_url: url)
+
       api = GroupDocs::Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
-        request[:path] = "/{{client_id}}/jobs/#{id}/urls?absolute_url=#{url}"
+        request[:path] = "/{{client_id}}/jobs/#{id}/urls"
       end
       api.add_params(options)
       json = api.execute!

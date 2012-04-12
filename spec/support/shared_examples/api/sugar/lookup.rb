@@ -30,7 +30,7 @@ shared_examples_for GroupDocs::Api::Sugar::Lookup do
       described_class.stub(:respond_to?).with(:all!).and_return(false)
       lambda do
         described_class.find_all!(:id, 1)
-      end.should raise_error(NoMethodError, "#{described_class}#all! is not implemented - aborting.")
+      end.should raise_error(NoMethodError, "#{described_class}.all! is not implemented - aborting.")
     end
 
     it 'allows passing attribute and its value' do

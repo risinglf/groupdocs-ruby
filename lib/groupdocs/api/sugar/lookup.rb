@@ -32,7 +32,7 @@ module GroupDocs
         # @raise [NoMethodError] if extending class does not implement #all! class method.
         #
         def find_all!(attribute, value, access = {})
-          respond_to?(:all!) or raise NoMethodError, "#{self}#all! is not implemented - aborting."
+          respond_to?(:all!) or raise NoMethodError, "#{self}.all! is not implemented - aborting."
 
           all!('/', access).select do |object|
             case value

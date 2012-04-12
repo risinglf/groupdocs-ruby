@@ -110,11 +110,13 @@ module GroupDocs
     # @return [Symbol] Set access mode
     #
     def access_mode_set!(mode, access = {})
-      json = GroupDocs::Api::Request.new do |request|
+      api = GroupDocs::Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
-        request[:path] = "/doc/{{client_id}}/files/#{file.id}/accessinfo?mode=#{parse_access_mode(mode)}"
-      end.execute!
+        request[:path] = "/doc/{{client_id}}/files/#{file.id}/accessinfo"
+      end
+      api.add_params(mode: parse_access_mode(mode))
+      json = api.execute!
 
       parse_access_mode(json[:access])
     end
@@ -294,10 +296,12 @@ module GroupDocs
     # @return [GroupDocs::Job] Created job
     #
     def convert!(format, options = {}, access = {})
+      options.merge!(new_type: format)
+
       api = GroupDocs::Api::Request.new do |request|
         request[:access] = access
         request[:method] = :POST
-        request[:path] = "/{{client_id}}/files/#{file.guid}?new_type=#{format}"
+        request[:path] = "/{{client_id}}/files/#{file.guid}"
       end
       api.add_params(options)
       json = api.execute!
