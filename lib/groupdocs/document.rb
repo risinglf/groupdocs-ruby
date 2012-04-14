@@ -2,6 +2,7 @@ module GroupDocs
   class Document < GroupDocs::Api::Entity
 
     require 'groupdocs/document/annotation'
+    require 'groupdocs/document/change'
     require 'groupdocs/document/field'
     require 'groupdocs/document/metadata'
     require 'groupdocs/document/rectangle'
@@ -494,6 +495,20 @@ module GroupDocs
       GroupDocs::Job.new(id: json[:job_id])
     end
 
+    #
+    # Returns an array of changes in document.
+    #
+    # @example
+    #   document_one = GroupDocs::Document.find!(:name, 'CV.doc')
+    #   document_two = GroupDocs::Document.find!(:name, 'Resume.doc')
+    #   job = document_one.compare!(document_two)
+    #   result = job.documents!.first
+    #   result.changes!
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
     def changes!(access = {})
       api = GroupDocs::Api::Request.new do |request|
         request[:access] = access
@@ -502,6 +517,10 @@ module GroupDocs
       end
       api.add_params(resultFileId: file.guid)
       json = api.execute!
+
+      json[:changes].map do |change|
+        GroupDocs::Document::Change.new(change)
+      end
     end
 
     #

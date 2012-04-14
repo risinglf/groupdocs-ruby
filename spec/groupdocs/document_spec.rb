@@ -486,6 +486,26 @@ describe GroupDocs::Document do
     end
   end
 
+  describe '#changes!' do
+    before(:each) do
+      mock_api_server(load_json('comparison_changes'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.changes!(client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns array of GroupDocs::Document::Change objects' do
+      changes = subject.changes!
+      changes.should be_an(Array)
+      changes.each do |change|
+        change.should be_a(GroupDocs::Document::Change)
+      end
+    end
+  end
+
   describe '#method_missing' do
     it 'passes unknown methods to file object' do
       -> { subject.name }.should_not raise_error(NoMethodError)

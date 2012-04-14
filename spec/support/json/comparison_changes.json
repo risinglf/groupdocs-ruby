@@ -1,0 +1,46 @@
+{
+  "result":
+    {
+      "changes":
+        [
+          {
+            "id": 1,
+            "type": "delete",
+            "page":
+              {
+                "id": 1,
+                "width": 612,
+                "height": 792
+              },
+            "box":
+              {
+                "X": 0.8938259,
+                "Y": 0.31941694,
+                "Width": 0.0457534268,
+                "Height": 0.01388945
+              },
+            "text": "This part was deleted"
+          },
+          {
+            "id": 2,
+            "type": "insert",
+            "page":
+              {
+                "id": 2,
+                "width": 612,
+                "height": 792
+              },
+            "box":
+              {
+                "X": 0.34985,
+                "Y": 0.3476543,
+                "Width": 0.2374,
+                "Height": 0.4765943
+              },
+            "text": "This part was inserted"
+          }
+        ]
+    },
+  "status": "Ok",
+  "error_message": null
+}
