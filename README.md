@@ -114,6 +114,10 @@ Read more about examples of using Annotation API on [wiki](https://github.com/p0
 
 Read more about examples of using Assembly API on [wiki](https://github.com/p0deje/groupdocs-ruby/wiki/Assembly-API).
 
+### Comparison API
+
+Read more about examples of using Comparison API on [wiki](https://github.com/p0deje/groupdocs-ruby/wiki/Comparison-API).
+
 ### Document API
 
 Read more about examples of using Document API on [wiki](https://github.com/p0deje/groupdocs-ruby/wiki/Document-API).
