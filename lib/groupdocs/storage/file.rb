@@ -85,6 +85,8 @@ module GroupDocs
       attr_accessor :type
       # @attr [Integer] access
       attr_accessor :access
+      # @attr [String] path
+      attr_accessor :path
 
       # Compatibility with response JSON
       alias_method :adj_name=, :name=
@@ -167,7 +169,7 @@ module GroupDocs
       # @return [GroupDocs::Storage::File] Renamed file
       #
       def rename!(name, access = {})
-        move!("/#{name}", access)
+        move!("#{path}#{name}", access)
       end
 
       #

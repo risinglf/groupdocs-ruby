@@ -261,11 +261,6 @@ describe GroupDocs::Document do
       subject.should_receive(:sharers_clear!)
       subject.sharers_set!(nil)
     end
-
-    it 'is aliased to #sharers=' do
-      subject.should respond_to(:sharers=)
-      subject.method(:sharers=).should == subject.method(:sharers_set!)
-    end
   end
 
   describe '#sharers_clear!' do

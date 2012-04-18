@@ -61,6 +61,8 @@ describe GroupDocs::Storage::File do
   it { should respond_to(:type=)        }
   it { should respond_to(:access)       }
   it { should respond_to(:access=)      }
+  it { should respond_to(:path)         }
+  it { should respond_to(:path=)        }
 
   it 'is compatible with response JSON' do
     subject.should respond_to(:adj_name=)

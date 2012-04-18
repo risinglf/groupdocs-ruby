@@ -198,15 +198,19 @@ module GroupDocs
       # @return [Array<GroupDocs::Storage::Folder, GroupDocs::Storage::File>]
       #
       def list!(options = {}, access = {})
+        query_path = "#{path}/#{name}"
+        query_path.gsub!(/[\/]{2}/, '/')
+
         api = GroupDocs::Api::Request.new do |request|
           request[:access] = access
           request[:method] = :GET
-          request[:path] = "/storage/{{client_id}}/folders#{path.gsub(/[\/]{2}/, '/')}"
+          request[:path] = "/storage/{{client_id}}/folders#{query_path}"
         end
         api.add_params(options)
         json = api.execute!
 
         json[:entities].map do |entity|
+          entity.merge!(path: path)
           if entity[:dir]
             GroupDocs::Storage::Folder.new(entity)
           else
@@ -288,8 +292,6 @@ module GroupDocs
           end
         end
       end
-      # note that aliased version cannot accept access credentials hash
-      alias_method :sharers=, :sharers_set!
 
       #
       # Clears sharers list.

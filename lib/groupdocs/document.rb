@@ -266,8 +266,6 @@ module GroupDocs
         end
       end
     end
-    # note that aliased version cannot accept access credentials hash
-    alias_method :sharers=, :sharers_set!
 
     #
     # Clears sharers list.
