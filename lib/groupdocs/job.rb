@@ -19,7 +19,7 @@ module GroupDocs
       api = GroupDocs::Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
-        request[:path] = '/async{{client_id}}/jobs'
+        request[:path] = '/async/{{client_id}}/jobs'
       end
       api.add_params(options)
       json = api.execute!
@@ -28,10 +28,6 @@ module GroupDocs
         GroupDocs::Job.new(job)
       end
     end
-
-    #
-    # @todo Implement job.get (http://scotland.groupdocs.com/jira/browse/CORE-385)
-    #
 
     #
     # Creates new draft job.
@@ -172,7 +168,7 @@ module GroupDocs
       api = GroupDocs::Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
-        request[:path] = "/{{client_id}}/jobs/#{id}/urls"
+        request[:path] = "/async/{{client_id}}/jobs/#{id}/urls"
       end
       api.add_params(options)
       json = api.execute!
