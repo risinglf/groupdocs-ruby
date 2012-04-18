@@ -1,16 +1,16 @@
 ## GroupDocs [![Build Status](https://secure.travis-ci.org/p0deje/groupdocs-ruby.png)](http://travis-ci.org/p0deje/groupdocs-ruby)
 
-Simple gem which implements API wrapper for [GroupDocs](http://groupdocs.com).
+Ruby SDK for [GroupDocs](http://groupdocs.com) REST API.
 
 ## Installation
 
-GroupDocs requires at least Ruby 1.9.2. Ruby 1.8.7 is not supported!
+GroupDocs requires Ruby 1.9. Ruby 1.8 is not supported!
 
 Install as usually
 
     gem install groupdocs
 
-If you want to try latest version of gem (or it's not yet published)
+Installing from source
 
     gem install bundler # unless it's already installed
     git clone git@github.com:p0deje/groupdocs-ruby.git
