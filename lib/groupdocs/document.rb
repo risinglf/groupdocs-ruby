@@ -196,30 +196,6 @@ module GroupDocs
     end
 
     #
-    # Creates thumbnails of specific pages.
-    #
-    # @param [Hash] options
-    # @option options [Integer] :page_number Starting page
-    # @option options [Integer] :page_count Number of pages
-    # @option options [Integer] :quality From 1 to 100
-    # @option options [Boolean] :use_pdf
-    # @param [Hash] access Access credentials
-    # @option access [String] :client_id
-    # @option access [String] :private_key
-    #
-    # @todo what should it return?
-    #
-    def thumbnail!(options = {}, access = {})
-      api = GroupDocs::Api::Request.new do |request|
-        request[:access] = access
-        request[:method] = :POST
-        request[:path] = "/doc/{{client_id}}/files/#{file.guid}/thumbnails"
-      end
-      api.add_params(options)
-      api.execute!
-    end
-
-    #
     # Returns an array of users a document is shared with.
     #
     # @param [Hash] access Access credentials

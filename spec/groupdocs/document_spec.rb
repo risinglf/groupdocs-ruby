@@ -195,24 +195,6 @@ describe GroupDocs::Document do
     end
   end
 
-  describe '#thumbnail!' do
-    before(:each) do
-      mock_api_server(load_json('document_thumbnail'))
-    end
-
-    it 'accepts access credentials hash' do
-      lambda do
-        subject.thumbnail!({}, client_id: 'client_id', private_key: 'private_key')
-      end.should_not raise_error(ArgumentError)
-    end
-
-    it 'accepts options hash' do
-      lambda do
-        subject.thumbnail!(page_number: 1, page_count: 2, use_pdf: true)
-      end.should_not raise_error(ArgumentError)
-    end
-  end
-
   describe '#sharers!' do
     before(:each) do
       mock_api_server(load_json('document_access_info_get'))
