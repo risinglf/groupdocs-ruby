@@ -89,7 +89,7 @@ module GroupDocs
         request[:method] = :GET
         request[:path] = "/async/{{client_id}}/jobs/#{id}/documents"
       end.execute!
-      p json
+
       json[:documents].map do |document|
         document.merge!(file: GroupDocs::Storage::File.new(document))
         GroupDocs::Document.new(document)
