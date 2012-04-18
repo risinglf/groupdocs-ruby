@@ -19,7 +19,7 @@ module GroupDocs
       api = GroupDocs::Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
-        request[:path] = '/{{client_id}}/jobs'
+        request[:path] = '/async{{client_id}}/jobs'
       end
       api.add_params(options)
       json = api.execute!
@@ -54,7 +54,7 @@ module GroupDocs
       api = GroupDocs::Api::Request.new do |request|
         request[:access] = access
         request[:method] = :POST
-        request[:path] = '/{{client_id}}/jobs'
+        request[:path] = '/async/{{client_id}}/jobs'
         request[:request_body] = options
       end
       json = api.execute!
@@ -91,9 +91,9 @@ module GroupDocs
       json = GroupDocs::Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
-        request[:path] = "/{{client_id}}/jobs/#{id}/documents"
+        request[:path] = "/async/{{client_id}}/jobs/#{id}/documents"
       end.execute!
-
+      p json
       json[:documents].map do |document|
         document.merge!(file: GroupDocs::Storage::File.new(document))
         GroupDocs::Document.new(document)
@@ -120,7 +120,7 @@ module GroupDocs
       api = GroupDocs::Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
-        request[:path] = "/{{client_id}}/jobs/#{id}/files/#{document.file.guid}"
+        request[:path] = "/async/{{client_id}}/jobs/#{id}/files/#{document.file.guid}"
       end
       api.add_params(options)
       json = api.execute!
@@ -151,7 +151,7 @@ module GroupDocs
       GroupDocs::Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
-        request[:path] = "/{{client_id}}/jobs/#{id}/files/#{document.file.guid}/datasources/#{datasource.id}"
+        request[:path] = "/async/{{client_id}}/jobs/#{id}/files/#{document.file.guid}/datasources/#{datasource.id}"
       end.execute!
     end
 
@@ -196,7 +196,7 @@ module GroupDocs
       GroupDocs::Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
-        request[:path] = "/{{client_id}}/jobs/#{id}"
+        request[:path] = "/async/{{client_id}}/jobs/#{id}"
         request[:request_body] = options
       end.execute!
     end
