@@ -144,6 +144,10 @@ describe GroupDocs::Storage::File do
   end
 
   describe '#rename!' do
+    before(:each) do
+      subject.path = '/'
+    end
+
     it 'accepts access credentials hash' do
       lambda do
         subject.rename!('resume.pdf', client_id: 'client_id', private_key: 'private_key')
