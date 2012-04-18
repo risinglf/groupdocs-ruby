@@ -12,6 +12,8 @@ describe GroupDocs::Document::Change do
   it { should respond_to(:box=)  }
   it { should respond_to(:text)  }
   it { should respond_to(:text=) }
+  it { should respond_to(:page)  }
+  it { should respond_to(:page=) }
 
   describe '#type' do
     it 'returns type as symbol' do

@@ -9,7 +9,8 @@ module GroupDocs
     attr_accessor :box
     # @attr [String] text
     attr_accessor :text
-    # TODO page
+    # @attr [Integer] page
+    attr_accessor :page
 
     #
     # Returns type as symbol.
