@@ -1,6 +1,15 @@
 module GroupDocs
   module Api
     module Sugar
+      #
+      # Extends classes providing them with .find! and .find_all! class methods
+      # which is a bit of sugar for working with files, folder and documents,
+      #
+      # It's not that flexible because requires extending class to implement
+      # .all! class method.
+      #
+      # This module is a subject to modifications.
+      #
       module Lookup
 
         #
@@ -29,7 +38,7 @@ module GroupDocs
         # @option access [String] :private_key
         # @return [Array] Array of matching entities
         #
-        # @raise [NoMethodError] if extending class does not implement #all! class method.
+        # @raise [NoMethodError] if extending class does not implement .all! class method.
         #
         def find_all!(attribute, value, access = {})
           respond_to?(:all!) or raise NoMethodError, "#{self}.all! is not implemented - aborting."
