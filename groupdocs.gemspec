@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     = GroupDocs::VERSION
   s.authors     = 'Alex Rodionov'
   s.email       = 'p0deje@gmail.com'
-  s.homepage    = 'https://github.com/p0deje/groupdocs-ruby'
+  s.homepage    = 'https://github.com/groupdocs/groupdocs-ruby'
   s.summary     = 'Ruby SDK for GroupDocs REST API'
   s.description = 'Ruby SDK for GroupDocs REST API'
 

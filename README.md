@@ -1,4 +1,4 @@
-## GroupDocs [![Build Status](https://secure.travis-ci.org/p0deje/groupdocs-ruby.png)](http://travis-ci.org/p0deje/groupdocs-ruby)
+## GroupDocs [![Build Status](https://secure.travis-ci.org/groupdocs/groupdocs-ruby.png)](http://travis-ci.org/groupdocs/groupdocs-ruby)
 
 Ruby SDK for [GroupDocs](http://groupdocs.com) REST API.
 
@@ -13,7 +13,7 @@ Install as usually
 Installing from source
 
     gem install bundler # unless it's already installed
-    git clone git@github.com:p0deje/groupdocs-ruby.git
+    git clone git@github.com:groupdocs/groupdocs-ruby.git
     cd groupdocs-ruby/
     git checkout master
     bundle install --path vendor/bundle
