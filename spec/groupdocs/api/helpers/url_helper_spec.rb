@@ -26,13 +26,20 @@ describe GroupDocs::Api::Helpers::URL do
     end
   end
 
+  describe '#normalize_path' do
+    it 'replaces two or more slashes with one' do
+      subject.options[:path] = '/doc//folder///new////'
+      subject.send(:normalize_path)
+      subject.options[:path].should == '/doc/folder/new/'
+    end
+  end
+
   describe '#parse_path' do
     it 'replaces {{client_id}} with real client ID' do
       subject.options[:path] = '/doc/{{client_id}}/files/123'
       subject.should_receive(:client_id).and_return('real_client_id')
-      lambda do
-        subject.send(:parse_path)
-      end.should change { subject.options[:path] }.to('/doc/real_client_id/files/123')
+      subject.send(:parse_path)
+      subject.options[:path].should == '/doc/real_client_id/files/123'
     end
   end
 

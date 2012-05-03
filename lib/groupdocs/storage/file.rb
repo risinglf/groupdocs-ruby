@@ -37,7 +37,7 @@ module GroupDocs
         json = GroupDocs::Api::Request.new do |request|
           request[:access] = access
           request[:method] = :POST
-          request[:path] = "/storage/{{client_id}}/folders#{upload_path.gsub(/[\/]{2}/, '/')}"
+          request[:path] = "/storage/{{client_id}}/folders#{upload_path}"
           request[:request_body] = Object::File.new(filepath, 'rb')
         end.execute!
 
@@ -58,7 +58,7 @@ module GroupDocs
         folder = GroupDocs::Storage::Folder.new(path: path)
         folder.list!({}, access).each do |entity|
           if entity.is_a?(GroupDocs::Storage::Folder)
-            files += all!("#{path}/#{entity.name}".gsub(/[\/]{2}/, '/'), access)
+            files += all!("#{path}/#{entity.name}", access)
           else
             files << entity
           end

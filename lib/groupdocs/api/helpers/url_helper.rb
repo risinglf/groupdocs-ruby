@@ -23,12 +23,21 @@ module GroupDocs
         private
 
         #
-        # Parses path replacing {client_id} with real one.
+        # Normalizes path replacing two or more slashes with one.
+        #
+        # @api private
+        #
+        def normalize_path
+          options[:path].gsub!(%r(//+), '/')
+        end
+
+        #
+        # Parses path replacing {{client_id}} with real one.
         #
         # @api private
         #
         def parse_path
-          options[:path] = options[:path].sub(/\{\{client_id\}\}/, client_id)
+          options[:path].sub!(/\{\{client_id\}\}/, client_id)
         end
 
         #
@@ -53,11 +62,11 @@ module GroupDocs
           # convert hash to base64
           hash = Base64.strict_encode64(hash)
           # remove trailing '='
-          hash = hash.gsub(/=*$/, '')
+          hash.gsub!(/=*$/, '')
           # URL encode hash
           hash = CGI.escape(hash)
           # covert all hexademical characters to upper case
-          hash = hash.gsub(/(%[A-Fa-f0-9]{1,2})/) { |group| group.upcase }
+          hash.gsub!(/(%[A-Fa-f0-9]{1,2})/) { |group| group.upcase }
 
           options[:path] << "#{separator}signature=#{hash}"
         end

@@ -43,7 +43,7 @@ module GroupDocs
         folder.list!({}, access).each do |entity|
           if entity.is_a?(GroupDocs::Storage::Folder)
             folders << entity
-            folders += all!("#{path}/#{entity.name}".gsub(/[\/]{2}/, '/'), access)
+            folders += all!("#{path}/#{entity.name}", access)
           end
         end
 
@@ -200,13 +200,10 @@ module GroupDocs
       def list!(options = {}, access = {})
         options[:order_by].capitalize! if options[:order_by]
 
-        query_path = "#{path}/#{name}"
-        query_path.gsub!(/[\/]{2}/, '/')
-
         api = GroupDocs::Api::Request.new do |request|
           request[:access] = access
           request[:method] = :GET
-          request[:path] = "/storage/{{client_id}}/folders#{query_path}"
+          request[:path] = "/storage/{{client_id}}/folders#{path}/#{name}"
         end
         api.add_params(options)
         json = api.execute!
