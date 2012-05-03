@@ -4,6 +4,16 @@ module GroupDocs
 
       extend GroupDocs::Api::Sugar::Lookup
 
+      DOCUMENT_TYPES = {
+        undefined: -1,
+        cells:      0,
+        words:      1,
+        slides:     2,
+        pdf:        3,
+        html:       4,
+        image:      5,
+      }
+
       #
       # Uploads file to API server.
       #
@@ -88,6 +98,30 @@ module GroupDocs
 
       # Compatibility with response JSON
       alias_method :adj_name=, :name=
+
+      #
+      # Updates type with machine-readable format.
+      #
+      # @param [Symbol, Integer] type
+      # @raise [ArgumentError] if type is unknown
+      #
+      def type=(type)
+        if type.is_a?(Symbol)
+          DOCUMENT_TYPES.keys.include?(type) or raise ArgumentError, "Unknown type: #{type.inspect}"
+          type = DOCUMENT_TYPES[type]
+        end
+
+        @type = type
+      end
+
+      #
+      # Returns document type in human-readable format.
+      #
+      # @return [Symbol]
+      #
+      def type
+        DOCUMENT_TYPES.invert[@type]
+      end
 
       #
       # Converts timestamp which is return by API server to Time object.
