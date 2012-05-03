@@ -39,6 +39,13 @@ describe GroupDocs::Api::Helpers::REST do
       end.should change { subject.options[:method] }.to(:get)
     end
 
+    it 'converts HTTP method to symbol' do
+      subject.options[:method] = 'GET'
+      lambda do
+        subject.send(:prepare_request)
+      end.should change { subject.options[:method] }.to(:get)
+    end
+
     it 'coverts request body to JSON' do
       subject.options[:method] = :POST
       subject.options[:request_body] = { body: 'test' }
