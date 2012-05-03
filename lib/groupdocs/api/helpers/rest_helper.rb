@@ -72,15 +72,7 @@ module GroupDocs
         # @api private
         #
         def raise_bad_request_error(json)
-          raise GroupDocs::Errors::BadResponseError, <<-ERR
-            Bad response!
-            Request method: #{options[:method].upcase}
-            Request URL: #{resource[options[:path]]}
-            Request body: #{options[:request_body]}
-            Status: #{json[:status]}
-            Error message: #{json[:error_message]}
-            Response body: #{response}
-          ERR
+          raise GroupDocs::Errors::BadResponseError, json[:error_message]
         end
 
       end # Request

@@ -132,56 +132,10 @@ describe GroupDocs::Api::Helpers::REST do
       { status: 'Failed', error_message: 'The source path is not found.' }
     end
 
-    it 'raises error' do
+    it 'raises error with message from response' do
       lambda do
         subject.send(:raise_bad_request_error, json)
-      end.should raise_error(GroupDocs::Errors::BadResponseError)
-    end
-
-    it 'shows "Bad response!" message' do
-      lambda do
-        subject.send(:raise_bad_request_error, json)
-      end.should raise_error(message = /Bad response!/)
-    end
-
-    it 'contains information about request method' do
-      subject.options[:method] = :get
-      lambda do
-        subject.send(:raise_bad_request_error, json)
-      end.should raise_error(message = /Request method: GET/)
-    end
-
-    it 'contains information about request URL' do
-      subject.options[:path] = '/folders'
-      lambda do
-        subject.send(:raise_bad_request_error, json)
-      end.should raise_error(message = %r(Request URL: https?://(.+)/folders))
-    end
-
-    it 'contains information about request body' do
-      subject.options[:request_body] = '{"test": 123}'
-      lambda do
-        subject.send(:raise_bad_request_error, json)
-      end.should raise_error(message = /Request body: {"test": 123}/)
-    end
-
-    it 'contains information about response status' do
-      lambda do
-        subject.send(:raise_bad_request_error, json)
-      end.should raise_error(message = /Status: Failed/)
-    end
-
-    it 'contains information about error message' do
-      lambda do
-        subject.send(:raise_bad_request_error, json)
-      end.should raise_error(message = /Error message: The source path is not found./)
-    end
-
-    it 'contains information about response body' do
-      mock_response('{"status": "Failed", "error_message": "The source path is not found."}')
-      lambda do
-        subject.send(:raise_bad_request_error, json)
-      end.should raise_error(message = /Response body: {"status": "Failed", "error_message": "The source path is not found."}/)
+      end.should raise_error(GroupDocs::Errors::BadResponseError, 'The source path is not found.')
     end
   end
 end
