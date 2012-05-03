@@ -10,15 +10,9 @@ describe GroupDocs::Storage::File do
       mock_api_server(load_json('file_upload'))
     end
 
-    it 'accepts options hash' do
-      lambda do
-        described_class.upload!(__FILE__, '/upload_path', { description: 'Description' })
-      end.should_not raise_error(ArgumentError)
-    end
-
     it 'accepts access credentials hash' do
       lambda do
-        described_class.upload!(__FILE__, '/upload_path', {}, client_id: 'client_id', private_key: 'private_key')
+        described_class.upload!(__FILE__, '/upload_path', client_id: 'client_id', private_key: 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 

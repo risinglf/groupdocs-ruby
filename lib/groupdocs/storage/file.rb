@@ -13,8 +13,6 @@ module GroupDocs
       # @param [String] filepath Path to file to be uploaded
       # @param [String] upload_path Full path to directory to upload file to starting with "/".
       #                      You can also add filename and then uploaded file will use it.
-      # @param [Hash] options Hash of options
-      # @option options [String] :description Optional description for file
       # @param [Hash] access Access credentials
       # @option access [String] :client_id
       # @option access [String] :private_key
@@ -22,18 +20,16 @@ module GroupDocs
       #
       # @raise [ArgumentError] If path does not start with /
       #
-      def self.upload!(filepath, upload_path = '/', options = {}, access = {})
+      def self.upload!(filepath, upload_path = '/', access = {})
         upload_path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{upload_path.inspect}"
         upload_path << "/#{Object::File.basename(filepath)}" unless upload_path =~ /\.(\w){3,4}$/
 
-        api = GroupDocs::Api::Request.new do |request|
+        json = GroupDocs::Api::Request.new do |request|
           request[:access] = access
           request[:method] = :POST
           request[:path] = "/storage/{{client_id}}/folders#{upload_path.gsub(/[\/]{2}/, '/')}"
           request[:request_body] = Object::File.new(filepath, 'rb')
-        end
-        api.add_params(options)
-        json = api.execute!
+        end.execute!
 
         GroupDocs::Storage::File.new(json)
       end
