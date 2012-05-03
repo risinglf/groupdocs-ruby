@@ -32,7 +32,7 @@ describe GroupDocs::Api::Helpers::Access do
     it 'raises error if client ID has not been set' do
       subject.options[:access] = {}
       GroupDocs.client_id = nil
-      -> { subject.send(:client_id) }.should raise_error(GroupDocs::Errors::NoClientIdError)
+      -> { subject.send(:client_id) }.should raise_error(GroupDocs::NoClientIdError)
     end
   end
 
@@ -52,7 +52,7 @@ describe GroupDocs::Api::Helpers::Access do
     it 'raises error if private key has not been set' do
       subject.options[:access] = {}
       GroupDocs.private_key = nil
-      -> { subject.send(:private_key) }.should raise_error(GroupDocs::Errors::NoPrivateKeyError)
+      -> { subject.send(:private_key) }.should raise_error(GroupDocs::NoPrivateKeyError)
     end
   end
 

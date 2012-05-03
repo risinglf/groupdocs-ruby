@@ -5,20 +5,28 @@ describe GroupDocs::Storage::File do
   it_behaves_like GroupDocs::Api::Entity
   include_examples GroupDocs::Api::Sugar::Lookup
 
+  describe 'DOCUMENT_TYPES' do
+    it 'contains hash of document types' do
+      described_class::DOCUMENT_TYPES.should == {
+        undefined: -1,
+        cells:      0,
+        words:      1,
+        slides:     2,
+        pdf:        3,
+        html:       4,
+        image:      5,
+      }
+    end
+  end
+
   describe '.upload!' do
     before(:each) do
       mock_api_server(load_json('file_upload'))
     end
 
-    it 'accepts options hash' do
-      lambda do
-        described_class.upload!(__FILE__, '/upload_path', { description: 'Description' })
-      end.should_not raise_error(ArgumentError)
-    end
-
     it 'accepts access credentials hash' do
       lambda do
-        described_class.upload!(__FILE__, '/upload_path', {}, client_id: 'client_id', private_key: 'private_key')
+        described_class.upload!(__FILE__, '/upload_path', client_id: 'client_id', private_key: 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -59,6 +67,8 @@ describe GroupDocs::Storage::File do
   it { should respond_to(:version=)     }
   it { should respond_to(:type)         }
   it { should respond_to(:type=)        }
+  it { should respond_to(:file_type)    }
+  it { should respond_to(:file_type=)   }
   it { should respond_to(:access)       }
   it { should respond_to(:access=)      }
   it { should respond_to(:path)         }
@@ -67,6 +77,29 @@ describe GroupDocs::Storage::File do
   it 'is compatible with response JSON' do
     subject.should respond_to(:adj_name=)
     subject.method(:adj_name=).should == subject.method(:name=)
+  end
+
+  describe '#type=' do
+    it 'saves type in machine readable format if symbol is passed' do
+      subject.type = :words
+      subject.instance_variable_get(:@type).should == 1
+    end
+
+    it 'does nothing if parameter is not symbol' do
+      subject.type = 2
+      subject.instance_variable_get(:@type).should == 2
+    end
+
+    it 'raises error if type is unknown' do
+      -> { subject.type = :unknown }.should raise_error(ArgumentError)
+    end
+  end
+
+  describe '#type' do
+    it 'returns type in human-readable format' do
+      subject.type = 1
+      subject.type.should == :words
+    end
   end
 
   describe '#created_on' do
@@ -201,18 +234,18 @@ describe GroupDocs::Storage::File do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.compress!(:zip, client_id: 'client_id', private_key: 'private_key')
+        subject.compress!(client_id: 'client_id', private_key: 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'returns archived file' do
       subject.stub(name: 'resume.pdf')
-      subject.compress!(:zip).should be_a(GroupDocs::Storage::File)
+      subject.compress!.should be_a(GroupDocs::Storage::File)
     end
 
     it 'creates archive filename as filename + archive type' do
       subject.stub(name: 'resume.pdf')
-      subject.compress!(:zip).name.should == 'resume.pdf.zip'
+      subject.compress!.name.should == 'resume.pdf.zip'
     end
   end
 

@@ -20,7 +20,7 @@ module GroupDocs
         #
         def client_id
           client_id = options[:access][:client_id] || GroupDocs.client_id
-          client_id or raise Errors::NoClientIdError, 'Client ID has not been specified.'
+          client_id or raise NoClientIdError, 'Client ID has not been specified.'
         end
 
         #
@@ -32,7 +32,7 @@ module GroupDocs
         #
         def private_key
           private_key = options[:access][:private_key] || GroupDocs.private_key
-          private_key or raise Errors::NoPrivateKeyError, 'Private Key has not been specified.'
+          private_key or raise NoPrivateKeyError, 'Private Key has not been specified.'
         end
 
         #

@@ -46,6 +46,11 @@ describe GroupDocs::Api::Request do
       mock_api_server('{"status":"Ok"}')
     end
 
+    it 'normalizes path' do
+      subject.should_receive(:normalize_path)
+      subject.execute!
+    end
+
     it 'parses path' do
       subject.should_receive(:parse_path)
       subject.execute!

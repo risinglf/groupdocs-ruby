@@ -4,6 +4,16 @@ module GroupDocs
 
       extend GroupDocs::Api::Sugar::Lookup
 
+      DOCUMENT_TYPES = {
+        undefined: -1,
+        cells:      0,
+        words:      1,
+        slides:     2,
+        pdf:        3,
+        html:       4,
+        image:      5,
+      }
+
       #
       # Uploads file to API server.
       #
@@ -13,8 +23,6 @@ module GroupDocs
       # @param [String] filepath Path to file to be uploaded
       # @param [String] upload_path Full path to directory to upload file to starting with "/".
       #                      You can also add filename and then uploaded file will use it.
-      # @param [Hash] options Hash of options
-      # @option options [String] :description Optional description for file
       # @param [Hash] access Access credentials
       # @option access [String] :client_id
       # @option access [String] :private_key
@@ -22,18 +30,16 @@ module GroupDocs
       #
       # @raise [ArgumentError] If path does not start with /
       #
-      def self.upload!(filepath, upload_path = '/', options = {}, access = {})
+      def self.upload!(filepath, upload_path = '/', access = {})
         upload_path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{upload_path.inspect}"
         upload_path << "/#{Object::File.basename(filepath)}" unless upload_path =~ /\.(\w){3,4}$/
 
-        api = GroupDocs::Api::Request.new do |request|
+        json = GroupDocs::Api::Request.new do |request|
           request[:access] = access
           request[:method] = :POST
-          request[:path] = "/storage/{{client_id}}/folders#{upload_path.gsub(/[\/]{2}/, '/')}"
+          request[:path] = "/storage/{{client_id}}/folders#{upload_path}"
           request[:request_body] = Object::File.new(filepath, 'rb')
-        end
-        api.add_params(options)
-        json = api.execute!
+        end.execute!
 
         GroupDocs::Storage::File.new(json)
       end
@@ -52,7 +58,7 @@ module GroupDocs
         folder = GroupDocs::Storage::Folder.new(path: path)
         folder.list!({}, access).each do |entity|
           if entity.is_a?(GroupDocs::Storage::Folder)
-            files += all!("#{path}/#{entity.name}".gsub(/[\/]{2}/, '/'), access)
+            files += all!("#{path}/#{entity.name}", access)
           else
             files << entity
           end
@@ -83,6 +89,8 @@ module GroupDocs
       attr_accessor :version
       # @attr [Integer] type
       attr_accessor :type
+      # @attr [Integer] file_type
+      attr_accessor :file_type
       # @attr [Integer] access
       attr_accessor :access
       # @attr [String] path
@@ -90,6 +98,30 @@ module GroupDocs
 
       # Compatibility with response JSON
       alias_method :adj_name=, :name=
+
+      #
+      # Updates type with machine-readable format.
+      #
+      # @param [Symbol, Integer] type
+      # @raise [ArgumentError] if type is unknown
+      #
+      def type=(type)
+        if type.is_a?(Symbol)
+          DOCUMENT_TYPES.keys.include?(type) or raise ArgumentError, "Unknown type: #{type.inspect}"
+          type = DOCUMENT_TYPES[type]
+        end
+
+        @type = type
+      end
+
+      #
+      # Returns document type in human-readable format.
+      #
+      # @return [Symbol]
+      #
+      def type
+        DOCUMENT_TYPES.invert[@type]
+      end
 
       #
       # Converts timestamp which is return by API server to Time object.
@@ -201,21 +233,20 @@ module GroupDocs
       #
       # Compresses file on server to given archive type.
       #
-      # @param [Symbol] type Archive type: :zip, :rar.
       # @param [Hash] access Access credentials
       # @option access [String] :client_id
       # @option access [String] :private_key
       # @return [GroupDocs::Storage::File] Archive file
       #
-      def compress!(type = :zip, access = {})
+      def compress!(access = {})
         json = GroupDocs::Api::Request.new do |request|
           request[:access] = access
           request[:method] = :POST
-          request[:path] = "/storage/{{client_id}}/files/#{id}/archive/#{type}"
+          request[:path] = "/storage/{{client_id}}/files/#{id}/archive/zip"
         end.execute!
 
-        # HACK add filename for further download
-        json[:name] = "#{name}.#{type}"
+        # HACK add filename for further file operations
+        json[:name] = "#{name}.zip"
         GroupDocs::Storage::File.new(json)
       end
 
@@ -232,6 +263,9 @@ module GroupDocs
           request[:method] = :DELETE
           request[:path] = "/storage/{{client_id}}/files/#{guid}"
         end.execute!
+      # TODO: workaround for http://scotland.groupdocs.com/jira/browse/CORE-423
+      rescue RestClient::BadRequest
+        nil
       end
 
       #

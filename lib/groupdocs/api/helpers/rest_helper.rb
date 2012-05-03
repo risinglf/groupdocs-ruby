@@ -22,7 +22,7 @@ module GroupDocs
             options[:headers] = DEFAULT_HEADERS.dup
           end
 
-          options[:method] = options[:method].downcase
+          options[:method] = options[:method].downcase.to_sym
 
           if options[:request_body] && !options[:request_body].is_a?(Object::File)
             options[:request_body] = options[:request_body].to_json
@@ -47,7 +47,7 @@ module GroupDocs
             when :delete
               resource[options[:path]].delete(options[:headers])
             else
-              raise GroupDocs::Errors::UnsupportedMethodError, "Unsupported HTTP method: #{options[:method].inspect}"
+              raise UnsupportedMethodError, "Unsupported HTTP method: #{options[:method].inspect}"
           end
         end
 
@@ -68,19 +68,11 @@ module GroupDocs
         end
 
         #
-        # @raise [GroupDocs::Errors::BadResponseError]
+        # @raise [GroupDocs::BadResponseError]
         # @api private
         #
         def raise_bad_request_error(json)
-          raise GroupDocs::Errors::BadResponseError, <<-ERR
-            Bad response!
-            Request method: #{options[:method].upcase}
-            Request URL: #{resource[options[:path]]}
-            Request body: #{options[:request_body]}
-            Status: #{json[:status]}
-            Error message: #{json[:error_message]}
-            Response body: #{response}
-          ERR
+          raise BadResponseError, json[:error_message]
         end
 
       end # Request

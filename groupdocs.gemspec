@@ -1,4 +1,3 @@
-# encoding: utf-8
 $LOAD_PATH.unshift(File.expand_path('../lib', __FILE__))
 require "groupdocs/version"
 
@@ -17,12 +16,12 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
 
   s.add_runtime_dependency 'rest-client', '~> 1.6'
-  s.add_runtime_dependency 'json'       , '~> 1.6'
+  s.add_runtime_dependency 'json'       , '~> 1.7'
   s.add_runtime_dependency 'ruby-hmac'  , '~> 0.4'
 
   s.add_development_dependency 'rspec'    , '~> 2.9'
   s.add_development_dependency 'rake'     , '~> 0.9'
   s.add_development_dependency 'simplecov', '~> 0.6'
-  s.add_development_dependency 'yard'     , '~> 0.7'
+  s.add_development_dependency 'yard'     , '~> 0.8'
   s.add_development_dependency 'webmock'  , '~> 1.8'
 end

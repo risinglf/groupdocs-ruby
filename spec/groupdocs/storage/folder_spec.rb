@@ -185,6 +185,12 @@ describe GroupDocs::Storage::Folder do
       -> { subject.list!(page: 1, count: 1) }.should_not raise_error(ArgumentError)
     end
 
+    it 'capitalizes :order_by option' do
+      options = { order_by: 'field' }
+      options[:order_by].should_receive(:capitalize!)
+      subject.list!(options)
+    end
+
     it 'returns array' do
       subject.list!.should be_an(Array)
     end
