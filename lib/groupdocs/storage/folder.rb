@@ -198,6 +198,8 @@ module GroupDocs
       # @return [Array<GroupDocs::Storage::Folder, GroupDocs::Storage::File>]
       #
       def list!(options = {}, access = {})
+        options[:order_by].capitalize! if options[:order_by]
+
         query_path = "#{path}/#{name}"
         query_path.gsub!(/[\/]{2}/, '/')
 
