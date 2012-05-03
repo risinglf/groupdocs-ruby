@@ -47,7 +47,7 @@ module GroupDocs
             when :delete
               resource[options[:path]].delete(options[:headers])
             else
-              raise GroupDocs::Errors::UnsupportedMethodError, "Unsupported HTTP method: #{options[:method].inspect}"
+              raise UnsupportedMethodError, "Unsupported HTTP method: #{options[:method].inspect}"
           end
         end
 
@@ -68,11 +68,11 @@ module GroupDocs
         end
 
         #
-        # @raise [GroupDocs::Errors::BadResponseError]
+        # @raise [GroupDocs::BadResponseError]
         # @api private
         #
         def raise_bad_request_error(json)
-          raise GroupDocs::Errors::BadResponseError, json[:error_message]
+          raise BadResponseError, json[:error_message]
         end
 
       end # Request

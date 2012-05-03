@@ -24,7 +24,7 @@ module GroupDocs
       json = api.execute!
 
       GroupDocs::DataSource.new(json[:datasource])
-    rescue GroupDocs::Errors::BadResponseError
+    rescue BadResponseError
       nil
     end
 

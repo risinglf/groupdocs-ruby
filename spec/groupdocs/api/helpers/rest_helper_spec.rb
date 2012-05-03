@@ -88,7 +88,7 @@ describe GroupDocs::Api::Helpers::REST do
 
     it 'raises error if incorrect method has been passed' do
       subject.options[:method] = :TEST
-      -> { subject.send(:send_request) }.should raise_error(GroupDocs::Errors::UnsupportedMethodError)
+      -> { subject.send(:send_request) }.should raise_error(GroupDocs::UnsupportedMethodError)
     end
 
     it 'saves response' do
@@ -135,7 +135,7 @@ describe GroupDocs::Api::Helpers::REST do
     it 'raises error with message from response' do
       lambda do
         subject.send(:raise_bad_request_error, json)
-      end.should raise_error(GroupDocs::Errors::BadResponseError, 'The source path is not found.')
+      end.should raise_error(GroupDocs::BadResponseError, 'The source path is not found.')
     end
   end
 end
