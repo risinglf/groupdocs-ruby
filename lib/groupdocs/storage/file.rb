@@ -79,6 +79,8 @@ module GroupDocs
       attr_accessor :version
       # @attr [Integer] type
       attr_accessor :type
+      # @attr [Integer] file_type
+      attr_accessor :file_type
       # @attr [Integer] access
       attr_accessor :access
       # @attr [String] path

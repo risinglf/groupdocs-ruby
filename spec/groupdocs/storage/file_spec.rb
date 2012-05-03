@@ -53,6 +53,8 @@ describe GroupDocs::Storage::File do
   it { should respond_to(:version=)     }
   it { should respond_to(:type)         }
   it { should respond_to(:type=)        }
+  it { should respond_to(:file_type)    }
+  it { should respond_to(:file_type=)   }
   it { should respond_to(:access)       }
   it { should respond_to(:access=)      }
   it { should respond_to(:path)         }
