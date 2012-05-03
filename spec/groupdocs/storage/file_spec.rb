@@ -201,18 +201,18 @@ describe GroupDocs::Storage::File do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.compress!(:zip, client_id: 'client_id', private_key: 'private_key')
+        subject.compress!(client_id: 'client_id', private_key: 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'returns archived file' do
       subject.stub(name: 'resume.pdf')
-      subject.compress!(:zip).should be_a(GroupDocs::Storage::File)
+      subject.compress!.should be_a(GroupDocs::Storage::File)
     end
 
     it 'creates archive filename as filename + archive type' do
       subject.stub(name: 'resume.pdf')
-      subject.compress!(:zip).name.should == 'resume.pdf.zip'
+      subject.compress!.name.should == 'resume.pdf.zip'
     end
   end
 

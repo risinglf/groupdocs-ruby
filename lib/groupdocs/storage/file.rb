@@ -201,21 +201,20 @@ module GroupDocs
       #
       # Compresses file on server to given archive type.
       #
-      # @param [Symbol] type Archive type: :zip, :rar.
       # @param [Hash] access Access credentials
       # @option access [String] :client_id
       # @option access [String] :private_key
       # @return [GroupDocs::Storage::File] Archive file
       #
-      def compress!(type = :zip, access = {})
+      def compress!(access = {})
         json = GroupDocs::Api::Request.new do |request|
           request[:access] = access
           request[:method] = :POST
-          request[:path] = "/storage/{{client_id}}/files/#{id}/archive/#{type}"
+          request[:path] = "/storage/{{client_id}}/files/#{id}/archive/zip"
         end.execute!
 
-        # HACK add filename for further download
-        json[:name] = "#{name}.#{type}"
+        # HACK add filename for further file operations
+        json[:name] = "#{name}.zip"
         GroupDocs::Storage::File.new(json)
       end
 
