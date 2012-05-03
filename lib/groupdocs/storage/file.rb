@@ -263,6 +263,9 @@ module GroupDocs
           request[:method] = :DELETE
           request[:path] = "/storage/{{client_id}}/files/#{guid}"
         end.execute!
+      # TODO: workaround for http://scotland.groupdocs.com/jira/browse/CORE-423
+      rescue RestClient::BadRequest
+        nil
       end
 
       #
