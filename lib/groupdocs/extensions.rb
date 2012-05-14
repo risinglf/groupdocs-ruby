@@ -1,0 +1,1 @@
+require 'groupdocs/extensions/lookup'

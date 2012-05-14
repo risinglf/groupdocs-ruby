@@ -23,7 +23,7 @@ module GroupDocs
 
       options[:after] = (options[:after].to_i * 1000) if options[:after]
 
-      api = GroupDocs::Api::Request.new do |request|
+      api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
         request[:path] = "/ant/{{client_id}}/annotations/#{annotation.guid}/replies"
@@ -33,7 +33,7 @@ module GroupDocs
 
       json[:replies].map do |reply|
         reply.merge!(annotation: annotation)
-        GroupDocs::Document::Annotation::Reply.new(reply)
+        Document::Annotation::Reply.new(reply)
       end
     end
 
@@ -101,7 +101,7 @@ module GroupDocs
     # @raise [NameError] if annotation or annotation_guid are not set
     #
     def create!(access = {})
-      json = GroupDocs::Api::Request.new do |request|
+      json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :POST
         request[:path] = "/ant/{{client_id}}/annotations/#{get_annotation_guid}/replies"
@@ -127,7 +127,7 @@ module GroupDocs
     # @option access [String] :private_key
     #
     def edit!(access = {})
-      GroupDocs::Api::Request.new do |request|
+      Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
         request[:path] = "/ant/{{client_id}}/replies/#{guid}"
@@ -145,7 +145,7 @@ module GroupDocs
     # @todo currently not implemented in API
     #
     def remove!(access = {})
-      GroupDocs::Api::Request.new do |request|
+      Api::Request.new do |request|
         request[:access] = access
         request[:method] = :DELETE
         request[:path] = "/ant/{{client_id}}/replies/#{guid}"

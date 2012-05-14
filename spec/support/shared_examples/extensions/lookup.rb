@@ -1,4 +1,4 @@
-shared_examples_for GroupDocs::Api::Sugar::Lookup do
+shared_examples_for GroupDocs::Extensions::Lookup do
   before(:each) do
     # make sure `name` attribute exists
     described_class.class_eval('attr_accessor :name')

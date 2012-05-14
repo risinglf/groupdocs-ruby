@@ -27,7 +27,7 @@ module GroupDocs
       # @return [String] URL of package for downloading
       #
       def create!(access = {})
-        json = GroupDocs::Api::Request.new do |request|
+        json = Api::Request.new do |request|
           request[:access] = access
           request[:method] = :POST
           request[:path] = "/storage/{{client_id}}/packages/#{name}.zip"

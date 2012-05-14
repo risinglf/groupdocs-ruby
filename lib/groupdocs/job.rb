@@ -1,8 +1,8 @@
 module GroupDocs
   class Job < GroupDocs::Api::Entity
 
-    extend GroupDocs::Api::Helpers::Actions
-    include GroupDocs::Api::Helpers::Status
+    extend Api::Helpers::Actions
+    include Api::Helpers::Status
 
     #
     # Returns array of recent jobs.
@@ -16,7 +16,7 @@ module GroupDocs
     # @return [Array<GroupDocs::Job>]
     #
     def self.all!(options = {}, access = {})
-      api = GroupDocs::Api::Request.new do |request|
+      api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
         request[:path] = '/async/{{client_id}}/jobs'
@@ -25,7 +25,7 @@ module GroupDocs
       json = api.execute!
 
       json[:jobs].map do |job|
-        GroupDocs::Job.new(job)
+        Job.new(job)
       end
     end
 
@@ -47,7 +47,7 @@ module GroupDocs
       options[:actions] = convert_actions(options[:actions])
       options[:out_formats] = options[:out_formats].join(?;) if options[:out_formats]
 
-      api = GroupDocs::Api::Request.new do |request|
+      api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :POST
         request[:path] = '/async/{{client_id}}/jobs'
@@ -55,7 +55,7 @@ module GroupDocs
       end
       json = api.execute!
 
-      GroupDocs::Job.new(id: json[:job_id])
+      Job.new(id: json[:job_id])
     end
 
     # @attr [Integer] id
@@ -71,7 +71,7 @@ module GroupDocs
     def documents=(documents)
       @documents = documents.map do |document|
         document.merge!(file: GroupDocs::Storage::File.new(document))
-        GroupDocs::Document.new(document)
+        Document.new(document)
       end
     end
 
@@ -84,7 +84,7 @@ module GroupDocs
     # @return [Array<GroupDocs::Document>]
     #
     def documents!(access = {})
-      json = GroupDocs::Api::Request.new do |request|
+      json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
         request[:path] = "/async/{{client_id}}/jobs/#{id}/documents"
@@ -92,7 +92,7 @@ module GroupDocs
 
       json[:documents].map do |document|
         document.merge!(file: GroupDocs::Storage::File.new(document))
-        GroupDocs::Document.new(document)
+        Document.new(document)
       end
     end
 
@@ -113,7 +113,7 @@ module GroupDocs
       document.is_a?(GroupDocs::Document) or raise ArgumentError,
         "Document should be GroupDocs::Document object. Received: #{document.inspect}"
 
-      api = GroupDocs::Api::Request.new do |request|
+      api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
         request[:path] = "/async/{{client_id}}/jobs/#{id}/files/#{document.file.guid}"
@@ -144,7 +144,7 @@ module GroupDocs
       datasource.is_a?(GroupDocs::DataSource) or raise ArgumentError,
         "Datasource should be GroupDocs::DataSource object. Received: #{datasource.inspect}"
 
-      GroupDocs::Api::Request.new do |request|
+      Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
         request[:path] = "/async/{{client_id}}/jobs/#{id}/files/#{document.file.guid}/datasources/#{datasource.id}"
@@ -165,7 +165,7 @@ module GroupDocs
     def add_url!(url, options = {}, access = {})
       options.merge!(absolute_url: url)
 
-      api = GroupDocs::Api::Request.new do |request|
+      api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
         request[:path] = "/async/{{client_id}}/jobs/#{id}/urls"
@@ -189,7 +189,7 @@ module GroupDocs
     def update!(options, access = {})
       options[:status] = parse_status(options[:status]) if options[:status]
 
-      GroupDocs::Api::Request.new do |request|
+      Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
         request[:path] = "/async/{{client_id}}/jobs/#{id}"

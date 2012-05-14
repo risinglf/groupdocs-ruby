@@ -3,7 +3,8 @@ require 'spec_helper'
 describe GroupDocs::Storage::Folder do
 
   it_behaves_like GroupDocs::Api::Entity
-  include_examples GroupDocs::Api::Sugar::Lookup
+  include_examples GroupDocs::Extensions::Lookup
+  include_examples GroupDocs::Api::Helpers::AccessMode
 
   describe '.create!' do
     before(:each) do
@@ -16,8 +17,9 @@ describe GroupDocs::Storage::Folder do
       end.should_not raise_error(ArgumentError)
     end
 
-    it 'raises error if path does not start with /' do
-      -> { described_class.create!('Test') }.should raise_error(ArgumentError)
+    it 'checks that path starts with /' do
+      GroupDocs::Api::Helpers::Path.should_receive(:verify_starts_with_root).with('Test')
+      described_class.create!('Test')
     end
 
     it 'returns GroupDocs::Storage::Folder object' do
@@ -74,8 +76,6 @@ describe GroupDocs::Storage::Folder do
   it { should respond_to(:version=)      }
   it { should respond_to(:type)          }
   it { should respond_to(:type=)         }
-  it { should respond_to(:access)        }
-  it { should respond_to(:access=)       }
 
   describe '#created_on' do
     it 'returns converted to Time object Unix timestamp' do
@@ -91,23 +91,20 @@ describe GroupDocs::Storage::Folder do
     end
   end
 
-  describe '#access' do
-    it 'returns converted to human-readable format access mode' do
-      subject.should_receive(:parse_access_mode).with(0).and_return(:private)
-      subject.access = 0
-      subject.access.should == :private
-    end
-  end
-
   describe '#move!' do
+    before(:each) do
+      mock_api_server(load_json('folder_move'))
+    end
+
     it 'accepts access credentials hash' do
       lambda do
         subject.move!('/Test', client_id: 'client_id', private_key: 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
-    it 'raises error if path does not start with /' do
-      -> { subject.move!('Test2') }.should raise_error(ArgumentError)
+    it 'checks that path starts with /' do
+      GroupDocs::Api::Helpers::Path.should_receive(:verify_starts_with_root).with('Test1')
+      subject.move!('Test1')
     end
 
     it 'sends "Groupdocs-Move" header' do
@@ -117,7 +114,6 @@ describe GroupDocs::Storage::Folder do
     end
 
     it 'returns moved to folder path' do
-      mock_api_server(load_json('folder_move'))
       moved = subject.move!('/Test2')
       moved.should be_a(String)
       moved.should == '/Test2'
@@ -145,14 +141,19 @@ describe GroupDocs::Storage::Folder do
   end
 
   describe '#copy!' do
+    before(:each) do
+      mock_api_server(load_json('folder_move'))
+    end
+
     it 'accepts access credentials hash' do
       lambda do
         subject.copy!('/Test2', client_id: 'client_id', private_key: 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
-    it 'raises error if path does not start with /' do
-      -> { subject.copy!('Test2') }.should raise_error(ArgumentError)
+    it 'checks that path starts with /' do
+      GroupDocs::Api::Helpers::Path.should_receive(:verify_starts_with_root).with('Test2')
+      subject.copy!('Test2')
     end
 
     it 'sends "Groupdocs-Copy" header' do
@@ -162,7 +163,6 @@ describe GroupDocs::Storage::Folder do
     end
 
     it 'returns moved to folder path' do
-      mock_api_server(load_json('folder_move'))
       moved = subject.copy!('/Test2')
       moved.should be_a(String)
       moved.should == '/Test2'

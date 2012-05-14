@@ -32,7 +32,7 @@ module GroupDocs
           if answer.is_a?(GroupDocs::Questionnaire::Question::Answer)
             answer
           else
-            GroupDocs::Questionnaire::Question::Answer.new(answer)
+            Questionnaire::Question::Answer.new(answer)
           end
         end
       end

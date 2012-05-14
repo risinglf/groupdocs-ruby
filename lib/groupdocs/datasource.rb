@@ -15,7 +15,7 @@ module GroupDocs
     # @return [GroupDocs::DataSource, nil]
     #
     def self.get!(id, options = {}, access = {})
-      api = GroupDocs::Api::Request.new do |request|
+      api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
         request[:path] = "/merge/{{client_id}}/datasources/#{id}"
@@ -23,7 +23,7 @@ module GroupDocs
       api.add_params(options)
       json = api.execute!
 
-      GroupDocs::DataSource.new(json[:datasource])
+      DataSource.new(json[:datasource])
     rescue BadResponseError
       nil
     end
@@ -74,7 +74,7 @@ module GroupDocs
           if field.is_a?(GroupDocs::DataSource::Field)
             field
           else
-            GroupDocs::DataSource::Field.new(field)
+            DataSource::Field.new(field)
           end
         end
       end
@@ -108,7 +108,7 @@ module GroupDocs
     # @option access [String] :private_key
     #
     def add!(access = {})
-      json = GroupDocs::Api::Request.new do |request|
+      json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :POST
         request[:path] = '/merge/{{client_id}}/datasources'
@@ -132,7 +132,7 @@ module GroupDocs
     # @option access [String] :private_key
     #
     def update!(access = {})
-      GroupDocs::Api::Request.new do |request|
+      Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
         request[:path] = "/merge/{{client_id}}/datasources/#{id}"
@@ -148,7 +148,7 @@ module GroupDocs
     # @option access [String] :private_key
     #
     def remove!(access = {})
-      GroupDocs::Api::Request.new do |request|
+      Api::Request.new do |request|
         request[:access] = access
         request[:method] = :DELETE
         request[:path] = "/merge/{{client_id}}/datasources/#{id}"
