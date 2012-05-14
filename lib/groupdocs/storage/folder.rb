@@ -2,7 +2,7 @@ module GroupDocs
   module Storage
     class Folder < GroupDocs::Api::Entity
 
-      extend GroupDocs::Api::Sugar::Lookup
+      extend GroupDocs::Extensions::Lookup
       include GroupDocs::Api::Helpers::Access
 
       #

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe GroupDocs::Storage::Folder do
 
   it_behaves_like GroupDocs::Api::Entity
-  include_examples GroupDocs::Api::Sugar::Lookup
+  include_examples GroupDocs::Extensions::Lookup
 
   describe '.create!' do
     before(:each) do

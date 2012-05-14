@@ -3,7 +3,7 @@ require 'spec_helper'
 describe GroupDocs::Storage::File do
 
   it_behaves_like GroupDocs::Api::Entity
-  include_examples GroupDocs::Api::Sugar::Lookup
+  include_examples GroupDocs::Extensions::Lookup
 
   describe 'DOCUMENT_TYPES' do
     it 'contains hash of document types' do

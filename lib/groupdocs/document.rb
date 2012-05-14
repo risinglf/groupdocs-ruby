@@ -8,7 +8,7 @@ module GroupDocs
     require 'groupdocs/document/rectangle'
     require 'groupdocs/document/view'
 
-    extend GroupDocs::Api::Sugar::Lookup
+    extend GroupDocs::Extensions::Lookup
     include GroupDocs::Api::Helpers::Access
     include GroupDocs::Api::Helpers::Status
 

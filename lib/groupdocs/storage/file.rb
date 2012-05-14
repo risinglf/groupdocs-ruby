@@ -2,7 +2,7 @@ module GroupDocs
   module Storage
     class File < GroupDocs::Api::Entity
 
-      extend GroupDocs::Api::Sugar::Lookup
+      extend GroupDocs::Extensions::Lookup
 
       DOCUMENT_TYPES = {
         undefined: -1,
