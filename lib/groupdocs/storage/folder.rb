@@ -200,14 +200,16 @@ module GroupDocs
         api.add_params(options)
         json = api.execute!
 
-        json[:entities].map do |entity|
-          entity.merge!(path: path)
-          if entity[:dir]
-            Storage::Folder.new(entity)
-          else
-            Storage::File.new(entity)
-          end
+        folders = json[:folders].map do |folder|
+          folder.merge!(path: path)
+          Storage::Folder.new(folder)
         end
+        files = json[:files].map do |file|
+          file.merge!(path: path)
+          Storage::File.new(file)
+        end
+
+        folders + files
       end
 
       #
