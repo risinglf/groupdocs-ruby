@@ -111,7 +111,7 @@ module GroupDocs
             reply
           else
             reply.merge!(annotation: self)
-            GroupDocs::Document::Annotation::Reply.new(reply)
+            Document::Annotation::Reply.new(reply)
           end
         end
       end
@@ -144,7 +144,7 @@ module GroupDocs
     # @option access [String] :private_key
     #
     def create!(access = {})
-      json = GroupDocs::Api::Request.new do |request|
+      json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :POST
         request[:path] = "/ant/{{client_id}}/files/#{document.file.guid}/annotations"
@@ -166,7 +166,7 @@ module GroupDocs
     # @return [Array<GroupDocs::User>]
     #
     def collaborators_set!(emails, access = {})
-      json = GroupDocs::Api::Request.new do |request|
+      json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
         request[:path] = "/ant/{{client_id}}/files/#{document.file.guid}/collaborators"
@@ -174,7 +174,7 @@ module GroupDocs
       end.execute!
 
       json[:collaborators].map do |collaborator|
-        GroupDocs::User.new(collaborator)
+        User.new(collaborator)
       end
     end
     # note that aliased version cannot accept access credentials hash
@@ -188,7 +188,7 @@ module GroupDocs
     # @option access [String] :private_key
     #
     def remove!(access = {})
-      GroupDocs::Api::Request.new do |request|
+      Api::Request.new do |request|
         request[:access] = access
         request[:method] = :DELETE
         request[:path] = "/ant/{{client_id}}/annotations/#{guid}"
@@ -208,7 +208,7 @@ module GroupDocs
     # @raise [ArgumentError] If :after option is passed but it's not an instance of Time
     #
     def replies!(options = {}, access = {})
-      GroupDocs::Document::Annotation::Reply.get!(self, options, access)
+      Document::Annotation::Reply.get!(self, options, access)
     end
 
   end # Document::Annotation

@@ -5,7 +5,7 @@ module GroupDocs
     require 'groupdocs/questionnaire/page'
     require 'groupdocs/questionnaire/question'
 
-    include GroupDocs::Api::Helpers::Access
+    include Api::Helpers::AccessMode
 
     #
     # Returns an array of all questionnaires.
@@ -16,14 +16,14 @@ module GroupDocs
     # @return [Array<GroupDocs::Questionnaire>]
     #
     def self.all!(access = {})
-      json = GroupDocs::Api::Request.new do |request|
+      json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
         request[:path] = '/merge/{{client_id}}/questionnaires'
       end.execute!
 
       json[:questionnaires].map do |questionnaire|
-        GroupDocs::Questionnaire.new(questionnaire)
+        Questionnaire.new(questionnaire)
       end
     end
 
@@ -37,13 +37,13 @@ module GroupDocs
     # @return [GroupDocs::Questionnaire, nil]
     #
     def self.get!(id, access = {})
-      json = GroupDocs::Api::Request.new do |request|
+      json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
         request[:path] = "/merge/{{client_id}}/questionnaires/#{id}"
       end.execute!
 
-      GroupDocs::Questionnaire.new(json[:questionnaire])
+      Questionnaire.new(json[:questionnaire])
     rescue RestClient::BadRequest
       nil
     end
@@ -57,14 +57,14 @@ module GroupDocs
     # @return [Array<GroupDocs::Questionnaire::Execution>]
     #
     def self.executions!(access = {})
-      json = GroupDocs::Api::Request.new do |request|
+      json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
         request[:path] = '/merge/{{client_id}}/questionnaires/executions'
       end.execute!
 
       json[:executions].map do |execution|
-        GroupDocs::Questionnaire::Execution.new(execution)
+        Questionnaire::Execution.new(execution)
       end
     end
 
@@ -92,7 +92,7 @@ module GroupDocs
           if page.is_a?(GroupDocs::Questionnaire::Page)
             page
           else
-            GroupDocs::Questionnaire::Page.new(page)
+            Questionnaire::Page.new(page)
           end
         end
       end
@@ -120,7 +120,7 @@ module GroupDocs
     # @option access [String] :private_key
     #
     def create!(access = {})
-      json = GroupDocs::Api::Request.new do |request|
+      json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :POST
         request[:path] = '/merge/{{client_id}}/questionnaires'
@@ -138,7 +138,7 @@ module GroupDocs
     # @option access [String] :private_key
     #
     def update!(access = {})
-      GroupDocs::Api::Request.new do |request|
+      Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
         request[:path] = "/merge/{{client_id}}/questionnaires/#{id}"
@@ -154,7 +154,7 @@ module GroupDocs
     # @option access [String] :private_key
     #
     def remove!(access = {})
-      GroupDocs::Api::Request.new do |request|
+      Api::Request.new do |request|
         request[:access] = access
         request[:method] = :DELETE
         request[:path] = "/merge/{{client_id}}/questionnaires/#{id}"
@@ -173,14 +173,14 @@ module GroupDocs
     # @return [Array<GroupDocs::DataSource>]
     #
     def datasources!(access = {})
-      json = GroupDocs::Api::Request.new do |request|
+      json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
         request[:path] = "/merge/{{client_id}}/questionnaires/#{id}/datasources"
       end.execute!
 
       json[:datasources].map do |datasource|
-        GroupDocs::DataSource.new(datasource)
+        DataSource.new(datasource)
       end
     end
 
@@ -204,7 +204,7 @@ module GroupDocs
       execution.is_a?(GroupDocs::Questionnaire::Execution) or raise ArgumentError,
         "Execution should be GroupDocs::Questionnaire::Execution object, received: #{execution.inspect}"
 
-      json = GroupDocs::Api::Request.new do |request|
+      json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :POST
         request[:path] = "/merge/{{client_id}}/questionnaires/#{id}/executions"

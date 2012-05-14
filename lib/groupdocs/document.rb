@@ -8,9 +8,9 @@ module GroupDocs
     require 'groupdocs/document/rectangle'
     require 'groupdocs/document/view'
 
-    extend GroupDocs::Extensions::Lookup
-    include GroupDocs::Api::Helpers::Access
-    include GroupDocs::Api::Helpers::Status
+    extend Extensions::Lookup
+    include Api::Helpers::AccessMode
+    include Api::Helpers::Status
 
     #
     # Returns an array of all documents on server.
@@ -22,7 +22,7 @@ module GroupDocs
     # @return [Array<GroupDocs::Storage::Document>]
     #
     def self.all!(path = '/', access = {})
-      GroupDocs::Storage::File.all!(path, access).map(&:to_document)
+      Storage::File.all!(path, access).map(&:to_document)
     end
 
     #
@@ -37,7 +37,7 @@ module GroupDocs
     # @return [Array<GroupDocs::Document::View>]
     #
     def self.views!(options = { page_index: 0 }, access = {})
-      api = GroupDocs::Api::Request.new do |request|
+      api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
         request[:path] = "/doc/{{client_id}}/views"
@@ -46,7 +46,7 @@ module GroupDocs
       json = api.execute!
 
       json[:views].map do |view|
-        GroupDocs::Document::View.new(view)
+        Document::View.new(view)
       end
     end
 
@@ -92,7 +92,7 @@ module GroupDocs
     # @return [Symbol] One of :private, :restricted or :public access modes
     #
     def access_mode!(access = {})
-      json = GroupDocs::Api::Request.new do |request|
+      json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
         request[:path] = "/doc/{{client_id}}/files/#{file.id}/accessinfo"
@@ -111,7 +111,7 @@ module GroupDocs
     # @return [Symbol] Set access mode
     #
     def access_mode_set!(mode, access = {})
-      api = GroupDocs::Api::Request.new do |request|
+      api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
         request[:path] = "/doc/{{client_id}}/files/#{file.id}/accessinfo"
@@ -133,7 +133,7 @@ module GroupDocs
     # @return [Array<Symbol>]
     #
     def formats!(access = {})
-      json = GroupDocs::Api::Request.new do |request|
+      json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
         request[:path] = "/doc/{{client_id}}/files/#{file.id}/formats"
@@ -153,13 +153,13 @@ module GroupDocs
     # @return [GroupDocs::Document::MetaData]
     #
     def metadata!(access = {})
-      json = GroupDocs::Api::Request.new do |request|
+      json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
         request[:path] = "/doc/{{client_id}}/files/#{file.id}/metadata"
       end.execute!
 
-      GroupDocs::Document::MetaData.new do |metadata|
+      Document::MetaData.new do |metadata|
         metadata.id = json[:id]
         metadata.guid = json[:guid]
         metadata.page_count = json[:page_count]
@@ -182,7 +182,7 @@ module GroupDocs
     # @return [Array<GroupDocs::Document::Field>]
     #
     def fields!(options = {}, access = {})
-      api = GroupDocs::Api::Request.new do |request|
+      api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
         request[:path] = "/doc/{{client_id}}/files/#{file.guid}/fields"
@@ -191,7 +191,7 @@ module GroupDocs
       json = api.execute!
 
       json[:fields].map do |field|
-        GroupDocs::Document::Field.new(field)
+        Document::Field.new(field)
       end
     end
 
@@ -204,14 +204,14 @@ module GroupDocs
     # @return [Array<GroupDocs::User>]
     #
     def sharers!(access = {})
-      json = GroupDocs::Api::Request.new do |request|
+      json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
         request[:path] = "/doc/{{client_id}}/files/#{file.id}/accessinfo"
       end.execute!
 
       json[:sharers].map do |user|
-        GroupDocs::User.new(user)
+        User.new(user)
       end
     end
 
@@ -230,7 +230,7 @@ module GroupDocs
       if emails.nil? || emails.empty?
         sharers_clear!(access)
       else
-        json = GroupDocs::Api::Request.new do |request|
+        json = Api::Request.new do |request|
           request[:access] = access
           request[:method] = :PUT
           request[:path] = "/doc/{{client_id}}/files/#{file.id}/sharers"
@@ -238,7 +238,7 @@ module GroupDocs
         end.execute!
 
         json[:shared_users].map do |user|
-          GroupDocs::User.new(user)
+          User.new(user)
         end
       end
     end
@@ -252,7 +252,7 @@ module GroupDocs
     # @return nil
     #
     def sharers_clear!(access = {})
-      GroupDocs::Api::Request.new do |request|
+      Api::Request.new do |request|
         request[:access] = access
         request[:method] = :DELETE
         request[:path] = "/doc/{{client_id}}/files/#{file.id}/sharers"
@@ -273,7 +273,7 @@ module GroupDocs
     def convert!(format, options = {}, access = {})
       options.merge!(new_type: format)
 
-      api = GroupDocs::Api::Request.new do |request|
+      api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :POST
         request[:path] = "/{{client_id}}/files/#{file.guid}"
@@ -281,7 +281,7 @@ module GroupDocs
       api.add_params(options)
       json = api.execute!
 
-      GroupDocs::Job.new(id: json[:job_id])
+      Job.new(id: json[:job_id])
     end
 
     #
@@ -305,7 +305,7 @@ module GroupDocs
       (options[:new_type].nil? || options[:email_results].nil?) and raise ArgumentError,
         "Both :new_type and :email_results should be passed, received: #{options.inspect}"
 
-      api = GroupDocs::Api::Request.new do |request|
+      api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :POST
         request[:path] = "/merge/{{client_id}}/files/#{file.guid}/datasources/#{datasource.id}"
@@ -313,7 +313,7 @@ module GroupDocs
       api.add_params(options)
       json = api.execute!
 
-      GroupDocs::Job.new(id: json[:job_id])
+      Job.new(id: json[:job_id])
     end
 
     #
@@ -325,14 +325,14 @@ module GroupDocs
     # @return [Array<GroupDocs::Questionnaire>]
     #
     def questionnaires!(access = {})
-      json = GroupDocs::Api::Request.new do |request|
+      json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
         request[:path] = "/merge/{{client_id}}/files/#{file.guid}/questionnaires"
       end.execute!
 
       json[:questionnaires].map do |questionnaire|
-        GroupDocs::Questionnaire.new(questionnaire)
+        Questionnaire.new(questionnaire)
       end
     end
 
@@ -350,7 +350,7 @@ module GroupDocs
       questionnaire.is_a?(GroupDocs::Questionnaire) or raise ArgumentError,
         "Questionnaire should be GroupDocs::Questionnaire object, received: #{questionnaire.inspect}"
 
-      GroupDocs::Api::Request.new do |request|
+      Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
         request[:path] = "/merge/{{client_id}}/files/#{file.guid}/questionnaires/#{questionnaire.id}"
@@ -372,7 +372,7 @@ module GroupDocs
       questionnaire.is_a?(GroupDocs::Questionnaire) or raise ArgumentError,
         "Questionnaire should be GroupDocs::Questionnaire object, received: #{questionnaire.inspect}"
 
-      json = GroupDocs::Api::Request.new do |request|
+      json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :POST
         request[:path] = "/merge/{{client_id}}/files/#{file.guid}/questionnaires"
@@ -397,7 +397,7 @@ module GroupDocs
       questionnaire.is_a?(GroupDocs::Questionnaire) or raise ArgumentError,
         "Questionnaire should be GroupDocs::Questionnaire object, received: #{questionnaire.inspect}"
 
-      GroupDocs::Api::Request.new do |request|
+      Api::Request.new do |request|
         request[:access] = access
         request[:method] = :DELETE
         request[:path] = "/merge/{{client_id}}/files/#{file.guid}/questionnaires/#{questionnaire.id}"
@@ -413,7 +413,7 @@ module GroupDocs
     # @return [Array<GroupDocs::Document::Annotation>]
     #
     def annotations!(access = {})
-      json = GroupDocs::Api::Request.new do |request|
+      json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
         request[:path] = "/ant/{{client_id}}/files/#{file.guid}/annotations"
@@ -421,7 +421,7 @@ module GroupDocs
 
       json[:annotations].map do |annotation|
         annotation.merge!(document: self)
-        GroupDocs::Document::Annotation.new(annotation)
+        Document::Annotation.new(annotation)
       end
     end
 
@@ -434,7 +434,7 @@ module GroupDocs
     # @return [Hash]
     #
     def details!(access = {})
-      api = GroupDocs::Api::Request.new do |request|
+      api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
         request[:path] = "/comparison/{{client_id}}/comparison/document"
@@ -458,7 +458,7 @@ module GroupDocs
       document.is_a?(GroupDocs::Document) or raise ArgumentError,
         "Document should be GroupDocs::Document object, received: #{document.inspect}"
 
-      api = GroupDocs::Api::Request.new do |request|
+      api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
         request[:path] = "/comparison/{{client_id}}/comparison/compare"
@@ -466,7 +466,7 @@ module GroupDocs
       api.add_params(source: file.guid, target: document.file.guid)
       json = api.execute!
 
-      GroupDocs::Job.new(id: json[:job_id])
+      Job.new(id: json[:job_id])
     end
 
     #
@@ -484,7 +484,7 @@ module GroupDocs
     # @option access [String] :private_key
     #
     def changes!(access = {})
-      api = GroupDocs::Api::Request.new do |request|
+      api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
         request[:path] = "/comparison/{{client_id}}/comparison/changes"
@@ -493,7 +493,7 @@ module GroupDocs
       json = api.execute!
 
       json[:changes].map do |change|
-        GroupDocs::Document::Change.new(change)
+        Document::Change.new(change)
       end
     end
 

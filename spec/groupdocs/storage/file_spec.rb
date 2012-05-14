@@ -4,6 +4,7 @@ describe GroupDocs::Storage::File do
 
   it_behaves_like GroupDocs::Api::Entity
   include_examples GroupDocs::Extensions::Lookup
+  include_examples GroupDocs::Api::Helpers::AccessMode
 
   describe 'DOCUMENT_TYPES' do
     it 'contains hash of document types' do
@@ -30,14 +31,14 @@ describe GroupDocs::Storage::File do
       end.should_not raise_error(ArgumentError)
     end
 
-    it 'raises error if upload path does not start with /' do
-      -> { described_class.upload!('test', 'upload_path') }.should raise_error(ArgumentError)
+    it 'checks that upload path starts with /' do
+      GroupDocs::Api::Helpers::Path.should_receive(:verify_starts_with_root).with('/upload_path')
+      described_class.upload!(__FILE__, '/upload_path')
     end
 
     it 'appends filename to upload path if it is not passed' do
-      upload_path = '/upload_path'
-      upload_path.should_receive(:<<).with("/#{File.basename(__FILE__)}")
-      described_class.upload!(__FILE__, upload_path)
+      GroupDocs::Api::Helpers::Path.should_receive(:append_file_name).with('/upload_path', __FILE__)
+      described_class.upload!(__FILE__, '/upload_path')
     end
 
     it 'returns GroupDocs::Storage::File object' do
@@ -69,8 +70,6 @@ describe GroupDocs::Storage::File do
   it { should respond_to(:type=)        }
   it { should respond_to(:file_type)    }
   it { should respond_to(:file_type=)   }
-  it { should respond_to(:access)       }
-  it { should respond_to(:access=)      }
   it { should respond_to(:path)         }
   it { should respond_to(:path=)        }
 
@@ -153,8 +152,14 @@ describe GroupDocs::Storage::File do
       end.should_not raise_error(ArgumentError)
     end
 
-    it 'raises error if path does not start with /' do
-      -> { subject.move!('resume2.pdf') }.should raise_error(ArgumentError)
+    it 'checks that path starts with /' do
+      GroupDocs::Api::Helpers::Path.should_receive(:verify_starts_with_root).with('/resume.pdf')
+      subject.move!('/resume.pdf')
+    end
+
+    it 'appends filename to move to path if it is not passed' do
+      GroupDocs::Api::Helpers::Path.should_receive(:append_file_name).with('/Folder', subject.name)
+      subject.move!('/Folder')
     end
 
     it 'sends "Groupdocs-Move" header' do
@@ -165,14 +170,6 @@ describe GroupDocs::Storage::File do
 
     it 'returns moved to file' do
       subject.move!('/resume2.pdf').should be_a(GroupDocs::Storage::File)
-    end
-
-    it 'appends filename to move to path if it is not passed' do
-      path = '/Folder'
-      name = File.basename(__FILE__)
-      subject.stub(name: name)
-      path.should_receive(:<<).with("/#{name}")
-      subject.move!(path)
     end
   end
 
@@ -204,8 +201,14 @@ describe GroupDocs::Storage::File do
       end.should_not raise_error(ArgumentError)
     end
 
-    it 'raises error if path does not start with /' do
-      -> { subject.copy!('resume2.pdf') }.should raise_error(ArgumentError)
+    it 'checks that path starts with /' do
+      GroupDocs::Api::Helpers::Path.should_receive(:verify_starts_with_root).with('resume.pdf')
+      subject.copy!('resume.pdf')
+    end
+
+    it 'appends filename to move to path if it is not passed' do
+      GroupDocs::Api::Helpers::Path.should_receive(:append_file_name).with('/Folder', subject.name)
+      subject.copy!('/Folder')
     end
 
     it 'sends "Groupdocs-Copy" header' do
@@ -216,14 +219,6 @@ describe GroupDocs::Storage::File do
 
     it 'returns copied to file' do
       subject.copy!('/resume2.pdf').should be_a(GroupDocs::Storage::File)
-    end
-
-    it 'appends filename to copy to path if it is not passed' do
-      path = '/Folder'
-      name = File.basename(__FILE__)
-      subject.stub(name: name)
-      path.should_receive(:<<).with("/#{name}")
-      subject.copy!(path)
     end
   end
 

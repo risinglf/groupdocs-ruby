@@ -92,7 +92,7 @@ module GroupDocs
           end
         end
 
-      end # Query
+      end # URL
     end # Helpers
   end # Api
 end # GroupDocs

@@ -5,9 +5,9 @@ module GroupDocs
   module Api
     class Request
 
-      include GroupDocs::Api::Helpers::Access
-      include GroupDocs::Api::Helpers::URL
-      include GroupDocs::Api::Helpers::REST
+      include Api::Helpers::Credentials
+      include Api::Helpers::URL
+      include Api::Helpers::REST
 
       # @attr_reader [RestClient::Resource] resource Entry point for all API requests
       attr_reader   :resource

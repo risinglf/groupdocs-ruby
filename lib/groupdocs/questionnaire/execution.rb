@@ -19,7 +19,7 @@ module GroupDocs
     # @return [Array<GroupDocs::Questionnaire::Execution>]
     #
     def self.all!(access = {})
-      GroupDocs::Questionnaire.executions!(access)
+      Questionnaire.executions!(access)
     end
 
     # @attr [Integer] id
@@ -90,7 +90,7 @@ module GroupDocs
     # @option access [String] :private_key
     #
     def set_status!(status, access = {})
-      GroupDocs::Api::Request.new do |request|
+      Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
         request[:path] = "/merge/{{client_id}}/questionnaires/executions/#{id}/status"
@@ -108,7 +108,7 @@ module GroupDocs
     # @option access [String] :private_key
     #
     def update!(access = {})
-      GroupDocs::Api::Request.new do |request|
+      Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
         request[:path] = "/merge/{{client_id}}/questionnaires/executions/#{id}"

@@ -19,7 +19,7 @@ module GroupDocs
           if question.is_a?(GroupDocs::Questionnaire::Question)
             question
           else
-            GroupDocs::Questionnaire::Question.new(question)
+            Questionnaire::Question.new(question)
           end
         end
       end

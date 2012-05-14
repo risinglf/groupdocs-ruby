@@ -2,8 +2,8 @@ module GroupDocs
   module Storage
     class Folder < GroupDocs::Api::Entity
 
-      extend GroupDocs::Extensions::Lookup
-      include GroupDocs::Api::Helpers::Access
+      extend Extensions::Lookup
+      include Api::Helpers::AccessMode
 
       #
       # Creates folder on server.
@@ -14,18 +14,16 @@ module GroupDocs
       # @option access [String] :private_key
       # @return [GroupDocs::Storage::Folder] Created folder
       #
-      # @raise [ArgumentError] If path does not start with /
-      #
       def self.create!(path, access = {})
-        path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{path.inspect}"
+        Api::Helpers::Path.verify_starts_with_root(path)
 
-        json = GroupDocs::Api::Request.new do |request|
+        json = Api::Request.new do |request|
           request[:access] = access
           request[:method] = :POST
           request[:path] = "/storage/{{client_id}}/paths#{path}"
         end.execute!
 
-        GroupDocs::Storage::Folder.new(json)
+        Storage::Folder.new(json)
       end
 
       #
@@ -64,10 +62,8 @@ module GroupDocs
       # @option access [String] :private_key
       # @return [Array<GroupDocs::Storage::Folder, GroupDocs::Storage::File>]
       #
-      # @raise [ArgumentError] If path does not start with /
-      #
       def self.list!(path = '/', options = {}, access = {})
-        path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{path.inspect}"
+        Api::Helpers::Path.verify_starts_with_root(path)
         new(path: path).list!(options, access)
       end
 
@@ -132,12 +128,10 @@ module GroupDocs
       # @option access [String] :private_key
       # @return [String] Moved to folder path
       #
-      # @raise [ArgumentError] If path does not start with /
-      #
       def move!(path, access = {})
-        path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{path.inspect}"
+        Api::Helpers::Path.verify_starts_with_root(path)
 
-        GroupDocs::Api::Request.new do |request|
+        Api::Request.new do |request|
           request[:access] = access
           request[:method] = :PUT
           request[:headers] = { :'Groupdocs-Move' => name }
@@ -169,12 +163,10 @@ module GroupDocs
       # @option access [String] :private_key
       # @return [String] Copied to folder path
       #
-      # @raise [ArgumentError] If path does not start with /
-      #
       def copy!(path, access = {})
-        path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{path.inspect}"
+        Api::Helpers::Path.verify_starts_with_root(path)
 
-        GroupDocs::Api::Request.new do |request|
+        Api::Request.new do |request|
           request[:access] = access
           request[:method] = :PUT
           request[:headers] = { :'Groupdocs-Copy' => name }
@@ -200,7 +192,7 @@ module GroupDocs
       def list!(options = {}, access = {})
         options[:order_by].capitalize! if options[:order_by]
 
-        api = GroupDocs::Api::Request.new do |request|
+        api = Api::Request.new do |request|
           request[:access] = access
           request[:method] = :GET
           request[:path] = "/storage/{{client_id}}/folders#{path}/#{name}"
@@ -211,9 +203,9 @@ module GroupDocs
         json[:entities].map do |entity|
           entity.merge!(path: path)
           if entity[:dir]
-            GroupDocs::Storage::Folder.new(entity)
+            Storage::Folder.new(entity)
           else
-            GroupDocs::Storage::File.new(entity)
+            Storage::File.new(entity)
           end
         end
       end
@@ -237,7 +229,7 @@ module GroupDocs
       # @option access [String] :private_key
       #
       def delete!(access = {})
-        GroupDocs::Api::Request.new do |request|
+        Api::Request.new do |request|
           request[:access] = access
           request[:method] = :DELETE
           request[:path] = "/storage/{{client_id}}/folders/#{name}"
@@ -253,14 +245,14 @@ module GroupDocs
       # @return [Array<GroupDocs::User>]
       #
       def sharers!(access = {})
-        json = GroupDocs::Api::Request.new do |request|
+        json = Api::Request.new do |request|
           request[:access] = access
           request[:method] = :GET
           request[:path] = "/doc/{{client_id}}/folders/#{id}/sharers"
         end.execute!
 
         json[:shared_users].map do |user|
-          GroupDocs::User.new(user)
+          User.new(user)
         end
       end
 
@@ -279,7 +271,7 @@ module GroupDocs
         if emails.nil? || emails.empty?
           sharers_clear!(access)
         else
-          json = GroupDocs::Api::Request.new do |request|
+          json = Api::Request.new do |request|
             request[:access] = access
             request[:method] = :PUT
             request[:path] = "/doc/{{client_id}}/folders/#{id}/sharers"
@@ -287,7 +279,7 @@ module GroupDocs
           end.execute!
 
           json[:shared_users].map do |user|
-            GroupDocs::User.new(user)
+            User.new(user)
           end
         end
       end
@@ -301,7 +293,7 @@ module GroupDocs
       # @return nil
       #
       def sharers_clear!(access = {})
-        GroupDocs::Api::Request.new do |request|
+        Api::Request.new do |request|
           request[:access] = access
           request[:method] = :DELETE
           request[:path] = "/doc/{{client_id}}/folders/#{id}/sharers"

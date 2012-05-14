@@ -19,7 +19,7 @@ module GroupDocs
     # @return [Hash]
     #
     def self.info!(access = {})
-      json = GroupDocs::Api::Request.new do |request|
+      json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
         request[:path] = '/storage/{{client_id}}'

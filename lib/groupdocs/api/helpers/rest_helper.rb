@@ -75,7 +75,7 @@ module GroupDocs
           raise BadResponseError, json[:error_message]
         end
 
-      end # Request
+      end # REST
     end # Helpers
   end # Api
 end # GroupDocs

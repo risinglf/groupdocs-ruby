@@ -1,13 +1,7 @@
 module GroupDocs
   module Api
     module Helpers
-      module Access
-
-        MODES = {
-          private:    0,
-          restricted: 1,
-          public:     2
-        }
+      module Credentials
 
         private
 
@@ -35,22 +29,7 @@ module GroupDocs
           private_key or raise NoPrivateKeyError, 'Private Key has not been specified.'
         end
 
-        #
-        # Converts access mode from/to human-readable format.
-        #
-        # @param [Integer, Symbol] mode
-        # @return [Symbol, Integer]
-        # @api private
-        #
-        def parse_access_mode(mode)
-          if mode.is_a?(Integer)
-            MODES.invert[mode]
-          else
-            MODES[mode]
-          end or raise ArgumentError, "Unknown access mode: #{mode.inspect}."
-        end
-
-      end # Access
+      end # Credentials
     end # Helpers
   end # Api
 end # GroupDocs

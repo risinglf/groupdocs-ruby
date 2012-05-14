@@ -2,7 +2,8 @@ module GroupDocs
   module Storage
     class File < GroupDocs::Api::Entity
 
-      extend GroupDocs::Extensions::Lookup
+      extend Extensions::Lookup
+      include Api::Helpers::AccessMode
 
       DOCUMENT_TYPES = {
         undefined: -1,
@@ -31,17 +32,17 @@ module GroupDocs
       # @raise [ArgumentError] If path does not start with /
       #
       def self.upload!(filepath, upload_path = '/', access = {})
-        upload_path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{upload_path.inspect}"
-        upload_path << "/#{Object::File.basename(filepath)}" unless upload_path =~ /\.(\w){3,4}$/
+        Api::Helpers::Path.verify_starts_with_root(upload_path)
+        Api::Helpers::Path.append_file_name(upload_path, filepath)
 
-        json = GroupDocs::Api::Request.new do |request|
+        json = Api::Request.new do |request|
           request[:access] = access
           request[:method] = :POST
           request[:path] = "/storage/{{client_id}}/folders#{upload_path}"
           request[:request_body] = Object::File.new(filepath, 'rb')
         end.execute!
 
-        GroupDocs::Storage::File.new(json)
+        Storage::File.new(json)
       end
 
       #
@@ -133,6 +134,15 @@ module GroupDocs
       end
 
       #
+      # Converts access mode to human-readable format.
+      #
+      # @return [Symbol]
+      #
+      def access
+        parse_access_mode(@access)
+      end
+
+      #
       # Converts timestamp which is return by API server to Time object.
       #
       # @return [Time]
@@ -151,7 +161,7 @@ module GroupDocs
       # @return [String] Path to downloaded file
       #
       def download!(path, access = {})
-        response = GroupDocs::Api::Request.new do |request|
+        response = Api::Request.new do |request|
           request[:access] = access
           request[:method] = :DOWNLOAD
           request[:path] = "/storage/{{client_id}}/files/#{id}"
@@ -175,20 +185,18 @@ module GroupDocs
       # @option access [String] :private_key
       # @return [GroupDocs::Storage::File] Moved to file
       #
-      # @raise [ArgumentError] If path does not start with /
-      #
       def move!(path, access = {})
-        path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{path.inspect}"
-        path << "/#{Object::File.basename(name)}" unless path =~ /\.(\w){3,4}$/
+        Api::Helpers::Path.verify_starts_with_root(path)
+        Api::Helpers::Path.append_file_name(path, name)
 
-        json = GroupDocs::Api::Request.new do |request|
+        json = Api::Request.new do |request|
           request[:access] = access
           request[:method] = :PUT
           request[:headers] = { :'Groupdocs-Move' => id }
           request[:path] = "/storage/{{client_id}}/files#{path}"
         end.execute!
 
-        GroupDocs::Storage::File.new(json[:dst_file])
+        Storage::File.new(json[:dst_file])
       end
 
       #
@@ -214,20 +222,18 @@ module GroupDocs
       # @option access [String] :private_key
       # @return [GroupDocs::Storage::File] Copied to file
       #
-      # @raise [ArgumentError] If path does not start with /
-      #
       def copy!(path, access = {})
-        path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{path.inspect}"
-        path << "/#{Object::File.basename(name)}" unless path =~ /\.(\w){3,4}$/
+        Api::Helpers::Path.verify_starts_with_root(path)
+        Api::Helpers::Path.append_file_name(path, name)
 
-        json = GroupDocs::Api::Request.new do |request|
+        json = Api::Request.new do |request|
           request[:access] = access
           request[:method] = :PUT
           request[:headers] = { :'Groupdocs-Copy' => id }
           request[:path] = "/storage/{{client_id}}/files#{path}"
         end.execute!
 
-        GroupDocs::Storage::File.new(json[:dst_file])
+        Storage::File.new(json[:dst_file])
       end
 
       #
@@ -239,7 +245,7 @@ module GroupDocs
       # @return [GroupDocs::Storage::File] Archive file
       #
       def compress!(access = {})
-        json = GroupDocs::Api::Request.new do |request|
+        json = Api::Request.new do |request|
           request[:access] = access
           request[:method] = :POST
           request[:path] = "/storage/{{client_id}}/files/#{id}/archive/zip"
@@ -247,7 +253,7 @@ module GroupDocs
 
         # HACK add filename for further file operations
         json[:name] = "#{name}.zip"
-        GroupDocs::Storage::File.new(json)
+        Storage::File.new(json)
       end
 
       #
@@ -258,7 +264,7 @@ module GroupDocs
       # @option access [String] :private_key
       #
       def delete!(access = {})
-        GroupDocs::Api::Request.new do |request|
+        Api::Request.new do |request|
           request[:access] = access
           request[:method] = :DELETE
           request[:path] = "/storage/{{client_id}}/files/#{guid}"
@@ -274,7 +280,7 @@ module GroupDocs
       # @return [GroupDocs::Document]
       #
       def to_document
-        GroupDocs::Document.new(file: self)
+        Document.new(file: self)
       end
 
     end # File
