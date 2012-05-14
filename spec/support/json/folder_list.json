@@ -2,17 +2,18 @@
   "status": "Ok",
   "result":
     {
-      "entities":
+      "folders":
         [
           {
             "id": 1,
-            "dir": true,
             "created_on": 1330450135,
             "modified_on": 1330450135
-          },
+          }
+        ],
+      "files":
+        [
           {
             "id": 2,
-            "dir": false,
             "created_on": 1330450135,
             "modified_on": 1330450135
           }

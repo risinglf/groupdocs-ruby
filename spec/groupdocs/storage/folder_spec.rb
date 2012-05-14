@@ -196,7 +196,7 @@ describe GroupDocs::Storage::Folder do
     end
 
     it 'returns empty array if nothing is listed in directory' do
-      mock_api_server('{"result": {"entities": []}, "status": "Ok"}')
+      mock_api_server('{"result": {"folders": [], "files": []}, "status": "Ok"}')
       subject.list!.should be_empty
     end
 
