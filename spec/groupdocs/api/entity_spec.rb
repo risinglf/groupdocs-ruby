@@ -50,5 +50,9 @@ describe GroupDocs::Api::Entity do
     it 'converts instance variable symbol to accessor method symbol' do
       subject.send(:variable_to_accessor, :@test).should == :test
     end
+
+    it 'converts camelized words to underscored' do
+      subject.send(:variable_to_accessor, :@TestOneAndTWO).should == :test_one_and_two
+    end
   end
 end

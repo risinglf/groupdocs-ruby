@@ -104,7 +104,8 @@ module GroupDocs
       #
       def variable_to_accessor(variable)
         word = variable.to_s.delete(?@)
-        word.gsub!(/[A-Z]/) { |letter| "_#{letter.downcase}" }
+        word.gsub!(/(?<=[a-z])[A-Z]/) { |match| "_#{match}" }
+        word.downcase!
         word.to_sym
       end
 
