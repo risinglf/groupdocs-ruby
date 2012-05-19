@@ -174,20 +174,18 @@ module GroupDocs
     #
     # Returns an array of document fields.
     #
-    # @param [Hash] options
-    # @option options [Boolean] :include_geometry Set to true if fields location and size should be returned
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
     # @return [Array<GroupDocs::Document::Field>]
     #
-    def fields!(options = {}, access = {})
+    def fields!(access = {})
       api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
         request[:path] = "/doc/{{client_id}}/files/#{file.guid}/fields"
       end
-      api.add_params(options)
+      api.add_params(include_geometry: true)
       json = api.execute!
 
       json[:fields].map do |field|
