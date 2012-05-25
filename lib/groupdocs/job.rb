@@ -44,7 +44,7 @@ module GroupDocs
     #
     def self.create!(options, access = {})
       options[:actions] or raise ArgumentError, 'options[:actions] is required.'
-      options[:actions] = convert_actions(options[:actions])
+      options[:actions] = convert_actions_to_byte(options[:actions])
       options[:out_formats] = options[:out_formats].join(?;) if options[:out_formats]
 
       api = Api::Request.new do |request|
@@ -60,8 +60,19 @@ module GroupDocs
 
     # @attr [Integer] id
     attr_accessor :id
+    # @attr [Array<Symbol>] actions
+    attr_accessor :actions
+    # @attr [Array<Symbol>] out_formats
+    # TODO how should it behave?
+    attr_accessor :out_formats
+    # @attr [Boolean] email_results
+    attr_accessor :email_results
+    # @attr [Boolean] url_only
+    attr_accessor :url_only
     # @attr [Array<GroupDocs::Document] documents
     attr_accessor :documents
+    # @attr [Time] requested_time
+    attr_accessor :requested_time
 
     #
     # Coverts passed array of attributes hash to array of GroupDocs::Document.
@@ -73,6 +84,24 @@ module GroupDocs
         document.merge!(file: GroupDocs::Storage::File.new(document))
         Document.new(document)
       end
+    end
+
+    #
+    # Converts timestamp which is return by API server to Time object.
+    #
+    # @return [Time]
+    #
+    def requested_time
+      Time.at(@requested_time / 1000)
+    end
+
+    #
+    # Returns job actions in human-readable format.
+    #
+    # @return [Array<Symbol>]
+    #
+    def actions
+      self.class.convert_byte_to_actions(@actions)
     end
 
     #

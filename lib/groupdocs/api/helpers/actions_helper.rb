@@ -25,7 +25,7 @@ module GroupDocs
         # @raise [ArgumentError] if action is unknown
         # @api private
         #
-        def convert_actions(actions)
+        def convert_actions_to_byte(actions)
           actions.is_a?(Array) or raise ArgumentError, "Actions should be an array, received: #{actions.inspect}"
           actions = actions.map(&:to_sym)
 
@@ -40,6 +40,29 @@ module GroupDocs
           end
 
           flag
+        end
+
+        #
+        # Converts actions byte flag to array.
+        #
+        # @param [Integer] byte
+        # @return [Array<Symbol>]
+        # @raise [ArgumentError] if actions is not an array
+        # @api private
+        #
+        def convert_byte_to_actions(byte)
+          byte.is_a?(Integer) or raise ArgumentError, "Byte flag should be an integer, received: #{byte.inspect}"
+
+          actions = []
+          ACTIONS.reverse_each do |action, flag|
+            decreased_byte = byte - flag
+            if decreased_byte >= 0
+              actions << action
+              byte = decreased_byte
+            end
+          end
+
+          actions
         end
 
       end # Actions
