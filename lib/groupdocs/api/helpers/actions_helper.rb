@@ -62,6 +62,10 @@ module GroupDocs
             end
           end
 
+          unless actions == [:none]
+            actions.delete(:none)
+          end
+
           actions
         end
 
