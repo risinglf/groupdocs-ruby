@@ -38,7 +38,7 @@ module GroupDocs
     # @return [Time]
     #
     def signed_up_on
-      Time.at(@signed_up_on)
+      Time.at(@signed_up_on / 1000)
     end
 
     # Compatibility with response JSON

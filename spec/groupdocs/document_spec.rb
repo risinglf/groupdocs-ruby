@@ -67,8 +67,8 @@ describe GroupDocs::Document do
 
   describe '#process_date' do
     it 'returns converted to Time object Unix timestamp' do
-      subject.process_date = 1330450135
-      subject.process_date.should be_a(Time)
+      subject.process_date = 1330450135000
+      subject.process_date.should == Time.at(1330450135)
     end
   end
 

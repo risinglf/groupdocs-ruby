@@ -98,7 +98,7 @@ describe GroupDocs::Job do
   describe '#requested_time' do
     it 'converts timestamp to Time object' do
       subject.requested_time = 1330450135000
-      subject.requested_time.should == Time.at(1330450135000 / 1000)
+      subject.requested_time.should == Time.at(1330450135)
     end
   end
 

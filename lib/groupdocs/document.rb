@@ -63,7 +63,7 @@ module GroupDocs
     # @return [Time]
     #
     def process_date
-      Time.at(@process_date)
+      Time.at(@process_date / 1000)
     end
 
     # Compatibility with response JSON
