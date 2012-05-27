@@ -93,6 +93,12 @@ describe GroupDocs::Job do
         document.should be_a(GroupDocs::Document)
       end
     end
+
+    it 'does nothing if nil is passed' do
+      lambda do
+        subject.documents = nil
+      end.should_not change(subject, :documents)
+    end
   end
 
   describe '#requested_time' do

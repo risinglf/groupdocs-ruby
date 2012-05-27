@@ -80,9 +80,11 @@ module GroupDocs
     # @param [Array<Hash>] documents Array of document attributes hashes
     #
     def documents=(documents)
-      @documents = documents.map do |document|
-        document.merge!(file: GroupDocs::Storage::File.new(document))
-        Document.new(document)
+      if documents
+        @documents = documents.map do |document|
+          document.merge!(file: GroupDocs::Storage::File.new(document))
+          Document.new(document)
+        end
       end
     end
 
