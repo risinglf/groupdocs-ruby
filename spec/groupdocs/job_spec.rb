@@ -49,7 +49,7 @@ describe GroupDocs::Job do
     end
 
     it 'convert actions to byte flag' do
-      described_class.should_receive(:convert_actions).with(actions).and_return(5)
+      described_class.should_receive(:convert_actions_to_byte).with(actions).and_return(5)
       described_class.create!(actions: actions)
     end
 
@@ -64,10 +64,20 @@ describe GroupDocs::Job do
     end
   end
 
-  it { should respond_to(:id)         }
-  it { should respond_to(:id=)        }
-  it { should respond_to(:documents)  }
-  it { should respond_to(:documents=) }
+  it { should respond_to(:id)              }
+  it { should respond_to(:id=)             }
+  it { should respond_to(:actions)         }
+  it { should respond_to(:actions=)        }
+  it { should respond_to(:out_formats)     }
+  it { should respond_to(:out_formats=)    }
+  it { should respond_to(:email_results)   }
+  it { should respond_to(:email_results=)  }
+  it { should respond_to(:url_only)        }
+  it { should respond_to(:url_only=)       }
+  it { should respond_to(:documents)       }
+  it { should respond_to(:documents=)      }
+  it { should respond_to(:requested_time)  }
+  it { should respond_to(:requested_time=) }
 
   describe '#documents=' do
     let(:response) do
@@ -82,6 +92,27 @@ describe GroupDocs::Job do
       documents.each do |document|
         document.should be_a(GroupDocs::Document)
       end
+    end
+
+    it 'does nothing if nil is passed' do
+      lambda do
+        subject.documents = nil
+      end.should_not change(subject, :documents)
+    end
+  end
+
+  describe '#requested_time' do
+    it 'converts timestamp to Time object' do
+      subject.requested_time = 1330450135000
+      subject.requested_time.should == Time.at(1330450135)
+    end
+  end
+
+  describe '#actions' do
+    it 'converts actions to human-readable format' do
+      subject.actions = 129
+      described_class.should_receive(:convert_byte_to_actions).with(129)
+      subject.actions
     end
   end
 

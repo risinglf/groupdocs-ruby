@@ -29,8 +29,8 @@ describe GroupDocs::Document::View do
 
   describe '#viewed_on' do
     it 'returns converted to Time object Unix timestamp' do
-      subject.viewed_on = 1330450135
-      subject.viewed_on.should be_a(Time)
+      subject.viewed_on = 1330450135000
+      subject.viewed_on.should == Time.at(1330450135)
     end
   end
 end

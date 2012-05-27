@@ -53,15 +53,15 @@ describe GroupDocs::DataSource do
 
   describe '#created_on' do
     it 'returns converted to Time object Unix timestamp' do
-      subject.created_on = 1332950825
-      subject.created_on.should be_a(Time)
+      subject.created_on = 1332950825000
+      subject.created_on.should == Time.at(1332950825)
     end
   end
 
   describe '#modified_on' do
     it 'returns converted to Time object Unix timestamp' do
-      subject.modified_on = 1332950825
-      subject.modified_on.should be_a(Time)
+      subject.modified_on = 1332950825000
+      subject.modified_on.should == Time.at(1332950825)
     end
   end
 

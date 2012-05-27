@@ -14,7 +14,7 @@ module GroupDocs
     # @return [Time]
     #
     def viewed_on
-      Time.at(@viewed_on)
+      Time.at(@viewed_on / 1000)
     end
 
     #
