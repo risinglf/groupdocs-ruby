@@ -7,43 +7,49 @@
             "id": 1,
             "status": 5,
             "documents":
-            [
-              {
-                "status": 2,
-                "output_formats": "pdf",
-                "outputs":
-                [
-                  {
-                    "ftype": 19,
-                    "error": null,
-                    "url": "http://groupdocs.com",
-                    "name": "Test.pdf"
-                  }
-                ],
-                "id": 123
-              }
-            ]
+            {
+              "inputs":
+              [
+                {
+                  "status": 2,
+                  "output_formats": "pdf",
+                  "outputs":
+                  [
+                    {
+                      "ftype": 19,
+                      "error": null,
+                      "url": "http://groupdocs.com",
+                      "name": "Test.pdf"
+                    }
+                  ],
+                  "id": 123
+                }
+              ]
+            }
           },
           {
             "id": 2,
             "status": 3,
             "documents":
-            [
-              {
-                "status": 1,
-                "output_formats": "tiff",
-                "outputs":
-                [
-                  {
-                    "ftype": 15,
-                    "error": null,
-                    "url": "http://groupdocs.com",
-                    "name": "CV.doc"
-                  }
-                ],
-                "id": 345
-              }
-            ]
+            {
+              "inputs":
+              [
+                {
+                  "status": 1,
+                  "output_formats": "tiff",
+                  "outputs":
+                  [
+                    {
+                      "ftype": 15,
+                      "error": null,
+                      "url": "http://groupdocs.com",
+                      "name": "CV.doc"
+                    }
+                  ],
+                  "id": 345
+                }
+              ]
+            }
           }
         ]
     },

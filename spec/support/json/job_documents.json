@@ -2,7 +2,7 @@
   "result":
     {
       "job_status": 5,
-      "documents":
+      "inputs":
       [
         {
           "status": 2,
