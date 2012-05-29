@@ -260,6 +260,13 @@ module GroupDocs
     #
     # Converts document to given format.
     #
+    # @example
+    #   document = GroupDocs::Document.find!(:name, 'CV.doc')
+    #   job = document.convert!(:docx)
+    #   sleep(5) # wait for server to finish converting
+    #   file = job.documents!.first
+    #   file.download!(File.dirname(__FILE__))
+    #
     # @param [Symbol] format
     # @param [Hash] options
     # @option options [Boolean] :email_results Set to true if converted document should be emailed
@@ -274,7 +281,7 @@ module GroupDocs
       api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :POST
-        request[:path] = "/{{client_id}}/files/#{file.guid}"
+        request[:path] = "/async/{{client_id}}/files/#{file.guid}"
       end
       api.add_params(options)
       json = api.execute!
@@ -474,6 +481,7 @@ module GroupDocs
     #   document_one = GroupDocs::Document.find!(:name, 'CV.doc')
     #   document_two = GroupDocs::Document.find!(:name, 'Resume.doc')
     #   job = document_one.compare!(document_two)
+    #   sleep(5) # wait for server to finish comparing
     #   result = job.documents!.first
     #   result.changes!
     #
