@@ -54,8 +54,10 @@ module GroupDocs
     attr_accessor :file
     # @attr [Time] process_date
     attr_accessor :process_date
-    # @attr [Array] outputs
+    # @attr [Array<GroupDocs::Storage::File>] outputs
     attr_accessor :outputs
+    # @attr [Array<Symbol>] output_formats
+    attr_accessor :output_formats
 
     #
     # Coverts passed array of attributes hash to array of GroupDocs::Storage::File.
@@ -68,6 +70,15 @@ module GroupDocs
           GroupDocs::Storage::File.new(output)
         end
       end
+    end
+
+    #
+    # Returns output formats in human-readable format.
+    #
+    # @return [Array<Symbol>]
+    #
+    def output_formats
+      @output_formats.split(?;).map(&:to_sym)
     end
 
     #
