@@ -65,6 +65,30 @@ describe GroupDocs::Document do
     subject.method(:proc_date=).should == subject.method(:process_date=)
   end
 
+  describe '#outputs=' do
+    let(:response) do
+      [
+        { ftype: 1, guid: 'fhy9yh94u238dgf' },
+        { ftype: 2, guid: 'ofh9rhy9rfohf9s' }
+      ]
+    end
+
+    it 'saves outputs as array of GroupDocs::Storage::File objects' do
+      subject.outputs = response
+      outputs = subject.outputs
+      outputs.should be_an(Array)
+      outputs.each do |output|
+        output.should be_a(GroupDocs::Storage::File)
+      end
+    end
+
+    it 'does nothing if nil is passed' do
+      lambda do
+        subject.outputs = nil
+      end.should_not change(subject, :outputs)
+    end
+  end
+
   describe '#process_date' do
     it 'returns converted to Time object Unix timestamp' do
       subject.process_date = 1330450135000

@@ -58,6 +58,19 @@ module GroupDocs
     attr_accessor :outputs
 
     #
+    # Coverts passed array of attributes hash to array of GroupDocs::Storage::File.
+    #
+    # @param [Array<Hash>] outputs Array of file attributes hashes
+    #
+    def outputs=(outputs)
+      if outputs
+        @outputs = outputs.map do |output|
+          GroupDocs::Storage::File.new(output)
+        end
+      end
+    end
+
+    #
     # Converts timestamp which is return by API server to Time object.
     #
     # @return [Time]
@@ -264,8 +277,9 @@ module GroupDocs
     #   document = GroupDocs::Document.find!(:name, 'CV.doc')
     #   job = document.convert!(:docx)
     #   sleep(5) # wait for server to finish converting
-    #   file = job.documents!.first
-    #   file.download!(File.dirname(__FILE__))
+    #   original_document = job.documents!.first
+    #   converted_file = original_file.outputs.first
+    #   converted_file.download!(File.dirname(__FILE__))
     #
     # @param [Symbol] format
     # @param [Hash] options
