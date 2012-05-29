@@ -81,7 +81,7 @@ module GroupDocs
     #
     def documents=(documents)
       if documents
-        @documents = documents.map do |document|
+        @documents = documents[:inputs].map do |document|
           document.merge!(file: GroupDocs::Storage::File.new(document))
           Document.new(document)
         end
@@ -121,7 +121,7 @@ module GroupDocs
         request[:path] = "/async/{{client_id}}/jobs/#{id}/documents"
       end.execute!
 
-      json[:documents].map do |document|
+      json[:inputs].map do |document|
         document.merge!(file: GroupDocs::Storage::File.new(document))
         Document.new(document)
       end

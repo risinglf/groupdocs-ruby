@@ -53,16 +53,49 @@ describe GroupDocs::Document do
     end
   end
 
-  it { should respond_to(:file)          }
-  it { should respond_to(:file=)         }
-  it { should respond_to(:process_date)  }
-  it { should respond_to(:process_date=) }
-  it { should respond_to(:outputs)       }
-  it { should respond_to(:outputs=)      }
+  it { should respond_to(:file)            }
+  it { should respond_to(:file=)           }
+  it { should respond_to(:process_date)    }
+  it { should respond_to(:process_date=)   }
+  it { should respond_to(:outputs)         }
+  it { should respond_to(:outputs=)        }
+  it { should respond_to(:output_formats)  }
+  it { should respond_to(:output_formats=) }
 
   it 'is compatible with response JSON' do
     subject.should respond_to(:proc_date=)
     subject.method(:proc_date=).should == subject.method(:process_date=)
+  end
+
+  describe '#outputs=' do
+    let(:response) do
+      [
+        { ftype: 1, guid: 'fhy9yh94u238dgf' },
+        { ftype: 2, guid: 'ofh9rhy9rfohf9s' }
+      ]
+    end
+
+    it 'saves outputs as array of GroupDocs::Storage::File objects' do
+      subject.outputs = response
+      outputs = subject.outputs
+      outputs.should be_an(Array)
+      outputs.each do |output|
+        output.should be_a(GroupDocs::Storage::File)
+      end
+    end
+
+    it 'does nothing if nil is passed' do
+      lambda do
+        subject.outputs = nil
+      end.should_not change(subject, :outputs)
+    end
+  end
+
+  describe '#output_formats' do
+    it 'returns parsed array of output formats' do
+      subject.output_formats = "pdf;tiff;doc"
+      subject.output_formats.should == [:pdf, :tiff, :doc]
+    end
   end
 
   describe '#process_date' do

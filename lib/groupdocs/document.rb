@@ -54,8 +54,32 @@ module GroupDocs
     attr_accessor :file
     # @attr [Time] process_date
     attr_accessor :process_date
-    # @attr [Array] outputs
+    # @attr [Array<GroupDocs::Storage::File>] outputs
     attr_accessor :outputs
+    # @attr [Array<Symbol>] output_formats
+    attr_accessor :output_formats
+
+    #
+    # Coverts passed array of attributes hash to array of GroupDocs::Storage::File.
+    #
+    # @param [Array<Hash>] outputs Array of file attributes hashes
+    #
+    def outputs=(outputs)
+      if outputs
+        @outputs = outputs.map do |output|
+          GroupDocs::Storage::File.new(output)
+        end
+      end
+    end
+
+    #
+    # Returns output formats in human-readable format.
+    #
+    # @return [Array<Symbol>]
+    #
+    def output_formats
+      @output_formats.split(?;).map(&:to_sym)
+    end
 
     #
     # Converts timestamp which is return by API server to Time object.
@@ -260,6 +284,14 @@ module GroupDocs
     #
     # Converts document to given format.
     #
+    # @example
+    #   document = GroupDocs::Document.find!(:name, 'CV.doc')
+    #   job = document.convert!(:docx)
+    #   sleep(5) # wait for server to finish converting
+    #   original_document = job.documents!.first
+    #   converted_file = original_file.outputs.first
+    #   converted_file.download!(File.dirname(__FILE__))
+    #
     # @param [Symbol] format
     # @param [Hash] options
     # @option options [Boolean] :email_results Set to true if converted document should be emailed
@@ -274,7 +306,7 @@ module GroupDocs
       api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :POST
-        request[:path] = "/{{client_id}}/files/#{file.guid}"
+        request[:path] = "/async/{{client_id}}/files/#{file.guid}"
       end
       api.add_params(options)
       json = api.execute!
@@ -474,6 +506,7 @@ module GroupDocs
     #   document_one = GroupDocs::Document.find!(:name, 'CV.doc')
     #   document_two = GroupDocs::Document.find!(:name, 'Resume.doc')
     #   job = document_one.compare!(document_two)
+    #   sleep(5) # wait for server to finish comparing
     #   result = job.documents!.first
     #   result.changes!
     #

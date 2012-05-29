@@ -81,8 +81,12 @@ describe GroupDocs::Job do
 
   describe '#documents=' do
     let(:response) do
-      [{ id: 1, guid: 'fhy9yh94u238dgf', status: 0, outputs: [] },
-       { id: 2, guid: 'ofh9rhy9rfohf9s', status: 2, outputs: [] }]
+      {
+        inputs: [
+          { id: 1, guid: 'fhy9yh94u238dgf', status: 0, outputs: [] },
+          { id: 2, guid: 'ofh9rhy9rfohf9s', status: 2, outputs: [] }
+        ]
+      }
     end
 
     it 'saves documents as array of GroupDocs::Document objects' do
