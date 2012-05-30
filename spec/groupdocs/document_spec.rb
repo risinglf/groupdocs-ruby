@@ -93,7 +93,7 @@ describe GroupDocs::Document do
 
   describe '#output_formats' do
     it 'returns parsed array of output formats' do
-      subject.output_formats = "pdf;tiff;doc"
+      subject.output_formats = "pdf,tiff,doc"
       subject.output_formats.should == [:pdf, :tiff, :doc]
     end
   end

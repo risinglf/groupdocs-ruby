@@ -62,9 +62,6 @@ module GroupDocs
     attr_accessor :id
     # @attr [Array<Symbol>] actions
     attr_accessor :actions
-    # @attr [Array<Symbol>] out_formats
-    # TODO how should it behave?
-    attr_accessor :out_formats
     # @attr [Boolean] email_results
     attr_accessor :email_results
     # @attr [Boolean] url_only

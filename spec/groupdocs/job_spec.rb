@@ -68,8 +68,6 @@ describe GroupDocs::Job do
   it { should respond_to(:id=)             }
   it { should respond_to(:actions)         }
   it { should respond_to(:actions=)        }
-  it { should respond_to(:out_formats)     }
-  it { should respond_to(:out_formats=)    }
   it { should respond_to(:email_results)   }
   it { should respond_to(:email_results=)  }
   it { should respond_to(:url_only)        }

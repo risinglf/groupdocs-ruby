@@ -78,7 +78,7 @@ module GroupDocs
     # @return [Array<Symbol>]
     #
     def output_formats
-      @output_formats.split(?;).map(&:to_sym)
+      @output_formats.split(?,).map(&:to_sym)
     end
 
     #
