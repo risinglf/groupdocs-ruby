@@ -129,6 +129,11 @@ describe GroupDocs::Job do
       end.should_not raise_error(ArgumentError)
     end
 
+    it 'updates job status' do
+      subject.documents!
+      subject.status.should == :archived
+    end
+
     it 'returns array of GroupDocs::Document objects' do
       documents = subject.documents!
       documents.should be_an(Array)

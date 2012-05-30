@@ -118,6 +118,7 @@ module GroupDocs
         request[:path] = "/async/{{client_id}}/jobs/#{id}/documents"
       end.execute!
 
+      self.status = json[:job_status]
       json[:inputs].map do |document|
         document.merge!(file: GroupDocs::Storage::File.new(document))
         Document.new(document)
