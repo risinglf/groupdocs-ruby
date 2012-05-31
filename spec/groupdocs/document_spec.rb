@@ -454,6 +454,11 @@ describe GroupDocs::Document do
         annotation.should be_a(GroupDocs::Document::Annotation)
       end
     end
+
+    it 'returns empty array if annotations are null in reponse' do
+      mock_api_server('{"status": "Ok", "result": {"annotations": null }}')
+      subject.annotations!.should be_empty
+    end
   end
 
   describe '#details!' do

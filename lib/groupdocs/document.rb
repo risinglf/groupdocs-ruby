@@ -449,9 +449,13 @@ module GroupDocs
         request[:path] = "/ant/{{client_id}}/files/#{file.guid}/annotations"
       end.execute!
 
-      json[:annotations].map do |annotation|
-        annotation.merge!(document: self)
-        Document::Annotation.new(annotation)
+      if json[:annotations]
+        json[:annotations].map do |annotation|
+          annotation.merge!(document: self)
+          Document::Annotation.new(annotation)
+        end
+      else
+        []
       end
     end
 
