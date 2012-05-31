@@ -1,13 +1,18 @@
 module GroupDocs
   class Document::Annotation < GroupDocs::Api::Entity
 
+    require 'groupdocs/document/annotation/reply'
+
     TYPES = {
       text:  0,
       area:  1,
       point: 2,
     }
 
-    require 'groupdocs/document/annotation/reply'
+    ACCESS = {
+      private: 0,
+      public:  1,
+    }
 
     # @attr [GroupDocs::Document] document
     attr_accessor :document
@@ -72,12 +77,36 @@ module GroupDocs
     end
 
     #
-    # Returns field type in human-readable format.
+    # Returns type in human-readable format.
     #
     # @return [Symbol]
     #
     def type
       TYPES.invert[@type]
+    end
+
+    #
+    # Updates access mode with machine-readable format.
+    #
+    # @param [Symbol] access
+    # @raise [ArgumentError] if access mode is unknown
+    #
+    def access=(access)
+      if access.is_a?(Symbol)
+        ACCESS.keys.include?(access) or raise ArgumentError, "Unknown access mode: #{access.inspect}"
+        access = ACCESS[access]
+      end
+
+      @access = access
+    end
+
+    #
+    # Returns access mode in human-readable format.
+    #
+    # @return [Symbol]
+    #
+    def access
+      ACCESS.invert[@access]
     end
 
     #
