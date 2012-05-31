@@ -86,7 +86,22 @@ module GroupDocs
     end
 
     #
-    # Returns access in human-readable format.
+    # Updates access mode with machine-readable format.
+    #
+    # @param [Symbol] access
+    # @raise [ArgumentError] if access mode is unknown
+    #
+    def access=(access)
+      if access.is_a?(Symbol)
+        ACCESS.keys.include?(access) or raise ArgumentError, "Unknown access mode: #{access.inspect}"
+        access = ACCESS[access]
+      end
+
+      @access = access
+    end
+
+    #
+    # Returns access mode in human-readable format.
     #
     # @return [Symbol]
     #
