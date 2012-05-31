@@ -90,6 +90,13 @@ describe GroupDocs::Document::Annotation do
     end
   end
 
+  describe '#access' do
+    it 'returns access in human-readable format' do
+      subject.access = 1
+      subject.access.should == :public
+    end
+  end
+
   describe '#created_on' do
     it 'returns converted to Time object Unix timestamp' do
       subject.created_on = 1332950825000

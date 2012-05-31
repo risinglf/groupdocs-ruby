@@ -1,13 +1,18 @@
 module GroupDocs
   class Document::Annotation < GroupDocs::Api::Entity
 
+    require 'groupdocs/document/annotation/reply'
+
     TYPES = {
       text:  0,
       area:  1,
       point: 2,
     }
 
-    require 'groupdocs/document/annotation/reply'
+    ACCESS = {
+      private: 0,
+      public:  1,
+    }
 
     # @attr [GroupDocs::Document] document
     attr_accessor :document
@@ -72,12 +77,21 @@ module GroupDocs
     end
 
     #
-    # Returns field type in human-readable format.
+    # Returns type in human-readable format.
     #
     # @return [Symbol]
     #
     def type
       TYPES.invert[@type]
+    end
+
+    #
+    # Returns access in human-readable format.
+    #
+    # @return [Symbol]
+    #
+    def access
+      ACCESS.invert[@access]
     end
 
     #
