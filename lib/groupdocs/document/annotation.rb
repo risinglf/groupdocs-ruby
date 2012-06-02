@@ -191,6 +191,26 @@ module GroupDocs
     end
 
     #
+    # Returns annotation collaborators.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<GroupDocs::User>]
+    #
+    def collaborators!(access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/ant/{{client_id}}/files/#{document.file.guid}/collaborators"
+      end.execute!
+
+      json[:collaborators].map do |collaborator|
+        User.new(collaborator)
+      end
+    end
+
+    #
     # Sets annotation collaborators to given emails.
     #
     # @param [Array] emails List of collaborators' email addresses
