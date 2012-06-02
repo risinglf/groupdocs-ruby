@@ -36,19 +36,24 @@ module GroupDocs
     attr_accessor :box
     # @attr [Array<GroupDocs::Document::Annotation::Reply>] replies
     attr_accessor :replies
+    # @attr [Hash] annotationPosition
+    attr_accessor :annotationPosition
 
     # Compatibility with response JSON
     alias_method :annotationGuid=, :guid=
 
     # Human-readable accessors
-    alias_method :session_guid,     :sessionGuid
-    alias_method :session_guid=,    :sessionGuid=
-    alias_method :document_guid,    :documentGuid
-    alias_method :document_guid=,   :documentGuid=
-    alias_method :reply_guid,       :replyGuid
-    alias_method :reply_guid=,      :replyGuid=
-    alias_method :created_on,       :createdOn
-    alias_method :created_on=,      :createdOn=
+    alias_method :session_guid,         :sessionGuid
+    alias_method :session_guid=,        :sessionGuid=
+    alias_method :document_guid,        :documentGuid
+    alias_method :document_guid=,       :documentGuid=
+    alias_method :reply_guid,           :replyGuid
+    alias_method :reply_guid=,          :replyGuid=
+    alias_method :created_on,           :createdOn
+    alias_method :created_on=,          :createdOn=
+    alias_method :annotation_position,  :annotationPosition
+    alias_method :annotation_position=, :annotationPosition=
+    alias_method :position,             :annotation_position
 
     #
     # Creates new GroupDocs::Document::Annotation.
@@ -238,6 +243,26 @@ module GroupDocs
     #
     def replies!(options = {}, access = {})
       Document::Annotation::Reply.get!(self, options, access)
+    end
+
+    #
+    # Moves annotation to given coordinates.
+    #
+    # @param [Integer, Float] x
+    # @param [Integer, Float] y
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def move!(x, y, access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/ant/{{client_id}}/annotations/#{guid}/position"
+        request[:request_body] = { x: x, y: y }
+      end.execute!
+
+      self.annotation_position = { x: x, y: y }
     end
 
   end # Document::Annotation
