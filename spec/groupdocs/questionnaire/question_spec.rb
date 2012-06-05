@@ -26,6 +26,13 @@ describe GroupDocs::Questionnaire::Question do
   it { should respond_to(:answers)     }
   it { should respond_to(:answers=)    }
 
+  it 'has human-readable accessors' do
+    subject.should respond_to(:default_answer)
+    subject.should respond_to(:default_answer=)
+    subject.method(:default_answer).should  == subject.method(:def_answer)
+    subject.method(:default_answer=).should == subject.method(:def_answer=)
+  end
+
   describe '#answers=' do
     it 'converts each answer to GroupDocs::Questionnaire::Question::Answer object' do
       subject.answers = [{ text: 'Text1', value: 'Value1' }, { text: 'Text2', value: 'Value2' }]

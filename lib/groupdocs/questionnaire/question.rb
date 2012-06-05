@@ -21,6 +21,10 @@ module GroupDocs
     # @attr [Array<Hash>] answers
     attr_accessor :answers
 
+    # Human-readable accessors
+    alias_method :default_answer,  :def_answer
+    alias_method :default_answer=, :def_answer=
+
     #
     # Converts each answer to GroupDocs::Questionnaire::Question::Answer object.
     #
