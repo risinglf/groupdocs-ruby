@@ -3,11 +3,7 @@ module GroupDocs
 
     require 'groupdocs/document/annotation/reply'
 
-    TYPES = {
-      text:  0,
-      area:  1,
-      point: 2,
-    }
+    TYPES = %w(Text Area Point)
 
     ACCESS = {
       private: 0,
@@ -74,8 +70,8 @@ module GroupDocs
     #
     def type=(type)
       if type.is_a?(Symbol)
-        TYPES.keys.include?(type) or raise ArgumentError, "Unknown type: #{type.inspect}"
-        type = TYPES[type]
+        type = type.to_s.capitalize
+        TYPES.include?(type) or raise ArgumentError, "Unknown type: #{type.inspect}"
       end
 
       @type = type
@@ -87,7 +83,7 @@ module GroupDocs
     # @return [Symbol]
     #
     def type
-      TYPES.invert[@type]
+      @type.downcase.to_sym
     end
 
     #

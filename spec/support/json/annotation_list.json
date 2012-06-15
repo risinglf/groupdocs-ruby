@@ -20,7 +20,7 @@
                 "X": null,
                 "Y": null
               },
-            "type": 0,
+            "type": "Text",
             "access":null,
             "createdOn": 1334028956687,
             "replies": []
