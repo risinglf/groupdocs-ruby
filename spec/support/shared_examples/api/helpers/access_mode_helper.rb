@@ -4,8 +4,8 @@ shared_examples_for GroupDocs::Api::Helpers::AccessMode do
 
   describe '#access' do
     it 'returns converted to human-readable format access mode' do
-      subject.should_receive(:parse_access_mode).with(1).and_return(:restricted)
-      subject.access = 1
+      subject.should_receive(:parse_access_mode).with('Restricted').and_return(:restricted)
+      subject.access = 'Restricted'
       subject.access.should == :restricted
     end
   end

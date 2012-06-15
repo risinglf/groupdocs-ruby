@@ -3,6 +3,7 @@ require 'spec_helper'
 describe GroupDocs::Document::Annotation do
 
   it_behaves_like GroupDocs::Api::Entity
+  include_examples GroupDocs::Api::Helpers::AccessMode
 
   subject do
     file = GroupDocs::Storage::File.new
@@ -95,29 +96,6 @@ describe GroupDocs::Document::Annotation do
     it 'returns type in human-readable format' do
       subject.type = 'Area'
       subject.type.should == :area
-    end
-  end
-
-  describe '#access=' do
-    it 'saves access mode in machine readable format if symbol is passed' do
-      subject.access = :public
-      subject.instance_variable_get(:@access).should == 'Public'
-    end
-
-    it 'does nothing if parameter is not symbol' do
-      subject.access = 'Public'
-      subject.instance_variable_get(:@access).should == 'Public'
-    end
-
-    it 'raises error if access mode is unknown' do
-      -> { subject.access = :unknown }.should raise_error(ArgumentError)
-    end
-  end
-
-  describe '#access' do
-    it 'returns access in human-readable format' do
-      subject.access = 'Public'
-      subject.access.should == :public
     end
   end
 

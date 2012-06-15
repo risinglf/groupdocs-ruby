@@ -3,27 +3,21 @@ module GroupDocs
     module Helpers
       module AccessMode
 
-        MODES = {
-          private:    0,
-          restricted: 1,
-          public:     2
-        }
-
         private
 
         #
         # Converts access mode from/to human-readable format.
         #
-        # @param [Integer, Symbol] mode
-        # @return [Symbol, Integer]
+        # @param [String, Symbol] mode
+        # @return [Symbol, String]
         # @api private
         #
         def parse_access_mode(mode)
-          if mode.is_a?(Integer)
-            MODES.invert[mode]
-          else
-            MODES[mode]
-          end or raise ArgumentError, "Unknown access mode: #{mode.inspect}."
+          case mode
+          when Symbol then mode.to_s.capitalize
+          when String then mode.downcase.to_sym
+          else raise ArgumentError, "Expected string/symbol, received: #{name.class}"
+          end
         end
 
       end # AccessMode

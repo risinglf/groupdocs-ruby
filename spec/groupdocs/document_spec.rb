@@ -127,14 +127,14 @@ describe GroupDocs::Document do
     end
 
     it 'returns access mode in human readable presentation' do
-      subject.should_receive(:parse_access_mode).with(0).and_return(:private)
+      subject.should_receive(:parse_access_mode).with('Private').and_return(:private)
       subject.access_mode!.should == :private
     end
   end
 
   describe '#access_mode_set!' do
     before(:each) do
-      mock_api_server('{"status": "Ok", "result": {"access": 0 }}')
+      mock_api_server('{"status": "Ok", "result": {"access": "Private" }}')
     end
 
     it 'accepts access credentials hash' do
@@ -143,9 +143,9 @@ describe GroupDocs::Document do
       end.should_not raise_error(ArgumentError)
     end
 
-    it 'sets corresponding access mode and determines set' do
-      subject.should_receive(:parse_access_mode).with(:private).and_return(0)
-      subject.should_receive(:parse_access_mode).with(0).and_return(:private)
+    it 'sets corresponding access mode' do
+      subject.should_receive(:parse_access_mode).with(:private).and_return('Private')
+      subject.should_receive(:parse_access_mode).with('Private').and_return(:private)
       subject.access_mode_set!(:private)
     end
 

@@ -3,8 +3,9 @@ module GroupDocs
 
     require 'groupdocs/document/annotation/reply'
 
+    include Api::Helpers::AccessMode
+
     TYPES  = %w(Text Area Point)
-    ACCESS = %w(Private Public)
 
     # @attr [GroupDocs::Document] document
     attr_accessor :document
@@ -83,27 +84,12 @@ module GroupDocs
     end
 
     #
-    # Updates access mode with machine-readable format.
-    #
-    # @param [Symbol] access
-    # @raise [ArgumentError] if access mode is unknown
-    #
-    def access=(access)
-      if access.is_a?(Symbol)
-        access = access.to_s.capitalize
-        ACCESS.include?(access) or raise ArgumentError, "Unknown access mode: #{access.inspect}"
-      end
-
-      @access = access
-    end
-
-    #
-    # Returns access mode in human-readable format.
+    # Converts access mode to human-readable format.
     #
     # @return [Symbol]
     #
     def access
-      @access.downcase.to_sym
+      parse_access_mode(@access)
     end
 
     #
