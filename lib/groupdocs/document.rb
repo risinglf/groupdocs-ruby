@@ -163,7 +163,7 @@ module GroupDocs
         request[:path] = "/doc/{{client_id}}/files/#{file.id}/formats"
       end.execute!
 
-      json[:types].split(';').map do |format|
+      json[:types].map do |format|
         format.downcase.to_sym
       end
     end

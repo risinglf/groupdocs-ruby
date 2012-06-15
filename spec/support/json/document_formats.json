@@ -1,7 +1,7 @@
 {
   "result":
     {
-      "types": "Pdf;Tiff;Jpeg"
+      "types": ["Pdf", "Tiff", "Jpeg"]
     },
   "status": "Ok",
   "error_message": null
