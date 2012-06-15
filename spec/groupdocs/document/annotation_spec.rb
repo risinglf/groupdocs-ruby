@@ -101,12 +101,12 @@ describe GroupDocs::Document::Annotation do
   describe '#access=' do
     it 'saves access mode in machine readable format if symbol is passed' do
       subject.access = :public
-      subject.instance_variable_get(:@access).should == 1
+      subject.instance_variable_get(:@access).should == 'Public'
     end
 
     it 'does nothing if parameter is not symbol' do
-      subject.access = 1
-      subject.instance_variable_get(:@access).should == 1
+      subject.access = 'Public'
+      subject.instance_variable_get(:@access).should == 'Public'
     end
 
     it 'raises error if access mode is unknown' do
@@ -116,7 +116,7 @@ describe GroupDocs::Document::Annotation do
 
   describe '#access' do
     it 'returns access in human-readable format' do
-      subject.access = 1
+      subject.access = 'Public'
       subject.access.should == :public
     end
   end

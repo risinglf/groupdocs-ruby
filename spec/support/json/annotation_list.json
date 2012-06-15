@@ -21,7 +21,7 @@
                 "Y": null
               },
             "type": "Text",
-            "access":null,
+            "access": "Public",
             "createdOn": 1334028956687,
             "replies": []
           }

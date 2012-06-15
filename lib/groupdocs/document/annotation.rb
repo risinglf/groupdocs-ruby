@@ -3,12 +3,8 @@ module GroupDocs
 
     require 'groupdocs/document/annotation/reply'
 
-    TYPES = %w(Text Area Point)
-
-    ACCESS = {
-      private: 0,
-      public:  1,
-    }
+    TYPES  = %w(Text Area Point)
+    ACCESS = %w(Private Public)
 
     # @attr [GroupDocs::Document] document
     attr_accessor :document
@@ -94,8 +90,8 @@ module GroupDocs
     #
     def access=(access)
       if access.is_a?(Symbol)
-        ACCESS.keys.include?(access) or raise ArgumentError, "Unknown access mode: #{access.inspect}"
-        access = ACCESS[access]
+        access = access.to_s.capitalize
+        ACCESS.include?(access) or raise ArgumentError, "Unknown access mode: #{access.inspect}"
       end
 
       @access = access
@@ -107,7 +103,7 @@ module GroupDocs
     # @return [Symbol]
     #
     def access
-      ACCESS.invert[@access]
+      @access.downcase.to_sym
     end
 
     #
