@@ -3,10 +3,7 @@ module GroupDocs
 
     require 'groupdocs/questionnaire/question/answer'
 
-    TYPES = {
-      simple:          0,
-      multiple_choice: 1,
-    }
+    TYPES = %w(GenericText MultipleChoice)
 
     # @attr [String] field
     attr_accessor :field
@@ -60,9 +57,14 @@ module GroupDocs
     # Updates type with machine-readable format.
     #
     # @param [Symbol] type
+    # @raise [ArgumentError] if type is unknown
     #
     def type=(type)
-      type = TYPES[type] if type.is_a?(Symbol)
+      if type.is_a?(Symbol)
+        type = accessor_to_variable(type).to_s.delete(?@)
+        TYPES.include?(type) or raise ArgumentError, "Unknown type: #{type.inspect}"
+      end
+
       @type = type
     end
 
@@ -72,7 +74,7 @@ module GroupDocs
     # @return [Symbol]
     #
     def type
-      TYPES.invert[@type]
+      variable_to_accessor(@type)
     end
 
   end # Questionnaire::Question
