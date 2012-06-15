@@ -109,6 +109,18 @@ module GroupDocs
         word.to_sym
       end
 
+      #
+      # Converts accessor symbol to instance variable symbol.
+      # @api private
+      #
+      def accessor_to_variable(accessor)
+        word = accessor.to_s
+        word.capitalize!
+        word.gsub!(/_([a-z])/) { |match| match.upcase }
+        word.gsub!(/_/, '')
+        "@#{word}".to_sym
+      end
+
     end # Entity
   end # Api
 end # GroupDocs
