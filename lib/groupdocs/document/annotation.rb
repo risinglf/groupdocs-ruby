@@ -84,6 +84,15 @@ module GroupDocs
     end
 
     #
+    # Converts access mode to machine-readable format.
+    #
+    # @param [Symbol] mode
+    #
+    def access=(mode)
+      @access = (mode.is_a?(Symbol) ? parse_access_mode(mode) : mode)
+    end
+
+    #
     # Converts access mode to human-readable format.
     #
     # @return [Symbol]

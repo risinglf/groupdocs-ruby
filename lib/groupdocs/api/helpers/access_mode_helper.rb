@@ -16,7 +16,7 @@ module GroupDocs
           case mode
           when Symbol then mode.to_s.capitalize
           when String then mode.downcase.to_sym
-          else raise ArgumentError, "Expected string/symbol, received: #{name.class}"
+          else raise ArgumentError, "Expected string/symbol, received: #{mode.class}"
           end
         end
 
