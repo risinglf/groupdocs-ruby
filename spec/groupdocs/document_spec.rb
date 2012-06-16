@@ -144,7 +144,7 @@ describe GroupDocs::Document do
     end
 
     it 'sets corresponding access mode' do
-      subject.should_receive(:parse_access_mode).with(:private).and_return('Private')
+      described_class::ACCESS_MODES.should_receive(:[]).with(:private).and_return(0)
       subject.should_receive(:parse_access_mode).with('Private').and_return(:private)
       subject.access_mode_set!(:private)
     end

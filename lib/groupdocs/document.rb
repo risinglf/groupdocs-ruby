@@ -8,6 +8,13 @@ module GroupDocs
     require 'groupdocs/document/rectangle'
     require 'groupdocs/document/view'
 
+    ACCESS_MODES = {
+      private:    0,
+      restricted: 1,
+      inherited:  2,
+      public:     3,
+    }
+
     extend Extensions::Lookup
     include Api::Helpers::AccessMode
     include Api::Helpers::Status
@@ -140,7 +147,7 @@ module GroupDocs
         request[:method] = :PUT
         request[:path] = "/doc/{{client_id}}/files/#{file.id}/accessinfo"
       end
-      api.add_params(mode: parse_access_mode(mode))
+      api.add_params(mode: ACCESS_MODES[mode])
       json = api.execute!
 
       parse_access_mode(json[:access])
