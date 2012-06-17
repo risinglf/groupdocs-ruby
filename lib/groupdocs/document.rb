@@ -65,6 +65,8 @@ module GroupDocs
     attr_accessor :outputs
     # @attr [Array<Symbol>] output_formats
     attr_accessor :output_formats
+    # @attr [Symbol] status
+    attr_accessor :status
 
     #
     # Coverts passed array of attributes hash to array of GroupDocs::Storage::File.
@@ -86,6 +88,15 @@ module GroupDocs
     #
     def output_formats
       @output_formats.split(?,).map(&:to_sym)
+    end
+
+    #
+    # Converts status to human-readable format.
+    #
+    # @return [Symbol]
+    #
+    def status
+      parse_status(@status)
     end
 
     #

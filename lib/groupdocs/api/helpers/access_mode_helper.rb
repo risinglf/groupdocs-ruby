@@ -10,6 +10,7 @@ module GroupDocs
         #
         # @param [String, Symbol] mode
         # @return [Symbol, String]
+        # @raise [ArgumentError] if argument is not symbol/string
         # @api private
         #
         def parse_access_mode(mode)

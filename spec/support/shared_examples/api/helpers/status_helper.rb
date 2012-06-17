@@ -4,9 +4,9 @@ shared_examples_for GroupDocs::Api::Helpers::Status do
 
   describe '#status' do
     it 'returns converted to human-readable format status' do
-      subject.should_receive(:parse_status).with(0).and_return(:pending)
-      subject.status = 0
-      subject.status.should == :pending
+      subject.should_receive(:parse_status).with('InProgress').and_return(:in_progress)
+      subject.status = 'InProgress'
+      subject.status.should == :in_progress
     end
   end
 end

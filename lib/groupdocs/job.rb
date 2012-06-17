@@ -70,6 +70,8 @@ module GroupDocs
     attr_accessor :documents
     # @attr [Time] requested_time
     attr_accessor :requested_time
+    # @attr [Symbol] status
+    attr_accessor :status
 
     #
     # Coverts passed array of attributes hash to array of GroupDocs::Document.
@@ -83,6 +85,15 @@ module GroupDocs
           Document.new(document)
         end
       end
+    end
+
+    #
+    # Converts status to human-readable format.
+    #
+    # @return [Symbol]
+    #
+    def status
+      parse_status(@status)
     end
 
     #
