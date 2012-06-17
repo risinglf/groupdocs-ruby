@@ -112,8 +112,8 @@ describe GroupDocs::Job do
 
   describe '#actions' do
     it 'converts actions to human-readable format' do
-      subject.actions = 'Convert, Combine'
-      subject.actions.should == [:convert, :combine]
+      subject.actions = 'Convert, Combine, CompressZip'
+      subject.actions.should == [:convert, :combine, :compress_zip]
     end
   end
 

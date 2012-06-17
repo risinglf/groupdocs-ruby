@@ -100,7 +100,7 @@ module GroupDocs
     # @return [Array<Symbol>]
     #
     def actions
-      @actions.split(', ').map { |action| action.downcase.to_sym }
+      @actions.split(', ').map { |action| variable_to_accessor(action) }
     end
 
     #
