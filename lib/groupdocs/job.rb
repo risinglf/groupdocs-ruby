@@ -34,7 +34,7 @@ module GroupDocs
     #
     # @param [Hash] options
     # @option options [Integer] :actions Array of actions to be performed. Required
-    # @option options [Boolean] :emails_results
+    # @option options [Boolean] :email_results
     # @option options [Array] :out_formats
     # @option options [Boolean] :url_only
     # @param [Hash] access Access credentials
