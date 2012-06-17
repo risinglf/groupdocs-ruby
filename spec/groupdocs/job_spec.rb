@@ -112,9 +112,8 @@ describe GroupDocs::Job do
 
   describe '#actions' do
     it 'converts actions to human-readable format' do
-      subject.actions = 129
-      described_class.should_receive(:convert_byte_to_actions).with(129)
-      subject.actions
+      subject.actions = 'Convert, Combine'
+      subject.actions.should == [:convert, :combine]
     end
   end
 

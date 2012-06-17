@@ -100,7 +100,7 @@ module GroupDocs
     # @return [Array<Symbol>]
     #
     def actions
-      self.class.convert_byte_to_actions(@actions)
+      @actions.split(', ').map { |action| action.downcase.to_sym }
     end
 
     #
