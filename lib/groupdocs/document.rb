@@ -8,6 +8,13 @@ module GroupDocs
     require 'groupdocs/document/rectangle'
     require 'groupdocs/document/view'
 
+    ACCESS_MODES = {
+      private:    0,
+      restricted: 1,
+      inherited:  2,
+      public:     3,
+    }
+
     extend Extensions::Lookup
     include Api::Helpers::AccessMode
     include Api::Helpers::Status
@@ -58,6 +65,8 @@ module GroupDocs
     attr_accessor :outputs
     # @attr [Array<Symbol>] output_formats
     attr_accessor :output_formats
+    # @attr [Symbol] status
+    attr_accessor :status
 
     #
     # Coverts passed array of attributes hash to array of GroupDocs::Storage::File.
@@ -79,6 +88,15 @@ module GroupDocs
     #
     def output_formats
       @output_formats.split(?,).map(&:to_sym)
+    end
+
+    #
+    # Converts status to human-readable format.
+    #
+    # @return [Symbol]
+    #
+    def status
+      parse_status(@status)
     end
 
     #
@@ -140,7 +158,7 @@ module GroupDocs
         request[:method] = :PUT
         request[:path] = "/doc/{{client_id}}/files/#{file.id}/accessinfo"
       end
-      api.add_params(mode: parse_access_mode(mode))
+      api.add_params(mode: ACCESS_MODES[mode])
       json = api.execute!
 
       parse_access_mode(json[:access])
@@ -163,7 +181,7 @@ module GroupDocs
         request[:path] = "/doc/{{client_id}}/files/#{file.id}/formats"
       end.execute!
 
-      json[:types].split(';').map do |format|
+      json[:types].map do |format|
         format.downcase.to_sym
       end
     end

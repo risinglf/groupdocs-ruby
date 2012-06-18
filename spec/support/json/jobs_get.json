@@ -5,13 +5,13 @@
         [
           {
             "id": 1,
-            "status": 5,
+            "status": "Archived",
             "documents":
             {
               "inputs":
               [
                 {
-                  "status": 2,
+                  "status": "InProgress",
                   "output_formats": "pdf",
                   "outputs":
                   [
@@ -29,13 +29,13 @@
           },
           {
             "id": 2,
-            "status": 3,
+            "status": "Completed",
             "documents":
             {
               "inputs":
               [
                 {
-                  "status": 1,
+                  "status": "Scheduled",
                   "output_formats": "tiff",
                   "outputs":
                   [

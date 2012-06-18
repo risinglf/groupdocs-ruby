@@ -4,15 +4,6 @@ describe GroupDocs::Questionnaire::Question do
 
   it_behaves_like GroupDocs::Api::Entity
 
-  describe 'TYPES' do
-    it 'contains hash of field types' do
-      described_class::TYPES.should == {
-        simple:          0,
-        multiple_choice: 1,
-      }
-    end
-  end
-
   it { should respond_to(:field)       }
   it { should respond_to(:field=)      }
   it { should respond_to(:text)        }
@@ -72,20 +63,24 @@ describe GroupDocs::Questionnaire::Question do
 
   describe '#type=' do
     it 'saves type in machine readable format if symbol is passed' do
-      subject.type = :multiple_choice
-      subject.instance_variable_get(:@type).should == 1
+      subject.type = :generic_text
+      subject.instance_variable_get(:@type).should == 'GenericText'
     end
 
     it 'does nothing if parameter is not symbol' do
-      subject.type = 1
-      subject.instance_variable_get(:@type).should == 1
+      subject.type = 'GenericText'
+      subject.instance_variable_get(:@type).should == 'GenericText'
+    end
+
+    it 'raises error if type is unknown' do
+      -> { subject.type = :unknown }.should raise_error(ArgumentError)
     end
   end
 
   describe '#type' do
     it 'returns type in human-readable format' do
-      subject.type = 1
-      subject.type.should == :multiple_choice
+      subject.type = 'GenericText'
+      subject.type.should == :generic_text
     end
   end
 end

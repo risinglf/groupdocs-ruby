@@ -1,14 +1,7 @@
 module GroupDocs
   class Questionnaire::Execution < GroupDocs::Api::Entity
 
-    STATUSES = {
-      draft:     0,
-      submitted: 1,
-      executed:  2,
-      approved:  3,
-      rejected:  4,
-      closed:    5,
-    }
+    include Api::Helpers::Status
 
     #
     # Returns an array of all executions.
@@ -56,29 +49,12 @@ module GroupDocs
     alias_method :document_id=,       :documentId=
 
     #
-    # Updates status with machine-readable format.
-    #
-    # If you want to update status on server, use #set_status! method.
-    #
-    # @param [Symbol, Integer] status
-    # @raise [ArgumentError] if status is unknown
-    #
-    def status=(status)
-      if status.is_a?(Symbol)
-        STATUSES.keys.include?(status) or raise ArgumentError, "Unknown status: #{status.inspect}"
-        status = STATUSES[status]
-      end
-
-      @status = status
-    end
-
-    #
-    # Returns execution status in human-readable format.
+    # Converts status to human-readable format.
     #
     # @return [Symbol]
     #
     def status
-      STATUSES.invert[@status]
+      parse_status(@status)
     end
 
     #
@@ -90,11 +66,13 @@ module GroupDocs
     # @option access [String] :private_key
     #
     def set_status!(status, access = {})
+      status = parse_status(status)
+
       Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
         request[:path] = "/merge/{{client_id}}/questionnaires/executions/#{id}/status"
-        request[:request_body] = STATUSES[status]
+        request[:request_body] = status
       end.execute!
 
       self.status = status

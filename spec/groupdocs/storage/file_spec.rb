@@ -6,20 +6,6 @@ describe GroupDocs::Storage::File do
   include_examples GroupDocs::Extensions::Lookup
   include_examples GroupDocs::Api::Helpers::AccessMode
 
-  describe 'DOCUMENT_TYPES' do
-    it 'contains hash of document types' do
-      described_class::DOCUMENT_TYPES.should == {
-        undefined: -1,
-        cells:      0,
-        words:      1,
-        slides:     2,
-        pdf:        3,
-        html:       4,
-        image:      5,
-      }
-    end
-  end
-
   describe '.upload!' do
     before(:each) do
       mock_api_server(load_json('file_upload'))
@@ -81,12 +67,12 @@ describe GroupDocs::Storage::File do
   describe '#type=' do
     it 'saves type in machine readable format if symbol is passed' do
       subject.type = :words
-      subject.instance_variable_get(:@type).should == 1
+      subject.instance_variable_get(:@type).should == 'Words'
     end
 
     it 'does nothing if parameter is not symbol' do
-      subject.type = 2
-      subject.instance_variable_get(:@type).should == 2
+      subject.type = 'Words'
+      subject.instance_variable_get(:@type).should == 'Words'
     end
 
     it 'raises error if type is unknown' do
@@ -96,7 +82,7 @@ describe GroupDocs::Storage::File do
 
   describe '#type' do
     it 'returns type in human-readable format' do
-      subject.type = 1
+      subject.type = 'Words'
       subject.type.should == :words
     end
   end

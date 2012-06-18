@@ -3,16 +3,9 @@ module GroupDocs
 
     require 'groupdocs/document/annotation/reply'
 
-    TYPES = {
-      text:  0,
-      area:  1,
-      point: 2,
-    }
+    include Api::Helpers::AccessMode
 
-    ACCESS = {
-      private: 0,
-      public:  1,
-    }
+    TYPES  = %w(Text Area Point)
 
     # @attr [GroupDocs::Document] document
     attr_accessor :document
@@ -74,8 +67,8 @@ module GroupDocs
     #
     def type=(type)
       if type.is_a?(Symbol)
-        TYPES.keys.include?(type) or raise ArgumentError, "Unknown type: #{type.inspect}"
-        type = TYPES[type]
+        type = type.to_s.capitalize
+        TYPES.include?(type) or raise ArgumentError, "Unknown type: #{type.inspect}"
       end
 
       @type = type
@@ -87,31 +80,25 @@ module GroupDocs
     # @return [Symbol]
     #
     def type
-      TYPES.invert[@type]
+      @type.downcase.to_sym
     end
 
     #
-    # Updates access mode with machine-readable format.
+    # Converts access mode to machine-readable format.
     #
-    # @param [Symbol] access
-    # @raise [ArgumentError] if access mode is unknown
+    # @param [Symbol] mode
     #
-    def access=(access)
-      if access.is_a?(Symbol)
-        ACCESS.keys.include?(access) or raise ArgumentError, "Unknown access mode: #{access.inspect}"
-        access = ACCESS[access]
-      end
-
-      @access = access
+    def access=(mode)
+      @access = (mode.is_a?(Symbol) ? parse_access_mode(mode) : mode)
     end
 
     #
-    # Returns access mode in human-readable format.
+    # Converts access mode to human-readable format.
     #
     # @return [Symbol]
     #
     def access
-      ACCESS.invert[@access]
+      parse_access_mode(@access)
     end
 
     #

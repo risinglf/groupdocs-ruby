@@ -1,11 +1,11 @@
 {
   "result":
     {
-      "job_status": 5,
+      "job_status": "Archived",
       "inputs":
       [
         {
-          "status": 2,
+          "status": "InProgress",
           "output_formats": "pdf",
           "outputs":
           [
@@ -19,7 +19,7 @@
           "id": 123
         },
         {
-          "status": 1,
+          "status": "Scheduled",
           "output_formats": "tiff",
           "outputs":
           [

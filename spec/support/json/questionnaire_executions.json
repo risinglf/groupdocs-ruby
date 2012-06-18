@@ -8,14 +8,14 @@
             "executiveId": 789,
             "approverId": 987,
             "datasourceId": 654,
-            "status": 5
+            "status": "Closed"
           },
           {
             "questionnaireId": 111,
             "executiveId": 222,
             "approverId": null,
             "datasourceId": null,
-            "status": 2
+            "status": "Executed"
           }
         ]
     },

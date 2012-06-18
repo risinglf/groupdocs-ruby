@@ -42,33 +42,6 @@ module GroupDocs
           flag
         end
 
-        #
-        # Converts actions byte flag to array.
-        #
-        # @param [Integer] byte
-        # @return [Array<Symbol>]
-        # @raise [ArgumentError] if actions is not an array
-        # @api private
-        #
-        def convert_byte_to_actions(byte)
-          byte.is_a?(Integer) or raise ArgumentError, "Byte flag should be an integer, received: #{byte.inspect}"
-
-          actions = []
-          ACTIONS.reverse_each do |action, flag|
-            decreased_byte = byte - flag
-            if decreased_byte >= 0
-              actions << action
-              byte = decreased_byte
-            end
-          end
-
-          unless actions == [:none]
-            actions.delete(:none)
-          end
-
-          actions
-        end
-
       end # Actions
     end # Helpers
   end # Api

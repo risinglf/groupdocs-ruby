@@ -3,6 +3,7 @@ require 'spec_helper'
 describe GroupDocs::Document::Annotation do
 
   it_behaves_like GroupDocs::Api::Entity
+  include_examples GroupDocs::Api::Helpers::AccessMode
 
   subject do
     file = GroupDocs::Storage::File.new
@@ -78,12 +79,12 @@ describe GroupDocs::Document::Annotation do
   describe '#type=' do
     it 'saves type in machine readable format if symbol is passed' do
       subject.type = :area
-      subject.instance_variable_get(:@type).should == 1
+      subject.instance_variable_get(:@type).should == 'Area'
     end
 
     it 'does nothing if parameter is not symbol' do
-      subject.type = 1
-      subject.instance_variable_get(:@type).should == 1
+      subject.type = 'Area'
+      subject.instance_variable_get(:@type).should == 'Area'
     end
 
     it 'raises error if type is unknown' do
@@ -93,31 +94,20 @@ describe GroupDocs::Document::Annotation do
 
   describe '#type' do
     it 'returns type in human-readable format' do
-      subject.type = 1
+      subject.type = 'Area'
       subject.type.should == :area
     end
   end
 
   describe '#access=' do
-    it 'saves access mode in machine readable format if symbol is passed' do
+    it 'converts symbol to string if passed' do
       subject.access = :public
-      subject.instance_variable_get(:@access).should == 1
+      subject.instance_variable_get(:@access).should == 'Public'
     end
 
-    it 'does nothing if parameter is not symbol' do
-      subject.access = 1
-      subject.instance_variable_get(:@access).should == 1
-    end
-
-    it 'raises error if access mode is unknown' do
-      -> { subject.access = :unknown }.should raise_error(ArgumentError)
-    end
-  end
-
-  describe '#access' do
-    it 'returns access in human-readable format' do
-      subject.access = 1
-      subject.access.should == :public
+    it 'does nothing if not a symbol is passed' do
+      subject.access = 'Blah'
+      subject.instance_variable_get(:@access).should == 'Blah'
     end
   end
 

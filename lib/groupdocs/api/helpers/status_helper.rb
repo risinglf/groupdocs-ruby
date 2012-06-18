@@ -3,43 +3,22 @@ module GroupDocs
     module Helpers
       module Status
 
-        STATUSES = {
-          draft:      -1,
-          pending:     0,
-          scheduled:   1,
-          in_progress: 2,
-          completed:   3,
-          postponed:   4,
-          archived:    5,
-        }
-
-        # @attr [Symbol] status
-        attr_accessor :status
-
-        #
-        # Sets status of the entity.
-        #
-        # @return [Symbol]
-        #
-        def status
-          parse_status(@status)
-        end
-
         private
 
         #
         # Converts status from/to human-readable format.
         #
-        # @param [Integer, Symbol] status
-        # @return [Symbol, Integer]
+        # @param [String, Symbol] status
+        # @return [Symbol, String]
+        # @raise [ArgumentError] if argument is not symbol/string
         # @api private
         #
         def parse_status(status)
-          if status.is_a?(Integer)
-            STATUSES.invert[status]
-          else
-            STATUSES[status]
-          end or raise ArgumentError, "Unknown status: #{status.inspect}."
+          case status
+          when Symbol then accessor_to_variable(status).to_s.delete(?@)
+          when String then variable_to_accessor(status)
+          else raise ArgumentError, "Expected string/symbol, received: #{status.class}"
+          end
         end
 
       end # Status

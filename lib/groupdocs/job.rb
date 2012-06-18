@@ -34,7 +34,7 @@ module GroupDocs
     #
     # @param [Hash] options
     # @option options [Integer] :actions Array of actions to be performed. Required
-    # @option options [Boolean] :emails_results
+    # @option options [Boolean] :email_results
     # @option options [Array] :out_formats
     # @option options [Boolean] :url_only
     # @param [Hash] access Access credentials
@@ -70,6 +70,8 @@ module GroupDocs
     attr_accessor :documents
     # @attr [Time] requested_time
     attr_accessor :requested_time
+    # @attr [Symbol] status
+    attr_accessor :status
 
     #
     # Coverts passed array of attributes hash to array of GroupDocs::Document.
@@ -83,6 +85,15 @@ module GroupDocs
           Document.new(document)
         end
       end
+    end
+
+    #
+    # Converts status to human-readable format.
+    #
+    # @return [Symbol]
+    #
+    def status
+      parse_status(@status)
     end
 
     #
@@ -100,7 +111,7 @@ module GroupDocs
     # @return [Array<Symbol>]
     #
     def actions
-      self.class.convert_byte_to_actions(@actions)
+      @actions.split(', ').map { |action| variable_to_accessor(action) }
     end
 
     #

@@ -5,8 +5,6 @@ module GroupDocs
     require 'groupdocs/questionnaire/page'
     require 'groupdocs/questionnaire/question'
 
-    include Api::Helpers::AccessMode
-
     #
     # Returns an array of all questionnaires.
     #

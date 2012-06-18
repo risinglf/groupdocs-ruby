@@ -20,8 +20,8 @@
                 "X": null,
                 "Y": null
               },
-            "type": 0,
-            "access":null,
+            "type": "Text",
+            "access": "Public",
             "createdOn": 1334028956687,
             "replies": []
           }
