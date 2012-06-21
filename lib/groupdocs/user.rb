@@ -4,9 +4,15 @@ module GroupDocs
     #
     # Returns current user profile.
     #
+    # @example Get fill
+    #   user = GroupDocs::User.get!
+    #   user.first_name
+    #   #=> "John"
+    #
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
+    # @return [GroupDocs::User]
     #
     def self.get!(access = {})
       json = Api::Request.new do |request|
@@ -68,6 +74,28 @@ module GroupDocs
     alias_method :pkey=,       :private_key=
     alias_method :pswd_salt=,  :password_salt=
     alias_method :signedupOn=, :signed_up_on=
+
+    #
+    # Updates user profile.
+    #
+    # @example
+    #   user = GroupDocs::User.get!
+    #   user.first_name = 'John'
+    #   user.last_name = 'Smith'
+    #   user.update!
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def update!(access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = '/mgmt/{{client_id}}/profile'
+        request[:request_body] = to_hash
+      end.execute!
+    end
 
   end # User
 end # GroupDocs
