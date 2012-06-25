@@ -4,17 +4,21 @@
       "executions":
         [
           {
-            "questionnaireId": 456,
-            "executiveId": 789,
-            "approverId": 987,
-            "datasourceId": 654,
+            "questionnaire_id": 456,
+            "executive": {
+              "id": 789
+            },
+            "approver": {
+              "id": 987
+            },
+            "datasource_id": 654,
             "status": "Closed"
           },
           {
-            "questionnaireId": 111,
-            "executiveId": 222,
-            "approverId": null,
-            "datasourceId": null,
+            "questionnaire_id": 111,
+            "executive": null,
+            "approver": null,
+            "datasource_id": null,
             "status": "Executed"
           }
         ]
