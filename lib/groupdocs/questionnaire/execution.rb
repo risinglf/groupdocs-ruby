@@ -29,8 +29,10 @@ module GroupDocs
     attr_accessor :approver
     # @attr [Integer] datasource_id
     attr_accessor :datasource_id
-    # @attr [Integer] status
+    # @attr [Symbol] status
     attr_accessor :status
+    # @attr [String] guid
+    attr_accessor :guid
 
     #
     # Converts status to human-readable format.

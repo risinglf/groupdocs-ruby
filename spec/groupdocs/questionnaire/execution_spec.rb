@@ -32,6 +32,8 @@ describe GroupDocs::Questionnaire::Execution do
   it { should respond_to(:datasource_id=)    }
   it { should respond_to(:status)            }
   it { should respond_to(:status=)           }
+  it { should respond_to(:guid)              }
+  it { should respond_to(:guid=)             }
 
   describe '#set_status!' do
     before(:each) do
