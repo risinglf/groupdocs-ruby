@@ -50,7 +50,10 @@ module GroupDocs
       # @param [Hash] options
       #
       define_method(:"#{method}=") do |options|
-        instance_variable_set(:"@#{method}", User.new(options)) if options
+        case options
+        when GroupDocs::User then instance_variable_set(:"@#{method}", options)
+        when Hash then instance_variable_set(:"@#{method}", User.new(options))
+        end
       end
     end
 
