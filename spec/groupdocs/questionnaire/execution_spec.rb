@@ -18,22 +18,40 @@ describe GroupDocs::Questionnaire::Execution do
     end
   end
 
-  it { should respond_to(:id)                }
-  it { should respond_to(:id=)               }
-  it { should respond_to(:questionnaire_id)  }
-  it { should respond_to(:questionnaire_id=) }
-  it { should respond_to(:owner)             }
-  it { should respond_to(:owner=)            }
-  it { should respond_to(:executive)         }
-  it { should respond_to(:executive=)        }
-  it { should respond_to(:approver)          }
-  it { should respond_to(:approver=)         }
-  it { should respond_to(:datasource_id)     }
-  it { should respond_to(:datasource_id=)    }
-  it { should respond_to(:status)            }
-  it { should respond_to(:status=)           }
-  it { should respond_to(:guid)              }
-  it { should respond_to(:guid=)             }
+  it { should respond_to(:id)                  }
+  it { should respond_to(:id=)                 }
+  it { should respond_to(:questionnaire_id)    }
+  it { should respond_to(:questionnaire_id=)   }
+  it { should respond_to(:questionnaire_name)  }
+  it { should respond_to(:questionnaire_name=) }
+  it { should respond_to(:owner)               }
+  it { should respond_to(:owner=)              }
+  it { should respond_to(:executive)           }
+  it { should respond_to(:executive=)          }
+  it { should respond_to(:approver)            }
+  it { should respond_to(:approver=)           }
+  it { should respond_to(:datasource_id)       }
+  it { should respond_to(:datasource_id=)      }
+  it { should respond_to(:status)              }
+  it { should respond_to(:status=)             }
+  it { should respond_to(:guid)                }
+  it { should respond_to(:guid=)               }
+
+  %w(owner executive approver).each do |method|
+    describe "##{method}=" do
+      it 'converts passed hash to GroupDocs::User object' do
+        subject.send(:"#{method}=", { first_name: 'Test' })
+        user = subject.send(:"#{method}")
+        user.should be_a(GroupDocs::User)
+        user.first_name.should == 'Test'
+      end
+
+      it 'does nothing if GroupDocs::User is passed' do
+        subject.send(:"#{method}=", GroupDocs::User.new(first_name: 'Test'))
+        subject.send(:"#{method}").first_name.should == 'Test'
+      end
+    end
+  end
 
   describe '#set_status!' do
     before(:each) do
