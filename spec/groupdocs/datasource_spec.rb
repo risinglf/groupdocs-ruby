@@ -25,8 +25,8 @@ describe GroupDocs::DataSource do
       described_class.get!(1).should be_a(GroupDocs::DataSource)
     end
 
-    it 'returns nil if datasource was not found' do
-      mock_api_server('{"result": {"datasource": null}, "status": "Failed"}')
+    it 'returns nil if ResourceNotFound was raised' do
+      GroupDocs::Api::Request.any_instance.should_receive(:execute!).and_raise(RestClient::ResourceNotFound)
       described_class.get!(99).should be_nil
     end
   end

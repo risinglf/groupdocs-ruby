@@ -39,8 +39,8 @@ describe GroupDocs::Questionnaire do
       described_class.get!(1).should be_a(GroupDocs::Questionnaire)
     end
 
-    it 'returns nil if BadRequestError was raised' do
-      GroupDocs::Api::Request.any_instance.should_receive(:execute!).and_raise(RestClient::BadRequest)
+    it 'returns nil if ResourceNotFound was raised' do
+      GroupDocs::Api::Request.any_instance.should_receive(:execute!).and_raise(RestClient::ResourceNotFound)
       described_class.get!(1).should be_nil
     end
   end

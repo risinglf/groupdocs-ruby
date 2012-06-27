@@ -42,7 +42,7 @@ module GroupDocs
       end.execute!
 
       Questionnaire.new(json[:questionnaire])
-    rescue RestClient::BadRequest
+    rescue RestClient::ResourceNotFound
       nil
     end
 

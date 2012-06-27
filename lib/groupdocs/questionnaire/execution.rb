@@ -45,9 +45,9 @@ module GroupDocs
 
     %w(owner executive approver).each do |method|
       #
-      # Converts hash of user options to GroupDocs::user object.
+      # Converts hash of user options to GroupDocs::User object.
       #
-      # @param [Hash] options
+      # @param [GroupDocs::User, Hash] options
       #
       define_method(:"#{method}=") do |options|
         case options
