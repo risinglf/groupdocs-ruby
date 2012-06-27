@@ -8,7 +8,7 @@ module GroupDocs
     #
     # @param [Integer] id
     # @param [Hash] options
-    # @option options [Array] :fields Array of field names to be returned. All by default
+    # @option options [Array] :field Array of field names to be returned. All by default
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key

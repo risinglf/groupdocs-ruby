@@ -17,7 +17,7 @@ describe GroupDocs::DataSource do
 
     it 'accepts options hash' do
       lambda do
-        described_class.get!(1, fields: %w(field1 field2))
+        described_class.get!(1, field: %w(field1 field2))
       end.should_not raise_error(ArgumentError)
     end
 
