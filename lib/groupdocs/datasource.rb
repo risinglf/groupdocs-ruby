@@ -24,7 +24,7 @@ module GroupDocs
       json = api.execute!
 
       DataSource.new(json[:datasource])
-    rescue BadResponseError
+    rescue RestClient::ResourceNotFound
       nil
     end
 
