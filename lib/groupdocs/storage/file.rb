@@ -62,7 +62,7 @@ module GroupDocs
 
       # @attr [Integer] id
       attr_accessor :id
-      # @attr [Integer] guid
+      # @attr [String] guid
       attr_accessor :guid
       # @attr [Integer] size
       attr_accessor :size
@@ -80,11 +80,11 @@ module GroupDocs
       attr_accessor :name
       # @attr [Integer] version
       attr_accessor :version
-      # @attr [Integer] type
+      # @attr [Symbol] type
       attr_accessor :type
-      # @attr [Integer] file_type
+      # @attr [Symbol] file_type
       attr_accessor :file_type
-      # @attr [Integer] access
+      # @attr [Symbol] access
       attr_accessor :access
       # @attr [String] path
       attr_accessor :path
@@ -114,6 +114,15 @@ module GroupDocs
       #
       def type
         @type.downcase.to_sym
+      end
+
+      #
+      # Returns file type in human-readable format.
+      #
+      # @return [Symbol]
+      #
+      def file_type
+        @file_type.downcase.to_sym
       end
 
       #

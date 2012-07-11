@@ -87,6 +87,13 @@ describe GroupDocs::Storage::File do
     end
   end
 
+  describe '#file_type' do
+    it 'returns file type in human-readable format' do
+      subject.file_type = 'Doc'
+      subject.file_type.should == :doc
+    end
+  end
+
   describe '#created_on' do
     it 'converts timestamp to Time object' do
       subject.created_on = 1330450135000
