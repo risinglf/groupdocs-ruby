@@ -89,7 +89,7 @@ module GroupDocs
       attr_accessor :version
       # @attr [Integer] type
       attr_accessor :type
-      # @attr [Integer] access
+      # @attr [Symbol] access
       attr_accessor :access
 
       #
