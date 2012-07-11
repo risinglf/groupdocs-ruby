@@ -78,8 +78,8 @@ describe GroupDocs::Document::Annotation do
 
   describe '#type=' do
     it 'saves type in machine readable format if symbol is passed' do
-      subject.type = :area
-      subject.instance_variable_get(:@type).should == 'Area'
+      subject.type = :text_strikeout
+      subject.instance_variable_get(:@type).should == 'TextStrikeout'
     end
 
     it 'does nothing if parameter is not symbol' do
@@ -94,8 +94,8 @@ describe GroupDocs::Document::Annotation do
 
   describe '#type' do
     it 'returns type in human-readable format' do
-      subject.type = 'Area'
-      subject.type.should == :area
+      subject.type = 'TextStrikeout'
+      subject.type.should == :text_strikeout
     end
   end
 
