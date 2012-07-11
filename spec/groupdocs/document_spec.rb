@@ -22,11 +22,6 @@ describe GroupDocs::Document do
       end.should_not raise_error(ArgumentError)
     end
 
-    it 'adds page index option by default' do
-      GroupDocs::Api::Request.any_instance.should_receive(:add_params).with({ page_index: 0 })
-      described_class.views!
-    end
-
     it 'returns an array of GroupDocs::Document::View objects' do
       views = described_class.views!
       views.should be_an(Array)
@@ -414,7 +409,13 @@ describe GroupDocs::Document do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.datasource!(datasource, { new_type: 1, email_results: false }, client_id: 'client_id', private_key: 'private_key')
+        subject.datasource!(datasource, {}, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'accepts options hash' do
+      lambda do
+        subject.datasource!(datasource, new_type: :pdf)
       end.should_not raise_error(ArgumentError)
     end
 
@@ -422,16 +423,8 @@ describe GroupDocs::Document do
       -> { subject.datasource!('Datasource') }.should raise_error(ArgumentError)
     end
 
-    it 'raises error if :new_type option is not passed' do
-      -> { subject.datasource!(datasource, email_results: false) }.should raise_error(ArgumentError)
-    end
-
-    it 'raises error if :email_results option is not passed' do
-      -> { subject.datasource!(datasource, new_type: :doc) }.should raise_error(ArgumentError)
-    end
-
     it 'returns GroupDocs::Job object' do
-      job = subject.datasource!(datasource, new_type: :doc, email_results: false)
+      job = subject.datasource!(datasource)
       job.should be_a(GroupDocs::Job)
     end
   end
@@ -455,7 +448,7 @@ describe GroupDocs::Document do
       end
     end
 
-    it 'returns empty array if annotations are null in reponse' do
+    it 'returns empty array if annotations are null in response' do
       mock_api_server('{"status": "Ok", "result": {"annotations": null }}')
       subject.annotations!.should be_empty
     end
