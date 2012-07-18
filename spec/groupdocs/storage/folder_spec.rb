@@ -229,6 +229,13 @@ describe GroupDocs::Storage::Folder do
       described_class.should_receive(:create!).with('/Test1', {})
       subject.create!
     end
+
+    it 'returns new GroupDocs::Storage::Folder object' do
+      subject = described_class.new(name: 'Test1')
+      new_folder = subject.create!
+      new_folder.should be_a(GroupDocs::Storage::Folder)
+      new_folder.should_not == subject
+    end
   end
 
   describe '#delete!' do

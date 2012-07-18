@@ -108,6 +108,31 @@ describe GroupDocs::Storage::File do
     end
   end
 
+  describe '#upload!' do
+    before(:each) do
+      mock_api_server(load_json('file_upload'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.upload!('/', client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'calls upload! class method and pass parameters to it' do
+      subject = described_class.new(name: File.basename(__FILE__), path: File.dirname(__FILE__))
+      described_class.should_receive(:upload!).with(__FILE__, '/Folder', {})
+      subject.upload!('/Folder')
+    end
+
+    it 'returns new GroupDocs::Storage::File object' do
+      subject = described_class.new(name: File.basename(__FILE__), path: File.dirname(__FILE__))
+      new_file = subject.upload!
+      new_file.should be_a(GroupDocs::Storage::File)
+      new_file.should_not == subject
+    end
+  end
+
   describe '#download!' do
     before(:each) do
       mock_api_server(File.read('spec/support/files/resume.pdf'))

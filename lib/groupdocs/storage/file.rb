@@ -15,7 +15,7 @@ module GroupDocs
       #
       # @param [String] filepath Path to file to be uploaded
       # @param [String] upload_path Full path to directory to upload file to starting with "/".
-      #                      You can also add filename and then uploaded file will use it.
+      #                             You can also add filename and then uploaded file will use it.
       # @param [Hash] access Access credentials
       # @option access [String] :client_id
       # @option access [String] :private_key
@@ -150,6 +150,26 @@ module GroupDocs
       #
       def modified_on
         Time.at(@modified_on / 1000)
+      end
+
+      #
+      # Uploads file to server.
+      #
+      # Note that it doesn't update self and instead returns new instance.
+      #
+      # @example
+      #   file = GroupDocs::Storage::File.new(name: 'document_one.doc', path: File.dirname(__FILE__))
+      #   file = file.upload!
+      #
+      # @param [String] upload_path Full path to directory to upload file to starting with "/".
+      #                             You can also add filename and then uploaded file will use it.
+      # @param [Hash] access Access credentials
+      # @option access [String] :client_id
+      # @option access [String] :private_key
+      # @return [GroupDocs::Storage::File]
+      #
+      def upload!(upload_path = '/', access = {})
+        self.class.upload!("#{path}/#{name}", upload_path, access)
       end
 
       #

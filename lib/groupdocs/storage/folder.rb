@@ -215,9 +215,16 @@ module GroupDocs
       #
       # Creates folder on server.
       #
+      # Note that it doesn't update self and instead returns new instance.
+      #
+      # @example
+      #   folder = GroupDocs::Storage::Folder.new(name: 'Folder')
+      #   folder = folder.create!
+      #
       # @param [Hash] access Access credentials
       # @option access [String] :client_id
       # @option access [String] :private_key
+      # @return [GroupDocs::Storage::Folder] Created folder
       #
       def create!(access = {})
         self.class.create!("/#{name}", access)
