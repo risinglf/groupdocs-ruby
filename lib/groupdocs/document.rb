@@ -43,7 +43,7 @@ module GroupDocs
     # @option access [String] :private_key
     # @return [Array<GroupDocs::Document::View>]
     #
-    def self.views!(options = { page_index: 0 }, access = {})
+    def self.views!(options = {}, access = {})
       api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
@@ -345,13 +345,10 @@ module GroupDocs
     # @return [GroupDocs::Job]
     #
     # @raise [ArgumentError] if datasource is not GroupDocs::DataSource object
-    # @raise [ArgumentError] if options does not contain :new_type and/or :email_results
     #
-    def datasource!(datasource, options, access = {})
+    def datasource!(datasource, options = {}, access = {})
       datasource.is_a?(GroupDocs::DataSource) or raise ArgumentError,
         "Datasource should be GroupDocs::DataSource object, received: #{datasource.inspect}"
-      (options[:new_type].nil? || options[:email_results].nil?) and raise ArgumentError,
-        "Both :new_type and :email_results should be passed, received: #{options.inspect}"
 
       api = Api::Request.new do |request|
         request[:access] = access

@@ -5,7 +5,7 @@ module GroupDocs
 
     include Api::Helpers::AccessMode
 
-    TYPES  = %w(Text Area Point)
+    TYPES  = %w(Text Area Point TextStrikeout Polyline)
 
     # @attr [GroupDocs::Document] document
     attr_accessor :document
@@ -67,7 +67,7 @@ module GroupDocs
     #
     def type=(type)
       if type.is_a?(Symbol)
-        type = type.to_s.capitalize
+        type = accessor_to_variable(type).to_s.delete(?@)
         TYPES.include?(type) or raise ArgumentError, "Unknown type: #{type.inspect}"
       end
 
@@ -80,7 +80,7 @@ module GroupDocs
     # @return [Symbol]
     #
     def type
-      @type.downcase.to_sym
+      variable_to_accessor(@type)
     end
 
     #

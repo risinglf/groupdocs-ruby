@@ -15,7 +15,7 @@ module GroupDocs
       #
       # @param [String] filepath Path to file to be uploaded
       # @param [String] upload_path Full path to directory to upload file to starting with "/".
-      #                      You can also add filename and then uploaded file will use it.
+      #                             You can also add filename and then uploaded file will use it.
       # @param [Hash] access Access credentials
       # @option access [String] :client_id
       # @option access [String] :private_key
@@ -62,7 +62,7 @@ module GroupDocs
 
       # @attr [Integer] id
       attr_accessor :id
-      # @attr [Integer] guid
+      # @attr [String] guid
       attr_accessor :guid
       # @attr [Integer] size
       attr_accessor :size
@@ -80,11 +80,11 @@ module GroupDocs
       attr_accessor :name
       # @attr [Integer] version
       attr_accessor :version
-      # @attr [Integer] type
+      # @attr [Symbol] type
       attr_accessor :type
-      # @attr [Integer] file_type
+      # @attr [Symbol] file_type
       attr_accessor :file_type
-      # @attr [Integer] access
+      # @attr [Symbol] access
       attr_accessor :access
       # @attr [String] path
       attr_accessor :path
@@ -117,6 +117,15 @@ module GroupDocs
       end
 
       #
+      # Returns file type in human-readable format.
+      #
+      # @return [Symbol]
+      #
+      def file_type
+        @file_type.downcase.to_sym
+      end
+
+      #
       # Converts timestamp which is return by API server to Time object.
       #
       # @return [Time]
@@ -141,6 +150,26 @@ module GroupDocs
       #
       def modified_on
         Time.at(@modified_on / 1000)
+      end
+
+      #
+      # Uploads file to server.
+      #
+      # Note that it doesn't update self and instead returns new instance.
+      #
+      # @example
+      #   file = GroupDocs::Storage::File.new(name: 'document_one.doc', path: File.dirname(__FILE__))
+      #   file = file.upload!
+      #
+      # @param [String] upload_path Full path to directory to upload file to starting with "/".
+      #                             You can also add filename and then uploaded file will use it.
+      # @param [Hash] access Access credentials
+      # @option access [String] :client_id
+      # @option access [String] :private_key
+      # @return [GroupDocs::Storage::File]
+      #
+      def upload!(upload_path = '/', access = {})
+        self.class.upload!("#{path}/#{name}", upload_path, access)
       end
 
       #
