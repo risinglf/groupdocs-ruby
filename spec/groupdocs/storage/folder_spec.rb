@@ -114,9 +114,9 @@ describe GroupDocs::Storage::Folder do
     end
 
     it 'returns moved to folder path' do
-      moved = subject.move!('/Test2')
+      moved = subject.move!('/Test2/Test1')
       moved.should be_a(String)
-      moved.should == '/Test2'
+      moved.should == '/Test2/Test1/'
     end
   end
 
@@ -163,9 +163,9 @@ describe GroupDocs::Storage::Folder do
     end
 
     it 'returns moved to folder path' do
-      moved = subject.copy!('/Test2')
+      moved = subject.copy!('/Test2/Test1')
       moved.should be_a(String)
-      moved.should == '/Test2'
+      moved.should == '/Test2/Test1/'
     end
   end
 
