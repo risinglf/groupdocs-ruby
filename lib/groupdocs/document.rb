@@ -198,7 +198,7 @@ module GroupDocs
       json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
-        request[:path] = "/doc/{{client_id}}/files/#{file.id}/metadata"
+        request[:path] = "/doc/{{client_id}}/files/#{file.guid}/metadata"
       end.execute!
 
       Document::MetaData.new do |metadata|
