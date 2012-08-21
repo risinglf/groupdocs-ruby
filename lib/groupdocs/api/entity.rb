@@ -55,7 +55,7 @@ module GroupDocs
                         value.to_hash
                       when Array
                         value.map do |i|
-                          i.to_hash if i.respond_to?(:to_hash)
+                          i.respond_to?(:to_hash) ? i.to_hash : i
                         end
                       else
                         value
