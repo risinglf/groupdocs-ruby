@@ -32,6 +32,22 @@ describe GroupDocs::Storage::File do
     end
   end
 
+  describe '.upload_web!' do
+    before(:each) do
+      mock_api_server(load_json('file_upload'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        described_class.upload_web!('http://www.google.com', client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns GroupDocs::Storage::File object' do
+      described_class.upload_web!('http://www.google.com').should be_a(GroupDocs::Storage::File)
+    end
+  end
+
   it { should respond_to(:id)           }
   it { should respond_to(:id=)          }
   it { should respond_to(:guid)         }

@@ -38,6 +38,27 @@ module GroupDocs
       end
 
       #
+      # Uploads web page as file.
+      #
+      # @param [String] url
+      # @param [Hash] access Access credentials
+      # @option access [String] :client_id
+      # @option access [String] :private_key
+      # @return [GroupDocs::Storage::File]
+      #
+      def self.upload_web!(url, access = {})
+        api = Api::Request.new do |request|
+          request[:access] = access
+          request[:method] = :POST
+          request[:path] = '/storage/{{client_id}}/urls'
+        end
+        api.add_params(url: url)
+        json = api.execute!
+
+        Storage::File.new(json)
+      end
+
+      #
       # Returns an array of all files on server starting with given path.
       #
       # @param [String] path Starting path to look for files
