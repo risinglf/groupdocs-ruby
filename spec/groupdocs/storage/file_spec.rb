@@ -292,6 +292,14 @@ describe GroupDocs::Storage::File do
     end
   end
 
+  describe '#move_to_trash!' do
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.move_to_trash!(client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
   describe '#to_document' do
     it 'creates new GroupDocs::Document' do
       subject.to_document.should be_a(GroupDocs::Document)

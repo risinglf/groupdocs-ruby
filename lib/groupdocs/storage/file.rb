@@ -314,6 +314,21 @@ module GroupDocs
       end
 
       #
+      # Moves file to trash on server.
+      #
+      # @param [Hash] access Access credentials
+      # @option access [String] :client_id
+      # @option access [String] :private_key
+      #
+      def move_to_trash!(access = {})
+        Api::Request.new do |request|
+          request[:access] = access
+          request[:method] = :PUT
+          request[:path] = "/storage/{{client_id}}/trash/#{path}/#{name}"
+        end.execute!
+      end
+
+      #
       # Converts file to GroupDocs::Document.
       #
       # @return [GroupDocs::Document]
