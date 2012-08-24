@@ -31,6 +31,22 @@ describe GroupDocs::Job do
     end
   end
 
+  describe '.get!' do
+    before(:each) do
+      mock_api_server(load_json('job_get'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        described_class.get!(1, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns GroupDocs::Job object' do
+      described_class.get!(1).should be_a(GroupDocs::Job)
+    end
+  end
+
   describe '.create!' do
     before(:each) do
       mock_api_server(load_json('job_create'))
@@ -66,6 +82,12 @@ describe GroupDocs::Job do
 
   it { should respond_to(:id)              }
   it { should respond_to(:id=)             }
+  it { should respond_to(:guid)            }
+  it { should respond_to(:guid=)           }
+  it { should respond_to(:name)            }
+  it { should respond_to(:name=)           }
+  it { should respond_to(:priority)        }
+  it { should respond_to(:priority=)       }
   it { should respond_to(:actions)         }
   it { should respond_to(:actions=)        }
   it { should respond_to(:email_results)   }
