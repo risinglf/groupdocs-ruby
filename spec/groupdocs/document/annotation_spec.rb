@@ -21,6 +21,8 @@ describe GroupDocs::Document::Annotation do
   it { should respond_to(:sessionGuid=)        }
   it { should respond_to(:documentGuid)        }
   it { should respond_to(:documentGuid=)       }
+  it { should respond_to(:creatorGuid)         }
+  it { should respond_to(:creatorGuid=)        }
   it { should respond_to(:replyGuid)           }
   it { should respond_to(:replyGuid=)          }
   it { should respond_to(:createdOn)           }
@@ -41,6 +43,8 @@ describe GroupDocs::Document::Annotation do
     subject.should respond_to(:session_guid=)
     subject.should respond_to(:document_guid)
     subject.should respond_to(:document_guid=)
+    subject.should respond_to(:creator_guid)
+    subject.should respond_to(:creator_guid=)
     subject.should respond_to(:reply_guid)
     subject.should respond_to(:reply_guid=)
     subject.should respond_to(:created_on)
@@ -52,6 +56,8 @@ describe GroupDocs::Document::Annotation do
     subject.method(:session_guid=).should        == subject.method(:sessionGuid=)
     subject.method(:document_guid).should        == subject.method(:documentGuid)
     subject.method(:document_guid=).should       == subject.method(:documentGuid=)
+    subject.method(:creator_guid).should         == subject.method(:creatorGuid)
+    subject.method(:creator_guid=).should        == subject.method(:creatorGuid=)
     subject.method(:reply_guid).should           == subject.method(:replyGuid)
     subject.method(:reply_guid=).should          == subject.method(:replyGuid=)
     # Annotation#created_on is overwritten
@@ -275,6 +281,23 @@ describe GroupDocs::Document::Annotation do
       lambda do
         subject.move!(10, 10)
       end.should change(subject, :annotation_position).to(x: 10, y: 10)
+    end
+  end
+
+  describe '#set_access!' do
+    before(:each) do
+      mock_api_server(load_json('annotation_access_set'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.set_access!(:private, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'updates annotation access mode' do
+      subject.set_access!(:private)
+      subject.access.should == :private
     end
   end
 end
