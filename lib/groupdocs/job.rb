@@ -206,7 +206,7 @@ module GroupDocs
       Api::Request.new do |request|
         request[:access] = access
         request[:method] = :DELETE
-        request[:path] = "/async/{{client_id}}/jobs/#{job.id}/documents/#{guid}"
+        request[:path] = "/async/{{client_id}}/jobs/#{id}/documents/#{guid}"
       end.execute!
     end
 

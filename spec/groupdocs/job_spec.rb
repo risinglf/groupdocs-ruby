@@ -195,10 +195,18 @@ describe GroupDocs::Job do
   end
 
   describe '#delete_document!' do
+    before(:each) do
+      mock_api_server('{ "result": {}, "status": "Ok" }')
+    end
+
     it 'accepts access credentials hash' do
       lambda do
-        subject.delete_document!(document, client_id: 'client_id', private_key: 'private_key')
+        subject.delete_document!('a9ufg8s7dfgsdf', client_id: 'client_id', private_key: 'private_key')
       end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns empty hash' do
+      subject.delete_document!('a9ufg8s7dfgsdf').should be_empty
     end
   end
 
