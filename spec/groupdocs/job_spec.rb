@@ -194,6 +194,14 @@ describe GroupDocs::Job do
     end
   end
 
+  describe '#delete_document!' do
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.delete_document!(document, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
   describe '#add_datasource!' do
     let(:document) do
       GroupDocs::Document.new(file: GroupDocs::Storage::File.new)

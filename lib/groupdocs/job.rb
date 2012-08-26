@@ -194,6 +194,23 @@ module GroupDocs
     end
 
     #
+    # Deletes document with guid from job.
+
+    #
+    # @param [String] guid
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def delete_document!(guid, access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :DELETE
+        request[:path] = "/async/{{client_id}}/jobs/#{job.id}/documents/#{guid}"
+      end.execute!
+    end
+
+    #
     # Adds datasource to job document.
     #
     # @param [GroupDocs::Document] document
