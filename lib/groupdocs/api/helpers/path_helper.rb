@@ -4,22 +4,22 @@ module GroupDocs
       module Path
 
         #
-        # Verifies path starts with root.
+        # Make helper methods accessible to class methods as well
         #
-        # @raise [ArgumentError] If path does not start with /
-        # @api private
-        #
-        def self.verify_starts_with_root(path)
-          path.chars.first == '/' or raise ArgumentError, "Path should start with /: #{path.inspect}"
+        def self.included(klass)
+          klass.extend self
         end
 
+        private
+
         #
-        # Appends file name to path if it's not present.
-        #
+        # Prepares path.
+        # @param [String] path
+        # @return [String]
         # @api private
         #
-        def self.append_file_name(path, name)
-          path << "/#{Object::File.basename(name)}" unless /\.(\w){3,4}$/ === path
+        def prepare_path(path)
+          path.sub(%r(^/), '').gsub(%r(//+), '/')
         end
 
       end # Path

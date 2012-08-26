@@ -47,7 +47,6 @@ module GroupDocs
       # Executes API request to server.
       #
       # It performs the following actions step by step:
-      #   * Normalizes path (i.e. replace // with /)
       #   * Parses path (i.e. replaces client ID)
       #   * Prepends path with version if it's set
       #   * URL encodes path
@@ -59,7 +58,6 @@ module GroupDocs
       # @return [Hash, String] Parsed response
       #
       def execute!
-        normalize_path
         parse_path
         prepend_version
         url_encode_path

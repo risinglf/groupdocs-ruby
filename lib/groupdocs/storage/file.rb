@@ -4,35 +4,48 @@ module GroupDocs
 
       extend Extensions::Lookup
       include Api::Helpers::AccessMode
+      include Api::Helpers::Path
 
       DOCUMENT_TYPES = %w(Undefined Cells Words Slides Pdf Html Image)
 
       #
       # Uploads file to API server.
       #
-      # @example
-      #   GroupDocs::Storage::File.upload!('resume.pdf', '/folder/cv.pdf', description: 'My resume')
+      # @example Upload file to root directory
+      #   GroupDocs::Storage::File.upload!('resume.pdf')
+      #
+      # @example Upload file to specific directory
+      #   GroupDocs::Storage::File.upload!('resume.pdf', path: 'folder1')
+      #
+      # @example Upload and rename file
+      #   GroupDocs::Storage::File.upload!('resume.pdf', name: 'cv.pdf')
+      #
+      # @example Upload file with description
+      #   GroupDocs::Storage::File.upload!('resume.pdf', description: 'Resume')
       #
       # @param [String] filepath Path to file to be uploaded
-      # @param [String] upload_path Full path to directory to upload file to starting with "/".
-      #                             You can also add filename and then uploaded file will use it.
+      # @param [Hash] options
+      # @option options [String] path Folder path to upload to
+      # @option options [String] name Name of file to be renamed
+      # @option options [String] description File description
       # @param [Hash] access Access credentials
       # @option access [String] :client_id
       # @option access [String] :private_key
       # @return [GroupDocs::Storage::File]
       #
-      # @raise [ArgumentError] If path does not start with /
-      #
-      def self.upload!(filepath, upload_path = '/', access = {})
-        Api::Helpers::Path.verify_starts_with_root(upload_path)
-        Api::Helpers::Path.append_file_name(upload_path, filepath)
+      def self.upload!(filepath, options = {}, access = {})
+        options[:path] ||= ''
+        options[:name] ||= Object::File.basename(filepath)
+        path = prepare_path("#{options[:path]}/#{options[:name]}")
 
-        json = Api::Request.new do |request|
+        api = Api::Request.new do |request|
           request[:access] = access
           request[:method] = :POST
-          request[:path] = "/storage/{{client_id}}/folders#{upload_path}"
+          request[:path] = "/storage/{{client_id}}/folders/#{path}"
           request[:request_body] = Object::File.new(filepath, 'rb')
-        end.execute!
+        end
+        api.add_params(description: options[:description]) if options[:description]
+        json = api.execute!
 
         Storage::File.new(json)
       end
@@ -174,26 +187,6 @@ module GroupDocs
       end
 
       #
-      # Uploads file to server.
-      #
-      # Note that it doesn't update self and instead returns new instance.
-      #
-      # @example
-      #   file = GroupDocs::Storage::File.new(name: 'document_one.doc', path: File.dirname(__FILE__))
-      #   file = file.upload!
-      #
-      # @param [String] upload_path Full path to directory to upload file to starting with "/".
-      #                             You can also add filename and then uploaded file will use it.
-      # @param [Hash] access Access credentials
-      # @option access [String] :client_id
-      # @option access [String] :private_key
-      # @return [GroupDocs::Storage::File]
-      #
-      def upload!(upload_path = '/', access = {})
-        self.class.upload!("#{path}/#{name}", upload_path, access)
-      end
-
-      #
       # Downloads file to given path.
       #
       # @param [String] path Directory to download file to
@@ -220,22 +213,23 @@ module GroupDocs
       #
       # Moves file to given path.
       #
-      # @param [String] path Full path to directory to move file to starting with "/".
-      #                      You can also add filename and then moved file will use it.
+      # @param [String] path
+      # @param [Hash] options
+      # @option options [String] name
       # @param [Hash] access Access credentials
       # @option access [String] :client_id
       # @option access [String] :private_key
       # @return [GroupDocs::Storage::File] Moved to file
       #
-      def move!(path, access = {})
-        Api::Helpers::Path.verify_starts_with_root(path)
-        Api::Helpers::Path.append_file_name(path, name)
+      def move!(path, options = {}, access = {})
+        options[:name] ||= name
+        path = prepare_path("#{path}/#{options[:name]}")
 
         json = Api::Request.new do |request|
           request[:access] = access
           request[:method] = :PUT
           request[:headers] = { :'Groupdocs-Move' => id }
-          request[:path] = "/storage/{{client_id}}/files#{path}"
+          request[:path] = "/storage/{{client_id}}/files/#{path}"
         end.execute!
 
         Storage::File.new(json[:dst_file])
@@ -251,28 +245,29 @@ module GroupDocs
       # @return [GroupDocs::Storage::File] Renamed file
       #
       def rename!(name, access = {})
-        move!("#{path}#{name}", access)
+        move!(path, { name: name }, access)
       end
 
       #
       # Moves file to given path.
       #
-      # @param [String] path Full path to directory to copy file to starting with "/".
-      #                      You can also add filename and then copied file will use it.
+      # @param [String] path
+      # @param [Hash] options
+      # @option options [String] name
       # @param [Hash] access Access credentials
       # @option access [String] :client_id
       # @option access [String] :private_key
       # @return [GroupDocs::Storage::File] Copied to file
       #
-      def copy!(path, access = {})
-        Api::Helpers::Path.verify_starts_with_root(path)
-        Api::Helpers::Path.append_file_name(path, name)
+      def copy!(path, options = {}, access = {})
+        options[:name] ||= name
+        path = prepare_path("#{path}/#{options[:name]}")
 
         json = Api::Request.new do |request|
           request[:access] = access
           request[:method] = :PUT
           request[:headers] = { :'Groupdocs-Copy' => id }
-          request[:path] = "/storage/{{client_id}}/files#{path}"
+          request[:path] = "/storage/{{client_id}}/files/#{path}"
         end.execute!
 
         Storage::File.new(json[:dst_file])
@@ -293,7 +288,7 @@ module GroupDocs
           request[:path] = "/storage/{{client_id}}/files/#{id}/archive/zip"
         end.execute!
 
-        # HACK add filename for further file operations
+        # add filename for further file operations
         json[:name] = "#{name}.zip"
         Storage::File.new(json)
       end

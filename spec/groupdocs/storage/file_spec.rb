@@ -13,18 +13,32 @@ describe GroupDocs::Storage::File do
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.upload!(__FILE__, '/upload_path', client_id: 'client_id', private_key: 'private_key')
+        described_class.upload!(__FILE__, {}, client_id: 'client_id', private_key: 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
-    it 'checks that upload path starts with /' do
-      GroupDocs::Api::Helpers::Path.should_receive(:verify_starts_with_root).with('/upload_path')
-      described_class.upload!(__FILE__, '/upload_path')
+    it 'accepts options hash' do
+      lambda do
+        described_class.upload!(__FILE__, path: 'folder1')
+      end.should_not raise_error(ArgumentError)
     end
 
-    it 'appends filename to upload path if it is not passed' do
-      GroupDocs::Api::Helpers::Path.should_receive(:append_file_name).with('/upload_path', __FILE__)
-      described_class.upload!(__FILE__, '/upload_path')
+    it 'uses root folder by default' do
+      opts = {}
+      described_class.upload!(__FILE__, opts)
+      opts[:path].should == ''
+    end
+
+    it 'uses file name by default' do
+      opts = {}
+      described_class.upload!(__FILE__, opts)
+      opts[:name].should == Object::File.basename(__FILE__)
+    end
+
+    it 'uses name if passed' do
+      opts = { name: 'file.pdf' }
+      described_class.upload!(__FILE__, opts)
+      opts[:name].should == opts[:name]
     end
 
     it 'returns GroupDocs::Storage::File object' do
@@ -124,31 +138,6 @@ describe GroupDocs::Storage::File do
     end
   end
 
-  describe '#upload!' do
-    before(:each) do
-      mock_api_server(load_json('file_upload'))
-    end
-
-    it 'accepts access credentials hash' do
-      lambda do
-        subject.upload!('/', client_id: 'client_id', private_key: 'private_key')
-      end.should_not raise_error(ArgumentError)
-    end
-
-    it 'calls upload! class method and pass parameters to it' do
-      subject = described_class.new(name: File.basename(__FILE__), path: File.dirname(__FILE__))
-      described_class.should_receive(:upload!).with(__FILE__, '/Folder', {})
-      subject.upload!('/Folder')
-    end
-
-    it 'returns new GroupDocs::Storage::File object' do
-      subject = described_class.new(name: File.basename(__FILE__), path: File.dirname(__FILE__))
-      new_file = subject.upload!
-      new_file.should be_a(GroupDocs::Storage::File)
-      new_file.should_not == subject
-    end
-  end
-
   describe '#download!' do
     before(:each) do
       mock_api_server(File.read('spec/support/files/resume.pdf'))
@@ -182,28 +171,31 @@ describe GroupDocs::Storage::File do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.move!('/resume.pdf', client_id: 'client_id', private_key: 'private_key')
+        subject.move!('folder1', {}, client_id: 'client_id', private_key: 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
-    it 'checks that path starts with /' do
-      GroupDocs::Api::Helpers::Path.should_receive(:verify_starts_with_root).with('/resume.pdf')
-      subject.move!('/resume.pdf')
+    it 'accepts options credentials hash' do
+      lambda do
+        subject.move!('folder1', name: 'file.pdf')
+      end.should_not raise_error(ArgumentError)
     end
 
-    it 'appends filename to move to path if it is not passed' do
-      GroupDocs::Api::Helpers::Path.should_receive(:append_file_name).with('/Folder', subject.name)
-      subject.move!('/Folder')
+    it 'uses current file name by default' do
+      subject.name = 'resume.pdf'
+      opts = {}
+      subject.move!('folder1', opts)
+      opts[:name].should == subject.name
     end
 
-    it 'sends "Groupdocs-Move" header' do
-      mock_api_server(load_json('file_move'), :'Groupdocs-Move' => '123')
-      subject.stub(id: 123)
-      subject.move!('/resume2.pdf')
+    it 'uses name if passed' do
+      opts = { name: 'file.pdf' }
+      subject.move!('folder1', opts)
+      opts[:name].should == opts[:name]
     end
 
     it 'returns moved to file' do
-      subject.move!('/resume2.pdf').should be_a(GroupDocs::Storage::File)
+      subject.move!('folder1').should be_a(GroupDocs::Storage::File)
     end
   end
 
@@ -219,7 +211,7 @@ describe GroupDocs::Storage::File do
     end
 
     it 'uses #move! to rename file' do
-      subject.should_receive(:move!).with('/resume2.pdf', {})
+      subject.should_receive(:move!).with(subject.path, { name: 'resume2.pdf' }, {})
       subject.rename!('resume2.pdf')
     end
   end
@@ -231,24 +223,27 @@ describe GroupDocs::Storage::File do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.copy!('/resume.pdf', client_id: 'client_id', private_key: 'private_key')
+        subject.copy!('resume.pdf', {}, client_id: 'client_id', private_key: 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
-    it 'checks that path starts with /' do
-      GroupDocs::Api::Helpers::Path.should_receive(:verify_starts_with_root).with('resume.pdf')
-      subject.copy!('resume.pdf')
+    it 'accepts options credentials hash' do
+      lambda do
+        subject.copy!('folder1', name: 'file.pdf')
+      end.should_not raise_error(ArgumentError)
     end
 
-    it 'appends filename to move to path if it is not passed' do
-      GroupDocs::Api::Helpers::Path.should_receive(:append_file_name).with('/Folder', subject.name)
-      subject.copy!('/Folder')
+    it 'uses current file name by default' do
+      subject.name = 'resume.pdf'
+      opts = {}
+      subject.copy!('folder1', opts)
+      opts[:name].should == subject.name
     end
 
-    it 'sends "Groupdocs-Copy" header' do
-      mock_api_server(load_json('file_copy'), :'Groupdocs-Copy' => '123')
-      subject.stub(id: 123)
-      subject.copy!('/resume2.pdf')
+    it 'uses name if passed' do
+      opts = { name: 'file.pdf' }
+      subject.copy!('folder1', opts)
+      opts[:name].should == opts[:name]
     end
 
     it 'returns copied to file' do
