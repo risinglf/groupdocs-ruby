@@ -2,7 +2,6 @@ module GroupDocs
   module Storage
     class File < GroupDocs::Api::Entity
 
-      extend Extensions::Lookup
       include Api::Helpers::AccessMode
       include Api::Helpers::Path
 
@@ -69,29 +68,6 @@ module GroupDocs
         json = api.execute!
 
         Storage::File.new(json)
-      end
-
-      #
-      # Returns an array of all files on server starting with given path.
-      #
-      # @param [String] path Starting path to look for files
-      # @param [Hash] access Access credentials
-      # @option access [String] :client_id
-      # @option access [String] :private_key
-      # @return [Array<GroupDocs::Storage::File>]
-      #
-      def self.all!(path = '/', access = {})
-        files = Array.new
-        folder = GroupDocs::Storage::Folder.new(path: path)
-        folder.list!({}, access).each do |entity|
-          if entity.is_a?(GroupDocs::Storage::Folder)
-            files += all!("#{path}/#{entity.name}", access)
-          else
-            files << entity
-          end
-        end
-
-        files
       end
 
       # @attr [Integer] id

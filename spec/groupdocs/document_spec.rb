@@ -3,7 +3,6 @@ require 'spec_helper'
 describe GroupDocs::Document do
 
   it_behaves_like GroupDocs::Api::Entity
-  include_examples GroupDocs::Extensions::Lookup
   include_examples GroupDocs::Api::Helpers::Status
 
   subject do
@@ -28,23 +27,6 @@ describe GroupDocs::Document do
       views.each do |view|
         view.should be_a(GroupDocs::Document::View)
       end
-    end
-  end
-
-  describe '.all!' do
-    it 'accepts access credentials hash' do
-      lambda do
-        described_class.all!('/', client_id: 'client_id', private_key: 'private_key')
-      end.should_not raise_error(ArgumentError)
-    end
-
-    it 'calls GroupDocs::Storage::File.all! and converts each file to document' do
-      file1 = GroupDocs::Storage::File.new
-      file2 = GroupDocs::Storage::File.new
-      GroupDocs::Storage::File.should_receive(:all!).with('/', {}).and_return([file1, file2])
-      file1.should_receive(:to_document).and_return(described_class.new(file: file1))
-      file2.should_receive(:to_document).and_return(described_class.new(file: file2))
-      described_class.all!
     end
   end
 

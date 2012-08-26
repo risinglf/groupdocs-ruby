@@ -15,22 +15,8 @@ module GroupDocs
       public:     3,
     }
 
-    extend Extensions::Lookup
     include Api::Helpers::AccessMode
     include Api::Helpers::Status
-
-    #
-    # Returns an array of all documents on server.
-    #
-    # @param [String] path Starting path to look for documents
-    # @param [Hash] access Access credentials
-    # @option access [String] :client_id
-    # @option access [String] :private_key
-    # @return [Array<GroupDocs::Storage::Document>]
-    #
-    def self.all!(path = '/', access = {})
-      Storage::File.all!(path, access).map(&:to_document)
-    end
 
     #
     # Returns an array of views for all documents.
