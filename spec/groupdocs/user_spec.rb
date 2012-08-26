@@ -94,4 +94,24 @@ describe GroupDocs::User do
       subject.update!
     end
   end
+
+  describe '#users!' do
+    before(:each) do
+      mock_api_server(load_json('user_users_get'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.users!(client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns array of GroupDocs::User objects' do
+      users = subject.users!
+      users.should be_an(Array)
+      users.each do |user|
+        user.should be_a(GroupDocs::User)
+      end
+    end
+  end
 end

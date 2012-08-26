@@ -4,7 +4,7 @@ module GroupDocs
     #
     # Returns current user profile.
     #
-    # @example Get fill
+    # @example
     #   user = GroupDocs::User.get!
     #   user.first_name
     #   #=> "John"
@@ -95,6 +95,26 @@ module GroupDocs
         request[:path] = '/mgmt/{{client_id}}/profile'
         request[:request_body] = to_hash
       end.execute!
+    end
+
+    #
+    # Returns an array of users associated to current user account.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<GroupDocs::User>]
+    #
+    def users!(access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = '/mgmt/{{client_id}}/account/users'
+      end.execute!
+
+      json[:users].map do |user|
+        GroupDocs::User.new(user)
+      end
     end
 
   end # User
