@@ -8,6 +8,7 @@ require 'groupdocs/document'
 require 'groupdocs/job'
 require 'groupdocs/questionnaire'
 require 'groupdocs/storage'
+require 'groupdocs/subscription'
 require 'groupdocs/user'
 
 module GroupDocs
