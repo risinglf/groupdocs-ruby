@@ -47,7 +47,7 @@ module GroupDocs
       def to_hash
         hash = {}
         instance_variables.each do |variable|
-          key = variable_to_accessor(variable)
+          key = variable.to_s.delete(?@)
           value = instance_variable_get(variable)
 
           hash[key] = case value
