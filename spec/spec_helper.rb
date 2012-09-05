@@ -11,10 +11,19 @@ require 'groupdocs'
 # shared examples
 Dir['spec/support/shared_examples/**/*.rb'].each { |file| file = file.sub(/spec\//, ''); require file }
 
+# matchers extension
+RSpec::Matchers.define :have_alias do |aliased, original|
+  match do |object|
+    object.should respond_to(aliased)
+    object.method(aliased).should == object.method(original)
+  end
+end
+
+# configure API access
 RSpec.configure do |spec|
   spec.before(:all) do
     GroupDocs.configure do |groupdocs|
-      groupdocs.client_id = '07aaaf95f8eb33a4'
+      groupdocs.client_id   = '07aaaf95f8eb33a4'
       groupdocs.private_key = '5cb711b3a52ffc5d90ee8a0f79206f5a'
       groupdocs.api_version = '2.0'
     end

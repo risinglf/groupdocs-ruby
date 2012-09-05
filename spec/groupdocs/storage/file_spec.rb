@@ -88,10 +88,7 @@ describe GroupDocs::Storage::File do
   it { should respond_to(:path)         }
   it { should respond_to(:path=)        }
 
-  it 'is compatible with response JSON' do
-    subject.should respond_to(:adj_name=)
-    subject.method(:adj_name=).should == subject.method(:name=)
-  end
+  it { should have_alias(:adj_name=, :name=) }
 
   describe '#type=' do
     it 'saves type in machine readable format if symbol is passed' do

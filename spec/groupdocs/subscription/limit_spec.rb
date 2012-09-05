@@ -13,22 +13,12 @@ describe GroupDocs::Subscription::Limit do
   it { should respond_to(:Description)  }
   it { should respond_to(:Description=) }
 
-  it 'has human-readable accessors' do
-    subject.should respond_to(:id)
-    subject.should respond_to(:id=)
-    subject.should respond_to(:min)
-    subject.should respond_to(:min=)
-    subject.should respond_to(:max)
-    subject.should respond_to(:max=)
-    subject.should respond_to(:description)
-    subject.should respond_to(:description=)
-    subject.method(:id).should           == subject.method(:Id)
-    subject.method(:id=).should          == subject.method(:Id=)
-    subject.method(:min).should          == subject.method(:Min)
-    subject.method(:min=).should         == subject.method(:Min=)
-    subject.method(:max).should          == subject.method(:Max)
-    subject.method(:max=).should         == subject.method(:Max=)
-    subject.method(:description).should  == subject.method(:Description)
-    subject.method(:description=).should == subject.method(:Description=)
-  end
+  it { should have_alias(:id, :Id)                     }
+  it { should have_alias(:id=, :Id=)                   }
+  it { should have_alias(:min, :Min)                   }
+  it { should have_alias(:min=, :Min=)                 }
+  it { should have_alias(:max, :Max)                   }
+  it { should have_alias(:max=, :Max=)                 }
+  it { should have_alias(:description, :Description)   }
+  it { should have_alias(:description=, :Description=) }
 end

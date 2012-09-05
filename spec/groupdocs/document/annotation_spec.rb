@@ -38,39 +38,21 @@ describe GroupDocs::Document::Annotation do
   it { should respond_to(:annotationPosition)  }
   it { should respond_to(:annotationPosition=) }
 
-  it 'has human-readable accessors' do
-    subject.should respond_to(:session_guid)
-    subject.should respond_to(:session_guid=)
-    subject.should respond_to(:document_guid)
-    subject.should respond_to(:document_guid=)
-    subject.should respond_to(:creator_guid)
-    subject.should respond_to(:creator_guid=)
-    subject.should respond_to(:reply_guid)
-    subject.should respond_to(:reply_guid=)
-    subject.should respond_to(:created_on)
-    subject.should respond_to(:created_on=)
-    subject.should respond_to(:annotation_position)
-    subject.should respond_to(:annotation_position=)
-    subject.should respond_to(:position)
-    subject.method(:session_guid).should         == subject.method(:sessionGuid)
-    subject.method(:session_guid=).should        == subject.method(:sessionGuid=)
-    subject.method(:document_guid).should        == subject.method(:documentGuid)
-    subject.method(:document_guid=).should       == subject.method(:documentGuid=)
-    subject.method(:creator_guid).should         == subject.method(:creatorGuid)
-    subject.method(:creator_guid=).should        == subject.method(:creatorGuid=)
-    subject.method(:reply_guid).should           == subject.method(:replyGuid)
-    subject.method(:reply_guid=).should          == subject.method(:replyGuid=)
-    # Annotation#created_on is overwritten
-    subject.method(:created_on=).should          == subject.method(:createdOn=)
-    subject.method(:annotation_position).should  == subject.method(:annotationPosition)
-    subject.method(:annotation_position=).should == subject.method(:annotationPosition=)
-    subject.method(:position).should             == subject.method(:annotation_position)
-  end
+  it { should have_alias(:session_guid, :sessionGuid)                 }
+  it { should have_alias(:session_guid=, :sessionGuid=)               }
+  it { should have_alias(:document_guid, :documentGuid)               }
+  it { should have_alias(:document_guid=, :documentGuid=)             }
+  it { should have_alias(:creator_guid, :creatorGuid)                 }
+  it { should have_alias(:creator_guid=, :creatorGuid=)               }
+  it { should have_alias(:reply_guid, :replyGuid)                     }
+  it { should have_alias(:reply_guid=, :replyGuid=)                   }
+  # Annotation#created_on is overwritten
+  it { should have_alias(:created_on=, :createdOn=)                   }
+  it { should have_alias(:annotation_position, :annotationPosition)   }
+  it { should have_alias(:annotation_position=, :annotationPosition=) }
+  it { should have_alias(:position, :annotation_position)             }
 
-  it 'is compatible with response JSON' do
-    subject.should respond_to(:annotationGuid=)
-    subject.method(:annotationGuid=).should == subject.method(:guid=)
-  end
+  it { should have_alias(:annotationGuid=, :guid=) }
 
   describe '#initialize' do
     it 'raises error if document is not specified' do
@@ -242,8 +224,7 @@ describe GroupDocs::Document::Annotation do
     end
 
     it 'is aliased to #collaborators=' do
-      subject.should respond_to(:collaborators=)
-      subject.method(:collaborators=).should == subject.method(:collaborators_set!)
+      subject.should have_alias(:collaborators=, :collaborators_set!)
     end
   end
 

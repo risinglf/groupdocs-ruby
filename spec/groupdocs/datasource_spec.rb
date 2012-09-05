@@ -44,12 +44,8 @@ describe GroupDocs::DataSource do
   it { should respond_to(:fields)            }
   it { should respond_to(:fields=)           }
 
-  it 'has human-readable accessors' do
-    subject.should respond_to(:description)
-    subject.should respond_to(:description=)
-    subject.method(:description).should  == subject.method(:descr)
-    subject.method(:description=).should == subject.method(:descr=)
-  end
+  it { should have_alias(:description, :descr)   }
+  it { should have_alias(:description=, :descr=) }
 
   describe '#created_on' do
     it 'returns converted to Time object Unix timestamp' do

@@ -68,12 +68,8 @@ describe GroupDocs::Questionnaire do
   it { should respond_to(:pages)  }
   it { should respond_to(:pages=) }
 
-  it 'has human-readable accessors' do
-    subject.should respond_to(:description)
-    subject.should respond_to(:description=)
-    subject.method(:description).should  == subject.method(:descr)
-    subject.method(:description=).should == subject.method(:descr=)
-  end
+  it { should have_alias(:description, :descr)   }
+  it { should have_alias(:description=, :descr=) }
 
   describe '#pages=' do
     it 'converts each page to GroupDocs::Questionnaire::Page object if hash is passed' do

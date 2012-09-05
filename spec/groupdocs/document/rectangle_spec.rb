@@ -13,26 +13,14 @@ describe GroupDocs::Document::Rectangle do
   it { should respond_to(:Height)  }
   it { should respond_to(:Height=) }
 
-  it 'has human-readable accessors' do
-    subject.should respond_to(:x)
-    subject.should respond_to(:x=)
-    subject.should respond_to(:y)
-    subject.should respond_to(:y=)
-    subject.should respond_to(:w)
-    subject.should respond_to(:w=)
-    subject.should respond_to(:width)
-    subject.should respond_to(:h)
-    subject.should respond_to(:h=)
-    subject.should respond_to(:height)
-    subject.method(:x).should      == subject.method(:X)
-    subject.method(:x=).should     == subject.method(:X=)
-    subject.method(:y).should      == subject.method(:Y)
-    subject.method(:y=).should     == subject.method(:Y=)
-    subject.method(:w).should      == subject.method(:Width)
-    subject.method(:w=).should     == subject.method(:Width=)
-    subject.method(:width).should  == subject.method(:w)
-    subject.method(:h).should      == subject.method(:Height)
-    subject.method(:h=).should     == subject.method(:Height=)
-    subject.method(:height).should == subject.method(:h)
-  end
+  it { should have_alias(:x, :X)        }
+  it { should have_alias(:x=, :X=)      }
+  it { should have_alias(:y, :Y)        }
+  it { should have_alias(:y=, :Y=)      }
+  it { should have_alias(:w, :Width)    }
+  it { should have_alias(:w=, :Width=)  }
+  it { should have_alias(:width, :w)    }
+  it { should have_alias(:h, :Height)   }
+  it { should have_alias(:h=, :Height=) }
+  it { should have_alias(:height, :h)   }
 end

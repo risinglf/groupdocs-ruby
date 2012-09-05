@@ -39,10 +39,7 @@ describe GroupDocs::Document do
   it { should respond_to(:output_formats)  }
   it { should respond_to(:output_formats=) }
 
-  it 'is compatible with response JSON' do
-    subject.should respond_to(:proc_date=)
-    subject.method(:proc_date=).should == subject.method(:process_date=)
-  end
+  it { should have_alias(:access_mode=, :access_mode_set!) }
 
   describe '#outputs=' do
     let(:response) do
@@ -131,8 +128,7 @@ describe GroupDocs::Document do
     end
 
     it 'is aliased to #access_mode=' do
-      subject.should respond_to(:access_mode=)
-      subject.method(:access_mode=).should == subject.method(:access_mode_set!)
+      subject.should have_alias(:access_mode=, :access_mode_set!)
     end
   end
 
