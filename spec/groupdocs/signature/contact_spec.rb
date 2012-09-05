@@ -68,16 +68,10 @@ describe GroupDocs::Signature::Contact do
   it { should respond_to(:provider)   }
   it { should respond_to(:provider=)  }
 
-  it 'has human-readable accessors' do
-    subject.should respond_to(:first_name)
-    subject.should respond_to(:first_name=)
-    subject.should respond_to(:last_name)
-    subject.should respond_to(:last_name=)
-    subject.method(:first_name).should  == subject.method(:firstName)
-    subject.method(:first_name=).should == subject.method(:firstName=)
-    subject.method(:last_name).should   == subject.method(:lastName)
-    subject.method(:last_name=).should  == subject.method(:lastName=)
-  end
+  it { should have_alias(:first_name, :firstName)   }
+  it { should have_alias(:first_name=, :firstName=) }
+  it { should have_alias(:last_name, :lastName)     }
+  it { should have_alias(:last_name=, :lastName=)   }
 
   describe '#add!' do
     before(:each) do
@@ -95,7 +89,7 @@ describe GroupDocs::Signature::Contact do
       subject.add!
     end
 
-    it 'adds ID of datasource from response to self' do
+    it 'adds ID of contact from response to self' do
       lambda do
         subject.add!
       end.should change(subject, :id)

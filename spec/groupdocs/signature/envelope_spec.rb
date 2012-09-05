@@ -103,60 +103,32 @@ describe GroupDocs::Signature::Envelope do
   it { should respond_to(:recipients)          }
   it { should respond_to(:recipients=)         }
 
-  it 'has human-readable accessors' do
-    subject.should respond_to(:owner_id)
-    subject.should respond_to(:owner_id=)
-    subject.should respond_to(:owner_guid)
-    subject.should respond_to(:owner_guid=)
-    subject.should respond_to(:creation_date_time)
-    subject.should respond_to(:creation_date_time=)
-    subject.should respond_to(:status_date_time)
-    subject.should respond_to(:status_date_time=)
-    subject.should respond_to(:reminder_time)
-    subject.should respond_to(:reminder_time=)
-    subject.should respond_to(:step_expire_time)
-    subject.should respond_to(:step_expire_time=)
-    subject.should respond_to(:envelope_expire_time)
-    subject.should respond_to(:envelope_expire_time=)
-    subject.should respond_to(:owner_should_sign)
-    subject.should respond_to(:owner_should_sign=)
-    subject.should respond_to(:ordered_signature)
-    subject.should respond_to(:ordered_signature=)
-    subject.should respond_to(:email_subject)
-    subject.should respond_to(:email_subject=)
-    subject.should respond_to(:email_body)
-    subject.should respond_to(:email_body=)
-    subject.should respond_to(:documents_count)
-    subject.should respond_to(:documents_count=)
-    subject.should respond_to(:documents_pages)
-    subject.should respond_to(:documents_pages=)
-    subject.method(:owner_id).should              == subject.method(:ownerId)
-    subject.method(:owner_id=).should             == subject.method(:ownerId=)
-    subject.method(:owner_guid).should            == subject.method(:ownerGuid)
-    subject.method(:owner_guid=).should           == subject.method(:ownerGuid=)
-    subject.method(:creation_date_time).should    == subject.method(:creationDateTime)
-    subject.method(:creation_date_time=).should   == subject.method(:creationDateTime=)
-    subject.method(:status_date_time).should      == subject.method(:statusDateTime)
-    subject.method(:status_date_time=).should     == subject.method(:statusDateTime=)
-    subject.method(:reminder_time).should         == subject.method(:reminderTime)
-    subject.method(:reminder_time=).should        == subject.method(:reminderTime=)
-    subject.method(:step_expire_time).should      == subject.method(:stepExpireTime)
-    subject.method(:step_expire_time=).should     == subject.method(:stepExpireTime=)
-    subject.method(:envelope_expire_time).should  == subject.method(:envelopeExpireTime)
-    subject.method(:envelope_expire_time=).should == subject.method(:envelopeExpireTime=)
-    subject.method(:owner_should_sign).should     == subject.method(:ownerShouldSign)
-    subject.method(:owner_should_sign=).should    == subject.method(:ownerShouldSign=)
-    subject.method(:ordered_signature).should     == subject.method(:orderedSignature)
-    subject.method(:ordered_signature=).should    == subject.method(:orderedSignature=)
-    subject.method(:email_subject).should         == subject.method(:emailSubject)
-    subject.method(:email_subject=).should        == subject.method(:emailSubject=)
-    subject.method(:email_body).should            == subject.method(:emailBody)
-    subject.method(:email_body=).should           == subject.method(:emailBody=)
-    subject.method(:documents_count).should       == subject.method(:documentsCount)
-    subject.method(:documents_count=).should      == subject.method(:documentsCount=)
-    subject.method(:documents_pages).should       == subject.method(:documentsPages)
-    subject.method(:documents_pages=).should      == subject.method(:documentsPages=)
-  end
+  it { should have_alias(:owner_id, :ownerId)                          }
+  it { should have_alias(:owner_id=, :ownerId=)                        }
+  it { should have_alias(:owner_guid, :ownerGuid)                      }
+  it { should have_alias(:owner_guid=, :ownerGuid=)                    }
+  it { should have_alias(:creation_date_time, :creationDateTime)       }
+  it { should have_alias(:creation_date_time=, :creationDateTime=)     }
+  it { should have_alias(:status_date_time, :statusDateTime)           }
+  it { should have_alias(:status_date_time=, :statusDateTime=)         }
+  it { should have_alias(:reminder_time, :reminderTime)                }
+  it { should have_alias(:reminder_time=, :reminderTime=)              }
+  it { should have_alias(:step_expire_time, :stepExpireTime)           }
+  it { should have_alias(:step_expire_time=, :stepExpireTime=)         }
+  it { should have_alias(:envelope_expire_time, :envelopeExpireTime)   }
+  it { should have_alias(:envelope_expire_time=, :envelopeExpireTime=) }
+  it { should have_alias(:owner_should_sign, :ownerShouldSign)         }
+  it { should have_alias(:owner_should_sign=, :ownerShouldSign=)       }
+  it { should have_alias(:ordered_signature, :orderedSignature)        }
+  it { should have_alias(:ordered_signature=, :orderedSignature=)      }
+  it { should have_alias(:email_subject, :emailSubject)                }
+  it { should have_alias(:email_subject=, :emailSubject=)              }
+  it { should have_alias(:email_body, :emailBody)                      }
+  it { should have_alias(:email_body=, :emailBody=)                    }
+  it { should have_alias(:documents_count, :documentsCount)            }
+  it { should have_alias(:documents_count=, :documentsCount=)          }
+  it { should have_alias(:documents_pages, :documentsPages)            }
+  it { should have_alias(:documents_pages=, :documentsPages=)          }
 
   describe '#recipients=' do
     it 'converts each recipient to GroupDocs::Signature::Contact object if hash is passed' do
