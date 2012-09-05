@@ -1,5 +1,5 @@
 module GroupDocs
-  class Job < GroupDocs::Api::Entity
+  class Job < Api::Entity
 
     extend Api::Helpers::Actions
     include Api::Helpers::Status

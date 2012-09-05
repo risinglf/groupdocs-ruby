@@ -1,5 +1,5 @@
 module GroupDocs
-  class Signature::Envelope < GroupDocs::Api::Entity
+  class Signature::Envelope < Api::Entity
 
     require 'groupdocs/signature/template_fields'
 

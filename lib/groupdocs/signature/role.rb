@@ -1,5 +1,5 @@
 module GroupDocs
-  class Signature::Role < GroupDocs::Api::Entity
+  class Signature::Role < Api::Entity
 
     #
     # Returns array of predefined roles.

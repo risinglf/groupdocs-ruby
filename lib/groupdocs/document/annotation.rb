@@ -1,5 +1,5 @@
 module GroupDocs
-  class Document::Annotation < GroupDocs::Api::Entity
+  class Document::Annotation < Api::Entity
 
     require 'groupdocs/document/annotation/reply'
 

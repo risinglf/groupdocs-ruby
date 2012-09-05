@@ -1,5 +1,5 @@
 module GroupDocs
-  class Signature::Contact < GroupDocs::Api::Entity
+  class Signature::Contact < Api::Entity
 
     #
     # Returns a list of all contacts.

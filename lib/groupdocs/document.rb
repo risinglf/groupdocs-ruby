@@ -1,5 +1,5 @@
 module GroupDocs
-  class Document < GroupDocs::Api::Entity
+  class Document < Api::Entity
 
     require 'groupdocs/document/annotation'
     require 'groupdocs/document/change'

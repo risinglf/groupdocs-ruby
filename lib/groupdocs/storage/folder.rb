@@ -1,6 +1,6 @@
 module GroupDocs
   module Storage
-    class Folder < GroupDocs::Api::Entity
+    class Folder < Api::Entity
 
       include Api::Helpers::AccessMode
       include Api::Helpers::Path

@@ -1,5 +1,5 @@
 module GroupDocs
-  class Signature::List < GroupDocs::Api::Entity
+  class Signature::List < Api::Entity
 
     #
     # Returns array of predefined lists.

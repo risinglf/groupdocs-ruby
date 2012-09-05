@@ -1,5 +1,5 @@
 module GroupDocs
-  class Document::Rectangle < GroupDocs::Api::Entity
+  class Document::Rectangle < Api::Entity
 
     # @attr [Float] X
     attr_accessor :X

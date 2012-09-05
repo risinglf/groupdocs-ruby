@@ -1,5 +1,5 @@
 module GroupDocs
-  class Signature::Recipient < GroupDocs::Api::Entity
+  class Signature::Recipient < Api::Entity
 
     # @attr [String] id
     attr_accessor :id

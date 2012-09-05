@@ -1,5 +1,5 @@
 module GroupDocs
-  class Document::Annotation::Reply < GroupDocs::Api::Entity
+  class Document::Annotation::Reply < Api::Entity
 
     #
     # Return an array of replies for given annotation.

@@ -1,5 +1,5 @@
 module GroupDocs
-  class User < GroupDocs::Api::Entity
+  class User < Api::Entity
 
     #
     # Returns current user profile.

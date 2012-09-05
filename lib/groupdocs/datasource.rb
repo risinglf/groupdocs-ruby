@@ -1,5 +1,5 @@
 module GroupDocs
-  class DataSource < GroupDocs::Api::Entity
+  class DataSource < Api::Entity
 
     require 'groupdocs/datasource/field'
 

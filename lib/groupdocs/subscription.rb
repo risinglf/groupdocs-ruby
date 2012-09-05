@@ -1,5 +1,5 @@
 module GroupDocs
-  class Subscription < GroupDocs::Api::Entity
+  class Subscription < Api::Entity
 
     require 'groupdocs/subscription/limit'
 

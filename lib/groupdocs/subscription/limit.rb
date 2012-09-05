@@ -1,5 +1,5 @@
 module GroupDocs
-  class Subscription::Limit < GroupDocs::Api::Entity
+  class Subscription::Limit < Api::Entity
 
     # @attr [Integer] Id
     attr_accessor :Id

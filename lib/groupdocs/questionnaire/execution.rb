@@ -1,5 +1,5 @@
 module GroupDocs
-  class Questionnaire::Execution < GroupDocs::Api::Entity
+  class Questionnaire::Execution < Api::Entity
 
     include Api::Helpers::Status
 
