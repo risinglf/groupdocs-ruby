@@ -9,14 +9,12 @@ module GroupDocs
     # @option access [String] :private_key
     # @return [Array<GroupDocs::Signature::List>]
     #
-    def self.get!(options = {}, access = {})
-      api = Api::Request.new do |request|
+    def self.get!(access = {})
+      json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
         request[:path] = '/signature/{{client_id}}/lists'
-      end
-      api.add_params(options)
-      json = api.execute!
+      end.execute!
 
       json[:lists].map do |list|
         new(list)

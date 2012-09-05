@@ -125,7 +125,7 @@ describe GroupDocs::Questionnaire do
       subject.create!
     end
 
-    it 'adds ID of questionnaire from response to self' do
+    it 'updates identifier of questionnaire' do
       lambda do
         subject.create!
       end.should change(subject, :id)

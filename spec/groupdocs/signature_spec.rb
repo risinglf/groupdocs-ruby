@@ -96,7 +96,7 @@ describe GroupDocs::Signature do
       subject.create!('Signature')
     end
 
-    it 'adds ID of signature from response to self' do
+    it 'updates identifier of signature' do
       lambda do
         subject.create!('Signature')
       end.should change(subject, :id)
@@ -105,7 +105,7 @@ describe GroupDocs::Signature do
 
   describe '#delete!' do
     before(:each) do
-      mock_api_server('{ "result": { "signature": null }}')
+      mock_api_server('{ "status": "Ok", "result": { "signature": null }}')
     end
 
     it 'accepts access credentials hash' do

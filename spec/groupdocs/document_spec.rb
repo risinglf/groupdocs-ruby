@@ -176,7 +176,7 @@ describe GroupDocs::Document do
     end
 
     it 'does not set last view if document has never been viewed' do
-      mock_api_server('{"status": "Ok", "result": {"last_view": null }}')
+      mock_api_server('{ "status": "Ok", "result": { "last_view": null }}')
       subject.metadata!.last_view.should be_nil
     end
   end
@@ -353,7 +353,7 @@ describe GroupDocs::Document do
       subject.create_questionnaire!(questionnaire)
     end
 
-    it 'adds ID from response to questionnaire' do
+    it 'updates ID from response to questionnaire' do
       lambda do
         subject.create_questionnaire!(questionnaire)
       end.should change(questionnaire, :id)
@@ -427,7 +427,7 @@ describe GroupDocs::Document do
     end
 
     it 'returns empty array if annotations are null in response' do
-      mock_api_server('{"status": "Ok", "result": {"annotations": null }}')
+      mock_api_server('{ "status": "Ok", "result": { "annotations": null }}')
       subject.annotations!.should be_empty
     end
   end

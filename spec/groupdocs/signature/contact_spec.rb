@@ -63,6 +63,8 @@ describe GroupDocs::Signature::Contact do
   it { should respond_to(:firstName=) }
   it { should respond_to(:lastName)   }
   it { should respond_to(:lastName=)  }
+  it { should respond_to(:nickname)   }
+  it { should respond_to(:nickname=)  }
   it { should respond_to(:email)      }
   it { should respond_to(:email=)     }
   it { should respond_to(:provider)   }
@@ -89,7 +91,7 @@ describe GroupDocs::Signature::Contact do
       subject.add!
     end
 
-    it 'adds ID of contact from response to self' do
+    it 'updates identifier of contact' do
       lambda do
         subject.add!
       end.should change(subject, :id)
@@ -115,7 +117,7 @@ describe GroupDocs::Signature::Contact do
 
   describe '#delete!' do
     before(:each) do
-      mock_api_server('{ "result": { "contact": null }}')
+      mock_api_server('{ "status": "Ok", "result": { "contact": null }}')
     end
 
     it 'accepts access credentials hash' do

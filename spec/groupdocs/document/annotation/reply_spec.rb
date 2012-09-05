@@ -128,7 +128,7 @@ describe GroupDocs::Document::Annotation::Reply do
 
   describe '#edit!' do
     before(:each) do
-      mock_api_server('{"result": {}, "status": "Ok", "error_message": null}')
+      mock_api_server('{ "result": {}, "status": "Ok" }')
     end
 
     it 'accepts access credentials hash' do
@@ -140,7 +140,7 @@ describe GroupDocs::Document::Annotation::Reply do
 
   describe '#remove!' do
     before(:each) do
-      mock_api_server('{"result": {}, "status": "Ok", "error_message": null}')
+      mock_api_server('{ "result": {}, "status": "Ok" }')
     end
 
     it 'accepts access credentials hash' do

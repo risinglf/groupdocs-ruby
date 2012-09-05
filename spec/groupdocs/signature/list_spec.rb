@@ -71,7 +71,7 @@ describe GroupDocs::Signature::List do
       subject.add!
     end
 
-    it 'adds ID of list from response to self' do
+    it 'updates identifier of list' do
       lambda do
         subject.add!
       end.should change(subject, :id)
@@ -80,7 +80,7 @@ describe GroupDocs::Signature::List do
 
   describe '#delete!' do
     before(:each) do
-      mock_api_server('{ "result": { "list": null }}')
+      mock_api_server('{ "status": "Ok", "result": { "list": null }}')
     end
 
     it 'accepts access credentials hash' do

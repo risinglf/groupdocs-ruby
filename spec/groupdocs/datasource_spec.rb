@@ -114,7 +114,7 @@ describe GroupDocs::DataSource do
       subject.add!
     end
 
-    it 'adds ID of datasource from response to self' do
+    it 'updates identifier of datasource' do
       lambda do
         subject.add!
       end.should change(subject, :id)

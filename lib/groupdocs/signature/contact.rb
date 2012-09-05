@@ -68,6 +68,8 @@ module GroupDocs
     attr_accessor :firstName
     # @attr [String] lastName
     attr_accessor :lastName
+    # @attr [String] nickname
+    attr_accessor :nickname
     # @attr [String] email
     attr_accessor :email
     # @attr [String] provider

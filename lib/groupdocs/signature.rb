@@ -4,6 +4,9 @@ module GroupDocs
     require 'groupdocs/signature/contact'
     require 'groupdocs/signature/envelope'
     require 'groupdocs/signature/list'
+    require 'groupdocs/signature/recipient'
+    require 'groupdocs/signature/role'
+    require 'groupdocs/signature/template'
 
     #
     # Returns a list of all user signatures.
