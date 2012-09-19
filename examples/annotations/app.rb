@@ -12,7 +12,7 @@ post '/upload' do
   set :client_id, params[:client_id]
   set :private_key, params[:private_key]
   filepath = "#{Dir.tmpdir}/#{params[:file][:filename]}"
-  File.open(filepath, 'w') { |f| f.write(params[:file][:tempfile].read) }
+  File.open(filepath, 'wb') { |f| f.write(params[:file][:tempfile].read) }
   @@file = GroupDocs::Storage::File.upload!(filepath, '/', client_id: options.client_id, private_key: options.private_key)
 
   haml :annotations
@@ -20,7 +20,7 @@ end
 
 get '/annotations' do
   annotations = @@file.to_document.annotations!(client_id: options.client_id, private_key: options.private_key)
-  annotations.map { |annotation| annotation.type }.join ", "
+  annotations.map { |annotation| "Annotation Type: #{annotation.type} -- Replies: #{annotation.replies.map { |reply| "'#{reply.user_name}':'#{reply.text}'" }}" }.join "<br />"
 end
 
 
@@ -38,7 +38,6 @@ __END__
       });
   %body
     = yield
-
 
 @@upload
 %h4 Upload file
@@ -59,7 +58,7 @@ __END__
   %input{ type: 'submit', value: 'Upload' }
 
 @@annotations
-%iframe{ src: "https://apps.groupdocs.com/document-annotation/Embed/#{@@file.guid}", frameborder: 0, width: 600, height: 400 }
+%iframe{ src: "https://apps.groupdocs.com/document-annotation/Embed/#{@@file.guid}", frameborder: 0, width: 720, height: 600 }
 %br
 %br
 %button#annotations Poll annotations
