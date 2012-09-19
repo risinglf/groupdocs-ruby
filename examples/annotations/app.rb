@@ -20,7 +20,7 @@ end
 
 get '/annotations' do
   annotations = @@file.to_document.annotations!(client_id: options.client_id, private_key: options.private_key)
-  annotations.map { |annotation| "Annotation Type: #{annotation.type} -- Replies: #{annotation.replies.map {|reply|"'#{reply.user_name}':'#{reply.text}'"}}" }.join "<br />"
+  annotations.map { |annotation| "Annotation Type: #{annotation.type} -- Replies: #{annotation.replies.map { |reply| "'#{reply.user_name}':'#{reply.text}'" }}" }.join "<br />"
 end
 
 
@@ -38,7 +38,6 @@ __END__
       });
   %body
     = yield
-
 
 @@upload
 %h4 Upload file
