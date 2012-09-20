@@ -1,6 +1,7 @@
 module GroupDocs
   class Signature::Envelope < Api::Entity
 
+    include Signature::DocumentMethods
     include Signature::TemplateFields
 
     #

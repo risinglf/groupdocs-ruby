@@ -121,6 +121,14 @@ module GroupDocs
         "@#{word}".to_sym
       end
 
+      #
+      # Returns pluralized class name.
+      # @api private
+      #
+      def pluralized_class
+        "%ss" % self.class.name.split('::').last.downcase
+      end
+
     end # Entity
   end # Api
 end # GroupDocs

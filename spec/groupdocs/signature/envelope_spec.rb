@@ -3,6 +3,7 @@ require 'spec_helper'
 describe GroupDocs::Signature::Envelope do
 
   it_behaves_like GroupDocs::Api::Entity
+  include_examples GroupDocs::Signature::DocumentMethods
   include_examples GroupDocs::Signature::TemplateFields
 
   describe '.all!' do

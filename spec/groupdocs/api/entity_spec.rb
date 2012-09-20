@@ -65,4 +65,11 @@ describe GroupDocs::Api::Entity do
       subject.send(:accessor_to_variable, :test_one_and_two).should == :@TestOneAndTwo
     end
   end
+
+  describe '#pluralized_class' do
+    it 'returns class name ending with s' do
+      object = GroupDocs::Storage::File.new
+      object.send(:pluralized_class).should == 'files'
+    end
+  end
 end
