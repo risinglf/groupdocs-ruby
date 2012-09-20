@@ -1,6 +1,8 @@
 module GroupDocs
   class Signature::Field < Api::Entity
 
+    require 'groupdocs/signature/field/location'
+
     #
     # Returns array of predefined lists.
     #
@@ -27,6 +29,12 @@ module GroupDocs
 
     # @attr [String] id
     attr_accessor :id
+    # @attr [String] templateId
+    attr_accessor :templateId
+    # @attr [String] recipientId
+    attr_accessor :recipientId
+    # @attr [String] signatureFieldId
+    attr_accessor :signatureFieldId
     # @attr [String] name
     attr_accessor :name
     # @attr [Integer] graphSizeW
@@ -57,8 +65,28 @@ module GroupDocs
     attr_accessor :acceptableValues
     # @attr [String] defaultValue
     attr_accessor :defaultValue
+    # @attr [String] tooltip
+    attr_accessor :tooltip
+    # @attr [Integer] input
+    attr_accessor :input
+    # @attr [Integer] order
+    attr_accessor :order
+    # @attr [String] textRows
+    attr_accessor :textRows
+    # @attr [String] textColumns
+    attr_accessor :textColumns
+    # @attr [Array<GroupDocs::Signature::Field::Location>] locations
+    attr_accessor :locations
 
     # Human-readable accessors
+    alias_method :template_id,         :templateId
+    alias_method :template_id=,        :templateId=
+    alias_method :recipient_id,        :recipientId
+    alias_method :recipient_id=,       :recipientId=
+    alias_method :signature_field_id,  :signatureFieldId
+    alias_method :signature_field_id=, :signatureFieldId=
+    alias_method :graph_size_w,        :graphSizeW
+    alias_method :graph_size_w=,       :graphSizeW=
     alias_method :graph_size_w,        :graphSizeW
     alias_method :graph_size_w=,       :graphSizeW=
     alias_method :graph_size_width,    :graphSizeW
@@ -91,6 +119,27 @@ module GroupDocs
     alias_method :acceptable_values=,  :acceptableValues=
     alias_method :default_value,       :defaultValue
     alias_method :default_value=,      :defaultValue=
+    alias_method :text_rows,           :textRows
+    alias_method :text_rows=,          :textRows=
+    alias_method :text_columns,        :textColumns
+    alias_method :text_columns=,       :textColumns=
+
+    #
+    # Converts each location to GroupDocs::Signature::Field::Location object.
+    #
+    # @param [Array<GroupDocs::Signature::Field::Location, Hash>] locations
+    #
+    def locations=(locations)
+      if locations
+        @locations = locations.map do |location|
+          if location.is_a?(GroupDocs::Signature::Field::Location)
+            location
+          else
+            Signature::Field::Location.new(location)
+          end
+        end
+      end
+    end
 
     #
     # Creates signature field.

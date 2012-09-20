@@ -203,5 +203,41 @@ module GroupDocs
       api.execute!
     end
 
+    #
+    # Returns an array of fields for document and recipient.
+    #
+    # @example
+    #   template = GroupDocs::Signature::Template.get!("g94h5g84hj9g4gf23i40j")
+    #   document = template.documents!.first
+    #   recipient = template.recipients!.first
+    #   template.fields! document, recipient
+    #
+    # @param [GroupDocs::Document] document
+    # @param [GroupDocs::Signature::Recipient] recipient
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @raise [ArgumentError] if document is not GroupDocs::Document
+    # @raise [ArgumentError] if recipient is not GroupDocs::Signature::Recipient
+    #
+    def fields!(document, recipient, access = {})
+      document.is_a?(GroupDocs::Document) or raise ArgumentError,
+        "Document should be GroupDocs::Document object, received: #{document.inspect}"
+      recipient.is_a?(GroupDocs::Signature::Recipient) or raise ArgumentError,
+        "Recipient should be GroupDocs::Signature::Recipient object, received: #{recipient.inspect}"
+
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/signature/{{client_id}}/templates/#{id}/fields"
+      end
+      api.add_params(document: document.file.guid, recipient: recipient.id)
+      json = api.execute!
+
+      json[:fields].map do |field|
+        Signature::Field.new(field)
+      end
+    end
+
   end # Signature::Template
 end # GroupDocs

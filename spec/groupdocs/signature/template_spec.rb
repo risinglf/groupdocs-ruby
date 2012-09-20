@@ -168,4 +168,35 @@ describe GroupDocs::Signature::Template do
       -> { subject.modify_recipient!('Recipient') }.should raise_error(ArgumentError)
     end
   end
+
+  describe '#fields!' do
+    let(:document)  { GroupDocs::Document.new(file: GroupDocs::Storage::File.new) }
+    let(:recipient) { GroupDocs::Signature::Recipient.new }
+
+    before(:each) do
+      mock_api_server(load_json('signature_fields_get'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.fields!(document, recipient, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'raises error if document is not GroupDocs::Document object' do
+      -> { subject.fields!('Document', recipient) }.should raise_error(ArgumentError)
+    end
+
+    it 'raises error if recipient is not GroupDocs::Signature::Recipient object' do
+      -> { subject.fields!(document, 'Recipient') }.should raise_error(ArgumentError)
+    end
+
+    it 'returns array of GroupDocs::Signature::Field objects' do
+      fields = subject.fields!(document, recipient)
+      fields.should be_an(Array)
+      fields.each do |field|
+        field.should be_a(GroupDocs::Signature::Field)
+      end
+    end
+  end
 end

@@ -28,6 +28,14 @@ describe GroupDocs::Signature::Field do
     end
   end
 
+  it { should respond_to(:id)                 }
+  it { should respond_to(:id=)                }
+  it { should respond_to(:templateId)         }
+  it { should respond_to(:templateId=)        }
+  it { should respond_to(:recipientId)        }
+  it { should respond_to(:recipientId=)       }
+  it { should respond_to(:signatureFieldId)   }
+  it { should respond_to(:signatureFieldId=)  }
   it { should respond_to(:graphSizeW)         }
   it { should respond_to(:graphSizeW=)        }
   it { should respond_to(:graphSizeW)         }
@@ -60,7 +68,23 @@ describe GroupDocs::Signature::Field do
   it { should respond_to(:acceptableValues=)  }
   it { should respond_to(:defaultValue)       }
   it { should respond_to(:defaultValue=)      }
+  it { should respond_to(:tooltip)            }
+  it { should respond_to(:tooltip=)           }
+  it { should respond_to(:input)              }
+  it { should respond_to(:input=)             }
+  it { should respond_to(:order)              }
+  it { should respond_to(:order=)             }
+  it { should respond_to(:textRows)           }
+  it { should respond_to(:textRows=)          }
+  it { should respond_to(:textColumns)        }
+  it { should respond_to(:textColumns=)       }
 
+  it { should have_alias(:template_id,         :templateId)         }
+  it { should have_alias(:template_id=,        :templateId=)        }
+  it { should have_alias(:recipient_id,        :recipientId)        }
+  it { should have_alias(:recipient_id=,       :recipientId=)       }
+  it { should have_alias(:signature_field_id,  :signatureFieldId)   }
+  it { should have_alias(:signature_field_id=, :signatureFieldId=)  }
   it { should have_alias(:graph_size_w,        :graphSizeW)         }
   it { should have_alias(:graph_size_w=,       :graphSizeW=)        }
   it { should have_alias(:graph_size_width,    :graphSizeW)         }
@@ -93,6 +117,35 @@ describe GroupDocs::Signature::Field do
   it { should have_alias(:acceptable_values=,  :acceptableValues=)  }
   it { should have_alias(:default_value,       :defaultValue)       }
   it { should have_alias(:default_value=,      :defaultValue=)      }
+  it { should have_alias(:text_rows,           :textRows)           }
+  it { should have_alias(:text_rows=,          :textRows=)          }
+  it { should have_alias(:text_columns,        :textColumns)        }
+  it { should have_alias(:text_columns=,       :textColumns=)       }
+
+  describe '#locations=' do
+    it 'converts each location to GroupDocs::Signature::Field::Location object if hash is passed' do
+      subject.locations = [{ name: 'location1', values: %w(value1 value2), type: 1 }]
+      locations = subject.locations
+      locations.should be_an(Array)
+      locations.each do |location|
+        location.should be_a(GroupDocs::Signature::Field::Location)
+      end
+    end
+
+    it 'saves each location if it is GroupDocs::Signature::Field::Location object' do
+      location1 = GroupDocs::Signature::Field::Location.new(id: 'location1')
+      location2 = GroupDocs::Signature::Field::Location.new(id: 'location2')
+      subject.locations = [location1, location2]
+      subject.locations.should include(location1)
+      subject.locations.should include(location2)
+    end
+
+    it 'does nothing if nil is passed' do
+      lambda do
+        subject.locations = nil
+      end.should_not change(subject, :locations)
+    end
+  end
 
   describe '#create!' do
     before(:each) do
