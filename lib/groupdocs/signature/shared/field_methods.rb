@@ -11,11 +11,17 @@ module GroupDocs
       #
       # Returns an array of fields for document and recipient.
       #
-      # @example
+      # @example Get fields from template
       #   template = GroupDocs::Signature::Template.get!("g94h5g84hj9g4gf23i40j")
       #   document = template.documents!.first
       #   recipient = template.recipients!.first
       #   template.fields! document, recipient
+      #
+      # @example Get fields from envelope
+      #   envelope = GroupDocs::Signature::Envelope.get!("g94h5g84hj9g4gf23i40j")
+      #   document = envelope.documents!.first
+      #   recipient = envelope.recipients!.first
+      #   envelope.fields! document, recipient
       #
       # @param [GroupDocs::Document] document
       # @param [GroupDocs::Signature::Recipient] recipient
@@ -47,13 +53,21 @@ module GroupDocs
       #
       # Adds field for document and recipient.
       #
-      # @example
+      # @example Add field to template
       #   template = GroupDocs::Signature::Template.get!("g94h5g84hj9g4gf23i40j")
       #   field = GroupDocs::Signature::Field.get!.detect { |f| f.name == "Signature" }
       #   field.location = { location_x: 0.1, location_y: 0.1, page: 1 }
       #   document = template.documents!.first
       #   recipient = template.recipients!.first
       #   template.add_field! field, document, recipient
+      #
+      # @example Add field to envelope
+      #   envelope = GroupDocs::Signature::Envelope.get!("g94h5g84hj9g4gf23i40j")
+      #   field = GroupDocs::Signature::Field.get!.detect { |f| f.name == "Signature" }
+      #   field.location = { location_x: 0.1, location_y: 0.1, page: 1 }
+      #   document = envelope.documents!.first
+      #   recipient = envelope.recipients!.first
+      #   envelope.add_field! field, document, recipient
       #
       # @param [GroupDocs::Signature::Field] field
       # @param [GroupDocs::Document] document
@@ -91,12 +105,19 @@ module GroupDocs
       #
       # Deletes field.
       #
-      # @example
+      # @example Delete field from template
       #   template = GroupDocs::Signature::Template.get!("g94h5g84hj9g4gf23i40j")
       #   document = template.documents!.first
       #   recipient = template.recipients!.first
       #   field = template.fields!(document, recipient).first
       #   template.delete_field! field
+      #
+      # @example Delete field from envelope
+      #   envelope = GroupDocs::Signature::Envelope.get!("g94h5g84hj9g4gf23i40j")
+      #   document = envelope.documents!.first
+      #   recipient = envelope.recipients!.first
+      #   field = envelope.fields!(document, recipient).first
+      #   envelope.delete_field! field
       #
       # @param [GroupDocs::Signature::Field] field
       # @param [Hash] access Access credentials
@@ -118,7 +139,7 @@ module GroupDocs
       #
       # Modifies field location.
       #
-      # @example
+      # @example Modify field location in template
       #   template = GroupDocs::Signature::Template.get!("g94h5g84hj9g4gf23i40j")
       #   document = template.documents!.first
       #   recipient = template.recipients!.first
@@ -128,6 +149,17 @@ module GroupDocs
       #   location.y = 0.123
       #   location.page = 2
       #   template.modify_field_location! location, field, document, recipient
+      #
+      # @example Modify field location in envelope
+      #   envelope = GroupDocs::Signature::Envelope.get!("g94h5g84hj9g4gf23i40j")
+      #   document = envelope.documents!.first
+      #   recipient = envelope.recipients!.first
+      #   field = envelope.fields!(document, recipient).first
+      #   location = field.locations.first
+      #   location.x = 0.123
+      #   location.y = 0.123
+      #   location.page = 2
+      #   envelope.modify_field_location! location, field, document, recipient
       #
       # @param [GroupDocs::Signature::Field::Location] location
       # @param [GroupDocs::Signature::Field] field
@@ -162,13 +194,21 @@ module GroupDocs
       #
       # Deletes field location.
       #
-      # @example
+      # @example Delete field location in template
       #   template = GroupDocs::Signature::Template.get!("g94h5g84hj9g4gf23i40j")
       #   document = template.documents!.first
       #   recipient = template.recipients!.first
       #   field = template.fields!(document, recipient).first
       #   location = field.locations.first
       #   template.delete_field_location! location, field
+      #
+      # @example Delete field location in envelope
+      #   envelope = GroupDocs::Signature::Envelop.get!("g94h5g84hj9g4gf23i40j")
+      #   document = envelope.documents!.first
+      #   recipient = envelope.recipients!.first
+      #   field = envelope.fields!(document, recipient).first
+      #   location = field.locations.first
+      #   envelope.delete_field_location! location, field
       #
       # @param [GroupDocs::Signature::Field::Location] location
       # @param [GroupDocs::Signature::Field] field
