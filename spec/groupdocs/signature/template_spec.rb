@@ -167,6 +167,26 @@ describe GroupDocs::Signature::Template do
     end
   end
 
+  describe '#modify_recipient!' do
+    let(:recipient) do
+      GroupDocs::Signature::Recipient.new
+    end
+
+    before(:each) do
+      mock_api_server('{ "status": "Ok", "result": {}}')
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.modify_recipient!(recipient, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'raises error if recipient is not GroupDocs::Signature::Recipient object' do
+      -> { subject.modify_recipient!('Recipient') }.should raise_error(ArgumentError)
+    end
+  end
+
   describe '#remove_recipient!' do
     let(:recipient) do
       GroupDocs::Signature::Recipient.new

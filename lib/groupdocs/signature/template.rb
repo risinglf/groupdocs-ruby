@@ -194,6 +194,34 @@ module GroupDocs
     end
 
     #
+    # Modify recipient of template.
+    #
+    # @example
+    #   template = GroupDocs::Signature::Template.get!("g94h5g84hj9g4gf23i40j")
+    #   recipient = template.recipients!.first
+    #   recipient.nickname = 'John Smith'
+    #   template.modify_recipient! recipient
+    #
+    # @param [GroupDocs::Signature::Recipient] recipient
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @raise [ArgumentError] if recipient is not GroupDocs::Signature::Recipient
+    #
+    def modify_recipient!(recipient, access = {})
+      recipient.is_a?(GroupDocs::Signature::Recipient) or raise ArgumentError,
+        "Recipient should be GroupDocs::Signature::Recipient object, received: #{recipient.inspect}"
+
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/signature/{{client_id}}/templates/#{id}/recipient/#{recipient.id}"
+      end
+      api.add_params(nickname: recipient.nickname, role: recipient.role_id, order: recipient.order)
+      api.execute!
+    end
+
+    #
     # Removes recipient from template.
     #
     # @example
