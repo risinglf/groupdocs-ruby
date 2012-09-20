@@ -232,16 +232,34 @@ describe GroupDocs::Signature::Template do
       -> { subject.add_field!(field, document, recipient) }.should raise_error(ArgumentError)
     end
 
-    it 'uses field location as payload' do
-      field.location.should_receive(:to_hash).and_return({})
+    it 'uses field, field location and forcedNewField flag as payload' do
+      payload = {}
+      location = {}
+      field.should_receive(:to_hash).and_return(payload)
+      field.location.should_receive(:to_hash).and_return(location)
+      payload.should_receive(:merge!).with(location).and_return(payload)
+      payload.should_receive(:merge!).with(forceNewField: true).and_return({})
       subject.add_field!(field, document, recipient)
     end
+  end
 
-    it 'appends field name and forcedNewField flag to payload' do
-      hash = {}
-      field.location.stub(to_hash: hash)
-      hash.should_receive(:merge).with(name: field.name, forceNewField: true)
-      subject.add_field!(field, document, recipient)
+  describe '#delete_field!' do
+    let(:field) do
+      GroupDocs::Signature::Field.new
+    end
+
+    before(:each) do
+      mock_api_server('{ "status": "Ok", "result": {}}')
+    end
+
+    it 'raises error if field is not GroupDocs::Signature::Field object' do
+      -> { subject.delete_field!('Field') }.should raise_error(ArgumentError)
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.delete_field!(field, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
     end
   end
 end

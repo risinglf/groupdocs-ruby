@@ -256,8 +256,10 @@ module GroupDocs
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
+    # @raise [ArgumentError] if field is not GroupDocs::Signature::Field
     # @raise [ArgumentError] if document is not GroupDocs::Document
     # @raise [ArgumentError] if recipient is not GroupDocs::Signature::Recipient
+    # @raise [ArgumentError] if field does not specify location
     #
     def add_field!(field, document, recipient, access = {})
       field.is_a?(GroupDocs::Signature::Field) or raise ArgumentError,
@@ -269,11 +271,43 @@ module GroupDocs
       field.location or raise ArgumentError,
         "You have to specify field location, received: #{field.location.inspect}"
 
+      payload = field.to_hash # field itself
+      payload.merge!(field.location.to_hash) # location should added in plain view (i.e. not "location": {...})
+      payload.merge!(forceNewField: true) # create new field flag
+
       Api::Request.new do |request|
         request[:access] = access
         request[:method] = :POST
         request[:path] = "/signature/{{client_id}}/templates/#{id}/documents/#{document.file.guid}/recipient/#{recipient.id}/field/#{field.id}"
-        request[:request_body] = field.location.to_hash.merge(name: field.name, forceNewField: true)
+        request[:request_body] = payload
+      end.execute!
+    end
+
+    #
+    # Deletes field.
+    #
+    # @example
+    #   template = GroupDocs::Signature::Template.get!("g94h5g84hj9g4gf23i40j")
+    #   document = template.documents!.first
+    #   recipient = template.recipients!.first
+    #   field = template.fields!(document, recipient).first
+    #   template.deletes_field! field
+    #
+    # @param [GroupDocs::Signature::Field] field
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @raise [ArgumentError] if field is not GroupDocs::Signature::Field
+    # @raise [ArgumentError] if document is not GroupDocs::Document
+    #
+    def delete_field!(field, access = {})
+      field.is_a?(GroupDocs::Signature::Field) or raise ArgumentError,
+        "Field should be GroupDocs::Signature::Field object, received: #{field.inspect}"
+
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :DELETE
+        request[:path] = "/signature/{{client_id}}/templates/#{id}/fields/#{field.id}"
       end.execute!
     end
 

@@ -59,6 +59,8 @@ module GroupDocs
     attr_accessor :fontUnderline
     # @attr [Boolean] isSystem
     attr_accessor :isSystem
+    # @attr [Boolean] mandatory
+    attr_accessor :mandatory
     # @attr [Integer] fieldType
     attr_accessor :fieldType
     # @attr [Boolean] acceptableValues
