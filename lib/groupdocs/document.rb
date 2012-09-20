@@ -53,6 +53,8 @@ module GroupDocs
     attr_accessor :output_formats
     # @attr [Symbol] status
     attr_accessor :status
+    # @attr [Integet] order
+    attr_accessor :order
 
     #
     # Coverts passed array of attributes hash to array of GroupDocs::Storage::File.

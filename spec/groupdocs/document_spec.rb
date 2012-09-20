@@ -38,6 +38,8 @@ describe GroupDocs::Document do
   it { should respond_to(:outputs=)        }
   it { should respond_to(:output_formats)  }
   it { should respond_to(:output_formats=) }
+  it { should respond_to(:order)           }
+  it { should respond_to(:order=)          }
 
   it { should have_alias(:access_mode=, :access_mode_set!) }
 
