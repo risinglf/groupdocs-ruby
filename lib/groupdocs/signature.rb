@@ -4,6 +4,7 @@ module GroupDocs
     require 'groupdocs/signature/shared'
     require 'groupdocs/signature/contact'
     require 'groupdocs/signature/envelope'
+    require 'groupdocs/signature/field'
     require 'groupdocs/signature/list'
     require 'groupdocs/signature/recipient'
     require 'groupdocs/signature/role'

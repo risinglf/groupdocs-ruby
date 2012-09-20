@@ -44,7 +44,7 @@ module GroupDocs
       #
       # @param [GroupDocs::Document] document
       # @param [Hash] options
-      # @param options [Integer] :order Display order of the document
+      # @option options [Integer] :order Display order of the document
       # @param [Hash] access Access credentials
       # @option access [String] :client_id
       # @option access [String] :private_key

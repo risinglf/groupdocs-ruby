@@ -33,7 +33,7 @@ describe GroupDocs::Signature::List do
   it { should respond_to(:defaultValue)  }
   it { should respond_to(:defaultValue=) }
 
-  it { should have_alias(:default_value, :defaultValue)   }
+  it { should have_alias(:default_value,  :defaultValue)  }
   it { should have_alias(:default_value=, :defaultValue=) }
 
   describe '#values=' do
