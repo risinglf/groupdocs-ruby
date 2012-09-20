@@ -92,5 +92,28 @@ module GroupDocs
     alias_method :default_value,       :defaultValue
     alias_method :default_value=,      :defaultValue=
 
+    #
+    # Creates signature field.
+    #
+    # @example
+    #   field = GroupDocs::Signature::Field.new
+    #   field.name = 'Field'
+    #   field.create!
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def create!(access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :POST
+        request[:path] = '/signature/{{client_id}}/field'
+        request[:request_body] = to_hash
+      end.execute!
+
+      self.id = json[:field][:id]
+    end
+
   end # Signature::Field
 end # GroupDocs
