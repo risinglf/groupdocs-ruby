@@ -75,6 +75,8 @@ module GroupDocs
     attr_accessor :textRows
     # @attr [String] textColumns
     attr_accessor :textColumns
+    # @attr [GroupDocs::Signature::Field::Location] location
+    attr_accessor :location
     # @attr [Array<GroupDocs::Signature::Field::Location>] locations
     attr_accessor :locations
 
@@ -123,6 +125,16 @@ module GroupDocs
     alias_method :text_rows=,          :textRows=
     alias_method :text_columns,        :textColumns
     alias_method :text_columns=,       :textColumns=
+
+    #
+    # Converts location to GroupDocs::Signature::Field::Location object.
+    #
+    # @param [GroupDocs::Signature::Field::Location, Hash] location
+    #
+    def location=(location)
+      @location = (location.is_a?(GroupDocs::Signature::Field::Location) ? location : Signature::Field::Location.new(location))
+      locations ? locations << @location : self.locations = [@location]
+    end
 
     #
     # Converts each location to GroupDocs::Signature::Field::Location object.

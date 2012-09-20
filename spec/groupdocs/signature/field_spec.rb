@@ -78,6 +78,10 @@ describe GroupDocs::Signature::Field do
   it { should respond_to(:textRows=)          }
   it { should respond_to(:textColumns)        }
   it { should respond_to(:textColumns=)       }
+  it { should respond_to(:location)           }
+  it { should respond_to(:location=)          }
+  it { should respond_to(:locations)          }
+  it { should respond_to(:locations=)         }
 
   it { should have_alias(:template_id,         :templateId)         }
   it { should have_alias(:template_id=,        :templateId=)        }
@@ -122,9 +126,37 @@ describe GroupDocs::Signature::Field do
   it { should have_alias(:text_columns,        :textColumns)        }
   it { should have_alias(:text_columns=,       :textColumns=)       }
 
+  describe '#location=' do
+    it 'converts location to GroupDocs::Signature::Field::Location object if hash is passed' do
+      subject.location = { id: 'location1' }
+      subject.location.should be_a(GroupDocs::Signature::Field::Location)
+    end
+
+    it 'saves each location if it is GroupDocs::Signature::Field::Location object' do
+      location = GroupDocs::Signature::Field::Location.new(id: 'location')
+      subject.location = location
+      subject.location.should == location
+    end
+
+    it 'appends location to locations if it is not empty' do
+      location1 = GroupDocs::Signature::Field::Location.new(id: 'location1')
+      location2 = GroupDocs::Signature::Field::Location.new(id: 'location2')
+      subject.locations = [location1]
+      subject.location = location2
+      subject.locations.should == [location1, location2]
+    end
+
+    it 'creates locations if it is empty' do
+      subject.locations = nil
+      location = GroupDocs::Signature::Field::Location.new(id: 'location')
+      subject.location = location
+      subject.locations.should == [location]
+    end
+  end
+
   describe '#locations=' do
     it 'converts each location to GroupDocs::Signature::Field::Location object if hash is passed' do
-      subject.locations = [{ name: 'location1', values: %w(value1 value2), type: 1 }]
+      subject.locations = [{ id: 'location1' }]
       locations = subject.locations
       locations.should be_an(Array)
       locations.each do |location|
