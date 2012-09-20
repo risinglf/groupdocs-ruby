@@ -39,16 +39,24 @@ describe GroupDocs::Signature::Field::Location do
   it { should have_alias(:field_id=,        :fieldId=)        }
   it { should have_alias(:location_x,       :locationX)       }
   it { should have_alias(:location_x=,      :locationX=)      }
+  it { should have_alias(:x,                :locationX)       }
+  it { should have_alias(:x=,               :locationX=)      }
   it { should have_alias(:location_y,       :locationY)       }
   it { should have_alias(:location_y=,      :locationY=)      }
+  it { should have_alias(:y,                :locationY)       }
+  it { should have_alias(:y=,               :locationY=)      }
   it { should have_alias(:location_w,       :locationWidth)   }
   it { should have_alias(:location_w=,      :locationWidth=)  }
   it { should have_alias(:location_width,   :locationWidth)   }
   it { should have_alias(:location_width=,  :locationWidth=)  }
+  it { should have_alias(:w,                :locationWidth)   }
+  it { should have_alias(:w=,               :locationWidth=)  }
   it { should have_alias(:location_h,       :locationHeight)  }
   it { should have_alias(:location_h=,      :locationHeight=) }
   it { should have_alias(:location_height,  :locationHeight)  }
   it { should have_alias(:location_height=, :locationHeight=) }
+  it { should have_alias(:h,                :locationHeight)  }
+  it { should have_alias(:h=,               :locationHeight=) }
   it { should have_alias(:font_name,        :fontName)        }
   it { should have_alias(:font_name=,       :fontName=)       }
   it { should have_alias(:font_color,       :fontColor)       }

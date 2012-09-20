@@ -298,7 +298,6 @@ module GroupDocs
     # @option access [String] :client_id
     # @option access [String] :private_key
     # @raise [ArgumentError] if field is not GroupDocs::Signature::Field
-    # @raise [ArgumentError] if document is not GroupDocs::Document
     #
     def delete_field!(field, access = {})
       field.is_a?(GroupDocs::Signature::Field) or raise ArgumentError,
@@ -308,6 +307,50 @@ module GroupDocs
         request[:access] = access
         request[:method] = :DELETE
         request[:path] = "/signature/{{client_id}}/templates/#{id}/fields/#{field.id}"
+      end.execute!
+    end
+
+    #
+    # Modifies field location.
+    #
+    # @example
+    #   template = GroupDocs::Signature::Template.get!("g94h5g84hj9g4gf23i40j")
+    #   document = template.documents!.first
+    #   recipient = template.recipients!.first
+    #   field = template.fields!(document, recipient).first
+    #   location = field.locations.first
+    #   location.x = 0.123
+    #   location.y = 0.123
+    #   location.page = 2
+    #   template.modify_field_location! location, field, document, recipient
+    #
+    # @param [GroupDocs::Signature::Field::Location] location
+    # @param [GroupDocs::Signature::Field] field
+    # @param [GroupDocs::Document] document
+    # @param [GroupDocs::Signature::Recipient] recipient
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @raise [ArgumentError] if location is not GroupDocs::Signature::Field::Location
+    # @raise [ArgumentError] if field is not GroupDocs::Signature::Field
+    # @raise [ArgumentError] if document is not GroupDocs::Document
+    # @raise [ArgumentError] if recipient is not GroupDocs::Signature::Recipient
+    #
+    def modify_field_location!(location, field, document, recipient, access = {})
+      location.is_a?(GroupDocs::Signature::Field::Location) or raise ArgumentError,
+        "Location should be GroupDocs::Signature::Field::Location object, received: #{location.inspect}"
+      field.is_a?(GroupDocs::Signature::Field) or raise ArgumentError,
+        "Field should be GroupDocs::Signature::Field object, received: #{field.inspect}"
+      document.is_a?(GroupDocs::Document) or raise ArgumentError,
+        "Document should be GroupDocs::Document object, received: #{document.inspect}"
+      recipient.is_a?(GroupDocs::Signature::Recipient) or raise ArgumentError,
+        "Recipient should be GroupDocs::Signature::Recipient object, received: #{recipient.inspect}"
+
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/signature/{{client_id}}/templates/#{id}/documents/#{document.file.guid}/recipient/#{recipient.id}/fields/#{field.id}/locations/#{location.id}"
+        request[:request_body] = location.to_hash
       end.execute!
     end
 

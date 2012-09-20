@@ -37,16 +37,24 @@ module GroupDocs
     alias_method :field_id=,        :fieldId=
     alias_method :location_x,       :locationX
     alias_method :location_x=,      :locationX=
+    alias_method :x,                :locationX
+    alias_method :x=,               :locationX=
     alias_method :location_y,       :locationY
     alias_method :location_y=,      :locationY=
+    alias_method :y,                :locationY
+    alias_method :y=,               :locationY=
     alias_method :location_w,       :locationWidth
     alias_method :location_w=,      :locationWidth=
     alias_method :location_width,   :locationWidth
     alias_method :location_width=,  :locationWidth=
+    alias_method :w,                :locationWidth
+    alias_method :w=,               :locationWidth=
     alias_method :location_h,       :locationHeight
     alias_method :location_h=,      :locationHeight=
     alias_method :location_height,  :locationHeight
     alias_method :location_height=, :locationHeight=
+    alias_method :h,                :locationHeight
+    alias_method :h=,               :locationHeight=
     alias_method :font_name,        :fontName
     alias_method :font_name=,       :fontName=
     alias_method :font_color,       :fontColor
