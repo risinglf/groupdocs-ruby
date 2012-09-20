@@ -295,4 +295,27 @@ describe GroupDocs::Signature::Template do
       end.should_not raise_error(ArgumentError)
     end
   end
+
+  describe '#delete_field_location!' do
+    let(:field)    { GroupDocs::Signature::Field.new }
+    let(:location) { GroupDocs::Signature::Field::Location.new }
+
+    before(:each) do
+      mock_api_server('{ "status": "Ok", "result": {}}')
+    end
+
+    it 'raises error if location is not GroupDocs::Signature::Field::Location object' do
+      -> { subject.delete_field_location!('Location', field) }.should raise_error(ArgumentError)
+    end
+
+    it 'raises error if field is not GroupDocs::Signature::Field object' do
+      -> { subject.delete_field_location!(location, 'Field') }.should raise_error(ArgumentError)
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.delete_field_location!(location, field, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
 end

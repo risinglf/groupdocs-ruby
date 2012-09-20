@@ -354,5 +354,37 @@ module GroupDocs
       end.execute!
     end
 
+    #
+    # Deletes field location.
+    #
+    # @example
+    #   template = GroupDocs::Signature::Template.get!("g94h5g84hj9g4gf23i40j")
+    #   document = template.documents!.first
+    #   recipient = template.recipients!.first
+    #   field = template.fields!(document, recipient).first
+    #   location = field.locations.first
+    #   template.delete_field_location! location, field
+    #
+    # @param [GroupDocs::Signature::Field::Location] location
+    # @param [GroupDocs::Signature::Field] field
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @raise [ArgumentError] if location is not GroupDocs::Signature::Field::Location
+    # @raise [ArgumentError] if field is not GroupDocs::Signature::Field
+    #
+    def delete_field_location!(location, field, access = {})
+      location.is_a?(GroupDocs::Signature::Field::Location) or raise ArgumentError,
+        "Location should be GroupDocs::Signature::Field::Location object, received: #{location.inspect}"
+      field.is_a?(GroupDocs::Signature::Field) or raise ArgumentError,
+        "Field should be GroupDocs::Signature::Field object, received: #{field.inspect}"
+
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :DELETE
+        request[:path] = "/signature/{{client_id}}/templates/#{id}/fields/#{field.id}/locations/#{location.id}"
+      end.execute!
+    end
+
   end # Signature::Template
 end # GroupDocs
