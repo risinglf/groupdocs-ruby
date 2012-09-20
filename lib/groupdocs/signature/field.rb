@@ -132,8 +132,10 @@ module GroupDocs
     # @param [GroupDocs::Signature::Field::Location, Hash] location
     #
     def location=(location)
-      @location = (location.is_a?(GroupDocs::Signature::Field::Location) ? location : Signature::Field::Location.new(location))
-      locations ? locations << @location : self.locations = [@location]
+      if location
+        @location = (location.is_a?(GroupDocs::Signature::Field::Location) ? location : Signature::Field::Location.new(location))
+        locations ? locations << @location : self.locations = [@location]
+      end
     end
 
     #

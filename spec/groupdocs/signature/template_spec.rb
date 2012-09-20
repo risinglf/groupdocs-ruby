@@ -199,4 +199,49 @@ describe GroupDocs::Signature::Template do
       end
     end
   end
+
+  describe '#add_field!' do
+    let(:field)     { GroupDocs::Signature::Field.new(location: { location_x: 0.1, page: 1 }) }
+    let(:document)  { GroupDocs::Document.new(file: GroupDocs::Storage::File.new) }
+    let(:recipient) { GroupDocs::Signature::Recipient.new }
+
+    before(:each) do
+      mock_api_server(load_json('signature_field_add'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.add_field!(field, document, recipient, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'raises error if field is not GroupDocs::Signature::Field object' do
+      -> { subject.add_field!('Field', document, recipient) }.should raise_error(ArgumentError)
+    end
+
+    it 'raises error if document is not GroupDocs::Document object' do
+      -> { subject.add_field!(field, 'Document', recipient) }.should raise_error(ArgumentError)
+    end
+
+    it 'raises error if recipient is not GroupDocs::Signature::Recipient object' do
+      -> { subject.add_field!(field, document, 'Recipient') }.should raise_error(ArgumentError)
+    end
+
+    it 'raises error if field does not specify location' do
+      field = GroupDocs::Signature::Field.new
+      -> { subject.add_field!(field, document, recipient) }.should raise_error(ArgumentError)
+    end
+
+    it 'uses field location as payload' do
+      field.location.should_receive(:to_hash).and_return({})
+      subject.add_field!(field, document, recipient)
+    end
+
+    it 'appends field name and forcedNewField flag to payload' do
+      hash = {}
+      field.location.stub(to_hash: hash)
+      hash.should_receive(:merge).with(name: field.name, forceNewField: true)
+      subject.add_field!(field, document, recipient)
+    end
+  end
 end

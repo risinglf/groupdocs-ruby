@@ -239,5 +239,43 @@ module GroupDocs
       end
     end
 
+    #
+    # Adds field for document and recipient.
+    #
+    # @example
+    #   template = GroupDocs::Signature::Template.get!("g94h5g84hj9g4gf23i40j")
+    #   field = GroupDocs::Signature::Field.get!.detect { |f| f.name == "Signature" }
+    #   field.location = { location_x: 0.1, location_y: 0.1, page: 1 }
+    #   document = template.documents!.first
+    #   recipient = template.recipients!.first
+    #   template.add_field! field, document, recipient
+    #
+    # @param [GroupDocs::Signature::Field] field
+    # @param [GroupDocs::Document] document
+    # @param [GroupDocs::Signature::Recipient] recipient
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @raise [ArgumentError] if document is not GroupDocs::Document
+    # @raise [ArgumentError] if recipient is not GroupDocs::Signature::Recipient
+    #
+    def add_field!(field, document, recipient, access = {})
+      field.is_a?(GroupDocs::Signature::Field) or raise ArgumentError,
+        "Field should be GroupDocs::Signature::Field object, received: #{field.inspect}"
+      document.is_a?(GroupDocs::Document) or raise ArgumentError,
+        "Document should be GroupDocs::Document object, received: #{document.inspect}"
+      recipient.is_a?(GroupDocs::Signature::Recipient) or raise ArgumentError,
+        "Recipient should be GroupDocs::Signature::Recipient object, received: #{recipient.inspect}"
+      field.location or raise ArgumentError,
+        "You have to specify field location, received: #{field.location.inspect}"
+
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :POST
+        request[:path] = "/signature/{{client_id}}/templates/#{id}/documents/#{document.file.guid}/recipient/#{recipient.id}/field/#{field.id}"
+        request[:request_body] = field.location.to_hash.merge(name: field.name, forceNewField: true)
+      end.execute!
+    end
+
   end # Signature::Template
 end # GroupDocs

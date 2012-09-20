@@ -152,6 +152,12 @@ describe GroupDocs::Signature::Field do
       subject.location = location
       subject.locations.should == [location]
     end
+
+    it 'does nothing if nil is passed' do
+      lambda do
+        subject.location = nil
+      end.should_not change(subject, :location)
+    end
   end
 
   describe '#locations=' do
