@@ -136,5 +136,24 @@ module GroupDocs
       end.execute!
     end
 
+    #
+    # Deletes signature field.
+    #
+    # @example Remove all created fields
+    #   fields = GroupDocs::Signature::Field.get!.select { |field| !field.is_system }
+    #   fields.each { |field| field.delete! }
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def delete!(access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :DELETE
+        request[:path] = "/signature/{{client_id}}/fields/#{id}"
+      end.execute!
+    end
+
   end # Signature::Field
 end # GroupDocs
