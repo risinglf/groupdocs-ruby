@@ -3,6 +3,8 @@ module GroupDocs
 
     # @attr [String] id
     attr_accessor :id
+    # @attr [String] email
+    attr_accessor :email
     # @attr [String] firstName
     attr_accessor :firstName
     # @attr [String] lastName
@@ -15,8 +17,12 @@ module GroupDocs
     attr_accessor :order
 
     # Human-readable accessors
-    alias_method :role_id,  :roleId
-    alias_method :role_id=, :roleId=
+    alias_method :first_name,  :firstName
+    alias_method :first_name=, :firstName=
+    alias_method :last_name,   :lastName
+    alias_method :last_name=,  :lastName=
+    alias_method :role_id,     :roleId
+    alias_method :role_id=,    :roleId=
 
   end # Signature::Contact
 end # GroupDocs

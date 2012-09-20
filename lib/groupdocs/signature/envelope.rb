@@ -94,5 +94,118 @@ module GroupDocs
     alias_method :envelope_expire_time,  :envelopeExpireTime
     alias_method :envelope_expire_time=, :envelopeExpireTime=
 
+    #
+    # Returns recipients array of envelope.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<GroupDocs::Signature::Recipient>]
+    #
+    def recipients!(access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/signature/{{client_id}}/envelopes/#{id}/recipients"
+      end.execute!
+
+      json[:recipients].map do |recipient|
+        Signature::Recipient.new(recipient)
+      end
+    end
+
+    #
+    # Adds recipient to envelope.
+    #
+    # @example
+    #   roles = GroupDocs::Signature::Role.get!
+    #   envelope = GroupDocs::Signature::Envelope.get!("g94h5g84hj9g4gf23i40j")
+    #   recipient = GroupDocs::Signature::Recipient.new
+    #   recipient.email = 'john@smith.com'
+    #   recipient.first_name = 'John'
+    #   recipient.last_name = 'Smith'
+    #   recipient.role_id = roles.detect { |role| role.name == "Signer" }.id
+    #   envelope.add_recipient! recipient
+    #
+    # @param [GroupDocs::Signature::Recipient] recipient
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @raise [ArgumentError] if recipient is not GroupDocs::Signature::Recipient
+    #
+    def add_recipient!(recipient, access = {})
+      recipient.is_a?(GroupDocs::Signature::Recipient) or raise ArgumentError,
+        "Recipient should be GroupDocs::Signature::Recipient object, received: #{recipient.inspect}"
+
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :POST
+        request[:path] = "/signature/{{client_id}}/envelopes/#{id}/recipient"
+      end
+      api.add_params(email:     recipient.email,
+                     firstname: recipient.first_name,
+                     lastname:  recipient.last_name,
+                     role:      recipient.role_id,
+                     order:     recipient.order)
+      api.execute!
+    end
+
+    #
+    # Modify recipient of envelope.
+    #
+    # @example
+    #   envelope = GroupDocs::Signature::Envelope.get!("g94h5g84hj9g4gf23i40j")
+    #   recipient = envelope.recipients!.first
+    #   recipient.first_name = 'Johnny'
+    #   envelope.modify_recipient! recipient
+    #
+    # @param [GroupDocs::Signature::Recipient] recipient
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @raise [ArgumentError] if recipient is not GroupDocs::Signature::Recipient
+    #
+    def modify_recipient!(recipient, access = {})
+      recipient.is_a?(GroupDocs::Signature::Recipient) or raise ArgumentError,
+        "Recipient should be GroupDocs::Signature::Recipient object, received: #{recipient.inspect}"
+
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/signature/{{client_id}}/envelopes/#{id}/recipient/#{recipient.id}"
+      end
+      api.add_params(email:     recipient.email,
+                     firstname: recipient.first_name,
+                     lastname:  recipient.last_name,
+                     role:      recipient.role_id,
+                     order:     recipient.order)
+      api.execute!
+    end
+
+    #
+    # Removes recipient from envelope.
+    #
+    # @example
+    #   envelope = GroupDocs::Signature::Envelope.get!("g94h5g84hj9g4gf23i40j")
+    #   recipient = envelope.recipients!.first
+    #   envelope.remove_recipient! recipient
+    #
+    # @param [GroupDocs::Signature::Recipient] recipient
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @raise [ArgumentError] if recipient is not GroupDocs::Signature::Recipient
+    #
+    def remove_recipient!(recipient, access = {})
+      recipient.is_a?(GroupDocs::Signature::Recipient) or raise ArgumentError,
+        "Recipient should be GroupDocs::Signature::Recipient object, received: #{recipient.inspect}"
+
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :DELETE
+        request[:path] = "/signature/{{client_id}}/envelopes/#{id}/recipients/#{recipient.id}"
+      end.execute!
+    end
+
   end # Signature::Envelope
 end # GroupDocs
