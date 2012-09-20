@@ -1,6 +1,7 @@
 module GroupDocs
   class Signature < Api::Entity
 
+    require 'groupdocs/signature/shared'
     require 'groupdocs/signature/contact'
     require 'groupdocs/signature/envelope'
     require 'groupdocs/signature/list'
