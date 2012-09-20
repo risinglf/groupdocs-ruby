@@ -115,5 +115,26 @@ module GroupDocs
       self.id = json[:field][:id]
     end
 
+    #
+    # Modifies signature field.
+    #
+    # @example
+    #   field = GroupDocs::Signature::Field.get!.first
+    #   field.name = 'Field'
+    #   field.modify!
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def modify!(access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :POST
+        request[:path] = "/signature/{{client_id}}/fields/#{id}"
+        request[:request_body] = to_hash
+      end.execute!
+    end
+
   end # Signature::Field
 end # GroupDocs
