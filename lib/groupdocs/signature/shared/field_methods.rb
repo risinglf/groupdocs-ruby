@@ -103,6 +103,52 @@ module GroupDocs
       end
 
       #
+      # Modifies document field.
+      #
+      # @example Modify template field
+      #   template = GroupDocs::Signature::Template.get!("g94h5g84hj9g4gf23i40j")
+      #   document = template.documents!.first
+      #   recipient = template.recipients!.first
+      #   field = template.fields!(document, recipient).first
+      #   field.name = "Field"
+      #   template.modify_field! field, document
+      #
+      # @example Modify envelope field
+      #   envelope = GroupDocs::Signature::Envelope.get!("g94h5g84hj9g4gf23i40j")
+      #   document = envelope.documents!.first
+      #   recipient = envelope.recipients!.first
+      #   field = envelope.fields!(document, recipient).first
+      #   field.name = "Field"
+      #   envelope.modify_field! field, document
+      #
+      # @param [GroupDocs::Signature::Field] field
+      # @param [GroupDocs::Document] document
+      # @param [Hash] access Access credentials
+      # @option access [String] :client_id
+      # @option access [String] :private_key
+      # @raise [ArgumentError] if field is not GroupDocs::Signature::Field
+      # @raise [ArgumentError] if document is not GroupDocs::Document
+      #
+      def modify_field!(field, document, access = {})
+        field.is_a?(GroupDocs::Signature::Field) or raise ArgumentError,
+          "Field should be GroupDocs::Signature::Field object, received: #{field.inspect}"
+        document.is_a?(GroupDocs::Document) or raise ArgumentError,
+          "Document should be GroupDocs::Document object, received: #{document.inspect}"
+
+        # prepare payload
+        payload = field.to_hash # field itself
+        payload.delete(:locations) # remove locations array
+        payload.merge!(field.locations.first.to_hash) # location should added in plain view (i.e. not "locations": [{...}])
+
+        Api::Request.new do |request|
+          request[:access] = access
+          request[:method] = :PUT
+          request[:path] = "/signature/{{client_id}}/#{pluralized_class}/#{id}/documents/#{document.file.guid}/field/#{field.id}"
+          request[:request_body] = payload
+        end.execute!
+      end
+
+      #
       # Deletes field.
       #
       # @example Delete field from template

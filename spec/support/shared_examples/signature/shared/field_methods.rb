@@ -63,6 +63,7 @@ shared_examples_for GroupDocs::Signature::FieldMethods do
     end
 
     it 'uses field, field location and forcedNewField flag as payload' do
+      hash_one = {}
       payload = {}
       location = {}
       field.should_receive(:to_hash).and_return(payload)
@@ -70,6 +71,41 @@ shared_examples_for GroupDocs::Signature::FieldMethods do
       payload.should_receive(:merge!).with(location).and_return(payload)
       payload.should_receive(:merge!).with(forceNewField: true).and_return({})
       subject.add_field!(field, document, recipient)
+    end
+  end
+
+  describe '#modify_field!' do
+    let(:field)    { GroupDocs::Signature::Field.new }
+    let(:document) { GroupDocs::Document.new(file: GroupDocs::Storage::File.new) }
+
+    before(:each) do
+      mock_api_server(load_json('signature_field_add'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.modify_field!(field, document, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'raises error if field is not GroupDocs::Signature::Field object' do
+      -> { subject.modify_field!('Field', document) }.should raise_error(ArgumentError)
+    end
+
+    it 'raises error if document is not GroupDocs::Document object' do
+      -> { subject.modify_field!(field, 'Document') }.should raise_error(ArgumentError)
+    end
+
+    it 'uses field and first field location as payload' do
+      payload   = {}
+      location  = {}
+      locations = [location]
+      field.should_receive(:to_hash).and_return(payload)
+      payload.should_receive(:delete).with(:locations).and_return(payload)
+      field.should_receive(:locations).and_return(locations)
+      locations.should_receive(:first).and_return(location)
+      payload.should_receive(:merge!).with(location).and_return(payload)
+      subject.modify_field!(field, document)
     end
   end
 
