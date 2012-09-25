@@ -235,9 +235,22 @@ module GroupDocs
     end
 
     #
-    # Archives envelope.
+    # Sends envelope.
     #
-    # Note that it works only on completed envelopes.
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def send!(access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/signature/{{client_id}}/envelopes/#{id}/send"
+      end.execute!
+    end
+
+    #
+    # Archives completed envelope.
     #
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
@@ -248,6 +261,21 @@ module GroupDocs
         request[:access] = access
         request[:method] = :PUT
         request[:path] = "/signature/{{client_id}}/envelopes/#{id}/archive"
+      end.execute!
+    end
+
+    #
+    # Restarts expired envelope.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def restart!(access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/signature/{{client_id}}/envelopes/#{id}/restart"
       end.execute!
     end
 
