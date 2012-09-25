@@ -4,9 +4,10 @@ module GroupDocs
     require 'groupdocs/signature/envelope/log'
 
     include Signature::DocumentMethods
+    include Signature::EntityFields
+    include Signature::EntityMethods
     include Signature::FieldMethods
     include Signature::RecipientMethods
-    include Signature::TemplateFields
 
     #
     # Returns a list of all envelopes.

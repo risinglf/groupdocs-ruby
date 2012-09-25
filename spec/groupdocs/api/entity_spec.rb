@@ -66,10 +66,17 @@ describe GroupDocs::Api::Entity do
     end
   end
 
-  describe '#pluralized_class' do
+  describe '#class_name' do
+    it 'returns downcased class name' do
+      object = GroupDocs::Storage::File.new
+      object.send(:class_name).should == 'file'
+    end
+  end
+
+  describe '#pluralized_class_name' do
     it 'returns class name ending with s' do
       object = GroupDocs::Storage::File.new
-      object.send(:pluralized_class).should == 'files'
+      object.send(:pluralized_class_name).should == 'files'
     end
   end
 end

@@ -4,9 +4,10 @@ describe GroupDocs::Signature::Envelope do
 
   it_behaves_like GroupDocs::Api::Entity
   include_examples GroupDocs::Signature::DocumentMethods
+  include_examples GroupDocs::Signature::EntityFields
+  include_examples GroupDocs::Signature::EntityMethods
   include_examples GroupDocs::Signature::FieldMethods
   include_examples GroupDocs::Signature::RecipientMethods
-  include_examples GroupDocs::Signature::TemplateFields
 
   describe '.all!' do
     before(:each) do

@@ -1,7 +1,7 @@
 shared_examples_for GroupDocs::Signature::DocumentMethods do
   describe '#documents!' do
     before(:each) do
-      mock_api_server(load_json('template_get_documents'))
+      mock_api_server(load_json("template_get_documents"))
     end
 
     it 'accepts access credentials hash' do

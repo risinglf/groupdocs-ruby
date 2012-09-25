@@ -1,7 +1,7 @@
 shared_examples_for GroupDocs::Signature::RecipientMethods do
   describe '#recipients!' do
     before(:each) do
-      mock_api_server(load_json('template_get_recipients'))
+      mock_api_server(load_json("template_get_recipients"))
     end
 
     it 'accepts access credentials hash' do

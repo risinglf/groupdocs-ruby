@@ -2,9 +2,10 @@ module GroupDocs
   class Signature::Template < Api::Entity
 
     include Signature::DocumentMethods
+    include Signature::EntityFields
+    include Signature::EntityMethods
     include Signature::FieldMethods
     include Signature::RecipientMethods
-    include Signature::TemplateFields
 
     #
     # Returns a list of all templates.
@@ -56,93 +57,6 @@ module GroupDocs
     # Human-readable accessors
     alias_method :template_expire_time,  :templateExpireTime
     alias_method :template_expire_time=, :templateExpireTime=
-
-    #
-    # Creates template.
-    #
-    # @example
-    #   template = GroupDocs::Signature::Template.new
-    #   template.name = "Envelope Template"
-    #   template.email_subject = "Sing this!"
-    #   template.create!
-    #
-    # @param [Hash] options Hash of options
-    # @option options [Integer] :templateId Template GUID to use
-    # @option options [Integer] :envelopeId Envelope GUID to use
-    # @param [Hash] access Access credentials
-    # @option access [String] :client_id
-    # @option access [String] :private_key
-    #
-    def create!(options = {}, access = {})
-      api = Api::Request.new do |request|
-        request[:access] = access
-        request[:method] = :POST
-        request[:path] = '/signature/{{client_id}}/template'
-        request[:request_body] = to_hash
-      end
-      api.add_params(options.merge(name: name))
-      json = api.execute!
-
-      self.id = json[:template][:id]
-    end
-
-    #
-    # Modifies template.
-    #
-    # @example
-    #   template = GroupDocs::Signature::Template.get!("g94h5g84hj9g4gf23i40j")
-    #   template.name = "Envelope Template"
-    #   template.email_subject = "Sing this!"
-    #   template.modify!
-    #
-    # @param [Hash] access Access credentials
-    # @option access [String] :client_id
-    # @option access [String] :private_key
-    #
-    def modify!(access = {})
-      Api::Request.new do |request|
-        request[:access] = access
-        request[:method] = :POST
-        request[:path] = "/signature/{{client_id}}/templates/#{id}"
-        request[:request_body] = to_hash
-      end.execute!
-    end
-
-    #
-    # Renames template.
-    #
-    # @param [String] name New template name
-    # @param [Hash] access Access credentials
-    # @option access [String] :client_id
-    # @option access [String] :private_key
-    #
-    def rename!(name, access = {})
-      api = Api::Request.new do |request|
-        request[:access] = access
-        request[:method] = :PUT
-        # TODO fix typo in API
-        request[:path] = "/signature/{{client_id}}/tempalates/#{id}"
-      end
-      api.add_params(name: name)
-      api.execute!
-
-      self.name = name
-    end
-
-    #
-    # Deletes template.
-    #
-    # @param [Hash] access Access credentials
-    # @option access [String] :client_id
-    # @option access [String] :private_key
-    #
-    def delete!(access = {})
-      Api::Request.new do |request|
-        request[:access] = access
-        request[:method] = :DELETE
-        request[:path] = "/signature/{{client_id}}/templates/#{id}"
-      end.execute!
-    end
 
     #
     # Adds recipient to template.

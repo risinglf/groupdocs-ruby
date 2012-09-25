@@ -6,7 +6,7 @@ module GroupDocs
     # @see GroupDocs::Signature::Envelope
     # @see GroupDocs::Signature::Template
     #
-    module TemplateFields
+    module EntityFields
 
       # @attr [String] id
       attr_accessor :id
@@ -73,6 +73,6 @@ module GroupDocs
         end
       end
 
-    end # TemplateFields
+    end # EntityFields
   end # Signature
 end # GroupDocs

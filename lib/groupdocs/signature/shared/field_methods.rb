@@ -40,7 +40,7 @@ module GroupDocs
         api = Api::Request.new do |request|
           request[:access] = access
           request[:method] = :GET
-          request[:path] = "/signature/{{client_id}}/#{pluralized_class}/#{id}/fields"
+          request[:path] = "/signature/{{client_id}}/#{pluralized_class_name}/#{id}/fields"
         end
         api.add_params(document: document.file.guid, recipient: recipient.id)
         json = api.execute!
@@ -97,7 +97,7 @@ module GroupDocs
         Api::Request.new do |request|
           request[:access] = access
           request[:method] = :POST
-          request[:path] = "/signature/{{client_id}}/#{pluralized_class}/#{id}/documents/#{document.file.guid}/recipient/#{recipient.id}/field/#{field.id}"
+          request[:path] = "/signature/{{client_id}}/#{pluralized_class_name}/#{id}/documents/#{document.file.guid}/recipient/#{recipient.id}/field/#{field.id}"
           request[:request_body] = payload
         end.execute!
       end
@@ -143,7 +143,7 @@ module GroupDocs
         Api::Request.new do |request|
           request[:access] = access
           request[:method] = :PUT
-          request[:path] = "/signature/{{client_id}}/#{pluralized_class}/#{id}/documents/#{document.file.guid}/field/#{field.id}"
+          request[:path] = "/signature/{{client_id}}/#{pluralized_class_name}/#{id}/documents/#{document.file.guid}/field/#{field.id}"
           request[:request_body] = payload
         end.execute!
       end
@@ -178,7 +178,7 @@ module GroupDocs
         Api::Request.new do |request|
           request[:access] = access
           request[:method] = :DELETE
-          request[:path] = "/signature/{{client_id}}/#{pluralized_class}/#{id}/fields/#{field.id}"
+          request[:path] = "/signature/{{client_id}}/#{pluralized_class_name}/#{id}/fields/#{field.id}"
         end.execute!
       end
 
@@ -232,7 +232,7 @@ module GroupDocs
         Api::Request.new do |request|
           request[:access] = access
           request[:method] = :PUT
-          request[:path] = "/signature/{{client_id}}/#{pluralized_class}/#{id}/documents/#{document.file.guid}/recipient/#{recipient.id}/fields/#{field.id}/locations/#{location.id}"
+          request[:path] = "/signature/{{client_id}}/#{pluralized_class_name}/#{id}/documents/#{document.file.guid}/recipient/#{recipient.id}/fields/#{field.id}/locations/#{location.id}"
           request[:request_body] = location.to_hash
         end.execute!
       end
@@ -273,7 +273,7 @@ module GroupDocs
         Api::Request.new do |request|
           request[:access] = access
           request[:method] = :DELETE
-          request[:path] = "/signature/{{client_id}}/#{pluralized_class}/#{id}/fields/#{field.id}/locations/#{location.id}"
+          request[:path] = "/signature/{{client_id}}/#{pluralized_class_name}/#{id}/fields/#{field.id}/locations/#{location.id}"
         end.execute!
       end
 

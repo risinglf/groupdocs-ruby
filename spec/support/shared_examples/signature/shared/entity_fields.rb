@@ -1,4 +1,5 @@
-shared_examples_for GroupDocs::Signature::TemplateFields do
+shared_examples_for GroupDocs::Signature::EntityFields do
+
   it { should respond_to(:id)                }
   it { should respond_to(:id=)               }
   it { should respond_to(:name)              }

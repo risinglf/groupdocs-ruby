@@ -20,7 +20,7 @@ module GroupDocs
         json = Api::Request.new do |request|
           request[:access] = access
           request[:method] = :GET
-          request[:path] = "/signature/{{client_id}}/#{pluralized_class}/#{id}/recipients"
+          request[:path] = "/signature/{{client_id}}/#{pluralized_class_name}/#{id}/recipients"
         end.execute!
 
         json[:recipients].map do |recipient|
@@ -54,7 +54,7 @@ module GroupDocs
         Api::Request.new do |request|
           request[:access] = access
           request[:method] = :DELETE
-          request[:path] = "/signature/{{client_id}}/#{pluralized_class}/#{id}/recipients/#{recipient.id}"
+          request[:path] = "/signature/{{client_id}}/#{pluralized_class_name}/#{id}/recipients/#{recipient.id}"
         end.execute!
       end
 
