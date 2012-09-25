@@ -1,6 +1,8 @@
 module GroupDocs
   class Signature::Envelope < Api::Entity
 
+    require 'groupdocs/signature/envelope/log'
+
     include Signature::DocumentMethods
     include Signature::FieldMethods
     include Signature::RecipientMethods
@@ -163,6 +165,26 @@ module GroupDocs
                      role:      recipient.role_id,
                      order:     recipient.order)
       api.execute!
+    end
+
+    #
+    # Returns audit logs array.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<GroupDocs::Signature::Envelope::Log>]
+    #
+    def logs!(access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/signature/{{client_id}}/envelopes/#{id}/logs"
+      end.execute!
+
+      json[:logs].map do |log|
+        Log.new(log)
+      end
     end
 
   end # Signature::Envelope

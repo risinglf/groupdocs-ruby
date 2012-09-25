@@ -5,7 +5,7 @@ describe GroupDocs::Signature::Field::Location do
   it_behaves_like GroupDocs::Api::Entity
 
   it { should respond_to(:id)              }
-  it { should respond_to(:id)              }
+  it { should respond_to(:id=)             }
   it { should respond_to(:documentId)      }
   it { should respond_to(:documentId=)     }
   it { should respond_to(:fieldId)         }

@@ -127,4 +127,24 @@ describe GroupDocs::Signature::Envelope do
       -> { subject.modify_recipient!('Recipient') }.should raise_error(ArgumentError)
     end
   end
+
+  describe '#logs!' do
+    before(:each) do
+      mock_api_server(load_json('envelope_logs'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.logs!(client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns array of GroupDocs::Signature::Envelope::Log objects' do
+      logs = subject.logs!
+      logs.should be_an(Array)
+      logs.each do |log|
+        log.should be_a(GroupDocs::Signature::Envelope::Log)
+      end
+    end
+  end
 end
