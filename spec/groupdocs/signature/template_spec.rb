@@ -8,6 +8,7 @@ describe GroupDocs::Signature::Template do
   include_examples GroupDocs::Signature::EntityMethods
   include_examples GroupDocs::Signature::FieldMethods
   include_examples GroupDocs::Signature::RecipientMethods
+  include_examples GroupDocs::Signature::ResourceMethods
 
   describe '.all!' do
     before(:each) do

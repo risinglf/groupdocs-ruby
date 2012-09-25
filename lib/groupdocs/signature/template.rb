@@ -6,6 +6,7 @@ module GroupDocs
     include Signature::EntityMethods
     include Signature::FieldMethods
     include Signature::RecipientMethods
+    extend  Signature::ResourceMethods
 
     #
     # Returns a list of all templates.
