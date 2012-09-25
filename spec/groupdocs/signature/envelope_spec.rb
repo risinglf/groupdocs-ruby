@@ -32,6 +32,46 @@ describe GroupDocs::Signature::Envelope do
     end
   end
 
+  describe '.for_me!' do
+    before(:each) do
+      mock_api_server(load_json('envelopes_all'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        described_class.for_me!({}, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'allows passing options' do
+      -> { described_class.for_me!(page: 1, count: 3) }.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns array of GroupDocs::Signature::Envelope objects' do
+      envelopes = described_class.for_me!
+      envelopes.should be_an(Array)
+      envelopes.each do |envelope|
+        envelope.should be_a(GroupDocs::Signature::Envelope)
+      end
+    end
+  end
+
+  describe '.get!' do
+    before(:each) do
+      mock_api_server(load_json('envelope_get'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        described_class.get!("j5498fre9fje9f", client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns GroupDocs::Signature::Envelope objects' do
+      described_class.get!("j5498fre9fje9f").should be_a(GroupDocs::Signature::Envelope)
+    end
+  end
+
   describe '.resources!' do
     before(:each) do
       mock_api_server(load_json('envelopes_resources'))
@@ -73,46 +113,6 @@ describe GroupDocs::Signature::Envelope do
       dates.each do |date|
         date.should be_a(String)
       end
-    end
-  end
-
-  describe '.for_me!' do
-    before(:each) do
-      mock_api_server(load_json('envelopes_all'))
-    end
-
-    it 'accepts access credentials hash' do
-      lambda do
-        described_class.for_me!({}, client_id: 'client_id', private_key: 'private_key')
-      end.should_not raise_error(ArgumentError)
-    end
-
-    it 'allows passing options' do
-      -> { described_class.for_me!(page: 1, count: 3) }.should_not raise_error(ArgumentError)
-    end
-
-    it 'returns array of GroupDocs::Signature::Envelope objects' do
-      envelopes = described_class.for_me!
-      envelopes.should be_an(Array)
-      envelopes.each do |envelope|
-        envelope.should be_a(GroupDocs::Signature::Envelope)
-      end
-    end
-  end
-
-  describe '.get!' do
-    before(:each) do
-      mock_api_server(load_json('envelope_get'))
-    end
-
-    it 'accepts access credentials hash' do
-      lambda do
-        described_class.get!("j5498fre9fje9f", client_id: 'client_id', private_key: 'private_key')
-      end.should_not raise_error(ArgumentError)
-    end
-
-    it 'returns GroupDocs::Signature::Envelope objects' do
-      described_class.get!("j5498fre9fje9f").should be_a(GroupDocs::Signature::Envelope)
     end
   end
 
