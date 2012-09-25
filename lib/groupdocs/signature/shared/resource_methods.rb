@@ -37,7 +37,7 @@ module GroupDocs
         end
 
         # TODO type in API
-        class_name = 'temlate' if class_name == 'class_name'
+        class_name = 'temlate' if class_name == 'template'
 
         api = Api::Request.new do |request|
           request[:access] = access
