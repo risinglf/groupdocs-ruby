@@ -234,7 +234,22 @@ module GroupDocs
       end
     end
 
-
+    #
+    # Archives envelope.
+    #
+    # Note that it works only on completed envelopes.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def archive!(access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/signature/{{client_id}}/envelopes/#{id}/archive"
+      end.execute!
+    end
 
   end # Signature::Envelope
 end # GroupDocs

@@ -192,4 +192,16 @@ describe GroupDocs::Signature::Envelope do
       end
     end
   end
+
+  describe '#archive!' do
+    before(:each) do
+      mock_api_server('{ "status": "Ok", "result": {}}')
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.archive!(client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
 end
