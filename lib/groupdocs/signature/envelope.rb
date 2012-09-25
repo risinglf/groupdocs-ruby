@@ -82,6 +82,52 @@ module GroupDocs
       new(json[:envelope])
     end
 
+    #
+    # Returns a list of resources of envelopes.
+    #
+    # @example
+    #   resources = GroupDocs::Envelope.resources!
+    #   resources[:documents]
+    #   #=> [#<GroupDocs::Document>]
+    #   resources[:recipients]
+    #   #=> [#<GroupDocs::Signature::Recipient>]
+    #   resources[:dates]
+    #   #=> ["2012-09-25T00:00:00.0000000"]
+    #
+    # @param [Hash] options Hash of options
+    # @option options [Array<Integer>] :status_ids List of status identifiers to filter
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Hash]
+    #
+    def self.resources!(options = {}, access = {})
+      ids = options.delete(:status_ids)
+      options[:statusIds] = ids.join(?,) if ids
+
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/signature/{{client_id}}/envelopes/resources"
+      end
+      api.add_params(options)
+      json = api.execute!
+
+      resources = {}
+      json.each do |key, value|
+        resources[key] = case key
+                         when :documents
+                           value.map { |doc| Document.new(file: Storage::File.new(doc)) }
+                         when :recipients
+                           value.map { |recipient| Signature::Recipient.new(recipient) }
+                         else
+                           value
+                         end
+      end
+
+      resources
+    end
+
     # @attr [String] creationDateTime
     attr_accessor :creationDateTime
     # @attr [Symbol] status
@@ -168,7 +214,7 @@ module GroupDocs
     end
 
     #
-    # Returns audit logs array.
+    # Returns a list of audit logs.
     #
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
@@ -186,6 +232,8 @@ module GroupDocs
         Log.new(log)
       end
     end
+
+
 
   end # Signature::Envelope
 end # GroupDocs
