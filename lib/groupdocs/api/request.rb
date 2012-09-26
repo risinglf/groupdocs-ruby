@@ -63,8 +63,6 @@ module GroupDocs
         prepend_version
         url_encode_path
         sign_url
-        p "================="
-        p options
         prepare_request
         send_request
         parse_response

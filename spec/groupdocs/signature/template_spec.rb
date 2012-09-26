@@ -34,22 +34,6 @@ describe GroupDocs::Signature::Template do
     end
   end
 
-  describe '.get!' do
-    before(:each) do
-      mock_api_server(load_json('template_get'))
-    end
-
-    it 'accepts access credentials hash' do
-      lambda do
-        described_class.get!("j5498fre9fje9f", client_id: 'client_id', private_key: 'private_key')
-      end.should_not raise_error(ArgumentError)
-    end
-
-    it 'returns GroupDocs::Signature::Template objects' do
-      described_class.get!("j5498fre9fje9f").should be_a(GroupDocs::Signature::Template)
-    end
-  end
-
   it { should respond_to(:templateExpireTime)  }
   it { should respond_to(:templateExpireTime=) }
 

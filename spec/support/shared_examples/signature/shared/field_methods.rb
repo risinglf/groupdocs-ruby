@@ -1,4 +1,5 @@
 shared_examples_for GroupDocs::Signature::FieldMethods do
+
   describe '#fields!' do
     let(:document)  { GroupDocs::Document.new(file: GroupDocs::Storage::File.new) }
     let(:recipient) { GroupDocs::Signature::Recipient.new }

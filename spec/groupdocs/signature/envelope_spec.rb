@@ -58,22 +58,6 @@ describe GroupDocs::Signature::Envelope do
     end
   end
 
-  describe '.get!' do
-    before(:each) do
-      mock_api_server(load_json('envelope_get'))
-    end
-
-    it 'accepts access credentials hash' do
-      lambda do
-        described_class.get!("j5498fre9fje9f", client_id: 'client_id', private_key: 'private_key')
-      end.should_not raise_error(ArgumentError)
-    end
-
-    it 'returns GroupDocs::Signature::Envelope objects' do
-      described_class.get!("j5498fre9fje9f").should be_a(GroupDocs::Signature::Envelope)
-    end
-  end
-
   it { should respond_to(:creationDateTime)    }
   it { should respond_to(:creationDateTime=)   }
   it { should respond_to(:status)              }

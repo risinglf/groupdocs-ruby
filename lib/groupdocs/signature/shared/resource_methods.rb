@@ -3,6 +3,7 @@ module GroupDocs
     #
     # Envelope and template entities share the same set of resource methods.
     #
+    # @see GroupDocs::Signature::Form
     # @see GroupDocs::Signature::Envelope
     # @see GroupDocs::Signature::Template
     #

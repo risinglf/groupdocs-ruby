@@ -33,25 +33,6 @@ module GroupDocs
       end
     end
 
-    #
-    # Returns template by its identifier.
-    #
-    # @param [String] id
-    # @param [Hash] access Access credentials
-    # @option access [String] :client_id
-    # @option access [String] :private_key
-    # @return [GroupDocs::Signature::Template]
-    #
-    def self.get!(id, access = {})
-      json = Api::Request.new do |request|
-        request[:access] = access
-        request[:method] = :GET
-        request[:path] = "/signature/{{client_id}}/templates/#{id}"
-      end.execute!
-
-      new(json[:template])
-    end
-
     # @attr [Integer] templateExpireTime
     attr_accessor :templateExpireTime
 

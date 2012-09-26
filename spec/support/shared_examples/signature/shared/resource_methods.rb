@@ -1,4 +1,5 @@
 shared_examples_for GroupDocs::Signature::ResourceMethods do
+
   describe '.resources!' do
     before(:each) do
       mock_api_server(load_json('envelopes_resources'))

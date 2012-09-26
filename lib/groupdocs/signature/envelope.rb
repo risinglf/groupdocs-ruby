@@ -16,7 +16,8 @@ module GroupDocs
     # @param [Hash] options Hash of options
     # @option options [Integer] :page Page to start with
     # @option options [Integer] :records How many items to list
-    # @option options [Integer] :statusId Filter by status identifier
+    # @option options [Integer] :status_id Filter by status identifier
+    # @option options [String] :document Filter by document GUID
     # @option options [String] :recipient Filter by recipient email
     # @option options [String] :date Filter by date
     # @option options [String] :name Filter by name
@@ -26,6 +27,9 @@ module GroupDocs
     # @return [Array<GroupDocs::Signature::Envelope>]
     #
     def self.all!(options = {}, access = {})
+      status_id = options.delete(:status_id)
+      options[:statusId] = status_id if status_id
+
       api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
@@ -63,25 +67,6 @@ module GroupDocs
       json[:envelopes].map do |envelope|
         new(envelope)
       end
-    end
-
-    #
-    # Returns an envelope by its identifier.
-    #
-    # @param [String] id
-    # @param [Hash] access Access credentials
-    # @option access [String] :client_id
-    # @option access [String] :private_key
-    # @return [GroupDocs::Signature::Envelope]
-    #
-    def self.get!(id, access = {})
-      json = Api::Request.new do |request|
-        request[:access] = access
-        request[:method] = :GET
-        request[:path] = "/signature/{{client_id}}/envelopes/#{id}"
-      end.execute!
-
-      new(json[:envelope])
     end
 
     # @attr [String] creationDateTime

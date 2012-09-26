@@ -3,10 +3,38 @@ module GroupDocs
     #
     # Envelope and template entities share the same set of methods.
     #
+    # @see GroupDocs::Signature::Form
     # @see GroupDocs::Signature::Envelope
     # @see GroupDocs::Signature::Template
     #
     module EntityMethods
+
+      def self.included(base)
+        base.extend ClassMethods
+      end
+
+      module ClassMethods
+        #
+        # Returns template, envelope or form by its identifier.
+        #
+        # @param [String] id
+        # @param [Hash] access Access credentials
+        # @option access [String] :client_id
+        # @option access [String] :private_key
+        # @return [GroupDocs::Signature::Template, GroupDocs::Signature::Envelope, GroupDocs::Signature::Form]
+        #
+        def get!(id, access = {})
+          class_name = self.name.split('::').last.downcase
+
+          json = Api::Request.new do |request|
+            request[:access] = access
+            request[:method] = :GET
+            request[:path] = "/signature/{{client_id}}/#{class_name}s/#{id}"
+          end.execute!
+
+          new(json[class_name.to_sym])
+        end
+      end # ClassMethods
 
       #
       # Creates template or envelope.
@@ -49,7 +77,7 @@ module GroupDocs
       end
 
       #
-      # Modifies template or envelope.
+      # Modifies template, envelope or form.
       #
       # @example Modify template
       #   template = GroupDocs::Signature::Template.get!("g94h5g84hj9g4gf23i40j")
@@ -77,7 +105,7 @@ module GroupDocs
       end
 
       #
-      # Renames template or envelope.
+      # Renames template, envelope or form.
       #
       # @param [String] name New template name
       # @param [Hash] access Access credentials
@@ -90,14 +118,15 @@ module GroupDocs
           request[:method] = :PUT
           request[:path] = "/signature/{{client_id}}/#{pluralized_class_name}/#{id}"
         end
-        api.add_params(name: name)
+        key = (class_name == 'form' ? :new_name : :name )
+        api.add_params(key => name)
         api.execute!
 
         self.name = name
       end
 
       #
-      # Deletes template or envelope.
+      # Deletes template, envelope or form.
       #
       # @param [Hash] access Access credentials
       # @option access [String] :client_id

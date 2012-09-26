@@ -59,7 +59,7 @@ module GroupDocs
 
       #
       # Converts each recipient to GroupDocs::Signature::Recipient object.
-      # @param [Array<GroupDocs::Signature::Recipient>, Hash] recipients
+      # @param [Array<GroupDocs::Signature::Recipient, Hash>] recipients
       #
       def recipients=(recipients)
         if recipients
