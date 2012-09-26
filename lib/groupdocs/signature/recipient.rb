@@ -1,6 +1,15 @@
 module GroupDocs
   class Signature::Recipient < Api::Entity
 
+    STATUSES = {
+      none:     -1,
+      waiting:   0,
+      notified:  1,
+      delegated: 2,
+      rejected:  3,
+      signed:    4,
+    }
+
     # @attr [String] id
     attr_accessor :id
     # @attr [String] email
@@ -15,6 +24,8 @@ module GroupDocs
     attr_accessor :roleId
     # @attr [String] order
     attr_accessor :order
+    # @attr [Symbol] status
+    attr_accessor :status
 
     # Human-readable accessors
     alias_method :first_name,  :firstName
@@ -24,5 +35,13 @@ module GroupDocs
     alias_method :role_id,     :roleId
     alias_method :role_id=,    :roleId=
 
-  end # Signature::Contact
+    #
+    # Converts status to human-readable format.
+    # @return [Symbol]
+    #
+    def status
+      STATUSES.invert[@status]
+    end
+
+  end # Signature::Recipient
 end # GroupDocs

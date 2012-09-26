@@ -18,6 +18,8 @@ describe GroupDocs::Signature::Recipient do
   it { should respond_to(:roleId=)    }
   it { should respond_to(:order)      }
   it { should respond_to(:order=)     }
+  it { should respond_to(:status)     }
+  it { should respond_to(:status=)    }
 
   it { should have_alias(:first_name,  :firstName)  }
   it { should have_alias(:first_name=, :firstName=) }
@@ -26,4 +28,10 @@ describe GroupDocs::Signature::Recipient do
   it { should have_alias(:role_id,     :roleId)     }
   it { should have_alias(:role_id=,    :roleId=)    }
 
+  describe '#status' do
+    it 'converts status to human-readable format' do
+      subject.status = 1
+      subject.status.should == :notified
+    end
+  end
 end
