@@ -144,6 +144,27 @@ describe GroupDocs::Signature::Envelope do
     it 'returns filled field' do
       subject.fill_field!('test', field, document, recipient).should be_a(GroupDocs::Signature::Field)
     end
+
+    it 'uses signature identifier if field is :signature and GroupDocs::Signature is passed' do
+      api = stub(GroupDocs::Api::Request)
+      api.stub!(execute!: { field: {} })
+      GroupDocs::Api::Request.stub(new: api)
+      signature = GroupDocs::Signature.new(id: '123')
+      api.should_receive(:add_params).with(signatureId: '123')
+      field.field_type = :signature
+      subject.fill_field!(signature, field, document, recipient)
+    end
+
+    it 'converts boolean value to required string if field is :checkbox' do
+      api = stub(GroupDocs::Api::Request)
+      options = {}
+      api.stub!(execute!: { field: {} })
+      api.stub!(options: { request_body: nil })
+      GroupDocs::Api::Request.stub(new: api)
+      field.field_type = :checkbox
+      subject.fill_field!(true, field, document, recipient)
+      api.options[:request_body].should == 'on'
+    end
   end
 
   describe '#sign!' do
@@ -252,7 +273,6 @@ describe GroupDocs::Signature::Envelope do
     end
   end
 
-
   describe '#restart!' do
     before(:each) do
       mock_api_server('{ "status": "Ok", "result": {}}')
@@ -260,7 +280,7 @@ describe GroupDocs::Signature::Envelope do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.archive!(client_id: 'client_id', private_key: 'private_key')
+        subject.restart!(client_id: 'client_id', private_key: 'private_key')
       end.should_not raise_error(ArgumentError)
     end
   end
