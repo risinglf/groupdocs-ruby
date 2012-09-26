@@ -52,6 +52,8 @@ describe GroupDocs::Signature::Form do
   it { should respond_to(:fieldsInFinalFileName=)      }
   it { should respond_to(:canParticipantDownloadForm)  }
   it { should respond_to(:canParticipantDownloadForm=) }
+  it { should respond_to(:status)                      }
+  it { should respond_to(:status=)                     }
 
   it { should have_alias(:owner_guid, :ownerGuid)                                       }
   it { should have_alias(:owner_guid=, :ownerGuid=)                                     }
@@ -71,6 +73,13 @@ describe GroupDocs::Signature::Form do
   it { should have_alias(:fields_in_final_file_name=, :fieldsInFinalFileName=)          }
   it { should have_alias(:can_participant_download_form, :canParticipantDownloadForm)   }
   it { should have_alias(:can_participant_download_form=, :canParticipantDownloadForm=) }
+
+  describe '#status' do
+    it 'converts status to human-readable format' do
+      subject.status = 1
+      subject.status.should == :in_progress
+    end
+  end
 
   describe '#create!' do
     let(:template) { GroupDocs::Signature::Template.new }

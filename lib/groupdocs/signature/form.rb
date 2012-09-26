@@ -4,6 +4,13 @@ module GroupDocs
     include Signature::EntityMethods
     extend  Signature::ResourceMethods
 
+    STATUSES = {
+      draft:      -1,
+      in_progress: 1,
+      completed:   2,
+      archived:    3,
+    }
+
     #
     # Returns a list of all forms.
     #
@@ -58,6 +65,8 @@ module GroupDocs
     attr_accessor :fieldsInFinalFileName
     # @attr [Boolean] canParticipantDownloadForm
     attr_accessor :canParticipantDownloadForm
+    # @attr [Symbol] status
+    attr_accessor :status
 
     # Human-readable accessors
     alias_method :owner_guid,                     :ownerGuid
@@ -78,6 +87,14 @@ module GroupDocs
     alias_method :fields_in_final_file_name=,     :fieldsInFinalFileName=
     alias_method :can_participant_download_form,  :canParticipantDownloadForm
     alias_method :can_participant_download_form=, :canParticipantDownloadForm=
+
+    #
+    # Converts status to human-readable format.
+    # @return [Symbol]
+    #
+    def status
+      STATUSES.invert[@status]
+    end
 
     #
     # Creates form.
