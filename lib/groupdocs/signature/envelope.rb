@@ -3,6 +3,17 @@ module GroupDocs
 
     require 'groupdocs/signature/envelope/log'
 
+    STATUSES = {
+      draft:      -1,
+      annotation:  0,
+      in_progress: 1,
+      expired:     2,
+      canceled:    3,
+      failed:      4,
+      completed:   5,
+      archived:    6,
+    }
+
     include Signature::DocumentMethods
     include Signature::EntityFields
     include Signature::EntityMethods
@@ -77,6 +88,8 @@ module GroupDocs
     attr_accessor :statusDateTime
     # @attr [Integer] envelopeExpireTime
     attr_accessor :envelopeExpireTime
+    # @attr [Symbol] status
+    attr_accessor :status
 
     # Human-readable accessors
     alias_method :creation_date_time,    :creationDateTime
@@ -85,6 +98,14 @@ module GroupDocs
     alias_method :status_date_time=,     :statusDateTime=
     alias_method :envelope_expire_time,  :envelopeExpireTime
     alias_method :envelope_expire_time=, :envelopeExpireTime=
+
+    #
+    # Converts status to human-readable format.
+    # @return [Symbol]
+    #
+    def status
+      STATUSES.invert[@status]
+    end
 
     #
     # Adds recipient to envelope.

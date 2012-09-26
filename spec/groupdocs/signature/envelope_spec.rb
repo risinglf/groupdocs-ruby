@@ -66,6 +66,8 @@ describe GroupDocs::Signature::Envelope do
   it { should respond_to(:statusDateTime=)     }
   it { should respond_to(:envelopeExpireTime)  }
   it { should respond_to(:envelopeExpireTime=) }
+  it { should respond_to(:status)              }
+  it { should respond_to(:status=)             }
 
   it { should have_alias(:creation_date_time, :creationDateTime)       }
   it { should have_alias(:creation_date_time=, :creationDateTime=)     }
@@ -73,6 +75,13 @@ describe GroupDocs::Signature::Envelope do
   it { should have_alias(:status_date_time=, :statusDateTime=)         }
   it { should have_alias(:envelope_expire_time, :envelopeExpireTime)   }
   it { should have_alias(:envelope_expire_time=, :envelopeExpireTime=) }
+
+  describe '#status' do
+    it 'converts status to human-readable format' do
+      subject.status = 1
+      subject.status.should == :in_progress
+    end
+  end
 
   describe '#add_recipient!' do
     let(:recipient) do
