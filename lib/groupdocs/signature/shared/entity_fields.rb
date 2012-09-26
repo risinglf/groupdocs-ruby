@@ -73,6 +73,22 @@ module GroupDocs
         end
       end
 
+      #
+      # Returns true if owner should sign.
+      # @return [Boolean]
+      #
+      def owner_should_sign
+        @ownerShouldSign == 1 ? true : false
+      end
+
+      #
+      # Returns ordered signature type.
+      # @return [Symbol]
+      #
+      def ordered_signature
+        @orderedSignature == 1 ? :parallel : :ordered
+      end
+
     end # EntityFields
   end # Signature
 end # GroupDocs

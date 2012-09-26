@@ -35,9 +35,9 @@ shared_examples_for GroupDocs::Signature::EntityFields do
   it { should have_alias(:reminder_time=, :reminderTime=)         }
   it { should have_alias(:step_expire_time, :stepExpireTime)      }
   it { should have_alias(:step_expire_time=, :stepExpireTime=)    }
-  it { should have_alias(:owner_should_sign, :ownerShouldSign)    }
+  # owner_should_sign is overwritten
   it { should have_alias(:owner_should_sign=, :ownerShouldSign=)  }
-  it { should have_alias(:ordered_signature, :orderedSignature)   }
+  # ordered_signature is overwritten
   it { should have_alias(:ordered_signature=, :orderedSignature=) }
   it { should have_alias(:email_subject, :emailSubject)           }
   it { should have_alias(:email_subject=, :emailSubject=)         }
@@ -70,6 +70,20 @@ shared_examples_for GroupDocs::Signature::EntityFields do
       lambda do
         subject.recipients = nil
       end.should_not change(subject, :recipients)
+    end
+  end
+
+  describe '#owner_should_sign' do
+    it 'returns true if owner should sign' do
+      subject.owner_should_sign = 1
+      subject.owner_should_sign.should be_true
+    end
+  end
+
+  describe '#ordered_signature' do
+    it 'returns :ordered for ordered entity' do
+      subject.owner_should_sign = 1
+      subject.ordered_signature.should == :ordered
     end
   end
 end
