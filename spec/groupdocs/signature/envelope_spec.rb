@@ -130,6 +130,100 @@ describe GroupDocs::Signature::Envelope do
     end
   end
 
+  describe '#fill_field!' do
+    let(:field)     { GroupDocs::Signature::Field.new(location: { location_x: 0.1, page: 1 }) }
+    let(:document)  { GroupDocs::Document.new(file: GroupDocs::Storage::File.new) }
+    let(:recipient) { GroupDocs::Signature::Recipient.new }
+
+    before(:each) do
+      mock_api_server(load_json('signature_field_add'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.fill_field!('test', field, document, recipient, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'raises error if field is not GroupDocs::Signature::Field object' do
+      -> { subject.fill_field!('test', 'Field', document, recipient) }.should raise_error(ArgumentError)
+    end
+
+    it 'raises error if document is not GroupDocs::Document object' do
+      -> { subject.fill_field!('test', field, 'Document', recipient) }.should raise_error(ArgumentError)
+    end
+
+    it 'raises error if recipient is not GroupDocs::Signature::Recipient object' do
+      -> { subject.fill_field!('test', field, document, 'Recipient') }.should raise_error(ArgumentError)
+    end
+
+    it 'returns filled field' do
+      subject.fill_field!('test', field, document, recipient).should be_a(GroupDocs::Signature::Field)
+    end
+  end
+
+  describe '#sign!' do
+    let(:recipient) { GroupDocs::Signature::Recipient.new }
+
+    before(:each) do
+      mock_api_server('{ "status": "Ok", "result": {}}')
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.sign!(recipient, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'raises error if recipient is not GroupDocs::Signature::Recipient object' do
+      -> { subject.sign!('Recipient') }.should raise_error(ArgumentError)
+    end
+  end
+
+  describe '#decline!' do
+    let(:recipient) { GroupDocs::Signature::Recipient.new }
+
+    before(:each) do
+      mock_api_server('{ "status": "Ok", "result": {}}')
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.decline!(recipient, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'raises error if recipient is not GroupDocs::Signature::Recipient object' do
+      -> { subject.decline!('Recipient') }.should raise_error(ArgumentError)
+    end
+  end
+
+  describe '#signed_documents!' do
+    before(:each) do
+      mock_api_server(File.read('spec/support/files/envelope.zip'))
+      subject.stub(name: 'envelope')
+    end
+
+    let(:path) { Dir.tmpdir }
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.signed_documents!(path, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'downloads file to given path' do
+      file = stub('file')
+      Object::File.should_receive(:open).with("#{path}/#{subject.name}.zip", 'w').and_yield(file)
+      file.should_receive(:write).with(File.read('spec/support/files/envelope.zip'))
+      subject.signed_documents!(path)
+    end
+
+    it 'returns saved file path' do
+      subject.signed_documents!(path).should == "#{path}/#{subject.name}.zip"
+    end
+  end
+
   describe '#logs!' do
     before(:each) do
       mock_api_server(load_json('envelope_logs'))

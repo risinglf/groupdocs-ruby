@@ -32,7 +32,8 @@ module GroupDocs
       # @option options [String] :path Path to send request to
       # @option options [Hash] :headers Additional HTTP headers
       # @option options [Hash] :access Access credentials hash
-      # @option options [Hash, File] :request_body Payload. If hash, will be converted to JSON, if File, will be send as is.
+      # @option options [Hash, String, Array, File] :request_body payload
+      # @option options [Boolean] :plain Send payload as plain text (i.e. do not convert to JSON)
       #
       # @yieldparam [Hash] options
       #
@@ -62,6 +63,8 @@ module GroupDocs
         prepend_version
         url_encode_path
         sign_url
+        p "================="
+        p options
         prepare_request
         send_request
         parse_response

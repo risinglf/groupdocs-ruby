@@ -170,6 +170,138 @@ module GroupDocs
     end
 
     #
+    # Fills field with value.
+    #
+    # Value differs depending on field type. See examples below.
+    #
+    # @example Fill single line field
+    #   envelope = GroupDocs::Signature::Envelope.get!("g94h5g84hj9g4gf23i40j")
+    #   document = envelope.documents!.first
+    #   recipient = envelope.recipients!.first
+    #   field = envelope.fields!(document, recipient).first
+    #   envelope.fill_field! "my_data", field, document, recipient
+    #
+    # @example Fill signature field
+    #   envelope = GroupDocs::Signature::Envelope.get!("g94h5g84hj9g4gf23i40j")
+    #   document = envelope.documents!.first
+    #   recipient = envelope.recipients!.first
+    #   field = envelope.fields!(document, recipient).first
+    #   signature = GroupDocs::Signature.get!.first
+    #   envelope.fill_field! signature, field, document, recipient
+    #
+    # @example Fill checkbox field
+    #   envelope = GroupDocs::Signature::Envelope.get!("g94h5g84hj9g4gf23i40j")
+    #   document = envelope.documents!.first
+    #   recipient = envelope.recipients!.first
+    #   field = envelope.fields!(document, recipient).first
+    #   envelope.fill_field! false, field, document, recipient
+    #
+    # @param [String, Boolean, GroupDocs::Signature] value
+    # @param [GroupDocs::Signature::Field] field
+    # @param [GroupDocs::Document] document
+    # @param [GroupDocs::Signature::Recipient] recipient
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [GroupDocs::Signature::Field] filled field
+    # @raise [ArgumentError] if field is not GroupDocs::Signature::Field
+    # @raise [ArgumentError] if document is not GroupDocs::Document
+    # @raise [ArgumentError] if recipient is not GroupDocs::Signature::Recipient
+    #
+    def fill_field!(value, field, document, recipient, access = {})
+      field.is_a?(GroupDocs::Signature::Field) or raise ArgumentError,
+        "Field should be GroupDocs::Signature::Field object, received: #{field.inspect}"
+      document.is_a?(GroupDocs::Document) or raise ArgumentError,
+        "Document should be GroupDocs::Document object, received: #{document.inspect}"
+      recipient.is_a?(GroupDocs::Signature::Recipient) or raise ArgumentError,
+        "Recipient should be GroupDocs::Signature::Recipient object, received: #{recipient.inspect}"
+
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/signature/{{client_id}}/envelopes/#{id}/documents/#{document.file.guid}/recipient/#{recipient.id}/field/#{field.id}"
+      end
+
+      type = field.field_type
+      if type == :signature && value.is_a?(GroupDocs::Signature)
+        api.add_params(signatureId: value.id)
+      else
+        if type == :checkbox
+          value = (value ? 'on' : 'off')
+        end
+        api.options[:request_body] = value
+        api.options[:plain] = true
+      end
+
+      json = api.execute!
+      Signature::Field.new(json[:field])
+    end
+
+    #
+    # Signs envelope.
+    #
+    # @param [GroupDocs::Signature::Recipient] recipient
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @raise [ArgumentError] if recipient is not GroupDocs::Signature::Recipient
+    #
+    def sign!(recipient, access = {})
+      recipient.is_a?(GroupDocs::Signature::Recipient) or raise ArgumentError,
+        "Recipient should be GroupDocs::Signature::Recipient object, received: #{recipient.inspect}"
+
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/signature/{{client_id}}/envelopes/#{id}/recipient/#{recipient.id}/sign"
+      end.execute!
+    end
+
+    #
+    # Declines envelope.
+    #
+    # @param [GroupDocs::Signature::Recipient] recipient
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @raise [ArgumentError] if recipient is not GroupDocs::Signature::Recipient
+    #
+    def decline!(recipient, access = {})
+      recipient.is_a?(GroupDocs::Signature::Recipient) or raise ArgumentError,
+        "Recipient should be GroupDocs::Signature::Recipient object, received: #{recipient.inspect}"
+
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/signature/{{client_id}}/envelopes/#{id}/recipient/#{recipient.id}/decline"
+      end.execute!
+    end
+
+    #
+    # Downloads all signed documents as ZIP file to given pat.
+    #
+    # @param [String] path Directory to download file to
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [String] path to file
+    #
+    def signed_documents!(path, access = {})
+      response = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :DOWNLOAD
+        request[:path] = "/signature/{{client_id}}/envelopes/#{id}/documents/get"
+      end.execute!
+
+      filepath = "#{path}/#{name}.zip"
+      Object::File.open(filepath, 'w') do |file|
+        file.write(response)
+      end
+
+      filepath
+    end
+
+    #
     # Returns a list of audit logs.
     #
     # @param [Hash] access Access credentials

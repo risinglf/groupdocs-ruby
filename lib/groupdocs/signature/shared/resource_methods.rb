@@ -36,9 +36,6 @@ module GroupDocs
           options[:statusIds] = ids.join(?,) if ids
         end
 
-        # TODO type in API
-        class_name = 'temlate' if class_name == 'template'
-
         api = Api::Request.new do |request|
           request[:access] = access
           request[:method] = :GET

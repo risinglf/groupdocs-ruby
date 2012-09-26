@@ -3,6 +3,15 @@ module GroupDocs
 
     require 'groupdocs/signature/field/location'
 
+    FIELD_TYPES = {
+      signature:   1,
+      single_line: 2,
+      multiline:   3,
+      date:        4,
+      dropdown:    5,
+      checkbox:    6,
+    }
+
     #
     # Returns array of predefined lists.
     #
@@ -61,7 +70,7 @@ module GroupDocs
     attr_accessor :isSystem
     # @attr [Boolean] mandatory
     attr_accessor :mandatory
-    # @attr [Integer] fieldType
+    # @attr [Symbol] fieldType
     attr_accessor :fieldType
     # @attr [Boolean] acceptableValues
     attr_accessor :acceptableValues
@@ -117,8 +126,6 @@ module GroupDocs
     alias_method :font_underline=,     :fontUnderline=
     alias_method :is_system,           :isSystem
     alias_method :is_system=,          :isSystem=
-    alias_method :field_type,          :fieldType
-    alias_method :field_type=,         :fieldType=
     alias_method :acceptable_values,   :acceptableValues
     alias_method :acceptable_values=,  :acceptableValues=
     alias_method :default_value,       :defaultValue
@@ -156,6 +163,28 @@ module GroupDocs
         end
       end
     end
+
+    #
+    # Saves field type in machine-readable format.
+    # @param [Symbol, Integer] type
+    #
+    def field_type=(type)
+      if type.is_a?(Symbol)
+        type = FIELD_TYPES[type]
+      end
+
+      @fieldType = type
+    end
+    alias_method :type=, :field_type=
+
+    #
+    # Returns field type in human-readable format.
+    # @return [Symbol]
+    #
+    def field_type
+      FIELD_TYPES.invert[@fieldType]
+    end
+    alias_method :type, :field_type
 
     #
     # Creates signature field.

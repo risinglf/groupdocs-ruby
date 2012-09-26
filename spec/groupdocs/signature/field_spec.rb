@@ -115,8 +115,6 @@ describe GroupDocs::Signature::Field do
   it { should have_alias(:font_underline=,     :fontUnderline=)     }
   it { should have_alias(:is_system,           :isSystem)           }
   it { should have_alias(:is_system=,          :isSystem=)          }
-  it { should have_alias(:field_type,          :fieldType)          }
-  it { should have_alias(:field_type=,         :fieldType=)         }
   it { should have_alias(:acceptable_values,   :acceptableValues)   }
   it { should have_alias(:acceptable_values=,  :acceptableValues=)  }
   it { should have_alias(:default_value,       :defaultValue)       }
@@ -182,6 +180,33 @@ describe GroupDocs::Signature::Field do
       lambda do
         subject.locations = nil
       end.should_not change(subject, :locations)
+    end
+  end
+
+  describe '#field_type=' do
+    it 'converts field type in machine-readable format if symbol is passed' do
+      subject.field_type = :multiline
+      subject.instance_variable_get(:@fieldType).should == 3
+    end
+
+    it 'saves field type as is if not a symbol is passed' do
+      subject.field_type = 3
+      subject.instance_variable_get(:@fieldType).should == 3
+    end
+
+    it 'is aliased to #type=' do
+      subject.should have_alias(:type=, :field_type=)
+    end
+  end
+
+  describe '#field_type' do
+    it 'returns field type in human-readable format' do
+      subject.field_type = :multiline
+      subject.field_type.should == :multiline
+    end
+
+    it 'is aliased to #type' do
+      subject.should have_alias(:type, :field_type)
     end
   end
 
