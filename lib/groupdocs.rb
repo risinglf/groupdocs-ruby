@@ -36,6 +36,15 @@ module GroupDocs
     end
 
     #
+    # Returns version of API.
+    #
+    # @return [String] API version. Default one if it has not been explicitly set
+    #
+    def api_version
+      @api_version || '2.0'
+    end
+
+    #
     # Calls block for configuration of GroupDocs.
     #
     # @example
