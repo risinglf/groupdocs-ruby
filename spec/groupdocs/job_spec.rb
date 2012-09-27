@@ -162,6 +162,11 @@ describe GroupDocs::Job do
         document.should be_a(GroupDocs::Document)
       end
     end
+
+    it 'returns empty array if null is returned instead of inputs array' do
+      mock_api_server('{ "status": "Ok", "result": {}}')
+      subject.documents!.should be_empty
+    end
   end
 
   describe '#add_document!' do
