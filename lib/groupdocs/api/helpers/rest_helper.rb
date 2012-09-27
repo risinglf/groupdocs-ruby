@@ -1,3 +1,6 @@
+require 'json'
+require 'rest-client'
+
 module GroupDocs
   module Api
     module Helpers

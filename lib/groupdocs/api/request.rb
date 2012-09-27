@@ -1,4 +1,3 @@
-require 'json'
 require 'groupdocs/api/helpers'
 
 module GroupDocs

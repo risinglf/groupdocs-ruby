@@ -4,7 +4,7 @@ module GroupDocs
       module Path
 
         #
-        # Make helper methods accessible to class methods as well
+        # Make helper methods accessible as class methods as well
         #
         def self.included(klass)
           klass.extend self

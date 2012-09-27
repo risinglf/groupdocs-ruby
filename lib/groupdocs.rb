@@ -1,4 +1,3 @@
-require 'rest-client'
 require 'groupdocs/version'
 require 'groupdocs/errors'
 require 'groupdocs/api'
