@@ -157,7 +157,7 @@ module GroupDocs
         request[:method] = :DELETE
         request[:path] = "/merge/{{client_id}}/questionnaires/#{id}"
       end.execute!
-    # TODO: fix this in API
+    # TODO: fix this in API - http://scotland.groupdocs.com/jira/browse/CORE-391
     rescue RestClient::BadRequest
       nil
     end

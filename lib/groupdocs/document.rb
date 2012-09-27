@@ -291,7 +291,7 @@ module GroupDocs
     # Converts document to given format.
     #
     # @example
-    #   document = GroupDocs::Document.find!(:name, 'CV.doc')
+    #   document = GroupDocs::Storage::Folder.list!.first.to_document
     #   job = document.convert!(:docx)
     #   sleep(5) # wait for server to finish converting
     #   original_document = job.documents!.first
@@ -510,8 +510,8 @@ module GroupDocs
     # Returns an array of changes in document.
     #
     # @example
-    #   document_one = GroupDocs::Document.find!(:name, 'CV.doc')
-    #   document_two = GroupDocs::Document.find!(:name, 'Resume.doc')
+    #   document_one = GroupDocs::Storage::Folder.list![0].to_document
+    #   document_two = GroupDocs::Storage::Folder.list![1].to_document
     #   job = document_one.compare!(document_two)
     #   sleep(5) # wait for server to finish comparing
     #   result = job.documents!.first

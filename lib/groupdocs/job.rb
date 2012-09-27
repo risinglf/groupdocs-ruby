@@ -195,7 +195,6 @@ module GroupDocs
 
     #
     # Deletes document with guid from job.
-
     #
     # @param [String] guid
     # @param [Hash] access Access credentials
@@ -221,8 +220,6 @@ module GroupDocs
     #
     # @raise [ArgumentError] If document is not a GroupDocs::Document object
     # @raise [ArgumentError] If datasource is not a GroupDocs::DataSource object
-    #
-    # @todo returns 404 (http://scotland.groupdocs.com/jira/browse/CORE-384)
     #
     def add_datasource!(document, datasource, access = {})
       document.is_a?(GroupDocs::Document) or raise ArgumentError,

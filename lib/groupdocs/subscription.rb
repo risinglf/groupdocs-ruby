@@ -46,17 +46,16 @@ module GroupDocs
     #
     # Returns all subscription plans for family.
     #
-    # @param [Symbol] family One of :api or :standard
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
     # @return [Array<GroupDocs::Subscription>]
     #
-    def self.list!(family, access = {})
+    def self.list!(access = {})
       json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
-        request[:path] = "/system/{{client_id}}/plans/#{family}"
+        request[:path] = '/system/{{client_id}}/plans/groupdocs'
       end.execute!
 
       json[:metrics].map do |plan|

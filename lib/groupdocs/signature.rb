@@ -128,9 +128,6 @@ module GroupDocs
         request[:method] = :DELETE
         request[:path] = "/signature/{{client_id}}/signatures/#{id}"
       end.execute!
-    # TODO: fix this in API
-    rescue RestClient::BadRequest
-      nil
     end
 
   end # Signature

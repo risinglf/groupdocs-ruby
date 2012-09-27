@@ -160,7 +160,7 @@ module GroupDocs
     # Creates new annotation.
     #
     # @example
-    #   document = GroupDocs::Document.find!(:name, 'CV.doc')
+    #   document = GroupDocs::Storage::Folder.list!.first.to_document
     #   annotation = GroupDocs::Document::Annotation.new(document: document)
     #   annotation.create!
     #

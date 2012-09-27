@@ -105,7 +105,7 @@ describe GroupDocs::Signature do
 
   describe '#delete!' do
     before(:each) do
-      mock_api_server('{ "status": "Ok", "result": { "signature": null }}')
+      mock_api_server('{ "status": "Ok", "result": {}}')
     end
 
     it 'accepts access credentials hash' do
