@@ -3,7 +3,6 @@ require 'spec_helper'
 describe GroupDocs::Document do
 
   it_behaves_like GroupDocs::Api::Entity
-  include_examples GroupDocs::Extensions::Lookup
   include_examples GroupDocs::Api::Helpers::Status
 
   subject do
@@ -31,23 +30,6 @@ describe GroupDocs::Document do
     end
   end
 
-  describe '.all!' do
-    it 'accepts access credentials hash' do
-      lambda do
-        described_class.all!('/', client_id: 'client_id', private_key: 'private_key')
-      end.should_not raise_error(ArgumentError)
-    end
-
-    it 'calls GroupDocs::Storage::File.all! and converts each file to document' do
-      file1 = GroupDocs::Storage::File.new
-      file2 = GroupDocs::Storage::File.new
-      GroupDocs::Storage::File.should_receive(:all!).with('/', {}).and_return([file1, file2])
-      file1.should_receive(:to_document).and_return(described_class.new(file: file1))
-      file2.should_receive(:to_document).and_return(described_class.new(file: file2))
-      described_class.all!
-    end
-  end
-
   it { should respond_to(:file)            }
   it { should respond_to(:file=)           }
   it { should respond_to(:process_date)    }
@@ -56,11 +38,10 @@ describe GroupDocs::Document do
   it { should respond_to(:outputs=)        }
   it { should respond_to(:output_formats)  }
   it { should respond_to(:output_formats=) }
+  it { should respond_to(:order)           }
+  it { should respond_to(:order=)          }
 
-  it 'is compatible with response JSON' do
-    subject.should respond_to(:proc_date=)
-    subject.method(:proc_date=).should == subject.method(:process_date=)
-  end
+  it { should have_alias(:access_mode=, :access_mode_set!) }
 
   describe '#outputs=' do
     let(:response) do
@@ -149,8 +130,7 @@ describe GroupDocs::Document do
     end
 
     it 'is aliased to #access_mode=' do
-      subject.should respond_to(:access_mode=)
-      subject.method(:access_mode=).should == subject.method(:access_mode_set!)
+      subject.should have_alias(:access_mode=, :access_mode_set!)
     end
   end
 
@@ -198,7 +178,7 @@ describe GroupDocs::Document do
     end
 
     it 'does not set last view if document has never been viewed' do
-      mock_api_server('{"status": "Ok", "result": {"last_view": null }}')
+      mock_api_server('{ "status": "Ok", "result": { "last_view": null }}')
       subject.metadata!.last_view.should be_nil
     end
   end
@@ -375,7 +355,7 @@ describe GroupDocs::Document do
       subject.create_questionnaire!(questionnaire)
     end
 
-    it 'adds ID from response to questionnaire' do
+    it 'updates ID from response to questionnaire' do
       lambda do
         subject.create_questionnaire!(questionnaire)
       end.should change(questionnaire, :id)
@@ -449,7 +429,7 @@ describe GroupDocs::Document do
     end
 
     it 'returns empty array if annotations are null in response' do
-      mock_api_server('{"status": "Ok", "result": {"annotations": null }}')
+      mock_api_server('{ "status": "Ok", "result": { "annotations": null }}')
       subject.annotations!.should be_empty
     end
   end

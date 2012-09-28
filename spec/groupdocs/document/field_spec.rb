@@ -13,10 +13,7 @@ describe GroupDocs::Document::Field do
   it { should respond_to(:rectangle)   }
   it { should respond_to(:rectangle=)  }
 
-  it 'is compatible with response JSON' do
-    subject.should respond_to(:rect=)
-    subject.method(:rect=).should == subject.method(:rectangle=)
-  end
+  it { should have_alias(:rect=, :rectangle=) }
 
   describe '#rectangle=' do
     it 'converts passed hash to GroupDocs::Document::Rectangle object' do

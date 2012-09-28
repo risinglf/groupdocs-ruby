@@ -1,5 +1,5 @@
 module GroupDocs
-  class Questionnaire::Question < GroupDocs::Api::Entity
+  class Questionnaire::Question < Api::Entity
 
     require 'groupdocs/questionnaire/question/answer'
 

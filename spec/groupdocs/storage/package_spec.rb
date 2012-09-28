@@ -17,8 +17,7 @@ describe GroupDocs::Storage::Package do
     end
 
     it 'is aliased to #<<' do
-      subject.should respond_to(:<<)
-      subject.method(:<<).should == subject.method(:add)
+      subject.should have_alias(:<<, :add)
     end
   end
 

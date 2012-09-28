@@ -21,6 +21,8 @@ describe GroupDocs::Document::Annotation do
   it { should respond_to(:sessionGuid=)        }
   it { should respond_to(:documentGuid)        }
   it { should respond_to(:documentGuid=)       }
+  it { should respond_to(:creatorGuid)         }
+  it { should respond_to(:creatorGuid=)        }
   it { should respond_to(:replyGuid)           }
   it { should respond_to(:replyGuid=)          }
   it { should respond_to(:createdOn)           }
@@ -36,35 +38,21 @@ describe GroupDocs::Document::Annotation do
   it { should respond_to(:annotationPosition)  }
   it { should respond_to(:annotationPosition=) }
 
-  it 'has human-readable accessors' do
-    subject.should respond_to(:session_guid)
-    subject.should respond_to(:session_guid=)
-    subject.should respond_to(:document_guid)
-    subject.should respond_to(:document_guid=)
-    subject.should respond_to(:reply_guid)
-    subject.should respond_to(:reply_guid=)
-    subject.should respond_to(:created_on)
-    subject.should respond_to(:created_on=)
-    subject.should respond_to(:annotation_position)
-    subject.should respond_to(:annotation_position=)
-    subject.should respond_to(:position)
-    subject.method(:session_guid).should         == subject.method(:sessionGuid)
-    subject.method(:session_guid=).should        == subject.method(:sessionGuid=)
-    subject.method(:document_guid).should        == subject.method(:documentGuid)
-    subject.method(:document_guid=).should       == subject.method(:documentGuid=)
-    subject.method(:reply_guid).should           == subject.method(:replyGuid)
-    subject.method(:reply_guid=).should          == subject.method(:replyGuid=)
-    # Annotation#created_on is overwritten
-    subject.method(:created_on=).should          == subject.method(:createdOn=)
-    subject.method(:annotation_position).should  == subject.method(:annotationPosition)
-    subject.method(:annotation_position=).should == subject.method(:annotationPosition=)
-    subject.method(:position).should             == subject.method(:annotation_position)
-  end
+  it { should have_alias(:session_guid, :sessionGuid)                 }
+  it { should have_alias(:session_guid=, :sessionGuid=)               }
+  it { should have_alias(:document_guid, :documentGuid)               }
+  it { should have_alias(:document_guid=, :documentGuid=)             }
+  it { should have_alias(:creator_guid, :creatorGuid)                 }
+  it { should have_alias(:creator_guid=, :creatorGuid=)               }
+  it { should have_alias(:reply_guid, :replyGuid)                     }
+  it { should have_alias(:reply_guid=, :replyGuid=)                   }
+  # Annotation#created_on is overwritten
+  it { should have_alias(:created_on=, :createdOn=)                   }
+  it { should have_alias(:annotation_position, :annotationPosition)   }
+  it { should have_alias(:annotation_position=, :annotationPosition=) }
+  it { should have_alias(:position, :annotation_position)             }
 
-  it 'is compatible with response JSON' do
-    subject.should respond_to(:annotationGuid=)
-    subject.method(:annotationGuid=).should == subject.method(:guid=)
-  end
+  it { should have_alias(:annotationGuid=, :guid=) }
 
   describe '#initialize' do
     it 'raises error if document is not specified' do
@@ -236,8 +224,7 @@ describe GroupDocs::Document::Annotation do
     end
 
     it 'is aliased to #collaborators=' do
-      subject.should respond_to(:collaborators=)
-      subject.method(:collaborators=).should == subject.method(:collaborators_set!)
+      subject.should have_alias(:collaborators=, :collaborators_set!)
     end
   end
 
@@ -275,6 +262,23 @@ describe GroupDocs::Document::Annotation do
       lambda do
         subject.move!(10, 10)
       end.should change(subject, :annotation_position).to(x: 10, y: 10)
+    end
+  end
+
+  describe '#set_access!' do
+    before(:each) do
+      mock_api_server(load_json('annotation_access_set'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.set_access!(:private, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'updates annotation access mode' do
+      subject.set_access!(:private)
+      subject.access.should == :private
     end
   end
 end

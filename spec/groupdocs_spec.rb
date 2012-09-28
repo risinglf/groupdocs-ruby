@@ -53,4 +53,15 @@ describe GroupDocs do
       subject.api_server.should == 'https://dev-api.groupdocs.com'
     end
   end
+
+  describe '#api_version' do
+    it 'returns default version if it has not been overwritten' do
+      subject.api_version.should == '2.0'
+    end
+
+    it 'returns custom overwritten version' do
+      subject.api_version = '3.0'
+      subject.api_version.should == '3.0'
+    end
+  end
 end

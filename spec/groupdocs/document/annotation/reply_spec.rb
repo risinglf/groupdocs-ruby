@@ -73,24 +73,15 @@ describe GroupDocs::Document::Annotation::Reply do
   it { should respond_to(:repliedOn)       }
   it { should respond_to(:repliedOn=)      }
 
-  it 'has human-readable accessors' do
-    subject.should respond_to(:annotation_guid)
-    subject.should respond_to(:annotation_guid=)
-    subject.should respond_to(:user_guid)
-    subject.should respond_to(:user_guid=)
-    subject.should respond_to(:user_name)
-    subject.should respond_to(:user_name=)
-    subject.should respond_to(:replied_on)
-    subject.should respond_to(:replied_on=)
-    subject.method(:annotation_guid).should  == subject.method(:annotationGuid)
-    subject.method(:annotation_guid=).should == subject.method(:annotationGuid=)
-    subject.method(:user_guid).should        == subject.method(:userGuid)
-    subject.method(:user_guid=).should       == subject.method(:userGuid=)
-    subject.method(:user_name).should        == subject.method(:userName)
-    subject.method(:user_name=).should       == subject.method(:userName=)
-    # Reply#replied_on is overwritten
-    subject.method(:replied_on=).should      == subject.method(:repliedOn=)
-  end
+  it { should have_alias(:annotation_guid, :annotationGuid)   }
+  it { should have_alias(:annotation_guid=, :annotationGuid=) }
+  it { should have_alias(:user_guid, :userGuid)               }
+  it { should have_alias(:user_guid=, :userGuid=)             }
+  it { should have_alias(:user_name, :userName)               }
+  it { should have_alias(:user_name=, :userName=)             }
+  # Reply#replied_on is overwritten
+  it { should have_alias(:replied_on=, :repliedOn=)           }
+
 
   describe '#initialize' do
     it 'raises error if annotation is not specified' do
@@ -137,7 +128,7 @@ describe GroupDocs::Document::Annotation::Reply do
 
   describe '#edit!' do
     before(:each) do
-      mock_api_server('{"result": {}, "status": "Ok", "error_message": null}')
+      mock_api_server('{ "result": {}, "status": "Ok" }')
     end
 
     it 'accepts access credentials hash' do
@@ -149,7 +140,7 @@ describe GroupDocs::Document::Annotation::Reply do
 
   describe '#remove!' do
     before(:each) do
-      mock_api_server('{"result": {}, "status": "Ok", "error_message": null}')
+      mock_api_server('{ "result": {}, "status": "Ok" }')
     end
 
     it 'accepts access credentials hash' do

@@ -1,5 +1,5 @@
 module GroupDocs
-  class Document::Field < GroupDocs::Api::Entity
+  class Document::Field < Api::Entity
 
     # @attr [Integer] page
     attr_accessor :page

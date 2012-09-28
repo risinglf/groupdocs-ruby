@@ -47,7 +47,7 @@ module GroupDocs
       def to_hash
         hash = {}
         instance_variables.each do |variable|
-          key = variable_to_accessor(variable)
+          key = variable.to_s.delete(?@).to_sym
           value = instance_variable_get(variable)
 
           hash[key] = case value
@@ -119,6 +119,22 @@ module GroupDocs
         word.gsub!(/_([a-z])/) { |match| match.upcase }
         word.gsub!(/_/, '')
         "@#{word}".to_sym
+      end
+
+      #
+      # Returns class name.
+      # @api private
+      #
+      def class_name
+        self.class.name.split('::').last.downcase
+      end
+
+      #
+      # Returns pluralized class name.
+      # @api private
+      #
+      def pluralized_class_name
+        "#{class_name}s"
       end
 
     end # Entity

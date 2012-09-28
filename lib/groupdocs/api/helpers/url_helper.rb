@@ -1,5 +1,4 @@
 require 'base64'
-require 'hmac-sha1'
 require 'uri'
 require 'cgi'
 
@@ -56,9 +55,8 @@ module GroupDocs
         #
         def sign_url
           # calculate a hash of the path with private key
-          hash = HMAC::SHA1.new(private_key)
-          hash << options[:path]
-          hash = hash.digest
+          hash = OpenSSL::Digest::Digest.new('sha1')
+          hash = OpenSSL::HMAC.digest(hash, private_key, options[:path])
           # convert hash to base64
           hash = Base64.strict_encode64(hash)
           # remove trailing '='

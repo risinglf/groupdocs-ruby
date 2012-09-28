@@ -3,7 +3,6 @@ require 'spec_helper'
 describe GroupDocs::Storage::Folder do
 
   it_behaves_like GroupDocs::Api::Entity
-  include_examples GroupDocs::Extensions::Lookup
   include_examples GroupDocs::Api::Helpers::AccessMode
 
   describe '.create!' do
@@ -13,18 +12,12 @@ describe GroupDocs::Storage::Folder do
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.create!('/Test', client_id: 'client_id', private_key: 'private_key')
+        described_class.create!('Test', client_id: 'client_id', private_key: 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
-    it 'checks that path starts with /' do
-      GroupDocs::Api::Helpers::Path.should_receive(:verify_starts_with_root).with('Test')
-      described_class.create!('Test')
-    end
-
     it 'returns GroupDocs::Storage::Folder object' do
-      described_class.stub(find!: described_class.new(id: 1))
-      folder = described_class.create!('/Test')
+      folder = described_class.create!('Test')
       folder.should be_a(GroupDocs::Storage::Folder)
     end
   end
@@ -36,21 +29,21 @@ describe GroupDocs::Storage::Folder do
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.list!('/', {}, client_id: 'client_id', private_key: 'private_key')
+        described_class.list!('', {}, client_id: 'client_id', private_key: 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'allows passing path' do
-      -> { described_class.list!('/test') }.should_not raise_error(ArgumentError)
+      -> { described_class.list!('test') }.should_not raise_error(ArgumentError)
     end
 
     it 'allows passing options' do
-      -> { described_class.list!('/', page: 1, count: 1) }.should_not raise_error(ArgumentError)
+      -> { described_class.list!('', page: 1, count: 1) }.should_not raise_error(ArgumentError)
     end
 
     it 'creates new instance of GroupDocs::Storage::Folder and calls #list!' do
       folder = stub('folder')
-      GroupDocs::Storage::Folder.should_receive(:new).with(path: '/').and_return(folder)
+      GroupDocs::Storage::Folder.should_receive(:new).with(path: '').and_return(folder)
       folder.should_receive(:list!).with({}, {})
       described_class.list!
     end
@@ -88,84 +81,6 @@ describe GroupDocs::Storage::Folder do
     it 'returns converted to Time object Unix timestamp' do
       subject.modified_on = 1330450135000
       subject.modified_on.should == Time.at(1330450135)
-    end
-  end
-
-  describe '#move!' do
-    before(:each) do
-      mock_api_server(load_json('folder_move'))
-    end
-
-    it 'accepts access credentials hash' do
-      lambda do
-        subject.move!('/Test', client_id: 'client_id', private_key: 'private_key')
-      end.should_not raise_error(ArgumentError)
-    end
-
-    it 'checks that path starts with /' do
-      GroupDocs::Api::Helpers::Path.should_receive(:verify_starts_with_root).with('Test1')
-      subject.move!('Test1')
-    end
-
-    it 'sends "Groupdocs-Move" header' do
-      mock_api_server(load_json('folder_move'), :'Groupdocs-Move' => 'Test1')
-      subject.stub(name: 'Test1')
-      subject.move!('/Test2')
-    end
-
-    it 'returns moved to folder path' do
-      moved = subject.move!('/Test2/Test1')
-      moved.should be_a(String)
-      moved.should == '/Test2/Test1/'
-    end
-  end
-
-  describe '#rename!' do
-    it 'accepts access credentials hash' do
-      lambda do
-        subject.rename!('Test2', client_id: 'client_id', private_key: 'private_key')
-      end.should_not raise_error(ArgumentError)
-    end
-
-    it 'uses #move! to rename directory' do
-      subject.should_receive(:move!).with('/Test2', {}).and_return('/Test2')
-      subject.rename!('Test2')
-    end
-
-    it 'strips leading / symbol from new name' do
-      subject.stub(move!: '/Test2')
-      renamed = subject.rename!('Test2')
-      renamed.should be_a(String)
-      renamed.should == 'Test2'
-    end
-  end
-
-  describe '#copy!' do
-    before(:each) do
-      mock_api_server(load_json('folder_move'))
-    end
-
-    it 'accepts access credentials hash' do
-      lambda do
-        subject.copy!('/Test2', client_id: 'client_id', private_key: 'private_key')
-      end.should_not raise_error(ArgumentError)
-    end
-
-    it 'checks that path starts with /' do
-      GroupDocs::Api::Helpers::Path.should_receive(:verify_starts_with_root).with('Test2')
-      subject.copy!('Test2')
-    end
-
-    it 'sends "Groupdocs-Copy" header' do
-      mock_api_server(load_json('folder_move'), :'Groupdocs-Copy' => 'Test1')
-      subject.stub(name: 'Test1')
-      subject.copy!('/Test2')
-    end
-
-    it 'returns moved to folder path' do
-      moved = subject.copy!('/Test2/Test1')
-      moved.should be_a(String)
-      moved.should == '/Test2/Test1/'
     end
   end
 
@@ -213,6 +128,44 @@ describe GroupDocs::Storage::Folder do
     end
   end
 
+  describe '#move!' do
+    before(:each) do
+      subject.path = ''
+      mock_api_server(load_json('folder_move'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.move!('Test', client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns moved to folder path' do
+      moved = subject.move!('Test2/Test1')
+      moved.should be_a(String)
+      moved.should == 'Test2/Test1/'
+    end
+  end
+
+  describe '#copy!' do
+    before(:each) do
+      subject.path = ''
+      mock_api_server(load_json('folder_move'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.copy!('/Test2', client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns moved to folder path' do
+      moved = subject.copy!('Test2/Test1')
+      moved.should be_a(String)
+      moved.should == 'Test2/Test1/'
+    end
+  end
+
   describe '#create!' do
     before(:each) do
       mock_api_server(load_json('folder_create'))
@@ -226,7 +179,7 @@ describe GroupDocs::Storage::Folder do
 
     it 'calls create! class method and pass parameters to it' do
       subject = described_class.new(name: 'Test1')
-      described_class.should_receive(:create!).with('/Test1', {})
+      described_class.should_receive(:create!).with('Test1', {})
       subject.create!
     end
 

@@ -1,5 +1,5 @@
 module GroupDocs
-  class Questionnaire::Page < GroupDocs::Api::Entity
+  class Questionnaire::Page < Api::Entity
 
     # @attr [Integer] number
     attr_accessor :number

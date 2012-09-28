@@ -1,5 +1,5 @@
 module GroupDocs
-  class Document::Annotation::Reply < GroupDocs::Api::Entity
+  class Document::Annotation::Reply < Api::Entity
 
     #
     # Return an array of replies for given annotation.
@@ -88,8 +88,8 @@ module GroupDocs
     # Creates reply.
     #
     # @example
-    #   document = GroupDocs::Document.find!(:name, 'CV.doc')
-    #   annotation = GroupDocs::Document::Annotation.new(document: document)
+    #   document = GroupDocs::Storage::Folder.list!.first.to_document
+    #   annotation = document.annotations!.first
     #   reply = GroupDocs::Document::Annotation::Reply.new(annotation: annotation)
     #   reply.text = "Reply text"
     #   reply.create!
@@ -98,14 +98,12 @@ module GroupDocs
     # @option access [String] :client_id
     # @option access [String] :private_key
     #
-    # @raise [NameError] if annotation or annotation_guid are not set
-    #
     def create!(access = {})
       json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :POST
         request[:path] = "/ant/{{client_id}}/annotations/#{get_annotation_guid}/replies"
-        request[:request_body] = text
+        request[:request_body] = { text: text }
       end.execute!
 
       self.guid            = json[:replyGuid]
@@ -116,7 +114,7 @@ module GroupDocs
     # Edits reply.
     #
     # @example
-    #   document = GroupDocs::Document.find!(:name, 'CV.doc')
+    #   document = GroupDocs::Storage::Folder.list!.first.to_document
     #   annotation = document.annotations!.first
     #   reply = annotation.replies!.first
     #   reply.text = "New reply text"
@@ -142,8 +140,6 @@ module GroupDocs
     # @option access [String] :client_id
     # @option access [String] :private_key
     #
-    # @todo currently not implemented in API
-    #
     def remove!(access = {})
       Api::Request.new do |request|
         request[:access] = access
@@ -157,7 +153,7 @@ module GroupDocs
     #
     # Returns annotation guid.
     #
-    # @returns [String]
+    # @return [String]
     #
     def get_annotation_guid
       annotation_guid || annotation.guid

@@ -1,5 +1,5 @@
 module GroupDocs
-  class Document::MetaData < GroupDocs::Api::Entity
+  class Document::MetaData < Api::Entity
 
     # @attr [Integer] id
     attr_accessor :id

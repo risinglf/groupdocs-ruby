@@ -1,5 +1,5 @@
 module GroupDocs
-  class Document::View < GroupDocs::Api::Entity
+  class Document::View < Api::Entity
 
     # @attr [GroupDocs::Document] document
     attr_accessor :document

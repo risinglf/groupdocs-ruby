@@ -51,25 +51,14 @@ describe GroupDocs::User do
   it { should respond_to(:signed_up_on)   }
   it { should respond_to(:signed_up_on=)  }
 
-  it 'is compatible with response JSON' do
-    subject.should respond_to(:pkey=)
-    subject.should respond_to(:pswd_salt=)
-    subject.should respond_to(:signedupOn=)
-    subject.method(:pkey=).should == subject.method(:private_key=)
-    subject.method(:pswd_salt=).should == subject.method(:password_salt=)
-    subject.method(:signedupOn=).should == subject.method(:signed_up_on=)
-  end
+  it { should have_alias(:first_name, :firstname)  }
+  it { should have_alias(:first_name=, :firstname=) }
+  it { should have_alias(:last_name, :lastname)   }
+  it { should have_alias(:last_name=, :lastname=)  }
 
-  it 'has human-readable accessors' do
-    subject.should respond_to(:first_name)
-    subject.should respond_to(:first_name=)
-    subject.should respond_to(:last_name)
-    subject.should respond_to(:last_name=)
-    subject.method(:first_name).should  == subject.method(:firstname)
-    subject.method(:first_name=).should == subject.method(:firstname=)
-    subject.method(:last_name).should   == subject.method(:lastname)
-    subject.method(:last_name=).should  == subject.method(:lastname=)
-  end
+  it { should have_alias(:pkey=, :private_key=) }
+  it { should have_alias(:pswd_salt=, :password_salt=) }
+  it { should have_alias(:signedupOn=, :signed_up_on=) }
 
   describe '#signed_up_on' do
     it 'returns converted to Time object Unix timestamp' do
@@ -92,6 +81,26 @@ describe GroupDocs::User do
     it 'uses hashed version of self as request body' do
       subject.should_receive(:to_hash)
       subject.update!
+    end
+  end
+
+  describe '#users!' do
+    before(:each) do
+      mock_api_server(load_json('user_users_get'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.users!(client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns array of GroupDocs::User objects' do
+      users = subject.users!
+      users.should be_an(Array)
+      users.each do |user|
+        user.should be_a(GroupDocs::User)
+      end
     end
   end
 end

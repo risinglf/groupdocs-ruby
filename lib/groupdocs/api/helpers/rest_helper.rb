@@ -1,3 +1,6 @@
+require 'json'
+require 'rest-client'
+
 module GroupDocs
   module Api
     module Helpers
@@ -25,8 +28,10 @@ module GroupDocs
           options[:method] = options[:method].downcase.to_sym
 
           if options[:request_body] && !options[:request_body].is_a?(Object::File)
-            options[:request_body] = options[:request_body].to_json
-            options[:headers][:content_type]= 'application/json'
+            unless options[:plain]
+              options[:request_body] = options[:request_body].to_json
+              options[:headers][:content_type]= 'application/json'
+            end
             options[:headers][:content_length] = options[:request_body].length
           end
         end

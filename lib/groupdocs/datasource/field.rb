@@ -1,5 +1,5 @@
 module GroupDocs
-  class DataSource::Field < GroupDocs::Api::Entity
+  class DataSource::Field < Api::Entity
 
     # @attr [String] name
     attr_accessor :name

@@ -1,9 +1,9 @@
 module GroupDocs
   module Storage
-    class Folder < GroupDocs::Api::Entity
+    class Folder < Api::Entity
 
-      extend Extensions::Lookup
       include Api::Helpers::AccessMode
+      include Api::Helpers::Path
 
       #
       # Creates folder on server.
@@ -15,37 +15,15 @@ module GroupDocs
       # @return [GroupDocs::Storage::Folder] Created folder
       #
       def self.create!(path, access = {})
-        Api::Helpers::Path.verify_starts_with_root(path)
+        path = prepare_path(path)
 
         json = Api::Request.new do |request|
           request[:access] = access
           request[:method] = :POST
-          request[:path] = "/storage/{{client_id}}/paths#{path}"
+          request[:path] = "/storage/{{client_id}}/paths/#{path}"
         end.execute!
 
         Storage::Folder.new(json)
-      end
-
-      #
-      # Returns an array of all folders on server starting with given path.
-      #
-      # @param [String] path Starting path to look for folders
-      # @param [Hash] access Access credentials
-      # @option access [String] :client_id
-      # @option access [String] :private_key
-      # @return [Array<GroupDocs::Storage::Folder>]
-      #
-      def self.all!(path = '/', access = {})
-        folders = Array.new
-        folder = GroupDocs::Storage::Folder.new(path: path)
-        folder.list!({}, access).each do |entity|
-          if entity.is_a?(GroupDocs::Storage::Folder)
-            folders << entity
-            folders += all!("#{path}/#{entity.name}", access)
-          end
-        end
-
-        folders
       end
 
       #
@@ -62,8 +40,8 @@ module GroupDocs
       # @option access [String] :private_key
       # @return [Array<GroupDocs::Storage::Folder, GroupDocs::Storage::File>]
       #
-      def self.list!(path = '/', options = {}, access = {})
-        Api::Helpers::Path.verify_starts_with_root(path)
+      def self.list!(path = '', options = {}, access = {})
+        path = prepare_path(path)
         new(path: path).list!(options, access)
       end
 
@@ -120,65 +98,6 @@ module GroupDocs
       end
 
       #
-      # Moves folder contents to given path.
-      #
-      # @param [String] destination_path Destination to move contents to
-      # @param [Hash] access Access credentials
-      # @option access [String] :client_id
-      # @option access [String] :private_key
-      # @return [String] Moved to folder path
-      #
-      def move!(destination_path, access = {})
-        Api::Helpers::Path.verify_starts_with_root(destination_path)
-        destination_path = "#{destination_path}/#{name}"
-
-        Api::Request.new do |request|
-          request[:access] = access
-          request[:method] = :PUT
-          request[:headers] = { :'Groupdocs-Move' => path }
-          request[:path] = "/storage/{{client_id}}/folders#{destination_path}"
-        end.execute!
-
-        destination_path
-      end
-
-      #
-      # Renames folder to new one.
-      #
-      # @param [String] name New name
-      # @param [Hash] access Access credentials
-      # @option access [String] :client_id
-      # @option access [String] :private_key
-      # @return [String] New name
-      #
-      def rename!(name, access = {})
-        move!("/#{name}", access).sub(/^\//, '')
-      end
-
-      #
-      # Copies folder contents to given path.
-      #
-      # @param [String] destination_path Destination to copy contents to
-      # @param [Hash] access Access credentials
-      # @option access [String] :client_id
-      # @option access [String] :private_key
-      # @return [String] Copied to folder path
-      #
-      def copy!(destination_path, access = {})
-        Api::Helpers::Path.verify_starts_with_root(destination_path)
-        destination_path = "#{destination_path}/#{name}"
-
-        Api::Request.new do |request|
-          request[:access] = access
-          request[:method] = :PUT
-          request[:headers] = { :'Groupdocs-Copy' => path }
-          request[:path] = "/storage/{{client_id}}/folders#{destination_path}"
-        end.execute!
-
-        destination_path
-      end
-
-      #
       # Returns an array of files and folders.
       #
       # @param [Hash] options Hash of options
@@ -193,25 +112,72 @@ module GroupDocs
       #
       def list!(options = {}, access = {})
         options[:order_by].capitalize! if options[:order_by]
+        full_path = prepare_path("#{path}/#{name}")
 
         api = Api::Request.new do |request|
           request[:access] = access
           request[:method] = :GET
-          request[:path] = "/storage/{{client_id}}/folders#{path}/#{name}"
+          request[:path] = "/storage/{{client_id}}/folders/#{full_path}"
         end
         api.add_params(options)
         json = api.execute!
 
         folders = json[:folders].map do |folder|
-          folder.merge!(path: path)
+          folder.merge!(path: full_path)
           Storage::Folder.new(folder)
         end
         files = json[:files].map do |file|
-          file.merge!(path: path)
+          file.merge!(path: full_path)
           Storage::File.new(file)
         end
 
         folders + files
+      end
+
+      #
+      # Moves folder contents to given path.
+      #
+      # @param [String] destination Destination to move contents to
+      # @param [Hash] access Access credentials
+      # @option access [String] :client_id
+      # @option access [String] :private_key
+      # @return [String] Moved to folder path
+      #
+      def move!(destination, access = {})
+        src_path = prepare_path(path)
+        dst_path = prepare_path("#{destination}/#{name}")
+
+        Api::Request.new do |request|
+          request[:access] = access
+          request[:method] = :PUT
+          request[:headers] = { :'Groupdocs-Move' => src_path }
+          request[:path] = "/storage/{{client_id}}/folders/#{dst_path}"
+        end.execute!
+
+        dst_path
+      end
+
+      #
+      # Copies folder contents to given path.
+      #
+      # @param [String] destination_path Destination to copy contents to
+      # @param [Hash] access Access credentials
+      # @option access [String] :client_id
+      # @option access [String] :private_key
+      # @return [String] Copied to folder path
+      #
+      def copy!(destination, access = {})
+        src_path = prepare_path(path)
+        dst_path = prepare_path("#{destination}/#{name}")
+
+        Api::Request.new do |request|
+          request[:access] = access
+          request[:method] = :PUT
+          request[:headers] = { :'Groupdocs-Copy' => src_path }
+          request[:path] = "/storage/{{client_id}}/folders/#{dst_path}"
+        end.execute!
+
+        dst_path
       end
 
       #
@@ -229,7 +195,7 @@ module GroupDocs
       # @return [GroupDocs::Storage::Folder] Created folder
       #
       def create!(access = {})
-        self.class.create!("/#{name}", access)
+        self.class.create! prepare_path("#{path}/#{name}"), access
       end
 
       #
@@ -243,7 +209,7 @@ module GroupDocs
         Api::Request.new do |request|
           request[:access] = access
           request[:method] = :DELETE
-          request[:path] = "/storage/{{client_id}}/folders/#{path}/#{name}"
+          request[:path] = "/storage/{{client_id}}/folders/#{prepare_path("#{path}/#{name}")}"
         end.execute!
       end
 

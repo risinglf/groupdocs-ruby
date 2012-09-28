@@ -1,5 +1,5 @@
 module GroupDocs
-  class Document < GroupDocs::Api::Entity
+  class Document < Api::Entity
 
     require 'groupdocs/document/annotation'
     require 'groupdocs/document/change'
@@ -15,22 +15,8 @@ module GroupDocs
       public:     3,
     }
 
-    extend Extensions::Lookup
     include Api::Helpers::AccessMode
     include Api::Helpers::Status
-
-    #
-    # Returns an array of all documents on server.
-    #
-    # @param [String] path Starting path to look for documents
-    # @param [Hash] access Access credentials
-    # @option access [String] :client_id
-    # @option access [String] :private_key
-    # @return [Array<GroupDocs::Storage::Document>]
-    #
-    def self.all!(path = '/', access = {})
-      Storage::File.all!(path, access).map(&:to_document)
-    end
 
     #
     # Returns an array of views for all documents.
@@ -67,6 +53,8 @@ module GroupDocs
     attr_accessor :output_formats
     # @attr [Symbol] status
     attr_accessor :status
+    # @attr [Integet] order
+    attr_accessor :order
 
     #
     # Coverts passed array of attributes hash to array of GroupDocs::Storage::File.
@@ -303,7 +291,7 @@ module GroupDocs
     # Converts document to given format.
     #
     # @example
-    #   document = GroupDocs::Document.find!(:name, 'CV.doc')
+    #   document = GroupDocs::Storage::Folder.list!.first.to_document
     #   job = document.convert!(:docx)
     #   sleep(5) # wait for server to finish converting
     #   original_document = job.documents!.first
@@ -522,8 +510,8 @@ module GroupDocs
     # Returns an array of changes in document.
     #
     # @example
-    #   document_one = GroupDocs::Document.find!(:name, 'CV.doc')
-    #   document_two = GroupDocs::Document.find!(:name, 'Resume.doc')
+    #   document_one = GroupDocs::Storage::Folder.list![0].to_document
+    #   document_two = GroupDocs::Storage::Folder.list![1].to_document
     #   job = document_one.compare!(document_two)
     #   sleep(5) # wait for server to finish comparing
     #   result = job.documents!.first

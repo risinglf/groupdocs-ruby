@@ -1,6 +1,6 @@
 module GroupDocs
   module Storage
-    class Package < GroupDocs::Api::Entity
+    class Package < Api::Entity
 
       # @attr [String] name Package name
       attr_accessor :name

@@ -79,6 +79,15 @@ describe GroupDocs::Api::Helpers::REST do
         subject.send(:prepare_request)
       end.should change { subject.options[:headers][:content_type] }.to('application/json')
     end
+
+    it 'allows sending payload as plain text' do
+      subject.options[:method] = :POST
+      subject.options[:request_body] = 'test'
+      subject.options[:plain] = true
+      subject.send(:prepare_request)
+      subject.options[:request_body].should == 'test'
+      subject.options[:headers][:content_type].should_not == 'application/json'
+    end
   end
 
   describe '#send_request' do

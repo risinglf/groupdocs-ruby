@@ -1,11 +1,11 @@
 module GroupDocs
-  class Job < GroupDocs::Api::Entity
+  class Job < Api::Entity
 
     extend Api::Helpers::Actions
     include Api::Helpers::Status
 
     #
-    # Returns array of recent jobs.
+    # Returns array of jobs.
     #
     # @param [Hash] options Hash of options
     # @option options [Integer] :page Page to start with
@@ -27,6 +27,25 @@ module GroupDocs
       json[:jobs].map do |job|
         Job.new(job)
       end
+    end
+
+    #
+    # Returns job by its identifier.
+    #
+    # @param [Integer] id
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [GroupDocs::Job]
+    #
+    def self.get!(id, access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/async/{{client_id}}/jobs/#{id}"
+      end.execute!
+
+      Job.new(json)
     end
 
     #
@@ -55,11 +74,17 @@ module GroupDocs
       end
       json = api.execute!
 
-      Job.new(id: json[:job_id])
+      Job.new(id: json[:job_id], guid: json[:job_guid])
     end
 
     # @attr [Integer] id
     attr_accessor :id
+    # @attr [String] guid
+    attr_accessor :guid
+    # @attr [String] name
+    attr_accessor :name
+    # @attr [Integer] priority
+    attr_accessor :priority
     # @attr [Array<Symbol>] actions
     attr_accessor :actions
     # @attr [Boolean] email_results
@@ -130,9 +155,13 @@ module GroupDocs
       end.execute!
 
       self.status = json[:job_status]
-      json[:inputs].map do |document|
-        document.merge!(file: GroupDocs::Storage::File.new(document))
-        Document.new(document)
+      if json[:inputs]
+        json[:inputs].map do |document|
+          document.merge!(file: GroupDocs::Storage::File.new(document))
+          Document.new(document)
+        end
+      else
+        []
       end
     end
 
@@ -165,6 +194,22 @@ module GroupDocs
     end
 
     #
+    # Deletes document with guid from job.
+    #
+    # @param [String] guid
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def delete_document!(guid, access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :DELETE
+        request[:path] = "/async/{{client_id}}/jobs/#{id}/documents/#{guid}"
+      end.execute!
+    end
+
+    #
     # Adds datasource to job document.
     #
     # @param [GroupDocs::Document] document
@@ -175,8 +220,6 @@ module GroupDocs
     #
     # @raise [ArgumentError] If document is not a GroupDocs::Document object
     # @raise [ArgumentError] If datasource is not a GroupDocs::DataSource object
-    #
-    # @todo returns 404 (http://scotland.groupdocs.com/jira/browse/CORE-384)
     #
     def add_datasource!(document, datasource, access = {})
       document.is_a?(GroupDocs::Document) or raise ArgumentError,

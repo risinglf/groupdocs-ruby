@@ -1,5 +1,5 @@
 module GroupDocs
-  class Document::Change < GroupDocs::Api::Entity
+  class Document::Change < Api::Entity
 
     # @attr [Integer] id
     attr_accessor :id

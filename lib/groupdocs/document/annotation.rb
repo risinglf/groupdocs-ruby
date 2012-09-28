@@ -1,5 +1,5 @@
 module GroupDocs
-  class Document::Annotation < GroupDocs::Api::Entity
+  class Document::Annotation < Api::Entity
 
     require 'groupdocs/document/annotation/reply'
 
@@ -17,6 +17,8 @@ module GroupDocs
     attr_accessor :sessionGuid
     # @attr [String] documentGuid
     attr_accessor :documentGuid
+    # @attr [String] creatorGuid
+    attr_accessor :creatorGuid
     # @attr [String] replyGuid
     attr_accessor :replyGuid
     # @attr [Time] createdOn
@@ -40,6 +42,8 @@ module GroupDocs
     alias_method :session_guid=,        :sessionGuid=
     alias_method :document_guid,        :documentGuid
     alias_method :document_guid=,       :documentGuid=
+    alias_method :creator_guid,         :creatorGuid
+    alias_method :creator_guid=,        :creatorGuid=
     alias_method :reply_guid,           :replyGuid
     alias_method :reply_guid=,          :replyGuid=
     alias_method :created_on,           :createdOn
@@ -156,7 +160,7 @@ module GroupDocs
     # Creates new annotation.
     #
     # @example
-    #   document = GroupDocs::Document.find!(:name, 'CV.doc')
+    #   document = GroupDocs::Storage::Folder.list!.first.to_document
     #   annotation = GroupDocs::Document::Annotation.new(document: document)
     #   annotation.create!
     #
@@ -270,6 +274,25 @@ module GroupDocs
       end.execute!
 
       self.annotation_position = { x: x, y: y }
+    end
+
+    #
+    # Sets access mode.
+    #
+    # @param [Symbol] mode
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def set_access!(mode, access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/ant/{{client_id}}/annotations/#{guid}/annotationAccess"
+        request[:request_body] = %w(public private).index(mode.to_s)
+      end.execute!
+
+      self.access = mode
     end
 
   end # Document::Annotation

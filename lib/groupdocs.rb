@@ -1,13 +1,13 @@
-require 'rest-client'
 require 'groupdocs/version'
 require 'groupdocs/errors'
 require 'groupdocs/api'
-require 'groupdocs/extensions'
 require 'groupdocs/datasource'
 require 'groupdocs/document'
 require 'groupdocs/job'
 require 'groupdocs/questionnaire'
+require 'groupdocs/signature'
 require 'groupdocs/storage'
+require 'groupdocs/subscription'
 require 'groupdocs/user'
 
 module GroupDocs
@@ -32,6 +32,15 @@ module GroupDocs
     #
     def api_server
       @api_server || 'https://api.groupdocs.com'
+    end
+
+    #
+    # Returns version of API.
+    #
+    # @return [String] API version. Default one if it has not been explicitly set
+    #
+    def api_version
+      @api_version || '2.0'
     end
 
     #

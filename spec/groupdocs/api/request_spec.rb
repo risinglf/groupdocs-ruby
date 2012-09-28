@@ -40,15 +40,10 @@ describe GroupDocs::Api::Request do
   describe '#execute!' do
     before(:each) do
       GroupDocs.stub(private_key: 'private_key')
-      subject.options[:method] = :get
-      subject.options[:path] = '/folders'
+      subject.options[:method]  = :get
+      subject.options[:path]    = '/folders'
       subject.options[:headers] = {}
       mock_api_server('{"status":"Ok"}')
-    end
-
-    it 'normalizes path' do
-      subject.should_receive(:normalize_path)
-      subject.execute!
     end
 
     it 'parses path' do

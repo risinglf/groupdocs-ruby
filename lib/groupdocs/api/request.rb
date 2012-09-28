@@ -1,4 +1,3 @@
-require 'json'
 require 'groupdocs/api/helpers'
 
 module GroupDocs
@@ -32,7 +31,8 @@ module GroupDocs
       # @option options [String] :path Path to send request to
       # @option options [Hash] :headers Additional HTTP headers
       # @option options [Hash] :access Access credentials hash
-      # @option options [Hash, File] :request_body Payload. If hash, will be converted to JSON, if File, will be send as is.
+      # @option options [Hash, String, Array, File] :request_body payload
+      # @option options [Boolean] :plain Send payload as plain text (i.e. do not convert to JSON)
       #
       # @yieldparam [Hash] options
       #
@@ -47,7 +47,6 @@ module GroupDocs
       # Executes API request to server.
       #
       # It performs the following actions step by step:
-      #   * Normalizes path (i.e. replace // with /)
       #   * Parses path (i.e. replaces client ID)
       #   * Prepends path with version if it's set
       #   * URL encodes path
@@ -59,7 +58,6 @@ module GroupDocs
       # @return [Hash, String] Parsed response
       #
       def execute!
-        normalize_path
         parse_path
         prepend_version
         url_encode_path
