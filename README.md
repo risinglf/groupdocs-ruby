@@ -23,7 +23,7 @@ Installing from source
 
 All "bang" methods (ending with exclamation sign) imply interaction with API server.
 
-Other methods (with expect to some methods - see documentation) do not operate with API Server
+Other methods (with expect to some, see documentation) do not operate with API Server
 
 ### Configuration
 
@@ -53,7 +53,9 @@ GroupDocs::Storage::Folder.create!('/folder', client_id: 'your_client_id', priva
 
 ### Documentation
 
-Reference to [this page](http://rubydoc.info/gems/groupdocs) for docs
+Reference to [this page](http://rubydoc.info/gems/groupdocs) for docs and examples.
+
+There are also some examples in [repository](https://github.com/groupdocs/groupdocs-ruby/tree/master/examples) and on [wiki](https://github.com/groupdocs/groupdocs-ruby/wiki)
 
 ### Entities
 
