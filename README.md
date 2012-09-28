@@ -36,8 +36,8 @@ GroupDocs.configure do |groupdocs|
   groupdocs.client_id = 'your_client_id'
   groupdocs.private_key = 'your_private_key'
   # optionally specify API server and version
-  groupdocs.api_server = 'https://dev-api.groupdocs.com'
-  groupdocs.api_version = '2.0'
+  groupdocs.api_server = 'https://dev-api.groupdocs.com' # default is 'https://api.groupdocs.com'
+  groupdocs.api_version = '3.0' # default is '2.0'
 end
 
 GroupDocs::Storage::Folder.create!('/folder')
@@ -49,9 +49,6 @@ You can also pass access credentials to particular requests
 ```ruby
 GroupDocs::Storage::Folder.create!('/folder', client_id: 'your_client_id', private_key: 'your_private_key')
 #=> #<GroupDocs::Storage::Folder:0x0000000171f432 @id=1, @name="folder", @url="http://groupdocs.com">
-
-GroupDocs::Document.find!(:name, 'CV.doc', client_id: 'your_client_id', private_key: 'your_private_key')
-#=> #<GroupDocs::Storage::Folder:0x0000000171f432 @id=1, @name="Folder1", @url="http://groupdocs.com">
 ```
 
 ### Entities
@@ -82,34 +79,6 @@ GroupDocs::Storage::Folder.new do |folder|
 end
 #=> #<GroupDocs::Storage::Folder:0x0000000171f432 @name="Folder">
 ```
-
-### Annotation API
-
-Read more about examples of using Annotation API on [wiki](https://github.com/p0deje/groupdocs-ruby/wiki/Annotation-API).
-
-### Assembly API
-
-Read more about examples of using Assembly API on [wiki](https://github.com/p0deje/groupdocs-ruby/wiki/Assembly-API).
-
-### Comparison API
-
-Read more about examples of using Comparison API on [wiki](https://github.com/p0deje/groupdocs-ruby/wiki/Comparison-API).
-
-### Document API
-
-Read more about examples of using Document API on [wiki](https://github.com/p0deje/groupdocs-ruby/wiki/Document-API).
-
-### Job API
-
-Read more about examples of using Job API on [wiki](https://github.com/p0deje/groupdocs-ruby/wiki/Job-API).
-
-### Signature API
-
-Not yet implemented.
-
-### Storage API
-
-Read more about examples of using Storage API on [wiki](https://github.com/p0deje/groupdocs-ruby/wiki/Storage-API).
 
 ### Copyright
 
