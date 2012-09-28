@@ -51,6 +51,10 @@ GroupDocs::Storage::Folder.create!('/folder', client_id: 'your_client_id', priva
 #=> #<GroupDocs::Storage::Folder:0x0000000171f432 @id=1, @name="folder", @url="http://groupdocs.com">
 ```
 
+### Documentation
+
+Reference to [this page](http://rubydoc.info/gems/groupdocs) for docs
+
 ### Entities
 
 All entities can be initialized in several ways.
