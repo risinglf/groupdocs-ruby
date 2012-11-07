@@ -205,16 +205,17 @@ module GroupDocs
     # Sets annotation collaborators to given emails.
     #
     # @param [Array] emails List of collaborators' email addresses
+    # @param [Integer] version Annotation version
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
     # @return [Array<GroupDocs::User>]
     #
-    def collaborators_set!(emails, access = {})
+    def set_collaborators!(emails, version = 1, access = {})
       json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
-        request[:path] = "/ant/{{client_id}}/files/#{document.file.guid}/collaborators"
+        request[:path] = "/ant/{{client_id}}/files/#{document.file.guid}/version/#{version}/collaborators"
         request[:request_body] = emails
       end.execute!
 
@@ -222,8 +223,29 @@ module GroupDocs
         User.new(collaborator)
       end
     end
-    # note that aliased version cannot accept access credentials hash
-    alias_method :collaborators=, :collaborators_set!
+
+    #
+    # Adds annotation collaborator.
+    #
+    # @param [Array] emails List of collaborators' email addresses
+    # @param [Integer] version Annotation version
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<GroupDocs::User>]
+    #
+    def set_collaborators!(emails, version = 1, access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/ant/{{client_id}}/files/#{document.file.guid}/version/#{version}/collaborators"
+        request[:request_body] = emails
+      end.execute!
+
+      json[:collaborators].map do |collaborator|
+        User.new(collaborator)
+      end
+    end
 
     #
     # Removes annotation.
