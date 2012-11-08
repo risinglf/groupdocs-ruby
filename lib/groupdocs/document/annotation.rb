@@ -277,6 +277,24 @@ module GroupDocs
     end
 
     #
+    # Moves annotation marker to given coordinates.
+    #
+    # @param [Integer, Float] x
+    # @param [Integer, Float] y
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def move_marker!(x, y, access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/ant/{{client_id}}/annotations/#{guid}/markerPosition"
+        request[:request_body] = { x: x, y: y }
+      end.execute!
+    end
+
+    #
     # Sets access mode.
     #
     # @param [Symbol] mode
