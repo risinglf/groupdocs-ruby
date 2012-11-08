@@ -13,7 +13,8 @@ module GroupDocs
           convert_body:        32,
           bind_data:           64,
           print:              128,
-          import_annotations: 256,
+          compare:            256,
+          import_annotations: 512,
         }
 
         #
