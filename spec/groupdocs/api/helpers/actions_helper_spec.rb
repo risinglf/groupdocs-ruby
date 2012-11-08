@@ -7,7 +7,7 @@ describe GroupDocs::Api::Helpers::Actions do
   end
 
   let(:actions) do
-    %w(convert combine compress_zip compress_rar trace convert_body bind_data print import_annotations)
+    %w(convert combine compress_zip compress_rar trace convert_body bind_data print compare import_annotations)
   end
 
   describe '.convert_actions_to_byte' do
@@ -31,7 +31,7 @@ describe GroupDocs::Api::Helpers::Actions do
     it 'returns correct byte flag' do
       flag = subject.convert_actions_to_byte(actions)
       flag.should be_an(Integer)
-      flag.should == 511
+      flag.should == 1023
     end
   end
 end

@@ -280,5 +280,20 @@ module GroupDocs
       end.execute!
     end
 
+    #
+    # Deletes draft job.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def delete!(access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :DELETE
+        request[:path] = "/async/{{client_id}}/jobs/#{id}"
+      end.execute!
+    end
+
   end # Job
 end # GroupDocs

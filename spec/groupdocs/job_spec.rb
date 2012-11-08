@@ -268,9 +268,27 @@ describe GroupDocs::Job do
       mock_api_server(load_json('job_update'))
     end
 
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.update!({}, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
     it 'parses status' do
       subject.should_receive(:parse_status).with(:draft).and_return(-1)
       subject.update!(status: :draft)
+    end
+  end
+
+  describe '#delete!' do
+    before(:each) do
+      mock_api_server('{ "status": "Ok", "result": {} }')
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.delete!(client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
     end
   end
 end
