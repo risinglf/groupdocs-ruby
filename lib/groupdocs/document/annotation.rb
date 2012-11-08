@@ -2,6 +2,7 @@ module GroupDocs
   class Document::Annotation < Api::Entity
 
     require 'groupdocs/document/annotation/reply'
+    require 'groupdocs/document/annotation/reviewer'
 
     include Api::Helpers::AccessMode
 
