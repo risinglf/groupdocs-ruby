@@ -21,6 +21,31 @@ module GroupDocs
       end
     end
 
+    #
+    # Sets reviewer contacts to passed array.
+    #
+    # Please, note that it removes existing reviewer contacts.
+    #
+    # @example Add new reviewer contact
+    #   reviewers = GroupDocs::Document::Annotation::Reviewer.all!
+    #   reviewers << GroupDocs::Document::Annotation::Reviewer.new(full_name: 'John Smith', email_address: 'john@smith.com')
+    #   GroupDocs::Document::Annotation::Reviewer.set! reviewers
+    #
+    # @param [Array<GroupDocs::Document::Annotation::Reviewer>] reviewers
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def self.set!(reviewers, access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = '/ant/{{client_id}}/reviewerContacts'
+        request[:request_body] = reviewers.each.map(&:to_hash)
+      end.execute!
+    end
+
+
     # @attr [String] emailAddress
     attr_accessor :emailAddress
     # @attr [String] FullName
@@ -31,22 +56,6 @@ module GroupDocs
     alias_method :email_address=, :emailAddress=
     alias_method :full_name,      :FullName
     alias_method :full_name=,     :FullName=
-
-    #
-    # Adds new reviewer contact.
-    #
-    # @param [Hash] access Access credentials
-    # @option access [String] :client_id
-    # @option access [String] :private_key
-    #
-    def add!(access = {})
-      Api::Request.new do |request|
-        request[:access] = access
-        request[:method] = :PUT
-        request[:path] = '/ant/{{client_id}}/reviewerContacts'
-        request[:request_body] = [to_hash] + self.class.all!.map(&:to_hash)
-      end.execute!
-    end
 
   end # Document::Annotation::Reviewer
 end # GroupDocs
