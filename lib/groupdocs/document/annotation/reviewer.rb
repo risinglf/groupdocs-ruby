@@ -43,8 +43,8 @@ module GroupDocs
       Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
-        request[:path] = '/ant/{{client_id}}/contacts'
-        request[:request_body] = to_hash
+        request[:path] = '/ant/{{client_id}}/reviewerContacts'
+        request[:request_body] = [to_hash] + self.class.all!.map(&:to_hash)
       end.execute!
     end
 
