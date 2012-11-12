@@ -226,6 +226,27 @@ module GroupDocs
     end
 
     #
+    # Adds annotation collaborator.
+    #
+    # @param [GroupDocs::Document::Annotation::Reviewer] collaborator
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<GroupDocs::User>]
+    #
+    def add_collaborator!(collaborator, access = {})
+      collaborator.is_a?(GroupDocs::Document::Annotation::Reviewer) or raise ArgumentError,
+        "Collaborator should be GroupDocs::Document::Annotation::Reviewer object, received: #{collaborator.inspect}"
+
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :POST
+        request[:path] = "/ant/{{client_id}}/files/#{document.file.guid}/collaborators"
+        request[:request_body] = collaborator.to_hash
+      end.execute!
+    end
+
+    #
     # Removes annotation.
     #
     # @param [Hash] access Access credentials
