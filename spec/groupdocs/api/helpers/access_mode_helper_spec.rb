@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe GroupDocs::Api::Helpers::AccessMode do
-
   subject do
     GroupDocs::Storage::Folder.new
   end

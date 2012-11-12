@@ -506,7 +506,7 @@ describe GroupDocs::Document do
     end
 
     it 'converts response byte flag into array of access rights' do
-      subject.should_receive(:convert_byte_to_link_access_rights).with(15)
+      subject.should_receive(:convert_byte_to_access_rights).with(15)
       subject.shared_link_access_rights!
     end
 
@@ -536,7 +536,7 @@ describe GroupDocs::Document do
     end
 
     it 'converts array of access rights into byte flag' do
-      subject.should_receive(:convert_link_access_rights_to_byte).with(%w(view))
+      subject.should_receive(:convert_access_rights_to_byte).with(%w(view))
       subject.set_shared_link_access_rights! %w(view)
     end
   end
@@ -562,42 +562,6 @@ describe GroupDocs::Document do
 
     it 'returns false if neither self nor file responds to method' do
       subject.respond_to?(:unknown).should be_false
-    end
-  end
-
-  describe '#convert_link_access_rights_to_byte' do
-    let(:rights) { %w(export view proof download) }
-
-    it 'raises error if rights is not an array' do
-      -> { subject.send(:convert_link_access_rights_to_byte, :export) }.should raise_error(ArgumentError)
-    end
-
-    it 'raises error if right is unknown' do
-      -> { subject.send(:convert_link_access_rights_to_byte, %w(unknown)) }.should raise_error(ArgumentError)
-    end
-
-    it 'converts each right to Symbol' do
-      rights.each do |right|
-        symbol = right.to_sym
-        right.should_receive(:to_sym).and_return(symbol)
-      end
-      subject.send(:convert_link_access_rights_to_byte, rights)
-    end
-
-    it 'returns correct byte flag' do
-      subject.send(:convert_link_access_rights_to_byte, rights).should == 15
-    end
-  end
-
-  describe '#convert_byte_to_link_access_rights' do
-    let(:rights) { %w(export view proof) }
-
-    it 'raises error if rights is not an integer' do
-      -> { subject.send(:convert_byte_to_link_access_rights, :export) }.should raise_error(ArgumentError)
-    end
-
-    it 'returns correct rights array flag' do
-      subject.send(:convert_byte_to_link_access_rights, 13).should =~ rights.map(&:to_sym)
     end
   end
 end

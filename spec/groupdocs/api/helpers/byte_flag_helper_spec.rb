@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe GroupDocs::Api::Helpers::ByteFlag do
   subject do
-    GroupDocs::Document.new(file: GroupDocs::Storage::File.new)
+    GroupDocs::Document::Annotation::Reviewer.new
   end
 
-  let(:value_to_byte) { GroupDocs::Document::LINK_ACCESS_RIGHTS }
+  let(:value_to_byte) { GroupDocs::Api::Helpers::AccessRights::ACCESS_RIGHTS }
 
   describe '#byte_from_array' do
     it 'returns correct byte flag' do
