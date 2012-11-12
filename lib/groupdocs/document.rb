@@ -15,7 +15,15 @@ module GroupDocs
       public:     3,
     }
 
+    LINK_ACCESS_RIGHTS = {
+      export:   1,
+      download: 2,
+      proof:    4,
+      view:     8,
+    }
+
     include Api::Helpers::AccessMode
+    include Api::Helpers::ByteFlag
     include Api::Helpers::Status
 
     #
@@ -536,6 +544,46 @@ module GroupDocs
     end
 
     #
+    # Returns an array of access rights for shared link.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<Symbol>]
+    #
+    def shared_link_access_rights!(access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/ant/{{client_id}}/files/#{file.guid}/sharedLinkAccessRights"
+      end.execute!
+
+      if json[:accessRights]
+        convert_byte_to_link_access_rights json[:accessRights]
+      else
+        []
+      end
+    end
+
+    #
+    # Sets access rights for shared link.
+    #
+    # @param [Array<Symbol>] rights
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<Symbol>]
+    #
+    def set_shared_link_access_rights!(rights, access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/ant/{{client_id}}/files/#{file.guid}/sharedLinkAccessRights"
+        request[:request_body] = convert_link_access_rights_to_byte(rights)
+      end.execute!
+    end
+
+    #
     # Pass all unknown methods to file.
     #
 
@@ -545,6 +593,42 @@ module GroupDocs
 
     def respond_to?(method)
       super or file.respond_to?(method)
+    end
+
+    private
+
+    #
+    # Converts shared link access rights array to byte flag.
+    #
+    # @param [Array<String, Symbol>] rights
+    # @return [Integer]
+    # @raise [ArgumentError] if rights is not an array
+    # @raise [ArgumentError] if right is unknown
+    # @api private
+    #
+    def convert_link_access_rights_to_byte(rights)
+      rights.is_a?(Array) or raise ArgumentError, "Rights should be an array, received: #{rights.inspect}"
+      rights = rights.map(&:to_sym)
+
+      possible_rights = LINK_ACCESS_RIGHTS.map { |hash| hash.first }
+      rights.each do |right|
+        possible_rights.include?(right) or raise ArgumentError, "Unknown access right: #{rights.inspect}"
+      end
+
+      byte_from_array(rights, LINK_ACCESS_RIGHTS)
+    end
+
+    #
+    # Converts byte flag to shared link access rights array.
+    #
+    # @param [Integer] rights
+    # @return [Array<Symbol>]
+    # @raise [ArgumentError] if rights is not integer
+    # @api private
+    #
+    def convert_byte_to_link_access_rights(rights)
+      rights.is_a?(Integer) or raise ArgumentError, "Rights should be an integer, received: #{rights.inspect}"
+      array_from_byte(rights, LINK_ACCESS_RIGHTS)
     end
 
   end # Document

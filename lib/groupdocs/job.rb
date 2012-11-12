@@ -1,7 +1,21 @@
 module GroupDocs
   class Job < Api::Entity
 
-    extend Api::Helpers::Actions
+    ACTIONS = {
+      none:                 0,
+      convert:              1,
+      combine:              2,
+      compress_zip:         4,
+      compress_rar:         8,
+      trace:               16,
+      convert_body:        32,
+      bind_data:           64,
+      print:              128,
+      compare:            256,
+      import_annotations: 512,
+    }
+
+    extend Api::Helpers::ByteFlag
     include Api::Helpers::Status
 
     #
@@ -293,6 +307,29 @@ module GroupDocs
         request[:method] = :DELETE
         request[:path] = "/async/{{client_id}}/jobs/#{id}"
       end.execute!
+    end
+
+    private
+
+    #
+    # Converts actions array to byte flag.
+    #
+    # @param [Array<String, Symbol>] actions
+    # @return [Integer]
+    # @raise [ArgumentError] if actions is not an array
+    # @raise [ArgumentError] if action is unknown
+    # @api private
+    #
+    def self.convert_actions_to_byte(actions)
+      actions.is_a?(Array) or raise ArgumentError, "Actions should be an array, received: #{actions.inspect}"
+      actions = actions.map(&:to_sym)
+
+      possible_actions = ACTIONS.map { |hash| hash.first }
+      actions.each do |action|
+        possible_actions.include?(action) or raise ArgumentError, "Unknown action: #{action.inspect}"
+      end
+
+      byte_from_array(actions, ACTIONS)
     end
 
   end # Job

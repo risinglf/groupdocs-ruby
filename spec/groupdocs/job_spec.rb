@@ -291,4 +291,28 @@ describe GroupDocs::Job do
       end.should_not raise_error(ArgumentError)
     end
   end
+
+  describe '#convert_actions_to_byte' do
+    let(:actions) { %w(convert compare) }
+
+    it 'raises error if actions is not an array' do
+      -> { described_class.convert_actions_to_byte(:export) }.should raise_error(ArgumentError)
+    end
+
+    it 'raises error if action is unknown' do
+      -> { described_class.convert_actions_to_byte(%w(unknown)) }.should raise_error(ArgumentError)
+    end
+
+    it 'converts each action to Symbol' do
+      actions.each do |action|
+        symbol = action.to_sym
+        action.should_receive(:to_sym).and_return(symbol)
+      end
+      described_class.convert_actions_to_byte(actions)
+    end
+
+    it 'returns correct byte flag' do
+      described_class.convert_actions_to_byte(actions).should == 257
+    end
+  end
 end
