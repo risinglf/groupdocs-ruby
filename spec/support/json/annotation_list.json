@@ -10,15 +10,15 @@
             "sessionGuid": null,
             "box":
               {
-                "X": 0.8938259,
-                "Y": 0.31941694,
-                "Width": 0.0457534268,
-                "Height": 0.01388945
+                "x": 0.8938259,
+                "y": 0.31941694,
+                "width": 0.0457534268,
+                "height": 0.01388945
               },
             "annotationPosition":
               {
-                "X": null,
-                "Y": null
+                "x": null,
+                "y": null
               },
             "type": "Text",
             "access": "Public",

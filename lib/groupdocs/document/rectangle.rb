@@ -1,26 +1,20 @@
 module GroupDocs
   class Document::Rectangle < Api::Entity
 
-    # @attr [Float] X
-    attr_accessor :X
-    # @attr [Float] Y
-    attr_accessor :Y
-    # @attr [Float] Width
-    attr_accessor :Width
-    # @attr [Float] Height
-    attr_accessor :Height
+    # @attr [Float] x
+    attr_accessor :x
+    # @attr [Float] y
+    attr_accessor :y
+    # @attr [Float] width
+    attr_accessor :width
+    # @attr [Float] height
+    attr_accessor :height
 
     # Human-readable accessors
-    alias_method :x,      :X
-    alias_method :x=,     :X=
-    alias_method :y,      :Y
-    alias_method :y=,     :Y=
-    alias_method :w,      :Width
-    alias_method :w=,     :Width=
-    alias_method :width,  :w
-    alias_method :h,      :Height
-    alias_method :h=,     :Height=
-    alias_method :height, :Height
+    alias_method :w,  :width
+    alias_method :w=, :width=
+    alias_method :h,  :height
+    alias_method :h=, :height=
 
   end # Document::Rectangle
 end # GroupDocs
