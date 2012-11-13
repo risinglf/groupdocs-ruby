@@ -1,3 +1,25 @@
+## v1.1
+
+**New**
+
+* Added `Annotation::Reviewer` class
+* Added `Reviewer.all!`
+* Added `Reviewer.set!`
+* Added `Job#delete!`
+* Added `Document#shared_link_access_rights!`
+* Added `Document#set_shared_link_access_rights!`
+* Added `Document#set_reviewers!`
+* Added `Document#add_collaborotor!`
+* More attributes for `User` class
+* Added `Annotation#move_marker!`
+* Added new `Job` action - `:compare`
+
+**Changes**
+
+* Moved `Annotation#collaborators!` and `Annotation#set_collaborators!` to `Document` class as it makes more sense
+* `Document#set_collaborators!` now accepts options `version` parameter (default to `1`)
+
+
 ## v1.0
 
 **New**
