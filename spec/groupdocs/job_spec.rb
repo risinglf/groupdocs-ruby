@@ -268,9 +268,51 @@ describe GroupDocs::Job do
       mock_api_server(load_json('job_update'))
     end
 
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.update!({}, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
     it 'parses status' do
       subject.should_receive(:parse_status).with(:draft).and_return(-1)
       subject.update!(status: :draft)
+    end
+  end
+
+  describe '#delete!' do
+    before(:each) do
+      mock_api_server('{ "status": "Ok", "result": {} }')
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.delete!(client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '#convert_actions_to_byte' do
+    let(:actions) { %w(convert compare) }
+
+    it 'raises error if actions is not an array' do
+      -> { described_class.convert_actions_to_byte(:export) }.should raise_error(ArgumentError)
+    end
+
+    it 'raises error if action is unknown' do
+      -> { described_class.convert_actions_to_byte(%w(unknown)) }.should raise_error(ArgumentError)
+    end
+
+    it 'converts each action to Symbol' do
+      actions.each do |action|
+        symbol = action.to_sym
+        action.should_receive(:to_sym).and_return(symbol)
+      end
+      described_class.convert_actions_to_byte(actions)
+    end
+
+    it 'returns correct byte flag' do
+      described_class.convert_actions_to_byte(actions).should == 257
     end
   end
 end

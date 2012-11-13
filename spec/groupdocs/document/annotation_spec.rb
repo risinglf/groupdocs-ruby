@@ -184,50 +184,6 @@ describe GroupDocs::Document::Annotation do
     end
   end
 
-  describe '#collaborators!' do
-    before(:each) do
-      mock_api_server(load_json('annotation_collaborators_get'))
-    end
-
-    it 'accepts access credentials hash' do
-      lambda do
-        subject.collaborators!(client_id: 'client_id', private_key: 'private_key')
-      end.should_not raise_error(ArgumentError)
-    end
-
-    it 'returns an array of GroupDocs::User objects' do
-      users = subject.collaborators!
-      users.should be_an(Array)
-      users.each do |user|
-        user.should be_a(GroupDocs::User)
-      end
-    end
-  end
-
-  describe '#collaborators_set!' do
-    before(:each) do
-      mock_api_server(load_json('annotation_collaborators_set'))
-    end
-
-    it 'accepts access credentials hash' do
-      lambda do
-        subject.collaborators_set!(%w(test1@email.com), client_id: 'client_id', private_key: 'private_key')
-      end.should_not raise_error(ArgumentError)
-    end
-
-    it 'returns an array of GroupDocs::User objects' do
-      users = subject.collaborators_set!(%w(test1@email.com))
-      users.should be_an(Array)
-      users.each do |user|
-        user.should be_a(GroupDocs::User)
-      end
-    end
-
-    it 'is aliased to #collaborators=' do
-      subject.should have_alias(:collaborators=, :collaborators_set!)
-    end
-  end
-
   describe '#remove!' do
     before(:each) do
       mock_api_server(load_json('annotation_remove'))
@@ -262,6 +218,18 @@ describe GroupDocs::Document::Annotation do
       lambda do
         subject.move!(10, 10)
       end.should change(subject, :annotation_position).to(x: 10, y: 10)
+    end
+  end
+
+  describe '#move_marker!' do
+    before(:each) do
+      mock_api_server('{ "status": "Ok", "result": {}}')
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.move_marker!(10, 10, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
     end
   end
 

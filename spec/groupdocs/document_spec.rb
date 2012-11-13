@@ -494,6 +494,144 @@ describe GroupDocs::Document do
     end
   end
 
+
+  describe '#collaborators!' do
+    before(:each) do
+      mock_api_server(load_json('annotation_collaborators_get'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.collaborators!(client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns an array of GroupDocs::User objects' do
+      users = subject.collaborators!
+      users.should be_an(Array)
+      users.each do |user|
+        user.should be_a(GroupDocs::User)
+      end
+    end
+  end
+
+  describe '#set_collaborators!' do
+    before(:each) do
+      mock_api_server(load_json('annotation_collaborators_set'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.set_collaborators!(%w(test1@email.com), 1, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'accepts version' do
+      lambda do
+        subject.set_collaborators!(%w(test1@email.com), 1)
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns an array of GroupDocs::User objects' do
+      users = subject.set_collaborators!(%w(test1@email.com))
+      users.should be_an(Array)
+      users.each do |user|
+        user.should be_a(GroupDocs::User)
+      end
+    end
+  end
+
+  describe '#add_collaborator!' do
+    before(:each) do
+      mock_api_server(load_json('annotation_collaborators_get'))
+    end
+
+    let!(:collaborator) { GroupDocs::User.new }
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.add_collaborator!(collaborator, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'uses hashed version of collaborator as request body' do
+      collaborator.should_receive(:to_hash)
+      subject.add_collaborator! collaborator
+    end
+
+    it 'raises error if collaborator is not an instance of GroupDocs::User' do
+      -> { subject.add_collaborator!('collaborator') }.should raise_error(ArgumentError)
+    end
+  end
+
+  describe '#set_reviewers!' do
+    before(:each) do
+      mock_api_server('{ "status": "Ok", "result": {}}')
+    end
+
+    let!(:reviewers) { [GroupDocs::User.new, GroupDocs::User.new] }
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.set_reviewers!(reviewers, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'uses hashed version of each reviewer as request body' do
+      reviewers.each do |reviewer|
+        reviewer.should_receive(:to_hash)
+      end
+      subject.set_reviewers! reviewers
+    end
+  end
+
+  describe '#shared_link_access_rights!' do
+    before(:each) do
+      mock_api_server('{ "status": "Ok", "result": { "accessRights": 15 }}')
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.shared_link_access_rights!(client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'converts response byte flag into array of access rights' do
+      subject.should_receive(:convert_byte_to_access_rights).with(15)
+      subject.shared_link_access_rights!
+    end
+
+    it 'returns array of access rights symbols' do
+      access_rights = subject.shared_link_access_rights!
+      access_rights.should be_an(Array)
+      access_rights.each do |access_right|
+        access_right.should be_a(Symbol)
+      end
+    end
+
+    it 'returns empty array if access rights is null' do
+      mock_api_server('{ "status": "Ok", "result": { "accessRights": null }}')
+      subject.shared_link_access_rights!.should be_empty
+    end
+  end
+
+  describe '#set_shared_link_access_rights!' do
+    before(:each) do
+      mock_api_server('{ "status": "Ok", "result": {}}')
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.set_shared_link_access_rights!(%w(view), client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'converts array of access rights into byte flag' do
+      subject.should_receive(:convert_access_rights_to_byte).with(%w(view))
+      subject.set_shared_link_access_rights! %w(view)
+    end
+  end
+
   describe '#method_missing' do
     it 'passes unknown methods to file object' do
       -> { subject.name }.should_not raise_error(NoMethodError)

@@ -2,6 +2,7 @@ module GroupDocs
   class Document::Annotation < Api::Entity
 
     require 'groupdocs/document/annotation/reply'
+    require 'groupdocs/document/annotation/reviewer'
 
     include Api::Helpers::AccessMode
 
@@ -182,50 +183,6 @@ module GroupDocs
     end
 
     #
-    # Returns annotation collaborators.
-    #
-    # @param [Hash] access Access credentials
-    # @option access [String] :client_id
-    # @option access [String] :private_key
-    # @return [Array<GroupDocs::User>]
-    #
-    def collaborators!(access = {})
-      json = Api::Request.new do |request|
-        request[:access] = access
-        request[:method] = :GET
-        request[:path] = "/ant/{{client_id}}/files/#{document.file.guid}/collaborators"
-      end.execute!
-
-      json[:collaborators].map do |collaborator|
-        User.new(collaborator)
-      end
-    end
-
-    #
-    # Sets annotation collaborators to given emails.
-    #
-    # @param [Array] emails List of collaborators' email addresses
-    # @param [Hash] access Access credentials
-    # @option access [String] :client_id
-    # @option access [String] :private_key
-    # @return [Array<GroupDocs::User>]
-    #
-    def collaborators_set!(emails, access = {})
-      json = Api::Request.new do |request|
-        request[:access] = access
-        request[:method] = :PUT
-        request[:path] = "/ant/{{client_id}}/files/#{document.file.guid}/collaborators"
-        request[:request_body] = emails
-      end.execute!
-
-      json[:collaborators].map do |collaborator|
-        User.new(collaborator)
-      end
-    end
-    # note that aliased version cannot accept access credentials hash
-    alias_method :collaborators=, :collaborators_set!
-
-    #
     # Removes annotation.
     #
     # @param [Hash] access Access credentials
@@ -274,6 +231,24 @@ module GroupDocs
       end.execute!
 
       self.annotation_position = { x: x, y: y }
+    end
+
+    #
+    # Moves annotation marker to given coordinates.
+    #
+    # @param [Integer, Float] x
+    # @param [Integer, Float] y
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def move_marker!(x, y, access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/ant/{{client_id}}/annotations/#{guid}/markerPosition"
+        request[:request_body] = { x: x, y: y }
+      end.execute!
     end
 
     #
