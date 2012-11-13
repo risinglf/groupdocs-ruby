@@ -537,6 +537,94 @@ module GroupDocs
     end
 
     #
+    # Returns document annotations collaborators.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<GroupDocs::User>]
+    #
+    def collaborators!(access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/ant/{{client_id}}/files/#{file.guid}/collaborators"
+      end.execute!
+
+      json[:collaborators].map do |collaborator|
+        User.new(collaborator)
+      end
+    end
+
+    #
+    # Sets document annotations collaborators to given emails.
+    #
+    # @param [Array<String>] emails List of collaborators' email addresses
+    # @param [Integer] version Annotation version
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<GroupDocs::User>]
+    #
+    def set_collaborators!(emails, version = 1, access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/ant/{{client_id}}/files/#{file.guid}/version/#{version}/collaborators"
+        request[:request_body] = emails
+      end.execute!
+
+      json[:collaborators].map do |collaborator|
+        User.new(collaborator)
+      end
+    end
+
+    #
+    # Adds document annotations collaborator.
+    #
+    # @param [GroupDocs::User] collaborator
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def add_collaborator!(collaborator, access = {})
+      collaborator.is_a?(GroupDocs::User) or raise ArgumentError,
+        "Collaborator should be GroupDocs::User object, received: #{collaborator.inspect}"
+
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :POST
+        request[:path] = "/ant/{{client_id}}/files/#{file.guid}/collaborators"
+        request[:request_body] = collaborator.to_hash
+      end.execute!
+    end
+
+    #
+    # Sets reviewers for document.
+    #
+    # @example Change reviewer rights
+    #   reviewers = document.collaborators!
+    #   reviewers.each do |reviewer|
+    #     reviewer.access_rights = %w(view)
+    #   end
+    #   document.set_reviewers! reviewers
+    #
+    # @param [Array<GroupDocs::User>] reviewers
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<Symbol>]
+    #
+    def set_reviewers!(reviewers, access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/ant/{{client_id}}/files/#{file.guid}/reviewerRights"
+        request[:request_body] = reviewers.map(&:to_hash)
+      end.execute!
+    end
+
+    #
     # Returns an array of access rights for shared link.
     #
     # @param [Hash] access Access credentials
@@ -573,28 +661,6 @@ module GroupDocs
         request[:method] = :PUT
         request[:path] = "/ant/{{client_id}}/files/#{file.guid}/sharedLinkAccessRights"
         request[:request_body] = convert_access_rights_to_byte(rights)
-      end.execute!
-    end
-
-    #
-    # Sets reviewers for document.
-    #
-    # @param [Array<GroupDocs::Document::Annotation::Reviewer>] reviewers
-    # @param [Hash] access Access credentials
-    # @option access [String] :client_id
-    # @option access [String] :private_key
-    # @return [Array<Symbol>]
-    #
-    def set_reviewers!(reviewers, access = {})
-      # append primaryEmail field
-      reviewers = reviewers.map(&:to_hash)
-      reviewers.each { |reviewer| reviewer[:primaryEmail] = reviewer.delete(:emailAddress) }
-
-      json = Api::Request.new do |request|
-        request[:access] = access
-        request[:method] = :PUT
-        request[:path] = "/ant/{{client_id}}/files/#{file.guid}/reviewerRights"
-        request[:request_body] = reviewers
       end.execute!
     end
 

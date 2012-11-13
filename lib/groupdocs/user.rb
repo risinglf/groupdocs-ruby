@@ -1,6 +1,8 @@
 module GroupDocs
   class User < Api::Entity
 
+    include Api::Helpers::AccessRights
+
     #
     # Returns current user profile.
     #
@@ -54,12 +56,37 @@ module GroupDocs
     attr_accessor :news_enabled
     # @attr [Time] signed_up_on
     attr_accessor :signed_up_on
+    # @attr [Integer] color
+    attr_accessor :color
+    # @attr [String] customEmailMessage
+    attr_accessor :customEmailMessage
 
     # Human-readable accessors
-    alias_method :first_name,  :firstname
-    alias_method :first_name=, :firstname=
-    alias_method :last_name,   :lastname
-    alias_method :last_name=,  :lastname=
+    alias_method :first_name,            :firstname
+    alias_method :first_name=,           :firstname=
+    alias_method :last_name,             :lastname
+    alias_method :last_name=,            :lastname=
+    alias_method :custom_email_message,  :customEmailMessage
+    alias_method :custom_email_message=, :customEmailMessage=
+
+    #
+    # Converts access rights to human-readable format flag.
+    # @return [Array<Symbol>]
+    #
+    def access_rights
+      convert_byte_to_access_rights @access_rights if @access_rights
+    end
+
+    #
+    # Converts access rights to machine-readable format flag.
+    # @param [Array<Symbol>] rights
+    #
+    def access_rights=(rights)
+      if rights.is_a?(Array)
+        rights = convert_access_rights_to_byte(rights)
+      end
+      @access_rights = rights
+    end
 
     #
     # Converts timestamp which is return by API server to Time object.

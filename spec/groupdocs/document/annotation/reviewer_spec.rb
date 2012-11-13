@@ -45,39 +45,13 @@ describe GroupDocs::Document::Annotation::Reviewer do
     end
   end
 
-  it { should respond_to(:id)                  }
-  it { should respond_to(:id=)                 }
-  it { should respond_to(:guid)                }
-  it { should respond_to(:guid=)               }
-  it { should respond_to(:color)               }
-  it { should respond_to(:color=)              }
-  it { should respond_to(:emailAddress)        }
-  it { should respond_to(:emailAddress=)       }
-  it { should respond_to(:FullName)            }
-  it { should respond_to(:FullName=)           }
-  it { should respond_to(:accessRights)        }
-  it { should respond_to(:accessRights=)       }
-  it { should respond_to(:customEmailMessage)  }
-  it { should respond_to(:customEmailMessage=) }
+  it { should respond_to(:emailAddress)  }
+  it { should respond_to(:emailAddress=) }
+  it { should respond_to(:FullName)      }
+  it { should respond_to(:FullName=)     }
 
-  it { should have_alias(:email_address, :emailAddress)                }
-  it { should have_alias(:email_address=, :emailAddress=)              }
-  it { should have_alias(:full_name, :FullName)                        }
-  it { should have_alias(:full_name=, :FullName=)                      }
-  it { should have_alias(:custom_email_message, :customEmailMessage)   }
-  it { should have_alias(:custom_email_message=, :customEmailMessage=) }
-
-  describe '#access_rights' do
-    it 'returns rights in human-readable format' do
-      subject.instance_variable_set(:@accessRights, 15)
-      subject.access_rights.should =~ [:export, :view, :proof, :download]
-    end
-  end
-
-  describe '#access_rights=' do
-    it 'converts rights in machine-readable format' do
-      subject.access_rights = %w(export view proof download)
-      subject.instance_variable_get(:@accessRights).should == 15
-    end
-  end
+  it { should have_alias(:email_address, :emailAddress)   }
+  it { should have_alias(:email_address=, :emailAddress=) }
+  it { should have_alias(:full_name, :FullName)           }
+  it { should have_alias(:full_name=, :FullName=)         }
 end

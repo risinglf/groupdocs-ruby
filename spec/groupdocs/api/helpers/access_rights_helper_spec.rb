@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe GroupDocs::Api::Helpers::AccessRights do
   subject do
-    GroupDocs::Document::Annotation::Reviewer.new
+    GroupDocs::User.new
   end
 
   describe '#convert_access_rights_to_byte' do

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe GroupDocs::Api::Helpers::ByteFlag do
   subject do
-    GroupDocs::Document::Annotation::Reviewer.new
+    GroupDocs::User.new
   end
 
   let(:value_to_byte) { GroupDocs::Api::Helpers::AccessRights::ACCESS_RIGHTS }
