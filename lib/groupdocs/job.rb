@@ -244,7 +244,7 @@ module GroupDocs
       Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
-        request[:path] = "/async/{{client_id}}/jobs/#{id}/files/#{document.file.guid}/datasources/#{datasource.id}"
+        request[:path] = "/async/{{client_id}}/jobs/#{id}/files/#{document.file.id}/datasources/#{datasource.id}"
       end.execute!
     end
 
