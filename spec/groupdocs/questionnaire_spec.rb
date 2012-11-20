@@ -3,6 +3,7 @@ require 'spec_helper'
 describe GroupDocs::Questionnaire do
 
   it_behaves_like GroupDocs::Api::Entity
+  include_examples GroupDocs::Api::Helpers::Status
 
   describe '.all!' do
     before(:each) do
@@ -65,8 +66,28 @@ describe GroupDocs::Questionnaire do
     end
   end
 
-  it { should respond_to(:pages)  }
-  it { should respond_to(:pages=) }
+  it { should respond_to(:id)                   }
+  it { should respond_to(:id=)                  }
+  it { should respond_to(:guid)                 }
+  it { should respond_to(:guid=)                }
+  it { should respond_to(:name)                 }
+  it { should respond_to(:name=)                }
+  it { should respond_to(:descr)                }
+  it { should respond_to(:descr=)               }
+  it { should respond_to(:pages)                }
+  it { should respond_to(:pages=)               }
+  it { should respond_to(:resolved_executions)  }
+  it { should respond_to(:resolved_executions=) }
+  it { should respond_to(:assigned_questions)   }
+  it { should respond_to(:assigned_questions=)  }
+  it { should respond_to(:total_questions)      }
+  it { should respond_to(:total_questions=)     }
+  it { should respond_to(:modified)             }
+  it { should respond_to(:modified=)            }
+  it { should respond_to(:expires)              }
+  it { should respond_to(:expires=)             }
+  it { should respond_to(:document_ids)         }
+  it { should respond_to(:document_ids=)        }
 
   it { should have_alias(:description, :descr)   }
   it { should have_alias(:description=, :descr=) }
