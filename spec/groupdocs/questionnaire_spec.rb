@@ -12,8 +12,22 @@ describe GroupDocs::Questionnaire do
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.all!(client_id: 'client_id', private_key: 'private_key')
+        described_class.all!({}, client_id: 'client_id', private_key: 'private_key')
       end.should_not raise_error(ArgumentError)
+    end
+
+    it 'accepts options hash' do
+      lambda do
+        described_class.all!(status: :draft)
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'parses status if passed' do
+      status = :draft
+      subject = described_class.new
+      described_class.should_receive(:new).any_number_of_times.and_return(subject)
+      subject.should_receive(:parse_status).with(status)
+      described_class.all!(status: status)
     end
 
     it 'returns an array of GroupDocs::Questionnaire objects' do

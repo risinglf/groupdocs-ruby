@@ -20,7 +20,10 @@ module GroupDocs
     # @return [Array<GroupDocs::Questionnaire>]
     #
     def self.all!(options = {}, access = {})
-      options[:status] = parse_status(options[:status]) if options[:status]
+      if options[:status]
+        # TODO find better way to parse status
+        options[:status] = new.send(:parse_status, options[:status])
+      end
 
       api = Api::Request.new do |request|
         request[:access] = access
