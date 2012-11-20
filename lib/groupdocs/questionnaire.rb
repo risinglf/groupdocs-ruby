@@ -269,7 +269,7 @@ module GroupDocs
         request[:method] = :GET
         request[:path] = "/merge/{{client_id}}/questionnaires/#{guid}/collectors"
       end.execute!
-p json
+
       json[:collectors].map do |collector|
         Collector.new(collector)
       end

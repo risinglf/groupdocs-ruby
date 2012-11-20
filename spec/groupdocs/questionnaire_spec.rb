@@ -176,26 +176,6 @@ describe GroupDocs::Questionnaire do
     end
   end
 
-  describe '#executions!' do
-    before(:each) do
-      mock_api_server(load_json('questionnaire_executions'))
-    end
-
-    it 'accepts access credentials hash' do
-      lambda do
-        subject.executions!(client_id: 'client_id', private_key: 'private_key')
-      end.should_not raise_error(ArgumentError)
-    end
-
-    it 'returns an array of GroupDocs::Questionnaire::Execution objects' do
-      executions = subject.executions!
-      executions.should be_an(Array)
-      executions.each do |execution|
-        execution.should be_a(GroupDocs::Questionnaire::Execution)
-      end
-    end
-  end
-
   describe '#datasources!' do
     before(:each) do
       mock_api_server(load_json('questionnaire_datasources'))
@@ -212,6 +192,26 @@ describe GroupDocs::Questionnaire do
       datasources.should be_an(Array)
       datasources.each do |datasource|
         datasource.should be_a(GroupDocs::DataSource)
+      end
+    end
+  end
+
+  describe '#executions!' do
+    before(:each) do
+      mock_api_server(load_json('questionnaire_executions'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.executions!(client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns an array of GroupDocs::Questionnaire::Execution objects' do
+      executions = subject.executions!
+      executions.should be_an(Array)
+      executions.each do |execution|
+        execution.should be_a(GroupDocs::Questionnaire::Execution)
       end
     end
   end
@@ -243,6 +243,26 @@ describe GroupDocs::Questionnaire do
 
     it 'returns GroupDocs::Questionnaire::Execution object' do
       subject.create_execution!(execution, email).should be_a(GroupDocs::Questionnaire::Execution)
+    end
+  end
+
+  describe '#collectors!' do
+    before(:each) do
+      mock_api_server(load_json('questionnaire_collectors'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.collectors!(client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns an array of GroupDocs::Questionnaire::Execution objects' do
+      collectors = subject.collectors!
+      collectors.should be_an(Array)
+      collectors.each do |collector|
+        collector.should be_a(GroupDocs::Questionnaire::Collector)
+      end
     end
   end
 end
