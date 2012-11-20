@@ -1,6 +1,7 @@
 module GroupDocs
   class Questionnaire < Api::Entity
 
+    require 'groupdocs/questionnaire/collector'
     require 'groupdocs/questionnaire/execution'
     require 'groupdocs/questionnaire/page'
     require 'groupdocs/questionnaire/question'
@@ -252,6 +253,26 @@ module GroupDocs
       execution.questionnaire_id = json[:questionnaire_id]
 
       execution
+    end
+
+    #
+    # Returns an array of questionnaire collectors.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<GroupDocs::Questionnaire::Execution>]
+    #
+    def collectors!(access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/merge/{{client_id}}/questionnaires/#{guid}/collectors"
+      end.execute!
+p json
+      json[:collectors].map do |collector|
+        Collector.new(collector)
+      end
     end
 
   end # Questionnaire

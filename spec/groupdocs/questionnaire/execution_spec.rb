@@ -7,6 +7,8 @@ describe GroupDocs::Questionnaire::Execution do
 
   it { should respond_to(:id)                  }
   it { should respond_to(:id=)                 }
+  it { should respond_to(:guid)                }
+  it { should respond_to(:guid=)               }
   it { should respond_to(:questionnaire_id)    }
   it { should respond_to(:questionnaire_id=)   }
   it { should respond_to(:questionnaire_name)  }
@@ -19,10 +21,6 @@ describe GroupDocs::Questionnaire::Execution do
   it { should respond_to(:approver=)           }
   it { should respond_to(:datasource_id)       }
   it { should respond_to(:datasource_id=)      }
-  it { should respond_to(:status)              }
-  it { should respond_to(:status=)             }
-  it { should respond_to(:guid)                }
-  it { should respond_to(:guid=)               }
 
   %w(owner executive approver).each do |method|
     describe "##{method}=" do

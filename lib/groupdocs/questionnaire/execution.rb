@@ -5,6 +5,8 @@ module GroupDocs
 
     # @attr [Integer] id
     attr_accessor :id
+    # @attr [String] guid
+    attr_accessor :guid
     # @attr [Integer] questionnaire_id
     attr_accessor :questionnaire_id
     # @attr [String] questionnaire_name
@@ -19,8 +21,6 @@ module GroupDocs
     attr_accessor :datasource_id
     # @attr [Symbol] status
     attr_accessor :status
-    # @attr [String] guid
-    attr_accessor :guid
 
     #
     # Converts status to human-readable format.
