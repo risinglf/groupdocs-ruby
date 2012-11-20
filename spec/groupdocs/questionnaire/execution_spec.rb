@@ -5,19 +5,6 @@ describe GroupDocs::Questionnaire::Execution do
   it_behaves_like GroupDocs::Api::Entity
   include_examples GroupDocs::Api::Helpers::Status
 
-  describe '.all!' do
-    it 'accepts access credentials hash' do
-      lambda do
-        described_class.all!(client_id: 'client_id', private_key: 'private_key')
-      end.should_not raise_error(ArgumentError)
-    end
-
-    it 'just calls GroupDocs::Questionnaire.executions! method' do
-      GroupDocs::Questionnaire.should_receive(:executions!).with({})
-      described_class.all!
-    end
-  end
-
   it { should respond_to(:id)                  }
   it { should respond_to(:id=)                 }
   it { should respond_to(:questionnaire_id)    }

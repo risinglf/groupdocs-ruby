@@ -3,18 +3,6 @@ module GroupDocs
 
     include Api::Helpers::Status
 
-    #
-    # Returns an array of all executions.
-    #
-    # @param [Hash] access Access credentials
-    # @option access [String] :client_id
-    # @option access [String] :private_key
-    # @return [Array<GroupDocs::Questionnaire::Execution>]
-    #
-    def self.all!(access = {})
-      Questionnaire.executions!(access)
-    end
-
     # @attr [Integer] id
     attr_accessor :id
     # @attr [Integer] questionnaire_id
@@ -51,7 +39,7 @@ module GroupDocs
       #
       define_method(:"#{method}=") do |options|
         case options
-        when GroupDocs::User then instance_variable_set(:"@#{method}", options)
+        when User then instance_variable_set(:"@#{method}", options)
         when Hash then instance_variable_set(:"@#{method}", User.new(options))
         end
       end
