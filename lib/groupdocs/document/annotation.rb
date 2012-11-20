@@ -51,7 +51,8 @@ module GroupDocs
     alias_method :created_on=,          :createdOn=
     alias_method :annotation_position,  :annotationPosition
     alias_method :annotation_position=, :annotationPosition=
-    alias_method :position,             :annotation_position
+    alias_method :position,             :annotationPosition
+    alias_method :position=,            :annotationPosition=
 
     #
     # Creates new GroupDocs::Document::Annotation.
@@ -249,6 +250,13 @@ module GroupDocs
         request[:path] = "/ant/{{client_id}}/annotations/#{guid}/markerPosition"
         request[:request_body] = { x: x, y: y }
       end.execute!
+
+      if box
+        box.x = x
+        box.y = y
+      else
+        self.box = { x: x, y: y }
+      end
     end
 
     #
