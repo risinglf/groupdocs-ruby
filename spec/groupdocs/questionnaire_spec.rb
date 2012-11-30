@@ -3,6 +3,7 @@ require 'spec_helper'
 describe GroupDocs::Questionnaire do
 
   it_behaves_like GroupDocs::Api::Entity
+  include_examples GroupDocs::Api::Helpers::Status
 
   describe '.all!' do
     before(:each) do
@@ -11,8 +12,22 @@ describe GroupDocs::Questionnaire do
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.all!(client_id: 'client_id', private_key: 'private_key')
+        described_class.all!({}, client_id: 'client_id', private_key: 'private_key')
       end.should_not raise_error(ArgumentError)
+    end
+
+    it 'accepts options hash' do
+      lambda do
+        described_class.all!(status: :draft)
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'parses status if passed' do
+      status = :draft
+      subject = described_class.new
+      described_class.should_receive(:new).any_number_of_times.and_return(subject)
+      subject.should_receive(:parse_status).with(status)
+      described_class.all!(status: status)
     end
 
     it 'returns an array of GroupDocs::Questionnaire objects' do
@@ -45,28 +60,28 @@ describe GroupDocs::Questionnaire do
     end
   end
 
-  describe '.executions!' do
-    before(:each) do
-      mock_api_server(load_json('questionnaire_executions'))
-    end
-
-    it 'accepts access credentials hash' do
-      lambda do
-        described_class.executions!(client_id: 'client_id', private_key: 'private_key')
-      end.should_not raise_error(ArgumentError)
-    end
-
-    it 'returns an array of GroupDocs::Questionnaire::Execution objects' do
-      executions = described_class.executions!
-      executions.should be_an(Array)
-      executions.each do |execution|
-        execution.should be_a(GroupDocs::Questionnaire::Execution)
-      end
-    end
-  end
-
-  it { should respond_to(:pages)  }
-  it { should respond_to(:pages=) }
+  it { should respond_to(:id)                   }
+  it { should respond_to(:id=)                  }
+  it { should respond_to(:guid)                 }
+  it { should respond_to(:guid=)                }
+  it { should respond_to(:name)                 }
+  it { should respond_to(:name=)                }
+  it { should respond_to(:descr)                }
+  it { should respond_to(:descr=)               }
+  it { should respond_to(:pages)                }
+  it { should respond_to(:pages=)               }
+  it { should respond_to(:resolved_executions)  }
+  it { should respond_to(:resolved_executions=) }
+  it { should respond_to(:assigned_questions)   }
+  it { should respond_to(:assigned_questions=)  }
+  it { should respond_to(:total_questions)      }
+  it { should respond_to(:total_questions=)     }
+  it { should respond_to(:modified)             }
+  it { should respond_to(:modified=)            }
+  it { should respond_to(:expires)              }
+  it { should respond_to(:expires=)             }
+  it { should respond_to(:document_ids)         }
+  it { should respond_to(:document_ids=)        }
 
   it { should have_alias(:description, :descr)   }
   it { should have_alias(:description=, :descr=) }
@@ -181,6 +196,26 @@ describe GroupDocs::Questionnaire do
     end
   end
 
+  describe '#executions!' do
+    before(:each) do
+      mock_api_server(load_json('questionnaire_executions'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.executions!(client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns an array of GroupDocs::Questionnaire::Execution objects' do
+      executions = subject.executions!
+      executions.should be_an(Array)
+      executions.each do |execution|
+        execution.should be_a(GroupDocs::Questionnaire::Execution)
+      end
+    end
+  end
+
   describe '#create_execution!' do
     before(:each) do
       mock_api_server(load_json('questionnaire_execution_create'))
@@ -208,6 +243,26 @@ describe GroupDocs::Questionnaire do
 
     it 'returns GroupDocs::Questionnaire::Execution object' do
       subject.create_execution!(execution, email).should be_a(GroupDocs::Questionnaire::Execution)
+    end
+  end
+
+  describe '#collectors!' do
+    before(:each) do
+      mock_api_server(load_json('questionnaire_collectors'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.collectors!(client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns an array of GroupDocs::Questionnaire::Execution objects' do
+      collectors = subject.collectors!
+      collectors.should be_an(Array)
+      collectors.each do |collector|
+        collector.should be_a(GroupDocs::Questionnaire::Collector)
+      end
     end
   end
 end

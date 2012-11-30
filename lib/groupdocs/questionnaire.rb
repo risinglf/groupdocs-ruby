@@ -1,24 +1,38 @@
 module GroupDocs
   class Questionnaire < Api::Entity
 
+    require 'groupdocs/questionnaire/collector'
     require 'groupdocs/questionnaire/execution'
     require 'groupdocs/questionnaire/page'
     require 'groupdocs/questionnaire/question'
 
+    include Api::Helpers::Status
+
     #
     # Returns an array of all questionnaires.
     #
+    # @param [Hash] options Hash of options
+    # @option options [Symbol] :status Filter questionnaires by status
+    # @option options [Integer] :page_number Page to start with
+    # @option options [Integer] :page_size How many items to list
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
     # @return [Array<GroupDocs::Questionnaire>]
     #
-    def self.all!(access = {})
-      json = Api::Request.new do |request|
+    def self.all!(options = {}, access = {})
+      if options[:status]
+        # TODO find better way to parse status
+        options[:status] = new.send(:parse_status, options[:status])
+      end
+
+      api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
         request[:path] = '/merge/{{client_id}}/questionnaires'
-      end.execute!
+      end
+      api.add_params(options)
+      json = api.execute!
 
       json[:questionnaires].map do |questionnaire|
         Questionnaire.new(questionnaire)
@@ -46,34 +60,30 @@ module GroupDocs
       nil
     end
 
-    #
-    # Returns an array of all executions.
-    #
-    # @param [Hash] access Access credentials
-    # @option access [String] :client_id
-    # @option access [String] :private_key
-    # @return [Array<GroupDocs::Questionnaire::Execution>]
-    #
-    def self.executions!(access = {})
-      json = Api::Request.new do |request|
-        request[:access] = access
-        request[:method] = :GET
-        request[:path] = '/merge/{{client_id}}/questionnaires/executions'
-      end.execute!
-
-      json[:executions].map do |execution|
-        Questionnaire::Execution.new(execution)
-      end
-    end
-
     # @attr [Integer] id
     attr_accessor :id
+    # @attr [String] guid
+    attr_accessor :guid
     # @attr [String] name
     attr_accessor :name
+    # @attr [Symbol] status
+    attr_accessor :status
     # @attr [String] descr
     attr_accessor :descr
     # @attr [Array<GroupDocs::Questionnaire::Page>] pages
     attr_accessor :pages
+    # @attr [Integer] resolved_executions
+    attr_accessor :resolved_executions
+    # @attr [Integer] assigned_questions
+    attr_accessor :assigned_questions
+    # @attr [Integer] total_questions
+    attr_accessor :total_questions
+    # @attr [Integer] modified
+    attr_accessor :modified
+    # @attr [Integer] expires
+    attr_accessor :expires
+    # @attr [Array<String>] document_ids
+    attr_accessor :document_ids
 
     # Human-readable accessors
     alias_method :description,  :descr
@@ -94,6 +104,15 @@ module GroupDocs
           end
         end
       end
+    end
+
+    #
+    # Converts status to human-readable format.
+    #
+    # @return [Symbol]
+    #
+    def status
+      parse_status(@status)
     end
 
     #
@@ -183,11 +202,32 @@ module GroupDocs
     end
 
     #
+    # Returns an array of questionnaire executions.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<GroupDocs::Questionnaire::Execution>]
+    #
+    def executions!(access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/merge/{{client_id}}/questionnaires/#{guid}/executions"
+      end.execute!
+
+      json[:executions].map do |execution|
+        Execution.new(execution)
+      end
+    end
+
+    #
     # Creates new questionnaire execution.
     #
     # @example
     #   execution = GroupDocs::Questionnaire::Execution.new
     #   questionnaire = GroupDocs::Questionnaire.get!(1)
+    #   # make sure to save execution as it has updated attributes
     #   execution = questionnaire.create_execution!(execution, 'user@email.com')
     #   #=> #<GroupDocs::Questionnaire::Execution @id=1, @questionnaire_id=1>
     #
@@ -213,6 +253,26 @@ module GroupDocs
       execution.questionnaire_id = json[:questionnaire_id]
 
       execution
+    end
+
+    #
+    # Returns an array of questionnaire collectors.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<GroupDocs::Questionnaire::Execution>]
+    #
+    def collectors!(access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/merge/{{client_id}}/questionnaires/#{guid}/collectors"
+      end.execute!
+
+      json[:collectors].map do |collector|
+        Collector.new(collector)
+      end
     end
 
   end # Questionnaire

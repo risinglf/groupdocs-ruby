@@ -613,7 +613,6 @@ module GroupDocs
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
-    # @return [Array<Symbol>]
     #
     def set_reviewers!(reviewers, access = {})
       Api::Request.new do |request|

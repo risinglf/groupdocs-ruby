@@ -50,7 +50,8 @@ describe GroupDocs::Document::Annotation do
   it { should have_alias(:created_on=, :createdOn=)                   }
   it { should have_alias(:annotation_position, :annotationPosition)   }
   it { should have_alias(:annotation_position=, :annotationPosition=) }
-  it { should have_alias(:position, :annotation_position)             }
+  it { should have_alias(:position, :annotationPosition)              }
+  it { should have_alias(:position=, :annotationPosition=)            }
 
   it { should have_alias(:annotationGuid=, :guid=) }
 
@@ -108,7 +109,7 @@ describe GroupDocs::Document::Annotation do
 
   describe '#box=' do
     it 'converts passed hash to GroupDocs::Document::Rectangle object' do
-      subject.box = { X: 0.90, Y: 0.05, Width: 0.06745, Height: 0.005967 }
+      subject.box = { x: 0.90, y: 0.05, width: 0.06745, height: 0.005967 }
       subject.box.should be_a(GroupDocs::Document::Rectangle)
       subject.box.x.should == 0.90
       subject.box.y.should == 0.05
@@ -230,6 +231,19 @@ describe GroupDocs::Document::Annotation do
       lambda do
         subject.move_marker!(10, 10, client_id: 'client_id', private_key: 'private_key')
       end.should_not raise_error(ArgumentError)
+    end
+
+    it 'updates box coordinates if it is set' do
+      subject.box = { x: 1, y: 2 }
+      subject.move_marker! 10, 10
+      subject.box.x.should == 10
+      subject.box.y.should == 10
+    end
+
+    it 'creates box coordinates if it is not set' do
+      subject.move_marker! 10, 10
+      subject.box.x.should == 10
+      subject.box.y.should == 10
     end
   end
 

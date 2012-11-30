@@ -24,7 +24,7 @@ describe GroupDocs::Document::Change do
 
   describe '#box=' do
     it 'converts passed hash to GroupDocs::Document::Rectangle object' do
-      subject.box = { X: 0.90, Y: 0.05, Width: 0.06745, Height: 0.005967 }
+      subject.box = { x: 0.90, y: 0.05, width: 0.06745, height: 0.005967 }
       subject.box.should be_a(GroupDocs::Document::Rectangle)
       subject.box.x.should == 0.90
       subject.box.y.should == 0.05
