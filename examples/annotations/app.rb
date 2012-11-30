@@ -13,7 +13,7 @@ post '/upload' do
   set :private_key, params[:private_key]
   filepath = "#{Dir.tmpdir}/#{params[:file][:filename]}"
   File.open(filepath, 'wb') { |f| f.write(params[:file][:tempfile].read) }
-  @@file = GroupDocs::Storage::File.upload!(filepath, '/', client_id: options.client_id, private_key: options.private_key)
+  @@file = GroupDocs::Storage::File.upload!(filepath, {}, client_id: options.client_id, private_key: options.private_key)
 
   haml :annotations
 end
