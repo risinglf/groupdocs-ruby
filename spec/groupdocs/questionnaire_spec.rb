@@ -265,4 +265,20 @@ describe GroupDocs::Questionnaire do
       end
     end
   end
+
+  describe '#metadata!' do
+    before(:each) do
+      mock_api_server(load_json('questionnaire_get'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.metadata!(client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns GroupDocs::Questionnaire object' do
+      subject.metadata!.should be_a(GroupDocs::Questionnaire)
+    end
+  end
 end

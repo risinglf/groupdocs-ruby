@@ -276,5 +276,23 @@ module GroupDocs
       end
     end
 
+    #
+    # Returns questionnaire metadata.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [GroupDocs::Questionnaire]
+    #
+    def metadata!(access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/merge/{{client_id}}/questionnaires/#{guid}/metadata"
+      end.execute!
+
+      Questionnaire.new(json[:questionnaire])
+    end
+
   end # Questionnaire
 end # GroupDocs
