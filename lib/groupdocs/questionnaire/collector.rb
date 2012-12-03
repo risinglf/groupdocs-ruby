@@ -3,6 +3,28 @@ module GroupDocs
 
     include Api::Helpers::Status
 
+    #
+    # Returns collector by its guid.
+    #
+    # @param [String] guid
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [GroupDocs::Questionnaire::Collector]
+    #
+    def self.get!(guid, access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/merge/{{client_id}}/questionnaires/collectors/#{guid}"
+      end.execute!
+
+      collector = json[:collector]
+      collector.merge!(questionnaire: Questionnaire.new(id: collector[:questionnaire_id]))
+
+      new(collector)
+    end
+
     # @attr [Integer] id
     attr_accessor :id
     # @attr [String] guid
@@ -83,7 +105,7 @@ module GroupDocs
       json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :POST
-        request[:path] = "/merge/{{client_id}}/questionnaires/#{get_questionnaire_id}/collectors"
+        request[:path] = "/merge/{{client_id}}/questionnaires/#{questionnaire.guid}/collectors"
         request[:request_body] = to_hash
       end.execute!
 
@@ -126,17 +148,6 @@ module GroupDocs
         request[:method] = :DELETE
         request[:path] = "/merge/{{client_id}}/questionnaires/collectors/#{guid}"
       end.execute!
-    end
-
-    private
-
-    #
-    # Returns questionnaire identifier.
-    #
-    # @return [String]
-    #
-    def get_questionnaire_id
-      questionnaire_id || questionnaire.guid
     end
 
   end # Questionnaire::Collector

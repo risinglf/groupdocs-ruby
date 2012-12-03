@@ -10,6 +10,22 @@ describe GroupDocs::Questionnaire::Collector do
     described_class.new(questionnaire: questionnaire)
   end
 
+  describe '.get!' do
+    before(:each) do
+      mock_api_server(load_json('questionnaire_collector'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        described_class.get!('9fh349hfdskf', client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns GroupDocs::Questionnaire::Collector object' do
+      described_class.get!('9fh349hfdskf').should be_a(GroupDocs::Questionnaire::Collector)
+    end
+  end
+
   it { should respond_to(:id)                   }
   it { should respond_to(:id=)                  }
   it { should respond_to(:guid)                 }
@@ -76,7 +92,7 @@ describe GroupDocs::Questionnaire::Collector do
     end
 
     it 'gets questionnaire id' do
-      subject.should_receive(:get_questionnaire_id)
+      subject.questionnaire.should_receive(:guid)
       subject.add!
     end
 
@@ -111,19 +127,6 @@ describe GroupDocs::Questionnaire::Collector do
       lambda do
         subject.remove!(client_id: 'client_id', private_key: 'private_key')
       end.should_not raise_error(ArgumentError)
-    end
-  end
-
-  describe '#get_questionnaire_id' do
-    it 'prefers questionnaire_id over annotation.guid' do
-      subject.questionnaire_id = 'abc'
-      subject.questionnaire.guid = 'def'
-      subject.send(:get_questionnaire_id).should == 'abc'
-    end
-
-    it 'returns questionnaire.guid if questionnaire_id is not set' do
-      subject.questionnaire.guid = 'def'
-      subject.send(:get_questionnaire_id).should == 'def'
     end
   end
 end

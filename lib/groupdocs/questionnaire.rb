@@ -261,7 +261,7 @@ module GroupDocs
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
-    # @return [Array<GroupDocs::Questionnaire::Execution>]
+    # @return [Array<GroupDocs::Questionnaire::Collector>]
     #
     def collectors!(access = {})
       json = Api::Request.new do |request|

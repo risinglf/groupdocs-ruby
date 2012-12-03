@@ -257,7 +257,7 @@ describe GroupDocs::Questionnaire do
       end.should_not raise_error(ArgumentError)
     end
 
-    it 'returns an array of GroupDocs::Questionnaire::Execution objects' do
+    it 'returns an array of GroupDocs::Questionnaire::Collector objects' do
       collectors = subject.collectors!
       collectors.should be_an(Array)
       collectors.each do |collector|
