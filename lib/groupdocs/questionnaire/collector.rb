@@ -91,6 +91,28 @@ module GroupDocs
       self.guid = json[:collector_guid]
     end
 
+    #
+    # Updates collector.
+    #
+    # @example
+    #   questionnaire = GroupDocs::Questionnaire.get!('110e8e64a0fe8da246b7e7879e51943f')
+    #   collector = questionnaire.collectors!.first
+    #   collector.type = :embedded
+    #   collector.update!
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def update!(access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/merge/{{client_id}}/questionnaires/collectors/#{guid}"
+        request[:request_body] = to_hash
+      end.execute!
+    end
+
     private
 
     #
