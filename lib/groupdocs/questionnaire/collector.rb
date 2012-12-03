@@ -113,6 +113,21 @@ module GroupDocs
       end.execute!
     end
 
+    #
+    # Removes collector.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def remove!(access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :DELETE
+        request[:path] = "/merge/{{client_id}}/questionnaires/collectors/#{guid}"
+      end.execute!
+    end
+
     private
 
     #
