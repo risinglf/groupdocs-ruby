@@ -271,6 +271,7 @@ module GroupDocs
       end.execute!
 
       json[:collectors].map do |collector|
+        collector.merge!(questionnaire: self)
         Collector.new(collector)
       end
     end

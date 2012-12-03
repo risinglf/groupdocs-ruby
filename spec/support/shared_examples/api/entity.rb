@@ -13,6 +13,8 @@ shared_examples_for GroupDocs::Api::Entity do
       GroupDocs::Document.any_instance.stub(file: GroupDocs::Storage::File.new)
       GroupDocs::Document::Annotation.any_instance.stub(document: GroupDocs::Document.new)
       described_class.any_instance.stub(annotation: GroupDocs::Document::Annotation.new)
+    when 'GroupDocs::Questionnaire::Collector'
+      described_class.any_instance.stub(questionnaire: GroupDocs::Questionnaire.new)
     end
   end
 
