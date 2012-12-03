@@ -34,13 +34,34 @@ module GroupDocs
       api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
-        request[:path] = "/doc/{{client_id}}/views"
+        request[:path] = '/doc/{{client_id}}/views'
       end
       api.add_params(options)
       json = api.execute!
 
       json[:views].map do |view|
         Document::View.new(view)
+      end
+    end
+
+    #
+    # Returns an array of all templates (documents with fields).
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<GroupDocs::Document>]
+    #
+    def self.templates!(options = {}, access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = '/merge/{{client_id}}/templates'
+      end.execute!
+
+      json[:templates].map do |template|
+        template.merge!(file: Storage::File.new(template))
+        Document.new(template)
       end
     end
 
@@ -54,8 +75,10 @@ module GroupDocs
     attr_accessor :output_formats
     # @attr [Symbol] status
     attr_accessor :status
-    # @attr [Integet] order
+    # @attr [Integer] order
     attr_accessor :order
+    # @attr [Integer] field_count
+    attr_accessor :field_count
 
     #
     # Coverts passed array of attributes hash to array of GroupDocs::Storage::File.

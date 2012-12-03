@@ -30,6 +30,26 @@ describe GroupDocs::Document do
     end
   end
 
+  describe '.templates!' do
+    before(:each) do
+      mock_api_server(load_json('templates_get'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        described_class.templates!(client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns an array of GroupDocs::Document objects' do
+      templates = described_class.templates!
+      templates.should be_an(Array)
+      templates.each do |template|
+        template.should be_a(GroupDocs::Document)
+      end
+    end
+  end
+
   it { should respond_to(:file)            }
   it { should respond_to(:file=)           }
   it { should respond_to(:process_date)    }
@@ -40,6 +60,8 @@ describe GroupDocs::Document do
   it { should respond_to(:output_formats=) }
   it { should respond_to(:order)           }
   it { should respond_to(:order=)          }
+  it { should respond_to(:field_count)     }
+  it { should respond_to(:field_count=)    }
 
   it { should have_alias(:access_mode=, :access_mode_set!) }
 
