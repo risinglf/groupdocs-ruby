@@ -130,5 +130,20 @@ module GroupDocs
       end.execute!
     end
 
+    #
+    # Deletes execution.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def delete!(access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :DELETE
+        request[:path] = "/merge/{{client_id}}/questionnaires/executions/#{id}"
+      end.execute!
+    end
+
   end # Questionnaire::Execution
 end # GroupDocs

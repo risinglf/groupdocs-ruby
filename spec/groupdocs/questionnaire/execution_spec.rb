@@ -128,4 +128,16 @@ describe GroupDocs::Questionnaire::Execution do
       subject.update!
     end
   end
+
+  describe '#delete!' do
+    before(:each) do
+      mock_api_server('{ "status": "Ok", "result": {}}')
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.delete!(client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
 end
