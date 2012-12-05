@@ -170,5 +170,41 @@ module GroupDocs
       end
     end
 
+    #
+    # Adds new questionnaire execution.
+    #
+    # @example
+    #   questionnaire = GroupDocs::Questionnaire.get!(1)
+    #   collector = questionnaire.collectors!.first
+    #   execution = GroupDocs::Questionnaire::Execution.new
+    #   execution.executive = GroupDocs::User.new(primary_email: 'john@smith.com')
+    #   # make sure to save execution as it has updated attributes
+    #   execution = collector.add_execution!(execution)
+    #   #=> #<GroupDocs::Questionnaire::Execution @id=1, @questionnaire_id=1>
+    #
+    # @param [GroupDocs::Questionnaire::Execution] execution
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [GroupDocs::Questionnaire::Execution] updated execution
+    #
+    def add_execution!(execution, access = {})
+      execution.is_a?(GroupDocs::Questionnaire::Execution) or raise ArgumentError,
+        "Execution should be GroupDocs::Questionnaire::Execution object, received: #{execution.inspect}"
+
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :POST
+        request[:path] = "/merge/{{client_id}}/questionnaires/collectors/#{guid}/executions"
+        request[:request_body] = execution.to_hash
+      end.execute!
+
+      execution.id = json[:execution_id]
+      execution.guid = json[:execution_guid]
+      execution.collector_id = json[:collector_id]
+
+      execution
+    end
+
   end # Questionnaire::Collector
 end # GroupDocs

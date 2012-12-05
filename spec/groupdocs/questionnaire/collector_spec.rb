@@ -149,4 +149,31 @@ describe GroupDocs::Questionnaire::Collector do
       end
     end
   end
+
+  describe '#add_execution!' do
+    before(:each) do
+      mock_api_server(load_json('questionnaire_execution_add'))
+    end
+
+    let(:execution) { GroupDocs::Questionnaire::Execution.new }
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.add_execution!(execution, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'raises error if execution is not GroupDocs::Questionnaire::Execution object' do
+      -> { subject.add_execution!('Execution') }.should raise_error(ArgumentError)
+    end
+
+    it 'uses hashed version of execution along with executive payload' do
+      execution.should_receive(:to_hash)
+      subject.add_execution!(execution)
+    end
+
+    it 'returns GroupDocs::Questionnaire::Execution object' do
+      subject.add_execution!(execution).should be_a(GroupDocs::Questionnaire::Execution)
+    end
+  end
 end
