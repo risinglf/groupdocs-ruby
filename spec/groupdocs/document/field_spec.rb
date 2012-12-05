@@ -24,5 +24,10 @@ describe GroupDocs::Document::Field do
       subject.rectangle.w.should == 0.06745
       subject.rectangle.h.should == 0.005967
     end
+
+    it 'does nothing when nil is passed' do
+      subject.rectangle = nil
+      subject.rectangle.should be_nil
+    end
   end
 end

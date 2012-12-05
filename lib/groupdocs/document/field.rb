@@ -17,7 +17,7 @@ module GroupDocs
     # @return [GroupDocs::Document::Rectangle]
     #
     def rectangle=(options)
-      @rectangle = GroupDocs::Document::Rectangle.new(options)
+      @rectangle = GroupDocs::Document::Rectangle.new(options) if options
     end
 
     # Compatibility with response JSON
