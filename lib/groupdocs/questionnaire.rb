@@ -145,6 +145,8 @@ module GroupDocs
       end.execute!
 
       self.id = json[:questionnaire_id]
+      self.guid = json[:questionnaire_guid]
+      self.name = json[:adjusted_name]
     end
 
     #
@@ -292,6 +294,32 @@ module GroupDocs
       end.execute!
 
       Questionnaire.new(json[:questionnaire])
+    end
+
+    #
+    # Updates questionnaire metadata.
+    #
+    # @example
+    #   questionnaire = GroupDocs::Questionnaire.get!(1)
+    #   metadata = questionnaire.metadata!
+    #   metadata.name = 'New questionnaire name'
+    #   questionnaire.update_metadata! metadata
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @raise [ArgumentError] if metadata is not GroupDocs::Questionnaire
+    #
+    def update_metadata!(metadata, access = {})
+      metadata.is_a?(GroupDocs::Questionnaire) or raise ArgumentError,
+        "Metadata should be GroupDocs::Questionnaire object, received: #{metadata.inspect}"
+
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/merge/{{client_id}}/questionnaires/#{guid}/metadata"
+        request[:request_body] = metadata.to_hash
+      end.execute!
     end
 
   end # Questionnaire

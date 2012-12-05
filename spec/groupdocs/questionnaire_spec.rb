@@ -140,10 +140,14 @@ describe GroupDocs::Questionnaire do
       subject.create!
     end
 
-    it 'updates identifier of questionnaire' do
+    it 'updates questionnaire attributes' do
       lambda do
         subject.create!
-      end.should change(subject, :id)
+      end.should change {
+        subject.id
+        subject.guid
+        subject.name
+      }
     end
   end
 
@@ -279,6 +283,29 @@ describe GroupDocs::Questionnaire do
 
     it 'returns GroupDocs::Questionnaire object' do
       subject.metadata!.should be_a(GroupDocs::Questionnaire)
+    end
+  end
+
+  describe '#update_metadata!' do
+    before(:each) do
+      mock_api_server('{ "status": "Ok", "result": { "questionnaire_id": 123456 }}')
+    end
+
+    let!(:metadata) { GroupDocs::Questionnaire.new }
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.update_metadata!(metadata, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'raises error if metadata is not GroupDocs::Questionnaire object' do
+      -> { subject.update_metadata!('Metadata') }.should raise_error(ArgumentError)
+    end
+
+    it 'uses hashed version as payload' do
+      metadata.should_receive(:to_hash)
+      subject.update_metadata!(metadata)
     end
   end
 end
