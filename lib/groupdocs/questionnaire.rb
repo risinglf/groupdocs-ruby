@@ -322,5 +322,27 @@ module GroupDocs
       end.execute!
     end
 
+    #
+    # Returns an array of document fields for questionnaire.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<GroupDocs::Document::Field>]
+    #
+    def fields!(access = {})
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/merge/{{client_id}}/questionnaires/#{guid}/fields"
+      end
+      api.add_params(include_geometry: true)
+      json = api.execute!
+
+      json[:fields].map do |field|
+        Document::Field.new(field)
+      end
+    end
+
   end # Questionnaire
 end # GroupDocs

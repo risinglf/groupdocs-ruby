@@ -308,4 +308,24 @@ describe GroupDocs::Questionnaire do
       subject.update_metadata!(metadata)
     end
   end
+
+  describe '#fields!' do
+    before(:each) do
+      mock_api_server(load_json('document_fields'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.fields!(client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns array of GroupDocs::Document::Field objects' do
+      fields = subject.fields!
+      fields.should be_an(Array)
+      fields.each do |field|
+        field.should be_a(GroupDocs::Document::Field)
+      end
+    end
+  end
 end
