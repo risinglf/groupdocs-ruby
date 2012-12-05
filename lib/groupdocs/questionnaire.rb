@@ -35,7 +35,7 @@ module GroupDocs
       json = api.execute!
 
       json[:questionnaires].map do |questionnaire|
-        Questionnaire.new(questionnaire)
+        new(questionnaire)
       end
     end
 
@@ -55,7 +55,7 @@ module GroupDocs
         request[:path] = "/merge/{{client_id}}/questionnaires/#{id}"
       end.execute!
 
-      Questionnaire.new(json[:questionnaire])
+      new(json[:questionnaire])
     rescue RestClient::ResourceNotFound
       nil
     end
@@ -221,40 +221,6 @@ module GroupDocs
       json[:executions].map do |execution|
         Execution.new(execution)
       end
-    end
-
-    #
-    # Creates new questionnaire execution.
-    #
-    # @example
-    #   execution = GroupDocs::Questionnaire::Execution.new
-    #   questionnaire = GroupDocs::Questionnaire.get!(1)
-    #   # make sure to save execution as it has updated attributes
-    #   execution = questionnaire.create_execution!(execution, 'user@email.com')
-    #   #=> #<GroupDocs::Questionnaire::Execution @id=1, @questionnaire_id=1>
-    #
-    # @param [GroupDocs::Questionnaire::Execution] execution
-    # @param [String] email
-    # @param [Hash] access Access credentials
-    # @option access [String] :client_id
-    # @option access [String] :private_key
-    # @return [GroupDocs::Questionnaire::Execution] updated execution
-    #
-    def create_execution!(execution, email, access = {})
-      execution.is_a?(GroupDocs::Questionnaire::Execution) or raise ArgumentError,
-        "Execution should be GroupDocs::Questionnaire::Execution object, received: #{execution.inspect}"
-
-      json = Api::Request.new do |request|
-        request[:access] = access
-        request[:method] = :POST
-        request[:path] = "/merge/{{client_id}}/questionnaires/#{id}/executions"
-        request[:request_body] = execution.to_hash.merge(executive: { primary_email: email })
-      end.execute!
-
-      execution.id = json[:execution_id]
-      execution.questionnaire_id = json[:questionnaire_id]
-
-      execution
     end
 
     #
