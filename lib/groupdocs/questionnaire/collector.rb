@@ -92,7 +92,7 @@ module GroupDocs
     # Adds collector.
     #
     # @example
-    #   questionnaire = GroupDocs::Questionnaire.get!('110e8e64a0fe8da246b7e7879e51943f')
+    #   questionnaire = GroupDocs::Questionnaire.get!(1)
     #   collector = GroupDocs::Questionnaire::Collector.new(questionnaire: questionnaire)
     #   collector.type = :link
     #   collector.add!
@@ -117,7 +117,7 @@ module GroupDocs
     # Updates collector.
     #
     # @example
-    #   questionnaire = GroupDocs::Questionnaire.get!('110e8e64a0fe8da246b7e7879e51943f')
+    #   questionnaire = GroupDocs::Questionnaire.get!(1)
     #   collector = questionnaire.collectors!.first
     #   collector.type = :embedded
     #   collector.update!
@@ -148,6 +148,26 @@ module GroupDocs
         request[:method] = :DELETE
         request[:path] = "/merge/{{client_id}}/questionnaires/collectors/#{guid}"
       end.execute!
+    end
+
+    #
+    # Returns an array of questionnaire collector executions.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<GroupDocs::Questionnaire::Execution>]
+    #
+    def executions!(access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/merge/{{client_id}}/questionnaires/collectors/#{guid}/executions"
+      end.execute!
+
+      json[:executions].map do |execution|
+        Questionnaire::Execution.new(execution)
+      end
     end
 
   end # Questionnaire::Collector
