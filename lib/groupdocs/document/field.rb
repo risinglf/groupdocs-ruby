@@ -12,9 +12,7 @@ module GroupDocs
 
     #
     # Coverts passed hash to GroupDocs::Document::Rectangle object.
-    #
     # @param [Hash] options
-    # @return [GroupDocs::Document::Rectangle]
     #
     def rectangle=(options)
       @rectangle = GroupDocs::Document::Rectangle.new(options) if options
