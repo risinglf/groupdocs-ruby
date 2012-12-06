@@ -9,7 +9,7 @@ module GroupDocs
       include Api::Helpers::REST
 
       # @attr_reader [RestClient::Resource] resource Entry point for all API requests
-      attr_reader   :resource
+      attr_reader :resource
       # @attr [String] response Response from server in JSON format
       attr_accessor :response
       # @attr [Hash] options Hash of options
