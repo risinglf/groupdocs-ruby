@@ -176,4 +176,34 @@ describe GroupDocs::Questionnaire::Collector do
       subject.add_execution!(execution).should be_a(GroupDocs::Questionnaire::Execution)
     end
   end
+
+  describe '#fill!' do
+    before(:each) do
+      mock_api_server(load_json('document_datasource'))
+    end
+
+    let(:datasource) do
+      GroupDocs::DataSource.new(id: 1)
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.fill!(datasource, {}, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'accepts options hash' do
+      lambda do
+        subject.fill!(datasource, new_type: :pdf)
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'raises error if datasource is not GroupDocs::Datasource object' do
+      -> { subject.fill!('Datasource') }.should raise_error(ArgumentError)
+    end
+
+    it 'returns GroupDocs::Job object' do
+      subject.fill!(datasource).should be_a(GroupDocs::Job)
+    end
+  end
 end
