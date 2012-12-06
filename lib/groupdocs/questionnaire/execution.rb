@@ -145,5 +145,37 @@ module GroupDocs
       end.execute!
     end
 
+    #
+    # Creates new job to merge datasource into questionnaire collector execution.
+    #
+    # When you fill collector, execution for it creates. You can then fill this execution
+    # (for example if you didn't answered all the questions at first).
+    #
+    # @param [GroupDocs::DataSource] datasource
+    # @param [Hash] options
+    # @option options [Boolean] :new_type New file format type
+    # @option options [Boolean] :email_results Set to true if converted document should be emailed
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [GroupDocs::Job]
+    #
+    # @raise [ArgumentError] if datasource is not GroupDocs::DataSource object
+    #
+    def fill!(datasource, options = {}, access = {})
+      datasource.is_a?(GroupDocs::DataSource) or raise ArgumentError,
+        "Datasource should be GroupDocs::DataSource object, received: #{datasource.inspect}"
+
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :POST
+        request[:path] = "/merge/{{client_id}}/questionnaires/executions/#{guid}/datasources/#{datasource.id}"
+      end
+      api.add_params(options)
+      json = api.execute!
+
+      Job.new(id: json[:job_id])
+    end
+
   end # Questionnaire::Execution
 end # GroupDocs
