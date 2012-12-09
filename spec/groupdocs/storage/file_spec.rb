@@ -87,6 +87,8 @@ describe GroupDocs::Storage::File do
   it { should respond_to(:file_type=)   }
   it { should respond_to(:path)         }
   it { should respond_to(:path=)        }
+  it { should respond_to(:data)         }
+  it { should respond_to(:data=)        }
 
   it { should have_alias(:adj_name=, :name=) }
 

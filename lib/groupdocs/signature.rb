@@ -61,6 +61,8 @@ module GroupDocs
     attr_accessor :initialsImageUrl
     # @attr [String] createdTimeStamp
     attr_accessor :createdTimeStamp
+    # @attr [String] data
+    attr_accessor :data
 
     # Human-readable accessors
     alias_method :user_guid,                :userGuid

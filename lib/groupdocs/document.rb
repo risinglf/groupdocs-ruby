@@ -65,6 +65,53 @@ module GroupDocs
       end
     end
 
+    #
+    # Signs given documents with signatures.
+    #
+    # @examples
+    #   file_data_one = Base64.strict_encode64(File.read('document_one.doc'))
+    #   file_data_two = Base64.strict_encode64(File.read('document_two.doc'))
+    #   document_one = GroupDocs::Storage::File.new(name: 'document_one', data: file_data_one).to_document
+    #   document_two = GroupDocs::Storage::File.new(name: 'document_two', data: file_data_two).to_document
+    #   signature = GroupDocs::Signature.new
+    #   signature.name = 'John Smith'
+    #   signature.data = Base64.strict_encode64(File.read('signature.png'))
+    #   signature.position = { top: 0.1, left: 0.07, width: 1.2, height: 0.08 }
+    #   GroupDocs::Document.sign_documents! [document_one, document_two], [signature]
+    #
+    # @param [Array<GroupDocs::Document>] documents Each document should have "#data"
+    # @param [Array<GroupDocs::Signature>] signatures Each signature should have "#data" and "#position"
+    #
+    def self.sign_documents!(documents, signatures, access = {})
+      documents.each do |document|
+        document.is_a?(Document) or raise ArgumentError, "Each document should be GroupDocs::Document object, received: #{document.inspect}"
+        document.data or raise ArgumentError, "Each document should have ##{data}, received: #{document.data.inspect}"
+      end
+      signatures.each do |signature|
+        signature.is_a?(Signature) or raise ArgumentError, "Each signature should be GroupDocs::Signature object, received: #{signature.inspect}"
+        signature.data or raise ArgumentError, "Each signature should have ##{data}, received: #{signature.data.inspect}"
+        signature.position or raise ArgumentError, "Each signature should have ##{position}, received: #{signature.position.inspect}"
+      end
+
+      files = documents.map(&:file)
+      signers = []
+      signatures.each do |signature|
+        signers << { name: signature.name }.merge(signature.position)
+      end
+      payload = {
+        documents: files.map(&:to_hash),
+        signers:   signers
+      }
+      payload[:signers][0][:placeSingatureOn] = '1'
+
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :POST
+        request[:path] = '/signature/{{client_id}}/sign'
+        request[:request_body] = payload
+      end.execute!
+    end
+
     # @attr [GroupDocs::Storage::File] file
     attr_accessor :file
     # @attr [Time] process_date

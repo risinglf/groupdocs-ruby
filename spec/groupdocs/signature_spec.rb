@@ -54,6 +54,8 @@ describe GroupDocs::Signature do
   it { should respond_to(:initialsImageUrl=)     }
   it { should respond_to(:createdTimeStamp)      }
   it { should respond_to(:createdTimeStamp=)     }
+  it { should respond_to(:data)                  }
+  it { should respond_to(:data=)                 }
 
   it { should have_alias(:user_guid, :userGuid)                             }
   it { should have_alias(:user_guid=, :userGuid=)                           }

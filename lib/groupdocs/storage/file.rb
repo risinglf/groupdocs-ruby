@@ -98,6 +98,8 @@ module GroupDocs
       attr_accessor :access
       # @attr [String] path
       attr_accessor :path
+      # @attr [String] data
+      attr_accessor :data
 
       # Compatibility with response JSON
       alias_method :adj_name=, :name=
