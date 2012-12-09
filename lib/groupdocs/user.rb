@@ -62,12 +62,9 @@ module GroupDocs
     attr_accessor :customEmailMessage
 
     # Human-readable accessors
-    alias_method :first_name,            :firstname
-    alias_method :first_name=,           :firstname=
-    alias_method :last_name,             :lastname
-    alias_method :last_name=,            :lastname=
-    alias_method :custom_email_message,  :customEmailMessage
-    alias_method :custom_email_message=, :customEmailMessage=
+    alias_accessor :first_name,           :firstname
+    alias_accessor :last_name,            :lastname
+    alias_accessor :custom_email_message, :customEmailMessage
 
     #
     # Converts access rights to human-readable format flag.

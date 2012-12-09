@@ -63,30 +63,18 @@ module GroupDocs
     attr_accessor :createdTimeStamp
 
     # Human-readable accessors
-    alias_method :user_guid,                :userGuid
-    alias_method :user_guid=,               :userGuid=
-    alias_method :recipient_id,             :recipientId
-    alias_method :recipient_id=,            :recipientId=
-    alias_method :company_name,             :companyName
-    alias_method :company_name=,            :companyName=
-    alias_method :first_name,               :firstName
-    alias_method :first_name=,              :firstName=
-    alias_method :last_name,                :lastName
-    alias_method :last_name=,               :lastName=
-    alias_method :full_name,                :fullName
-    alias_method :full_name=,               :fullName=
-    alias_method :text_initials,            :textInitials
-    alias_method :text_initials=,           :textInitials=
-    alias_method :signature_image_file_id,  :signatureImageFileId
-    alias_method :signature_image_file_id=, :signatureImageFileId=
-    alias_method :initials_image_file_id,   :initialsImageFileId
-    alias_method :initials_image_file_id=,  :initialsImageFileId=
-    alias_method :signature_image_url,      :signatureImageUrl
-    alias_method :signature_image_url=,     :signatureImageUrl=
-    alias_method :initials_image_url,       :initialsImageUrl
-    alias_method :initials_image_url=,      :initialsImageUrl=
-    alias_method :created_time_stamp,       :createdTimeStamp
-    alias_method :created_time_stamp=,      :createdTimeStamp=
+    alias_accessor :user_guid,               :userGuid
+    alias_accessor :recipient_id,            :recipientId
+    alias_accessor :company_name,            :companyName
+    alias_accessor :first_name,              :firstName
+    alias_accessor :last_name,               :lastName
+    alias_accessor :full_name,               :fullName
+    alias_accessor :text_initials,           :textInitials
+    alias_accessor :signature_image_file_id, :signatureImageFileId
+    alias_accessor :initials_image_file_id,  :initialsImageFileId
+    alias_accessor :signature_image_url,     :signatureImageUrl
+    alias_accessor :initials_image_url,      :initialsImageUrl
+    alias_accessor :created_time_stamp,      :createdTimeStamp
 
     #
     # Creates signature.

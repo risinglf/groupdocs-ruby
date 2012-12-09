@@ -75,16 +75,11 @@ module GroupDocs
     attr_accessor :CurrencyCode
 
     # Human-readable accessors
-    alias_method :id,               :Id
-    alias_method :id=,              :Id=
-    alias_method :name,             :Name
-    alias_method :name=,            :Name=
-    alias_method :pricing_plan_id,  :PricingPlanId
-    alias_method :pricing_plan_id=, :PricingPlanId=
-    alias_method :price,            :Price
-    alias_method :price=,           :Price=
-    alias_method :currency_code,    :CurrencyCode
-    alias_method :currency_code=,   :CurrencyCode=
+    alias_accessor :id,              :Id
+    alias_accessor :name,            :Name
+    alias_accessor :pricing_plan_id, :PricingPlanId
+    alias_accessor :price,           :Price
+    alias_accessor :currency_code,   :CurrencyCode
 
     # Compatibility with response JSON
     alias_method :ref_id=, :id=
@@ -97,8 +92,7 @@ module GroupDocs
       attr_accessor camel
 
       # Human-readable accessors
-      alias_method :"#{snake}",  :"#{camel}"
-      alias_method :"#{snake}=", :"#{camel}="
+      alias_accessor snake, camel
 
       #
       # Converts hash to subscription plan limit.

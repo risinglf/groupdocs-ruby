@@ -11,14 +11,10 @@ module GroupDocs
     attr_accessor :Description
 
     # Human-readable accessors
-    alias_method :id,           :Id
-    alias_method :id=,          :Id=
-    alias_method :min,          :Min
-    alias_method :min=,         :Min=
-    alias_method :max,          :Max
-    alias_method :max=,         :Max=
-    alias_method :description,  :Description
-    alias_method :description=, :Description=
+    alias_accessor :id,          :Id
+    alias_accessor :min,         :Min
+    alias_accessor :max,         :Max
+    alias_accessor :description, :Description
 
   end # Subscription::Limit
 end # GroupDocs

@@ -42,8 +42,7 @@ module GroupDocs
     attr_accessor :fields
 
     # Human-readable accessors
-    alias_method :description,  :descr
-    alias_method :description=, :descr=
+    alias_accessor :description, :descr
 
     #
     # Converts timestamp which is return by API server to Time object.

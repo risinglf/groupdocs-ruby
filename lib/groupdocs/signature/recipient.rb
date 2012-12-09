@@ -28,12 +28,9 @@ module GroupDocs
     attr_accessor :status
 
     # Human-readable accessors
-    alias_method :first_name,  :firstName
-    alias_method :first_name=, :firstName=
-    alias_method :last_name,   :lastName
-    alias_method :last_name=,  :lastName=
-    alias_method :role_id,     :roleId
-    alias_method :role_id=,    :roleId=
+    alias_accessor :first_name, :firstName
+    alias_accessor :last_name,  :lastName
+    alias_accessor :role_id,    :roleId
 
     #
     # Converts status to human-readable format.
