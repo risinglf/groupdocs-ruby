@@ -61,32 +61,19 @@ describe GroupDocs::Storage::File do
     end
   end
 
-  it { should respond_to(:id)           }
-  it { should respond_to(:id=)          }
-  it { should respond_to(:guid)         }
-  it { should respond_to(:guid=)        }
-  it { should respond_to(:known)        }
-  it { should respond_to(:known=)       }
-  it { should respond_to(:size)         }
-  it { should respond_to(:size=)        }
-  it { should respond_to(:thumbnail)    }
-  it { should respond_to(:thumbnail=)   }
-  it { should respond_to(:created_on)   }
-  it { should respond_to(:created_on=)  }
-  it { should respond_to(:modified_on)  }
-  it { should respond_to(:modified_on=) }
-  it { should respond_to(:url)          }
-  it { should respond_to(:url=)         }
-  it { should respond_to(:name)         }
-  it { should respond_to(:name=)        }
-  it { should respond_to(:version)      }
-  it { should respond_to(:version=)     }
-  it { should respond_to(:type)         }
-  it { should respond_to(:type=)        }
-  it { should respond_to(:file_type)    }
-  it { should respond_to(:file_type=)   }
-  it { should respond_to(:path)         }
-  it { should respond_to(:path=)        }
+  it { should have_accessor(:id)          }
+  it { should have_accessor(:guid)        }
+  it { should have_accessor(:known)       }
+  it { should have_accessor(:size)        }
+  it { should have_accessor(:thumbnail)   }
+  it { should have_accessor(:created_on)  }
+  it { should have_accessor(:modified_on) }
+  it { should have_accessor(:url)         }
+  it { should have_accessor(:name)        }
+  it { should have_accessor(:version)     }
+  it { should have_accessor(:type)        }
+  it { should have_accessor(:file_type)   }
+  it { should have_accessor(:path)        }
 
   it { should have_alias(:adj_name=, :name=) }
 

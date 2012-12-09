@@ -12,6 +12,12 @@ require 'groupdocs'
 Dir['spec/support/shared_examples/**/*.rb'].each { |file| file = file.sub(/spec\//, ''); require file }
 
 # matchers extension
+RSpec::Matchers.define :have_accessor do |name|
+  match do |object|
+    object.should respond_to(:"#{name}")
+    object.should respond_to(:"#{name}=")
+  end
+end
 RSpec::Matchers.define :have_alias do |aliased, original|
   match do |object|
     object.should respond_to(aliased)

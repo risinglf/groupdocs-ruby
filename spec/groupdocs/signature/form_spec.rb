@@ -30,30 +30,18 @@ describe GroupDocs::Signature::Form do
     end
   end
 
-  it { should respond_to(:id)                          }
-  it { should respond_to(:id=)                         }
-  it { should respond_to(:name)                        }
-  it { should respond_to(:name=)                       }
-  it { should respond_to(:ownerGuid)                   }
-  it { should respond_to(:ownerGuid=)                  }
-  it { should respond_to(:templateGuid)                }
-  it { should respond_to(:templateGuid=)               }
-  it { should respond_to(:createdTimeStamp)            }
-  it { should respond_to(:createdTimeStamp=)           }
-  it { should respond_to(:statusDateTime)              }
-  it { should respond_to(:statusDateTime=)             }
-  it { should respond_to(:documentsCount)              }
-  it { should respond_to(:documentsCount=)             }
-  it { should respond_to(:documentsPages)              }
-  it { should respond_to(:documentsPages=)             }
-  it { should respond_to(:participantsCount)           }
-  it { should respond_to(:participantsCount=)          }
-  it { should respond_to(:fieldsInFinalFileName)       }
-  it { should respond_to(:fieldsInFinalFileName=)      }
-  it { should respond_to(:canParticipantDownloadForm)  }
-  it { should respond_to(:canParticipantDownloadForm=) }
-  it { should respond_to(:status)                      }
-  it { should respond_to(:status=)                     }
+  it { should have_accessor(:id)                         }
+  it { should have_accessor(:name)                       }
+  it { should have_accessor(:ownerGuid)                  }
+  it { should have_accessor(:templateGuid)               }
+  it { should have_accessor(:createdTimeStamp)           }
+  it { should have_accessor(:statusDateTime)             }
+  it { should have_accessor(:documentsCount)             }
+  it { should have_accessor(:documentsPages)             }
+  it { should have_accessor(:participantsCount)          }
+  it { should have_accessor(:fieldsInFinalFileName)      }
+  it { should have_accessor(:canParticipantDownloadForm) }
+  it { should have_accessor(:status)                     }
 
   it { should have_aliased_accessor(:owner_guid, :ownerGuid)                                     }
   it { should have_aliased_accessor(:template_guid, :templateGuid)                               }

@@ -4,11 +4,9 @@ describe GroupDocs::Api::Request do
 
   subject { described_class.new(method: :GET, path: '/folders') }
 
-  it { should respond_to(:resource)  }
-  it { should respond_to(:response)  }
-  it { should respond_to(:response=) }
-  it { should respond_to(:options)   }
-  it { should respond_to(:options=)  }
+  it { should respond_to(:resource)    }
+  it { should have_accessor(:response) }
+  it { should have_accessor(:options)  }
 
   describe '#initialize' do
     it 'allows passing options' do

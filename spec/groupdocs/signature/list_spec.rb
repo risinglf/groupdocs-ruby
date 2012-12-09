@@ -24,14 +24,10 @@ describe GroupDocs::Signature::List do
     end
   end
 
-  it { should respond_to(:id)            }
-  it { should respond_to(:id=)           }
-  it { should respond_to(:name)          }
-  it { should respond_to(:name=)         }
-  it { should respond_to(:values)        }
-  it { should respond_to(:values=)       }
-  it { should respond_to(:defaultValue)  }
-  it { should respond_to(:defaultValue=) }
+  it { should have_accessor(:id)           }
+  it { should have_accessor(:name)         }
+  it { should have_accessor(:values)       }
+  it { should have_accessor(:defaultValue) }
 
   it { should have_aliased_accessor(:default_value, :defaultValue) }
 

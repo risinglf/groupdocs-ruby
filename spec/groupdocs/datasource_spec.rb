@@ -31,18 +31,12 @@ describe GroupDocs::DataSource do
     end
   end
 
-  it { should respond_to(:id)                }
-  it { should respond_to(:id=)               }
-  it { should respond_to(:descr)             }
-  it { should respond_to(:descr=)            }
-  it { should respond_to(:questionnaire_id)  }
-  it { should respond_to(:questionnaire_id=) }
-  it { should respond_to(:created_on)        }
-  it { should respond_to(:created_on=)       }
-  it { should respond_to(:modified_on)       }
-  it { should respond_to(:modified_on=)      }
-  it { should respond_to(:fields)            }
-  it { should respond_to(:fields=)           }
+  it { should have_accessor(:id)               }
+  it { should have_accessor(:descr)            }
+  it { should have_accessor(:questionnaire_id) }
+  it { should have_accessor(:created_on)       }
+  it { should have_accessor(:modified_on)      }
+  it { should have_accessor(:fields)           }
 
   it { should have_aliased_accessor(:description, :descr) }
 

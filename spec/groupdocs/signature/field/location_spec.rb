@@ -4,34 +4,20 @@ describe GroupDocs::Signature::Field::Location do
 
   it_behaves_like GroupDocs::Api::Entity
 
-  it { should respond_to(:id)              }
-  it { should respond_to(:id=)             }
-  it { should respond_to(:documentId)      }
-  it { should respond_to(:documentId=)     }
-  it { should respond_to(:fieldId)         }
-  it { should respond_to(:fieldId=)        }
-  it { should respond_to(:page)            }
-  it { should respond_to(:page=)           }
-  it { should respond_to(:locationX)       }
-  it { should respond_to(:locationX=)      }
-  it { should respond_to(:locationY)       }
-  it { should respond_to(:locationY=)      }
-  it { should respond_to(:locationWidth)   }
-  it { should respond_to(:locationWidth=)  }
-  it { should respond_to(:locationHeight)  }
-  it { should respond_to(:locationHeight=) }
-  it { should respond_to(:fontName)        }
-  it { should respond_to(:fontName=)       }
-  it { should respond_to(:fontColor)       }
-  it { should respond_to(:fontColor=)      }
-  it { should respond_to(:fontSize)        }
-  it { should respond_to(:fontSize=)       }
-  it { should respond_to(:fontBold)        }
-  it { should respond_to(:fontBold=)       }
-  it { should respond_to(:fontItalic)      }
-  it { should respond_to(:fontItalic=)     }
-  it { should respond_to(:fontUnderline)   }
-  it { should respond_to(:fontUnderline=)  }
+  it { should have_accessor(:id)             }
+  it { should have_accessor(:documentId)     }
+  it { should have_accessor(:fieldId)        }
+  it { should have_accessor(:page)           }
+  it { should have_accessor(:locationX)      }
+  it { should have_accessor(:locationY)      }
+  it { should have_accessor(:locationWidth)  }
+  it { should have_accessor(:locationHeight) }
+  it { should have_accessor(:fontName)       }
+  it { should have_accessor(:fontColor)      }
+  it { should have_accessor(:fontSize)       }
+  it { should have_accessor(:fontBold)       }
+  it { should have_accessor(:fontItalic)     }
+  it { should have_accessor(:fontUnderline)  }
 
   it { should have_aliased_accessor(:document_id,     :documentId)     }
   it { should have_aliased_accessor(:field_id,        :fieldId)        }

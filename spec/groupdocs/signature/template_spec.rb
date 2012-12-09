@@ -34,8 +34,7 @@ describe GroupDocs::Signature::Template do
     end
   end
 
-  it { should respond_to(:templateExpireTime)  }
-  it { should respond_to(:templateExpireTime=) }
+  it { should have_accessor(:templateExpireTime) }
 
   it { should have_aliased_accessor(:template_expire_time, :templateExpireTime) }
 

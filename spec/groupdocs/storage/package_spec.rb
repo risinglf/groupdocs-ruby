@@ -4,10 +4,8 @@ describe GroupDocs::Storage::Package do
 
   it_behaves_like GroupDocs::Api::Entity
 
-  it { should respond_to(:name)     }
-  it { should respond_to(:name=)    }
-  it { should respond_to(:objects)  }
-  it { should respond_to(:objects=) }
+  it { should have_accessor(:name)    }
+  it { should have_accessor(:objects) }
 
   describe '#add' do
     it 'adds objects to be packed later' do

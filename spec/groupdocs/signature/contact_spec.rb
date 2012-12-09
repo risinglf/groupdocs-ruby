@@ -57,18 +57,12 @@ describe GroupDocs::Signature::Contact do
     end
   end
 
-  it { should respond_to(:id)         }
-  it { should respond_to(:id=)        }
-  it { should respond_to(:firstName)  }
-  it { should respond_to(:firstName=) }
-  it { should respond_to(:lastName)   }
-  it { should respond_to(:lastName=)  }
-  it { should respond_to(:nickname)   }
-  it { should respond_to(:nickname=)  }
-  it { should respond_to(:email)      }
-  it { should respond_to(:email=)     }
-  it { should respond_to(:provider)   }
-  it { should respond_to(:provider=)  }
+  it { should have_accessor(:id)        }
+  it { should have_accessor(:firstName) }
+  it { should have_accessor(:lastName)  }
+  it { should have_accessor(:nickname)  }
+  it { should have_accessor(:email)     }
+  it { should have_accessor(:provider)  }
 
   it { should have_aliased_accessor(:first_name, :firstName) }
   it { should have_aliased_accessor(:last_name, :lastName)   }

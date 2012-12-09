@@ -4,12 +4,9 @@ describe GroupDocs::DataSource::Field do
 
   it_behaves_like GroupDocs::Api::Entity
 
-  it { should respond_to(:name)   }
-  it { should respond_to(:name=)  }
-  it { should respond_to(:type)    }
-  it { should respond_to(:type=)   }
-  it { should respond_to(:values)  }
-  it { should respond_to(:values=) }
+  it { should have_accessor(:name)   }
+  it { should have_accessor(:type)   }
+  it { should have_accessor(:values) }
 
   describe '#type=' do
     it 'saves type in machine readable format if symbol is passed' do

@@ -24,36 +24,21 @@ describe GroupDocs::Signature do
     end
   end
 
-  it { should respond_to(:id)                    }
-  it { should respond_to(:id=)                   }
-  it { should respond_to(:userGuid)              }
-  it { should respond_to(:userGuid=)             }
-  it { should respond_to(:recipientId)           }
-  it { should respond_to(:recipientId=)          }
-  it { should respond_to(:name)                  }
-  it { should respond_to(:name=)                 }
-  it { should respond_to(:companyName)           }
-  it { should respond_to(:companyName=)          }
-  it { should respond_to(:position)              }
-  it { should respond_to(:position=)             }
-  it { should respond_to(:firstName)             }
-  it { should respond_to(:firstName=)            }
-  it { should respond_to(:lastName)              }
-  it { should respond_to(:lastName=)             }
-  it { should respond_to(:fullName)              }
-  it { should respond_to(:fullName=)             }
-  it { should respond_to(:textInitials)          }
-  it { should respond_to(:textInitials=)         }
-  it { should respond_to(:signatureImageFileId)  }
-  it { should respond_to(:signatureImageFileId=) }
-  it { should respond_to(:initialsImageFileId)   }
-  it { should respond_to(:initialsImageFileId=)  }
-  it { should respond_to(:signatureImageUrl)     }
-  it { should respond_to(:signatureImageUrl=)    }
-  it { should respond_to(:initialsImageUrl)      }
-  it { should respond_to(:initialsImageUrl=)     }
-  it { should respond_to(:createdTimeStamp)      }
-  it { should respond_to(:createdTimeStamp=)     }
+  it { should have_accessor(:id)                   }
+  it { should have_accessor(:userGuid)             }
+  it { should have_accessor(:recipientId)          }
+  it { should have_accessor(:name)                 }
+  it { should have_accessor(:companyName)          }
+  it { should have_accessor(:position)             }
+  it { should have_accessor(:firstName)            }
+  it { should have_accessor(:lastName)             }
+  it { should have_accessor(:fullName)             }
+  it { should have_accessor(:textInitials)         }
+  it { should have_accessor(:signatureImageFileId) }
+  it { should have_accessor(:initialsImageFileId)  }
+  it { should have_accessor(:signatureImageUrl)    }
+  it { should have_accessor(:initialsImageUrl)     }
+  it { should have_accessor(:createdTimeStamp)     }
 
   it { should have_aliased_accessor(:user_guid, :userGuid)                           }
   it { should have_aliased_accessor(:recipient_id, :recipientId)                     }

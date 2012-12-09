@@ -26,22 +26,14 @@ describe GroupDocs::Questionnaire::Collector do
     end
   end
 
-  it { should respond_to(:id)                   }
-  it { should respond_to(:id=)                  }
-  it { should respond_to(:guid)                 }
-  it { should respond_to(:guid=)                }
-  it { should respond_to(:questionnaire)        }
-  it { should respond_to(:questionnaire=)       }
-  it { should respond_to(:questionnaire_id)     }
-  it { should respond_to(:questionnaire_id=)    }
-  it { should respond_to(:type)                 }
-  it { should respond_to(:type=)                }
-  it { should respond_to(:resolved_executions)  }
-  it { should respond_to(:resolved_executions=) }
-  it { should respond_to(:emails)               }
-  it { should respond_to(:emails=)              }
-  it { should respond_to(:modified)             }
-  it { should respond_to(:modified=)            }
+  it { should have_accessor(:id)                  }
+  it { should have_accessor(:guid)                }
+  it { should have_accessor(:questionnaire)       }
+  it { should have_accessor(:questionnaire_id)    }
+  it { should have_accessor(:type)                }
+  it { should have_accessor(:resolved_executions) }
+  it { should have_accessor(:emails)              }
+  it { should have_accessor(:modified)            }
 
   describe '#initialize' do
     it 'raises error if questionnaire is not specified' do

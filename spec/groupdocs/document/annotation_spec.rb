@@ -11,32 +11,19 @@ describe GroupDocs::Document::Annotation do
     described_class.new(document: document)
   end
 
-  it { should respond_to(:document)            }
-  it { should respond_to(:document=)           }
-  it { should respond_to(:id)                  }
-  it { should respond_to(:id=)                 }
-  it { should respond_to(:guid)                }
-  it { should respond_to(:guid=)               }
-  it { should respond_to(:sessionGuid)         }
-  it { should respond_to(:sessionGuid=)        }
-  it { should respond_to(:documentGuid)        }
-  it { should respond_to(:documentGuid=)       }
-  it { should respond_to(:creatorGuid)         }
-  it { should respond_to(:creatorGuid=)        }
-  it { should respond_to(:replyGuid)           }
-  it { should respond_to(:replyGuid=)          }
-  it { should respond_to(:createdOn)           }
-  it { should respond_to(:createdOn=)          }
-  it { should respond_to(:type)                }
-  it { should respond_to(:type=)               }
-  it { should respond_to(:access)              }
-  it { should respond_to(:access=)             }
-  it { should respond_to(:box)                 }
-  it { should respond_to(:box=)                }
-  it { should respond_to(:replies)             }
-  it { should respond_to(:replies=)            }
-  it { should respond_to(:annotationPosition)  }
-  it { should respond_to(:annotationPosition=) }
+  it { should have_accessor(:document)           }
+  it { should have_accessor(:id)                 }
+  it { should have_accessor(:guid)               }
+  it { should have_accessor(:sessionGuid)        }
+  it { should have_accessor(:documentGuid)       }
+  it { should have_accessor(:creatorGuid)        }
+  it { should have_accessor(:replyGuid)          }
+  it { should have_accessor(:createdOn)          }
+  it { should have_accessor(:type)               }
+  it { should have_accessor(:access)             }
+  it { should have_accessor(:box)                }
+  it { should have_accessor(:replies)            }
+  it { should have_accessor(:annotationPosition) }
 
   it { should have_aliased_accessor(:session_guid, :sessionGuid)   }
   it { should have_aliased_accessor(:document_guid, :documentGuid) }

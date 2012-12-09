@@ -50,18 +50,12 @@ describe GroupDocs::Document do
     end
   end
 
-  it { should respond_to(:file)            }
-  it { should respond_to(:file=)           }
-  it { should respond_to(:process_date)    }
-  it { should respond_to(:process_date=)   }
-  it { should respond_to(:outputs)         }
-  it { should respond_to(:outputs=)        }
-  it { should respond_to(:output_formats)  }
-  it { should respond_to(:output_formats=) }
-  it { should respond_to(:order)           }
-  it { should respond_to(:order=)          }
-  it { should respond_to(:field_count)     }
-  it { should respond_to(:field_count=)    }
+  it { should have_accessor(:file)           }
+  it { should have_accessor(:process_date)   }
+  it { should have_accessor(:outputs)        }
+  it { should have_accessor(:output_formats) }
+  it { should have_accessor(:order)          }
+  it { should have_accessor(:field_count)    }
 
   it { should have_alias(:access_mode=, :access_mode_set!) }
 

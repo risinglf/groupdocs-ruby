@@ -4,16 +4,11 @@ describe GroupDocs::Document::Change do
 
   it_behaves_like GroupDocs::Api::Entity
 
-  it { should respond_to(:id)    }
-  it { should respond_to(:id=)   }
-  it { should respond_to(:type)  }
-  it { should respond_to(:type=) }
-  it { should respond_to(:box)   }
-  it { should respond_to(:box=)  }
-  it { should respond_to(:text)  }
-  it { should respond_to(:text=) }
-  it { should respond_to(:page)  }
-  it { should respond_to(:page=) }
+  it { should have_accessor(:id)   }
+  it { should have_accessor(:type) }
+  it { should have_accessor(:box)  }
+  it { should have_accessor(:text) }
+  it { should have_accessor(:page) }
 
   describe '#type' do
     it 'returns type as symbol' do

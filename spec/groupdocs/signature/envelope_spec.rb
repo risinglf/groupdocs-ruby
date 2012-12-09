@@ -58,16 +58,11 @@ describe GroupDocs::Signature::Envelope do
     end
   end
 
-  it { should respond_to(:creationDateTime)    }
-  it { should respond_to(:creationDateTime=)   }
-  it { should respond_to(:status)              }
-  it { should respond_to(:status=)             }
-  it { should respond_to(:statusDateTime)      }
-  it { should respond_to(:statusDateTime=)     }
-  it { should respond_to(:envelopeExpireTime)  }
-  it { should respond_to(:envelopeExpireTime=) }
-  it { should respond_to(:status)              }
-  it { should respond_to(:status=)             }
+  it { should have_accessor(:creationDateTime)   }
+  it { should have_accessor(:status)             }
+  it { should have_accessor(:statusDateTime)     }
+  it { should have_accessor(:envelopeExpireTime) }
+  it { should have_accessor(:status)             }
 
   it { should have_aliased_accessor(:creation_date_time, :creationDateTime)     }
   it { should have_aliased_accessor(:status_date_time, :statusDateTime)         }

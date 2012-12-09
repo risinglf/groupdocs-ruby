@@ -56,22 +56,14 @@ describe GroupDocs::Document::Annotation::Reply do
     end
   end
 
-  it { should respond_to(:annotation)      }
-  it { should respond_to(:annotation=)     }
-  it { should respond_to(:text)            }
-  it { should respond_to(:text=)           }
-  it { should respond_to(:guid)            }
-  it { should respond_to(:guid=)           }
-  it { should respond_to(:annotationGuid)  }
-  it { should respond_to(:annotationGuid=) }
-  it { should respond_to(:userGuid)        }
-  it { should respond_to(:userGuid=)       }
-  it { should respond_to(:userName)        }
-  it { should respond_to(:userName=)       }
-  it { should respond_to(:text)            }
-  it { should respond_to(:text=)           }
-  it { should respond_to(:repliedOn)       }
-  it { should respond_to(:repliedOn=)      }
+  it { should have_accessor(:annotation)     }
+  it { should have_accessor(:text)           }
+  it { should have_accessor(:guid)           }
+  it { should have_accessor(:annotationGuid) }
+  it { should have_accessor(:userGuid)       }
+  it { should have_accessor(:userName)       }
+  it { should have_accessor(:text)           }
+  it { should have_accessor(:repliedOn)      }
 
   it { should have_aliased_accessor(:annotation_guid, :annotationGuid) }
   it { should have_aliased_accessor(:user_guid, :userGuid)             }

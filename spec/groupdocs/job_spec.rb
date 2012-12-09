@@ -80,24 +80,15 @@ describe GroupDocs::Job do
     end
   end
 
-  it { should respond_to(:id)              }
-  it { should respond_to(:id=)             }
-  it { should respond_to(:guid)            }
-  it { should respond_to(:guid=)           }
-  it { should respond_to(:name)            }
-  it { should respond_to(:name=)           }
-  it { should respond_to(:priority)        }
-  it { should respond_to(:priority=)       }
-  it { should respond_to(:actions)         }
-  it { should respond_to(:actions=)        }
-  it { should respond_to(:email_results)   }
-  it { should respond_to(:email_results=)  }
-  it { should respond_to(:url_only)        }
-  it { should respond_to(:url_only=)       }
-  it { should respond_to(:documents)       }
-  it { should respond_to(:documents=)      }
-  it { should respond_to(:requested_time)  }
-  it { should respond_to(:requested_time=) }
+  it { should have_accessor(:id)             }
+  it { should have_accessor(:guid)           }
+  it { should have_accessor(:name)           }
+  it { should have_accessor(:priority)       }
+  it { should have_accessor(:actions)        }
+  it { should have_accessor(:email_results)  }
+  it { should have_accessor(:url_only)       }
+  it { should have_accessor(:documents)      }
+  it { should have_accessor(:requested_time) }
 
   describe '#documents=' do
     let(:response) do

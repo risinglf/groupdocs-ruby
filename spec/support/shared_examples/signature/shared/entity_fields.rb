@@ -1,31 +1,18 @@
 shared_examples_for GroupDocs::Signature::EntityFields do
 
-  it { should respond_to(:id)                }
-  it { should respond_to(:id=)               }
-  it { should respond_to(:name)              }
-  it { should respond_to(:name=)             }
-  it { should respond_to(:ownerId)           }
-  it { should respond_to(:ownerId=)          }
-  it { should respond_to(:ownerGuid)         }
-  it { should respond_to(:ownerGuid=)        }
-  it { should respond_to(:reminderTime)      }
-  it { should respond_to(:reminderTime=)     }
-  it { should respond_to(:stepExpireTime)    }
-  it { should respond_to(:stepExpireTime=)   }
-  it { should respond_to(:ownerShouldSign)   }
-  it { should respond_to(:ownerShouldSign=)  }
-  it { should respond_to(:orderedSignature)  }
-  it { should respond_to(:orderedSignature=) }
-  it { should respond_to(:emailSubject)      }
-  it { should respond_to(:emailSubject=)     }
-  it { should respond_to(:emailBody)         }
-  it { should respond_to(:emailBody=)        }
-  it { should respond_to(:documentsCount)    }
-  it { should respond_to(:documentsCount=)   }
-  it { should respond_to(:documentsPages)    }
-  it { should respond_to(:documentsPages=)   }
-  it { should respond_to(:recipients)        }
-  it { should respond_to(:recipients=)       }
+  it { should have_accessor(:id)               }
+  it { should have_accessor(:name)             }
+  it { should have_accessor(:ownerId)          }
+  it { should have_accessor(:ownerGuid)        }
+  it { should have_accessor(:reminderTime)     }
+  it { should have_accessor(:stepExpireTime)   }
+  it { should have_accessor(:ownerShouldSign)  }
+  it { should have_accessor(:orderedSignature) }
+  it { should have_accessor(:emailSubject)     }
+  it { should have_accessor(:emailBody)        }
+  it { should have_accessor(:documentsCount)   }
+  it { should have_accessor(:documentsPages)   }
+  it { should have_accessor(:recipients)       }
 
   it { should have_aliased_accessor(:owner_id, :ownerId)                }
   it { should have_aliased_accessor(:owner_guid, :ownerGuid)            }
