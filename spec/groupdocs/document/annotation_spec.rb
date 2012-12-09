@@ -25,14 +25,14 @@ describe GroupDocs::Document::Annotation do
   it { should have_accessor(:replies)            }
   it { should have_accessor(:annotationPosition) }
 
-  it { should have_aliased_accessor(:session_guid, :sessionGuid)   }
-  it { should have_aliased_accessor(:document_guid, :documentGuid) }
-  it { should have_aliased_accessor(:creator_guid, :creatorGuid)   }
-  it { should have_aliased_accessor(:reply_guid, :replyGuid)       }
+  it { should alias_accessor(:session_guid, :sessionGuid)   }
+  it { should alias_accessor(:document_guid, :documentGuid) }
+  it { should alias_accessor(:creator_guid, :creatorGuid)   }
+  it { should alias_accessor(:reply_guid, :replyGuid)       }
   # Annotation#created_on is overwritten
   it { should have_alias(:created_on=, :createdOn=)                            }
-  it { should have_aliased_accessor(:annotation_position, :annotationPosition) }
-  it { should have_aliased_accessor(:position, :annotationPosition)            }
+  it { should alias_accessor(:annotation_position, :annotationPosition) }
+  it { should alias_accessor(:position, :annotationPosition)            }
 
   it { should have_alias(:annotationGuid=, :guid=) }
 

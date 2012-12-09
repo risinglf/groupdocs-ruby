@@ -9,6 +9,6 @@ describe GroupDocs::Document::Rectangle do
   it { should have_accessor(:width)  }
   it { should have_accessor(:height) }
 
-  it { should have_aliased_accessor(:w, :width)  }
-  it { should have_aliased_accessor(:h, :height) }
+  it { should alias_accessor(:w, :width)  }
+  it { should alias_accessor(:h, :height) }
 end

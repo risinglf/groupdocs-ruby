@@ -72,7 +72,7 @@ describe GroupDocs::Questionnaire do
   it { should have_accessor(:expires)             }
   it { should have_accessor(:document_ids)        }
 
-  it { should have_aliased_accessor(:description, :descr) }
+  it { should alias_accessor(:description, :descr) }
 
   describe '#pages=' do
     it 'converts each page to GroupDocs::Questionnaire::Page object if hash is passed' do

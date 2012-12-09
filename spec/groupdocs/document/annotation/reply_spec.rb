@@ -65,9 +65,9 @@ describe GroupDocs::Document::Annotation::Reply do
   it { should have_accessor(:text)           }
   it { should have_accessor(:repliedOn)      }
 
-  it { should have_aliased_accessor(:annotation_guid, :annotationGuid) }
-  it { should have_aliased_accessor(:user_guid, :userGuid)             }
-  it { should have_aliased_accessor(:user_name, :userName)             }
+  it { should alias_accessor(:annotation_guid, :annotationGuid) }
+  it { should alias_accessor(:user_guid, :userGuid)             }
+  it { should alias_accessor(:user_name, :userName)             }
   # Reply#replied_on is overwritten
   it { should have_alias(:replied_on=, :repliedOn=) }
 

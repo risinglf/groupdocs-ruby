@@ -38,7 +38,7 @@ describe GroupDocs::DataSource do
   it { should have_accessor(:modified_on)      }
   it { should have_accessor(:fields)           }
 
-  it { should have_aliased_accessor(:description, :descr) }
+  it { should alias_accessor(:description, :descr) }
 
   describe '#created_on' do
     it 'returns converted to Time object Unix timestamp' do

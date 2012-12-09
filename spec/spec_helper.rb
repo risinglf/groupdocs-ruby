@@ -24,7 +24,7 @@ RSpec::Matchers.define :have_alias do |aliased, original|
     object.method(aliased).should == object.method(original)
   end
 end
-RSpec::Matchers.define :have_aliased_accessor do |aliased, original|
+RSpec::Matchers.define :alias_accessor do |aliased, original|
   match do |object|
     object.should have_alias(:"#{aliased}",  :"#{original}")
     object.should have_alias(:"#{aliased}=",  :"#{original}=")

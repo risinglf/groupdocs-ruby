@@ -10,6 +10,6 @@ describe GroupDocs::Signature::Envelope::Log do
   it { should have_accessor(:action)        }
   it { should have_accessor(:remoteAddress) }
 
-  it { should have_aliased_accessor(:user_name, :userName)            }
-  it { should have_aliased_accessor(:remote_address,  :remoteAddress) }
+  it { should alias_accessor(:user_name, :userName)            }
+  it { should alias_accessor(:remote_address,  :remoteAddress) }
 end

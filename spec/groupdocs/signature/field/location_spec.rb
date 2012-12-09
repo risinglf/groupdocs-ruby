@@ -19,22 +19,22 @@ describe GroupDocs::Signature::Field::Location do
   it { should have_accessor(:fontItalic)     }
   it { should have_accessor(:fontUnderline)  }
 
-  it { should have_aliased_accessor(:document_id,     :documentId)     }
-  it { should have_aliased_accessor(:field_id,        :fieldId)        }
-  it { should have_aliased_accessor(:location_x,      :locationX)      }
-  it { should have_aliased_accessor(:x,               :locationX)      }
-  it { should have_aliased_accessor(:location_y,      :locationY)      }
-  it { should have_aliased_accessor(:y,               :locationY)      }
-  it { should have_aliased_accessor(:location_w,      :locationWidth)  }
-  it { should have_aliased_accessor(:location_width,  :locationWidth)  }
-  it { should have_aliased_accessor(:w,               :locationWidth)  }
-  it { should have_aliased_accessor(:location_h,      :locationHeight) }
-  it { should have_aliased_accessor(:location_height, :locationHeight) }
-  it { should have_aliased_accessor(:h,               :locationHeight) }
-  it { should have_aliased_accessor(:font_name,       :fontName)       }
-  it { should have_aliased_accessor(:font_color,      :fontColor)      }
-  it { should have_aliased_accessor(:font_size,       :fontSize)       }
-  it { should have_aliased_accessor(:font_bold,       :fontBold)       }
-  it { should have_aliased_accessor(:font_italic,     :fontItalic)     }
-  it { should have_aliased_accessor(:font_underline,  :fontUnderline)  }
+  it { should alias_accessor(:document_id,     :documentId)     }
+  it { should alias_accessor(:field_id,        :fieldId)        }
+  it { should alias_accessor(:location_x,      :locationX)      }
+  it { should alias_accessor(:x,               :locationX)      }
+  it { should alias_accessor(:location_y,      :locationY)      }
+  it { should alias_accessor(:y,               :locationY)      }
+  it { should alias_accessor(:location_w,      :locationWidth)  }
+  it { should alias_accessor(:location_width,  :locationWidth)  }
+  it { should alias_accessor(:w,               :locationWidth)  }
+  it { should alias_accessor(:location_h,      :locationHeight) }
+  it { should alias_accessor(:location_height, :locationHeight) }
+  it { should alias_accessor(:h,               :locationHeight) }
+  it { should alias_accessor(:font_name,       :fontName)       }
+  it { should alias_accessor(:font_color,      :fontColor)      }
+  it { should alias_accessor(:font_size,       :fontSize)       }
+  it { should alias_accessor(:font_bold,       :fontBold)       }
+  it { should alias_accessor(:font_italic,     :fontItalic)     }
+  it { should alias_accessor(:font_underline,  :fontUnderline)  }
 end

@@ -11,7 +11,7 @@ describe GroupDocs::Questionnaire::Question do
   it { should have_accessor(:type)       }
   it { should have_accessor(:answers)    }
 
-  it { should have_aliased_accessor(:default_answer, :def_answer) }
+  it { should alias_accessor(:default_answer, :def_answer) }
 
   describe '#answers=' do
     it 'converts each answer to GroupDocs::Questionnaire::Question::Answer object' do

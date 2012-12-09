@@ -9,8 +9,8 @@ describe GroupDocs::Subscription::Limit do
   it { should have_accessor(:Max)         }
   it { should have_accessor(:Description) }
 
-  it { should have_aliased_accessor(:id, :Id)                   }
-  it { should have_aliased_accessor(:min, :Min)                 }
-  it { should have_aliased_accessor(:max, :Max)                 }
-  it { should have_aliased_accessor(:description, :Description) }
+  it { should alias_accessor(:id, :Id)                   }
+  it { should alias_accessor(:min, :Min)                 }
+  it { should alias_accessor(:max, :Max)                 }
+  it { should alias_accessor(:description, :Description) }
 end

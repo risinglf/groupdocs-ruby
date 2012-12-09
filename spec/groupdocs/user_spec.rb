@@ -38,9 +38,9 @@ describe GroupDocs::User do
   it { should have_accessor(:color)              }
   it { should have_accessor(:customEmailMessage) }
 
-  it { should have_aliased_accessor(:first_name, :firstname)                    }
-  it { should have_aliased_accessor(:last_name, :lastname)                      }
-  it { should have_aliased_accessor(:custom_email_message, :customEmailMessage) }
+  it { should alias_accessor(:first_name, :firstname)                    }
+  it { should alias_accessor(:last_name, :lastname)                      }
+  it { should alias_accessor(:custom_email_message, :customEmailMessage) }
 
   it { should have_alias(:pkey=, :private_key=)        }
   it { should have_alias(:pswd_salt=, :password_salt=) }

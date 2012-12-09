@@ -13,9 +13,9 @@ describe GroupDocs::Signature::Recipient do
   it { should have_accessor(:order)     }
   it { should have_accessor(:status)    }
 
-  it { should have_aliased_accessor(:first_name, :firstName) }
-  it { should have_aliased_accessor(:last_name,  :lastName)  }
-  it { should have_aliased_accessor(:role_id,    :roleId)    }
+  it { should alias_accessor(:first_name, :firstName) }
+  it { should alias_accessor(:last_name,  :lastName)  }
+  it { should alias_accessor(:role_id,    :roleId)    }
 
   describe '#status' do
     it 'converts status to human-readable format' do

@@ -56,26 +56,26 @@ describe GroupDocs::Signature::Field do
   it { should have_accessor(:location)          }
   it { should have_accessor(:locations)         }
 
-  it { should have_aliased_accessor(:template_id,        :templateId)        }
-  it { should have_aliased_accessor(:recipient_id,       :recipientId)       }
-  it { should have_aliased_accessor(:signature_field_id, :signatureFieldId)  }
-  it { should have_aliased_accessor(:graph_size_w,       :graphSizeW)        }
-  it { should have_aliased_accessor(:graph_size_width,   :graphSizeW)        }
-  it { should have_aliased_accessor(:graph_size_h,       :graphSizeH)        }
-  it { should have_aliased_accessor(:graph_size_height,  :graphSizeH)        }
-  it { should have_aliased_accessor(:get_data_from,      :getDataFrom)       }
-  it { should have_aliased_accessor(:regular_expression, :regularExpression) }
-  it { should have_aliased_accessor(:font_name,          :fontName)          }
-  it { should have_aliased_accessor(:font_color,         :fontColor)         }
-  it { should have_aliased_accessor(:font_size,          :fontSize)          }
-  it { should have_aliased_accessor(:font_bold,          :fontBold)          }
-  it { should have_aliased_accessor(:font_italic,        :fontItalic)        }
-  it { should have_aliased_accessor(:font_underline,     :fontUnderline)     }
-  it { should have_aliased_accessor(:is_system,          :isSystem)          }
-  it { should have_aliased_accessor(:acceptable_values,  :acceptableValues)  }
-  it { should have_aliased_accessor(:default_value,      :defaultValue)      }
-  it { should have_aliased_accessor(:text_rows,          :textRows)          }
-  it { should have_aliased_accessor(:text_columns,       :textColumns)       }
+  it { should alias_accessor(:template_id,        :templateId)        }
+  it { should alias_accessor(:recipient_id,       :recipientId)       }
+  it { should alias_accessor(:signature_field_id, :signatureFieldId)  }
+  it { should alias_accessor(:graph_size_w,       :graphSizeW)        }
+  it { should alias_accessor(:graph_size_width,   :graphSizeW)        }
+  it { should alias_accessor(:graph_size_h,       :graphSizeH)        }
+  it { should alias_accessor(:graph_size_height,  :graphSizeH)        }
+  it { should alias_accessor(:get_data_from,      :getDataFrom)       }
+  it { should alias_accessor(:regular_expression, :regularExpression) }
+  it { should alias_accessor(:font_name,          :fontName)          }
+  it { should alias_accessor(:font_color,         :fontColor)         }
+  it { should alias_accessor(:font_size,          :fontSize)          }
+  it { should alias_accessor(:font_bold,          :fontBold)          }
+  it { should alias_accessor(:font_italic,        :fontItalic)        }
+  it { should alias_accessor(:font_underline,     :fontUnderline)     }
+  it { should alias_accessor(:is_system,          :isSystem)          }
+  it { should alias_accessor(:acceptable_values,  :acceptableValues)  }
+  it { should alias_accessor(:default_value,      :defaultValue)      }
+  it { should alias_accessor(:text_rows,          :textRows)          }
+  it { should alias_accessor(:text_columns,       :textColumns)       }
 
   describe '#location=' do
     it 'converts location to GroupDocs::Signature::Field::Location object if hash is passed' do

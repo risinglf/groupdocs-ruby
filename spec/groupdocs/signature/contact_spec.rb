@@ -64,8 +64,8 @@ describe GroupDocs::Signature::Contact do
   it { should have_accessor(:email)     }
   it { should have_accessor(:provider)  }
 
-  it { should have_aliased_accessor(:first_name, :firstName) }
-  it { should have_aliased_accessor(:last_name, :lastName)   }
+  it { should alias_accessor(:first_name, :firstName) }
+  it { should alias_accessor(:last_name, :lastName)   }
 
   describe '#add!' do
     before(:each) do

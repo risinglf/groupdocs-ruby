@@ -46,11 +46,11 @@ describe GroupDocs::Subscription do
   it { should have_accessor(:Price)         }
   it { should have_accessor(:CurrencyCode)  }
 
-  it { should have_aliased_accessor(:id, :Id)                         }
-  it { should have_aliased_accessor(:name, :Name)                     }
-  it { should have_aliased_accessor(:pricing_plan_id, :PricingPlanId) }
-  it { should have_aliased_accessor(:price, :Price)                   }
-  it { should have_aliased_accessor(:currency_code, :CurrencyCode)    }
+  it { should alias_accessor(:id, :Id)                         }
+  it { should alias_accessor(:name, :Name)                     }
+  it { should alias_accessor(:pricing_plan_id, :PricingPlanId) }
+  it { should alias_accessor(:price, :Price)                   }
+  it { should alias_accessor(:currency_code, :CurrencyCode)    }
 
   it { should have_alias(:ref_id=, :id=) }
 
