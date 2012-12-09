@@ -13,8 +13,6 @@ describe GroupDocs::Document::Rectangle do
   it { should respond_to(:height)  }
   it { should respond_to(:height=) }
 
-  it { should have_alias(:w, :width)    }
-  it { should have_alias(:w=, :width=)  }
-  it { should have_alias(:h, :height)   }
-  it { should have_alias(:h=, :height=) }
+  it { should have_aliased_accessor(:w, :width)  }
+  it { should have_aliased_accessor(:h, :height) }
 end

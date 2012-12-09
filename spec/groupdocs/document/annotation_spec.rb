@@ -38,20 +38,14 @@ describe GroupDocs::Document::Annotation do
   it { should respond_to(:annotationPosition)  }
   it { should respond_to(:annotationPosition=) }
 
-  it { should have_alias(:session_guid, :sessionGuid)                 }
-  it { should have_alias(:session_guid=, :sessionGuid=)               }
-  it { should have_alias(:document_guid, :documentGuid)               }
-  it { should have_alias(:document_guid=, :documentGuid=)             }
-  it { should have_alias(:creator_guid, :creatorGuid)                 }
-  it { should have_alias(:creator_guid=, :creatorGuid=)               }
-  it { should have_alias(:reply_guid, :replyGuid)                     }
-  it { should have_alias(:reply_guid=, :replyGuid=)                   }
+  it { should have_aliased_accessor(:session_guid, :sessionGuid)   }
+  it { should have_aliased_accessor(:document_guid, :documentGuid) }
+  it { should have_aliased_accessor(:creator_guid, :creatorGuid)   }
+  it { should have_aliased_accessor(:reply_guid, :replyGuid)       }
   # Annotation#created_on is overwritten
-  it { should have_alias(:created_on=, :createdOn=)                   }
-  it { should have_alias(:annotation_position, :annotationPosition)   }
-  it { should have_alias(:annotation_position=, :annotationPosition=) }
-  it { should have_alias(:position, :annotationPosition)              }
-  it { should have_alias(:position=, :annotationPosition=)            }
+  it { should have_alias(:created_on=, :createdOn=)                            }
+  it { should have_aliased_accessor(:annotation_position, :annotationPosition) }
+  it { should have_aliased_accessor(:position, :annotationPosition)            }
 
   it { should have_alias(:annotationGuid=, :guid=) }
 

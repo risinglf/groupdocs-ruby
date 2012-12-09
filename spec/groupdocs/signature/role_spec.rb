@@ -41,14 +41,10 @@ describe GroupDocs::Signature::Role do
   it { should respond_to(:canDelegate)  }
   it { should respond_to(:canDelegate=) }
 
-  it { should have_alias(:can_edit, :canEdit)           }
-  it { should have_alias(:can_edit=, :canEdit=)         }
-  it { should have_alias(:can_sign, :canSign)           }
-  it { should have_alias(:can_sign=, :canSign=)         }
-  it { should have_alias(:can_annotate, :canAnnotate)   }
-  it { should have_alias(:can_annotate=, :canAnnotate=) }
-  it { should have_alias(:can_delegate, :canDelegate)   }
-  it { should have_alias(:can_delegate=, :canDelegate=) }
+  it { should have_aliased_accessor(:can_edit, :canEdit)         }
+  it { should have_aliased_accessor(:can_sign, :canSign)         }
+  it { should have_aliased_accessor(:can_annotate, :canAnnotate) }
+  it { should have_aliased_accessor(:can_delegate, :canDelegate) }
 
   describe '#can_edit?' do
     it 'returns true if role can edit' do

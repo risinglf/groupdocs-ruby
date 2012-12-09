@@ -44,8 +44,7 @@ describe GroupDocs::DataSource do
   it { should respond_to(:fields)            }
   it { should respond_to(:fields=)           }
 
-  it { should have_alias(:description, :descr)   }
-  it { should have_alias(:description=, :descr=) }
+  it { should have_aliased_accessor(:description, :descr) }
 
   describe '#created_on' do
     it 'returns converted to Time object Unix timestamp' do

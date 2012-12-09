@@ -55,24 +55,15 @@ describe GroupDocs::Signature::Form do
   it { should respond_to(:status)                      }
   it { should respond_to(:status=)                     }
 
-  it { should have_alias(:owner_guid, :ownerGuid)                                       }
-  it { should have_alias(:owner_guid=, :ownerGuid=)                                     }
-  it { should have_alias(:template_guid, :templateGuid)                                 }
-  it { should have_alias(:template_guid=, :templateGuid=)                               }
-  it { should have_alias(:created_time_stamp, :createdTimeStamp)                        }
-  it { should have_alias(:created_time_stamp=, :createdTimeStamp=)                      }
-  it { should have_alias(:status_date_time, :statusDateTime)                            }
-  it { should have_alias(:status_date_time=, :statusDateTime=)                          }
-  it { should have_alias(:documents_count, :documentsCount)                             }
-  it { should have_alias(:documents_count=, :documentsCount=)                           }
-  it { should have_alias(:documents_pages, :documentsPages)                             }
-  it { should have_alias(:documents_pages=, :documentsPages=)                           }
-  it { should have_alias(:participants_count, :participantsCount)                       }
-  it { should have_alias(:participants_count=, :participantsCount=)                     }
-  it { should have_alias(:fields_in_final_file_name, :fieldsInFinalFileName)            }
-  it { should have_alias(:fields_in_final_file_name=, :fieldsInFinalFileName=)          }
-  it { should have_alias(:can_participant_download_form, :canParticipantDownloadForm)   }
-  it { should have_alias(:can_participant_download_form=, :canParticipantDownloadForm=) }
+  it { should have_aliased_accessor(:owner_guid, :ownerGuid)                                     }
+  it { should have_aliased_accessor(:template_guid, :templateGuid)                               }
+  it { should have_aliased_accessor(:created_time_stamp, :createdTimeStamp)                      }
+  it { should have_aliased_accessor(:status_date_time, :statusDateTime)                          }
+  it { should have_aliased_accessor(:documents_count, :documentsCount)                           }
+  it { should have_aliased_accessor(:documents_pages, :documentsPages)                           }
+  it { should have_aliased_accessor(:participants_count, :participantsCount)                     }
+  it { should have_aliased_accessor(:fields_in_final_file_name, :fieldsInFinalFileName)          }
+  it { should have_aliased_accessor(:can_participant_download_form, :canParticipantDownloadForm) }
 
   describe '#status' do
     it 'converts status to human-readable format' do

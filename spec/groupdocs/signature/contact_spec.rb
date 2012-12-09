@@ -70,10 +70,8 @@ describe GroupDocs::Signature::Contact do
   it { should respond_to(:provider)   }
   it { should respond_to(:provider=)  }
 
-  it { should have_alias(:first_name, :firstName)   }
-  it { should have_alias(:first_name=, :firstName=) }
-  it { should have_alias(:last_name, :lastName)     }
-  it { should have_alias(:last_name=, :lastName=)   }
+  it { should have_aliased_accessor(:first_name, :firstName) }
+  it { should have_aliased_accessor(:last_name, :lastName)   }
 
   describe '#add!' do
     before(:each) do

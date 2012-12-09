@@ -15,9 +15,6 @@ describe GroupDocs::Signature::Envelope::Log do
   it { should respond_to(:remoteAddress)  }
   it { should respond_to(:remoteAddress=) }
 
-  it { should have_alias(:user_name,       :userName)       }
-  it { should have_alias(:user_name=,      :userName=)      }
-  it { should have_alias(:remote_address,  :remoteAddress)  }
-  it { should have_alias(:remote_address=, :remoteAddress=) }
-
+  it { should have_aliased_accessor(:user_name, :userName)            }
+  it { should have_aliased_accessor(:remote_address,  :remoteAddress) }
 end

@@ -55,12 +55,9 @@ describe GroupDocs::User do
   it { should respond_to(:customEmailMessage)  }
   it { should respond_to(:customEmailMessage=) }
 
-  it { should have_alias(:first_name, :firstname)                      }
-  it { should have_alias(:first_name=, :firstname=)                    }
-  it { should have_alias(:last_name, :lastname)                        }
-  it { should have_alias(:last_name=, :lastname=)                      }
-  it { should have_alias(:custom_email_message, :customEmailMessage)   }
-  it { should have_alias(:custom_email_message=, :customEmailMessage=) }
+  it { should have_aliased_accessor(:first_name, :firstname)                    }
+  it { should have_aliased_accessor(:last_name, :lastname)                      }
+  it { should have_aliased_accessor(:custom_email_message, :customEmailMessage) }
 
   it { should have_alias(:pkey=, :private_key=)        }
   it { should have_alias(:pswd_salt=, :password_salt=) }

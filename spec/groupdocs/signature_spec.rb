@@ -55,30 +55,18 @@ describe GroupDocs::Signature do
   it { should respond_to(:createdTimeStamp)      }
   it { should respond_to(:createdTimeStamp=)     }
 
-  it { should have_alias(:user_guid, :userGuid)                             }
-  it { should have_alias(:user_guid=, :userGuid=)                           }
-  it { should have_alias(:recipient_id, :recipientId)                       }
-  it { should have_alias(:recipient_id=, :recipientId=)                     }
-  it { should have_alias(:company_name, :companyName)                       }
-  it { should have_alias(:company_name=, :companyName=)                     }
-  it { should have_alias(:first_name, :firstName)                           }
-  it { should have_alias(:first_name=, :firstName=)                         }
-  it { should have_alias(:last_name, :lastName)                             }
-  it { should have_alias(:last_name=, :lastName=)                           }
-  it { should have_alias(:full_name, :fullName)                             }
-  it { should have_alias(:full_name=, :fullName=)                           }
-  it { should have_alias(:text_initials, :textInitials)                     }
-  it { should have_alias(:text_initials=, :textInitials=)                   }
-  it { should have_alias(:signature_image_file_id, :signatureImageFileId)   }
-  it { should have_alias(:signature_image_file_id=, :signatureImageFileId=) }
-  it { should have_alias(:initials_image_file_id, :initialsImageFileId)     }
-  it { should have_alias(:initials_image_file_id=, :initialsImageFileId=)   }
-  it { should have_alias(:signature_image_url, :signatureImageUrl)          }
-  it { should have_alias(:signature_image_url=, :signatureImageUrl=)        }
-  it { should have_alias(:initials_image_url, :initialsImageUrl)            }
-  it { should have_alias(:initials_image_url=, :initialsImageUrl=)          }
-  it { should have_alias(:created_time_stamp, :createdTimeStamp)            }
-  it { should have_alias(:created_time_stamp=, :createdTimeStamp=)          }
+  it { should have_aliased_accessor(:user_guid, :userGuid)                           }
+  it { should have_aliased_accessor(:recipient_id, :recipientId)                     }
+  it { should have_aliased_accessor(:company_name, :companyName)                     }
+  it { should have_aliased_accessor(:first_name, :firstName)                         }
+  it { should have_aliased_accessor(:last_name, :lastName)                           }
+  it { should have_aliased_accessor(:full_name, :fullName)                           }
+  it { should have_aliased_accessor(:text_initials, :textInitials)                   }
+  it { should have_aliased_accessor(:signature_image_file_id, :signatureImageFileId) }
+  it { should have_aliased_accessor(:initials_image_file_id, :initialsImageFileId)   }
+  it { should have_aliased_accessor(:signature_image_url, :signatureImageUrl)        }
+  it { should have_aliased_accessor(:initials_image_url, :initialsImageUrl)          }
+  it { should have_aliased_accessor(:created_time_stamp, :createdTimeStamp)          }
 
   describe '#create!' do
     before(:each) do

@@ -51,16 +51,11 @@ describe GroupDocs::Subscription do
   it { should respond_to(:CurrencyCode)   }
   it { should respond_to(:CurrencyCode=)  }
 
-  it { should have_alias(:id, :Id)                           }
-  it { should have_alias(:id=, :Id=)                         }
-  it { should have_alias(:name, :Name)                       }
-  it { should have_alias(:name=, :Name=)                     }
-  it { should have_alias(:pricing_plan_id, :PricingPlanId)   }
-  it { should have_alias(:pricing_plan_id=, :PricingPlanId=) }
-  it { should have_alias(:price, :Price)                     }
-  it { should have_alias(:price=, :Price=)                   }
-  it { should have_alias(:currency_code, :CurrencyCode)      }
-  it { should have_alias(:currency_code=, :CurrencyCode=)    }
+  it { should have_aliased_accessor(:id, :Id)                         }
+  it { should have_aliased_accessor(:name, :Name)                     }
+  it { should have_aliased_accessor(:pricing_plan_id, :PricingPlanId) }
+  it { should have_aliased_accessor(:price, :Price)                   }
+  it { should have_aliased_accessor(:currency_code, :CurrencyCode)    }
 
   it { should have_alias(:ref_id=, :id=) }
 

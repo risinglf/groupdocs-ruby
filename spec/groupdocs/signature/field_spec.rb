@@ -83,46 +83,26 @@ describe GroupDocs::Signature::Field do
   it { should respond_to(:locations)          }
   it { should respond_to(:locations=)         }
 
-  it { should have_alias(:template_id,         :templateId)         }
-  it { should have_alias(:template_id=,        :templateId=)        }
-  it { should have_alias(:recipient_id,        :recipientId)        }
-  it { should have_alias(:recipient_id=,       :recipientId=)       }
-  it { should have_alias(:signature_field_id,  :signatureFieldId)   }
-  it { should have_alias(:signature_field_id=, :signatureFieldId=)  }
-  it { should have_alias(:graph_size_w,        :graphSizeW)         }
-  it { should have_alias(:graph_size_w=,       :graphSizeW=)        }
-  it { should have_alias(:graph_size_width,    :graphSizeW)         }
-  it { should have_alias(:graph_size_width=,   :graphSizeW=)        }
-  it { should have_alias(:graph_size_h,        :graphSizeH)         }
-  it { should have_alias(:graph_size_h=,       :graphSizeH=)        }
-  it { should have_alias(:graph_size_height,   :graphSizeH)         }
-  it { should have_alias(:graph_size_height=,  :graphSizeH=)        }
-  it { should have_alias(:get_data_from,       :getDataFrom)        }
-  it { should have_alias(:get_data_from=,      :getDataFrom=)       }
-  it { should have_alias(:regular_expression,  :regularExpression)  }
-  it { should have_alias(:regular_expression=, :regularExpression=) }
-  it { should have_alias(:font_name,           :fontName)           }
-  it { should have_alias(:font_name=,          :fontName=)          }
-  it { should have_alias(:font_color,          :fontColor)          }
-  it { should have_alias(:font_color=,         :fontColor=)         }
-  it { should have_alias(:font_size,           :fontSize)           }
-  it { should have_alias(:font_size=,          :fontSize=)          }
-  it { should have_alias(:font_bold,           :fontBold)           }
-  it { should have_alias(:font_bold=,          :fontBold=)          }
-  it { should have_alias(:font_italic,         :fontItalic)         }
-  it { should have_alias(:font_italic=,        :fontItalic=)        }
-  it { should have_alias(:font_underline,      :fontUnderline)      }
-  it { should have_alias(:font_underline=,     :fontUnderline=)     }
-  it { should have_alias(:is_system,           :isSystem)           }
-  it { should have_alias(:is_system=,          :isSystem=)          }
-  it { should have_alias(:acceptable_values,   :acceptableValues)   }
-  it { should have_alias(:acceptable_values=,  :acceptableValues=)  }
-  it { should have_alias(:default_value,       :defaultValue)       }
-  it { should have_alias(:default_value=,      :defaultValue=)      }
-  it { should have_alias(:text_rows,           :textRows)           }
-  it { should have_alias(:text_rows=,          :textRows=)          }
-  it { should have_alias(:text_columns,        :textColumns)        }
-  it { should have_alias(:text_columns=,       :textColumns=)       }
+  it { should have_aliased_accessor(:template_id,        :templateId)        }
+  it { should have_aliased_accessor(:recipient_id,       :recipientId)       }
+  it { should have_aliased_accessor(:signature_field_id, :signatureFieldId)  }
+  it { should have_aliased_accessor(:graph_size_w,       :graphSizeW)        }
+  it { should have_aliased_accessor(:graph_size_width,   :graphSizeW)        }
+  it { should have_aliased_accessor(:graph_size_h,       :graphSizeH)        }
+  it { should have_aliased_accessor(:graph_size_height,  :graphSizeH)        }
+  it { should have_aliased_accessor(:get_data_from,      :getDataFrom)       }
+  it { should have_aliased_accessor(:regular_expression, :regularExpression) }
+  it { should have_aliased_accessor(:font_name,          :fontName)          }
+  it { should have_aliased_accessor(:font_color,         :fontColor)         }
+  it { should have_aliased_accessor(:font_size,          :fontSize)          }
+  it { should have_aliased_accessor(:font_bold,          :fontBold)          }
+  it { should have_aliased_accessor(:font_italic,        :fontItalic)        }
+  it { should have_aliased_accessor(:font_underline,     :fontUnderline)     }
+  it { should have_aliased_accessor(:is_system,          :isSystem)          }
+  it { should have_aliased_accessor(:acceptable_values,  :acceptableValues)  }
+  it { should have_aliased_accessor(:default_value,      :defaultValue)      }
+  it { should have_aliased_accessor(:text_rows,          :textRows)          }
+  it { should have_aliased_accessor(:text_columns,       :textColumns)       }
 
   describe '#location=' do
     it 'converts location to GroupDocs::Signature::Field::Location object if hash is passed' do

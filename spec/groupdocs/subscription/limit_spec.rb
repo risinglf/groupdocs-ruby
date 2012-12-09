@@ -13,12 +13,8 @@ describe GroupDocs::Subscription::Limit do
   it { should respond_to(:Description)  }
   it { should respond_to(:Description=) }
 
-  it { should have_alias(:id, :Id)                     }
-  it { should have_alias(:id=, :Id=)                   }
-  it { should have_alias(:min, :Min)                   }
-  it { should have_alias(:min=, :Min=)                 }
-  it { should have_alias(:max, :Max)                   }
-  it { should have_alias(:max=, :Max=)                 }
-  it { should have_alias(:description, :Description)   }
-  it { should have_alias(:description=, :Description=) }
+  it { should have_aliased_accessor(:id, :Id)                   }
+  it { should have_aliased_accessor(:min, :Min)                 }
+  it { should have_aliased_accessor(:max, :Max)                 }
+  it { should have_aliased_accessor(:description, :Description) }
 end

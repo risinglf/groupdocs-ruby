@@ -83,8 +83,7 @@ describe GroupDocs::Questionnaire do
   it { should respond_to(:document_ids)         }
   it { should respond_to(:document_ids=)        }
 
-  it { should have_alias(:description, :descr)   }
-  it { should have_alias(:description=, :descr=) }
+  it { should have_aliased_accessor(:description, :descr) }
 
   describe '#pages=' do
     it 'converts each page to GroupDocs::Questionnaire::Page object if hash is passed' do

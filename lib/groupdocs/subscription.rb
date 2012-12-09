@@ -92,7 +92,7 @@ module GroupDocs
       attr_accessor camel
 
       # Human-readable accessors
-      alias_accessor snake, camel
+      alias_accessor snake, camel.to_sym
 
       #
       # Converts hash to subscription plan limit.

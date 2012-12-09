@@ -50,8 +50,6 @@ describe GroupDocs::Document::Annotation::Reviewer do
   it { should respond_to(:FullName)      }
   it { should respond_to(:FullName=)     }
 
-  it { should have_alias(:email_address, :emailAddress)   }
-  it { should have_alias(:email_address=, :emailAddress=) }
-  it { should have_alias(:full_name, :FullName)           }
-  it { should have_alias(:full_name=, :FullName=)         }
+  it { should have_aliased_accessor(:email_address, :emailAddress) }
+  it { should have_aliased_accessor(:full_name, :FullName)         }
 end
