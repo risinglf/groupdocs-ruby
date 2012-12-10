@@ -107,6 +107,32 @@ describe GroupDocs::Document do
     end
   end
 
+ describe '#page_images!' do
+    before(:each) do
+      mock_api_server(load_json('document_page_images_get'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.page_images!(640, 480, {}, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'accepts options hash' do
+      lambda do
+        subject.page_images!(640, 480, first_page: 0, page_count: 1)
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns array of URLs' do
+      urls = subject.page_images!(640, 480)
+      urls.should be_an(Array)
+      urls.each do |url|
+        url.should be_a(String)
+      end
+    end
+  end
+
   describe '#access_mode!' do
     before(:each) do
       mock_api_server(load_json('document_access_info_get'))

@@ -138,6 +138,39 @@ module GroupDocs
     end
 
     #
+    # Returns array of URLs to images representing document pages.
+    #
+    # @example
+    #   file = GroupDocs::Storage::Folder.list!.last
+    #   document = file.to_document
+    #   document.page_images! 1024, 768, first_page: 0, page_count: 1
+    #
+    # @param [Integer] width Image width
+    # @param [Integer] height Image height
+    # @param [Hash] options
+    # @option options [Integer] :first_page Start page to return image for (starting with 0)
+    # @option options [Integer] :page_count Number of pages to return image for
+    # @option options [Integer] :quality
+    # @option options [Boolean] :use_pdf
+    # @option options [Boolean] :token
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<String>]
+    #
+    def page_images!(width, height, options = {}, access = {})
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/doc/{{client_id}}/files/#{file.guid}/pages/images/#{width}x#{height}/urls"
+      end
+      api.add_params(options)
+      json = api.execute!
+
+      json[:url]
+    end
+
+    #
     # Returns access mode of document.
     #
     # @param [Hash] access Access credentials
