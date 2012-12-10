@@ -175,7 +175,7 @@ module GroupDocs
         response = Api::Request.new do |request|
           request[:access] = access
           request[:method] = :DOWNLOAD
-          request[:path] = "/storage/{{client_id}}/files/#{id}"
+          request[:path] = "/storage/{{client_id}}/files/#{guid}"
         end.execute!
 
         filepath = "#{path}/#{name}"
