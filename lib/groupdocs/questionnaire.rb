@@ -86,8 +86,7 @@ module GroupDocs
     attr_accessor :document_ids
 
     # Human-readable accessors
-    alias_method :description,  :descr
-    alias_method :description=, :descr=
+    alias_accessor :description, :descr
 
     #
     # Converts each page to GroupDocs::Questionnaire::Page object.

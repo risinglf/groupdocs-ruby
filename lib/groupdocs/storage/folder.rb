@@ -105,6 +105,9 @@ module GroupDocs
       # @option options [Integer] :count How many items to list
       # @option options [String] :order_by Field name to sort by
       # @option options [Boolean] :order_asc Set to true to return in ascending order
+      # @option options [String] :filter Filter by name
+      # @option options [Array<Symbol>] :file_types Array of file types to return
+      # @option options [Boolean] :extended Set to true to return extended information
       # @param [Hash] access Access credentials
       # @option access [String] :client_id
       # @option access [String] :private_key

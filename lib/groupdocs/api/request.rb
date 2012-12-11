@@ -1,5 +1,3 @@
-require 'groupdocs/api/helpers'
-
 module GroupDocs
   module Api
     class Request

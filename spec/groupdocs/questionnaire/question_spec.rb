@@ -4,21 +4,14 @@ describe GroupDocs::Questionnaire::Question do
 
   it_behaves_like GroupDocs::Api::Entity
 
-  it { should respond_to(:field)       }
-  it { should respond_to(:field=)      }
-  it { should respond_to(:text)        }
-  it { should respond_to(:text=)       }
-  it { should respond_to(:def_answer)  }
-  it { should respond_to(:def_answer=) }
-  it { should respond_to(:required)    }
-  it { should respond_to(:required=)   }
-  it { should respond_to(:type)        }
-  it { should respond_to(:type=)       }
-  it { should respond_to(:answers)     }
-  it { should respond_to(:answers=)    }
+  it { should have_accessor(:field)      }
+  it { should have_accessor(:text)       }
+  it { should have_accessor(:def_answer) }
+  it { should have_accessor(:required)   }
+  it { should have_accessor(:type)       }
+  it { should have_accessor(:answers)    }
 
-  it { should have_alias(:default_answer, :def_answer)   }
-  it { should have_alias(:default_answer=, :def_answer=) }
+  it { should alias_accessor(:default_answer, :def_answer) }
 
   describe '#answers=' do
     it 'converts each answer to GroupDocs::Questionnaire::Question::Answer object' do

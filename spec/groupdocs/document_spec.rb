@@ -50,18 +50,12 @@ describe GroupDocs::Document do
     end
   end
 
-  it { should respond_to(:file)            }
-  it { should respond_to(:file=)           }
-  it { should respond_to(:process_date)    }
-  it { should respond_to(:process_date=)   }
-  it { should respond_to(:outputs)         }
-  it { should respond_to(:outputs=)        }
-  it { should respond_to(:output_formats)  }
-  it { should respond_to(:output_formats=) }
-  it { should respond_to(:order)           }
-  it { should respond_to(:order=)          }
-  it { should respond_to(:field_count)     }
-  it { should respond_to(:field_count=)    }
+  it { should have_accessor(:file)           }
+  it { should have_accessor(:process_date)   }
+  it { should have_accessor(:outputs)        }
+  it { should have_accessor(:output_formats) }
+  it { should have_accessor(:order)          }
+  it { should have_accessor(:field_count)    }
 
   it { should have_alias(:access_mode=, :access_mode_set!) }
 
@@ -110,6 +104,32 @@ describe GroupDocs::Document do
 
     it 'raises error if file is not an instance of GroupDocs::Storage::File' do
       -> { described_class.new(file: '') }.should raise_error(ArgumentError)
+    end
+  end
+
+ describe '#page_images!' do
+    before(:each) do
+      mock_api_server(load_json('document_page_images_get'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.page_images!(640, 480, {}, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'accepts options hash' do
+      lambda do
+        subject.page_images!(640, 480, first_page: 0, page_count: 1)
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns array of URLs' do
+      urls = subject.page_images!(640, 480)
+      urls.should be_an(Array)
+      urls.each do |url|
+        url.should be_a(String)
+      end
     end
   end
 

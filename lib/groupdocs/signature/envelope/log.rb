@@ -13,10 +13,8 @@ module GroupDocs
     attr_accessor :remoteAddress
 
     # Human-readable accessors
-    alias_method :remote_address,  :remoteAddress
-    alias_method :remote_address=, :remoteAddress=
-    alias_method :user_name,       :userName
-    alias_method :user_name=,      :userName=
+    alias_accessor :remote_address, :remoteAddress
+    alias_accessor :user_name,      :userName
 
   end # Signature::Envelope::Log
 end # GroupDocs

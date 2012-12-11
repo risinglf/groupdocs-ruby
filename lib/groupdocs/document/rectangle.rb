@@ -11,10 +11,8 @@ module GroupDocs
     attr_accessor :height
 
     # Human-readable accessors
-    alias_method :w,  :width
-    alias_method :w=, :width=
-    alias_method :h,  :height
-    alias_method :h=, :height=
+    alias_accessor :w, :width
+    alias_accessor :h, :height
 
   end # Document::Rectangle
 end # GroupDocs

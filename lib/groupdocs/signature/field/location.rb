@@ -31,42 +31,24 @@ module GroupDocs
     attr_accessor :fontUnderline
 
     # Human-readable accessors
-    alias_method :document_id,      :documentId
-    alias_method :document_id=,     :documentId=
-    alias_method :field_id,         :fieldId
-    alias_method :field_id=,        :fieldId=
-    alias_method :location_x,       :locationX
-    alias_method :location_x=,      :locationX=
-    alias_method :x,                :locationX
-    alias_method :x=,               :locationX=
-    alias_method :location_y,       :locationY
-    alias_method :location_y=,      :locationY=
-    alias_method :y,                :locationY
-    alias_method :y=,               :locationY=
-    alias_method :location_w,       :locationWidth
-    alias_method :location_w=,      :locationWidth=
-    alias_method :location_width,   :locationWidth
-    alias_method :location_width=,  :locationWidth=
-    alias_method :w,                :locationWidth
-    alias_method :w=,               :locationWidth=
-    alias_method :location_h,       :locationHeight
-    alias_method :location_h=,      :locationHeight=
-    alias_method :location_height,  :locationHeight
-    alias_method :location_height=, :locationHeight=
-    alias_method :h,                :locationHeight
-    alias_method :h=,               :locationHeight=
-    alias_method :font_name,        :fontName
-    alias_method :font_name=,       :fontName=
-    alias_method :font_color,       :fontColor
-    alias_method :font_color=,      :fontColor=
-    alias_method :font_size,        :fontSize
-    alias_method :font_size=,       :fontSize=
-    alias_method :font_bold,        :fontBold
-    alias_method :font_bold=,       :fontBold=
-    alias_method :font_italic,      :fontItalic
-    alias_method :font_italic=,     :fontItalic=
-    alias_method :font_underline,   :fontUnderline
-    alias_method :font_underline=,  :fontUnderline=
+    alias_accessor :document_id,     :documentId
+    alias_accessor :field_id,        :fieldId
+    alias_accessor :location_x,      :locationX
+    alias_accessor :x,               :locationX
+    alias_accessor :location_y,      :locationY
+    alias_accessor :y,               :locationY
+    alias_accessor :location_w,      :locationWidth
+    alias_accessor :location_width,  :locationWidth
+    alias_accessor :w,               :locationWidth
+    alias_accessor :location_h,      :locationHeight
+    alias_accessor :location_height, :locationHeight
+    alias_accessor :h,               :locationHeight
+    alias_accessor :font_name,       :fontName
+    alias_accessor :font_color,      :fontColor
+    alias_accessor :font_size,       :fontSize
+    alias_accessor :font_bold,       :fontBold
+    alias_accessor :font_italic,     :fontItalic
+    alias_accessor :font_underline,  :fontUnderline
 
   end # Signature::Field::Location
 end # GroupDocs

@@ -55,14 +55,10 @@ module GroupDocs
     attr_accessor :repliedOn
 
     # Human-readable accessors
-    alias_method :annotation_guid,  :annotationGuid
-    alias_method :annotation_guid=, :annotationGuid=
-    alias_method :user_guid,        :userGuid
-    alias_method :user_guid=,       :userGuid=
-    alias_method :user_name,        :userName
-    alias_method :user_name=,       :userName=
-    alias_method :replied_on,       :repliedOn
-    alias_method :replied_on=,      :repliedOn=
+    alias_accessor :annotation_guid, :annotationGuid
+    alias_accessor :user_guid,       :userGuid
+    alias_accessor :user_name,       :userName
+    alias_accessor :replied_on,      :repliedOn
 
     #
     # Creates new GroupDocs::Document::Annotation.

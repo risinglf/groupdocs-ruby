@@ -37,8 +37,7 @@ module GroupDocs
     attr_accessor :templateExpireTime
 
     # Human-readable accessors
-    alias_method :template_expire_time,  :templateExpireTime
-    alias_method :template_expire_time=, :templateExpireTime=
+    alias_accessor :template_expire_time, :templateExpireTime
 
     #
     # Adds recipient to template.

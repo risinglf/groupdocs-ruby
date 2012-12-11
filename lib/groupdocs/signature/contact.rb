@@ -76,10 +76,8 @@ module GroupDocs
     attr_accessor :provider
 
     # Human-readable accessors
-    alias_method :first_name,  :firstName
-    alias_method :first_name=, :firstName=
-    alias_method :last_name,   :lastName
-    alias_method :last_name=,  :lastName=
+    alias_accessor :first_name, :firstName
+    alias_accessor :last_name,  :lastName
 
     #
     # Adds contact.

@@ -60,31 +60,19 @@ describe GroupDocs::Questionnaire do
     end
   end
 
-  it { should respond_to(:id)                   }
-  it { should respond_to(:id=)                  }
-  it { should respond_to(:guid)                 }
-  it { should respond_to(:guid=)                }
-  it { should respond_to(:name)                 }
-  it { should respond_to(:name=)                }
-  it { should respond_to(:descr)                }
-  it { should respond_to(:descr=)               }
-  it { should respond_to(:pages)                }
-  it { should respond_to(:pages=)               }
-  it { should respond_to(:resolved_executions)  }
-  it { should respond_to(:resolved_executions=) }
-  it { should respond_to(:assigned_questions)   }
-  it { should respond_to(:assigned_questions=)  }
-  it { should respond_to(:total_questions)      }
-  it { should respond_to(:total_questions=)     }
-  it { should respond_to(:modified)             }
-  it { should respond_to(:modified=)            }
-  it { should respond_to(:expires)              }
-  it { should respond_to(:expires=)             }
-  it { should respond_to(:document_ids)         }
-  it { should respond_to(:document_ids=)        }
+  it { should have_accessor(:id)                  }
+  it { should have_accessor(:guid)                }
+  it { should have_accessor(:name)                }
+  it { should have_accessor(:descr)               }
+  it { should have_accessor(:pages)               }
+  it { should have_accessor(:resolved_executions) }
+  it { should have_accessor(:assigned_questions)  }
+  it { should have_accessor(:total_questions)     }
+  it { should have_accessor(:modified)            }
+  it { should have_accessor(:expires)             }
+  it { should have_accessor(:document_ids)        }
 
-  it { should have_alias(:description, :descr)   }
-  it { should have_alias(:description=, :descr=) }
+  it { should alias_accessor(:description, :descr) }
 
   describe '#pages=' do
     it 'converts each page to GroupDocs::Questionnaire::Page object if hash is passed' do

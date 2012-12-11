@@ -26,28 +26,17 @@ describe GroupDocs::Questionnaire::Execution do
     end
   end
 
-  it { should respond_to(:id)                  }
-  it { should respond_to(:id=)                 }
-  it { should respond_to(:guid)                }
-  it { should respond_to(:guid=)               }
-  it { should respond_to(:collector_id)        }
-  it { should respond_to(:collector_id=)       }
-  it { should respond_to(:collector_guid)      }
-  it { should respond_to(:collector_guid=)     }
-  it { should respond_to(:questionnaire_name)  }
-  it { should respond_to(:questionnaire_name=) }
-  it { should respond_to(:owner)               }
-  it { should respond_to(:owner=)              }
-  it { should respond_to(:executive)           }
-  it { should respond_to(:executive=)          }
-  it { should respond_to(:approver)            }
-  it { should respond_to(:approver=)           }
-  it { should respond_to(:datasource_id)       }
-  it { should respond_to(:datasource_id=)      }
-  it { should respond_to(:modified)            }
-  it { should respond_to(:modified=)           }
-  it { should respond_to(:document)            }
-  it { should respond_to(:document=)           }
+  it { should have_accessor(:id)                 }
+  it { should have_accessor(:guid)               }
+  it { should have_accessor(:collector_id)       }
+  it { should have_accessor(:collector_guid)     }
+  it { should have_accessor(:questionnaire_name) }
+  it { should have_accessor(:owner)              }
+  it { should have_accessor(:executive)          }
+  it { should have_accessor(:approver)           }
+  it { should have_accessor(:datasource_id)      }
+  it { should have_accessor(:modified)           }
+  it { should have_accessor(:document)           }
 
   %w(owner executive approver).each do |method|
     describe "##{method}=" do

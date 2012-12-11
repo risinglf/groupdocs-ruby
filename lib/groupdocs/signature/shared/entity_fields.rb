@@ -8,6 +8,8 @@ module GroupDocs
     #
     module EntityFields
 
+      extend Api::Helpers::Accessor
+
       # @attr [String] id
       attr_accessor :id
       # @attr [String] name
@@ -36,26 +38,16 @@ module GroupDocs
       attr_accessor :recipients
 
       # Human-readable accessors
-      alias_method :owner_id,           :ownerId
-      alias_method :owner_id=,          :ownerId=
-      alias_method :owner_guid,         :ownerGuid
-      alias_method :owner_guid=,        :ownerGuid=
-      alias_method :reminder_time,      :reminderTime
-      alias_method :reminder_time=,     :reminderTime=
-      alias_method :step_expire_time,   :stepExpireTime
-      alias_method :step_expire_time=,  :stepExpireTime=
-      alias_method :owner_should_sign,  :ownerShouldSign
-      alias_method :owner_should_sign=, :ownerShouldSign=
-      alias_method :ordered_signature,  :orderedSignature
-      alias_method :ordered_signature=, :orderedSignature=
-      alias_method :email_subject,      :emailSubject
-      alias_method :email_subject=,     :emailSubject=
-      alias_method :email_body,         :emailBody
-      alias_method :email_body=,        :emailBody=
-      alias_method :documents_count,    :documentsCount
-      alias_method :documents_count=,   :documentsCount=
-      alias_method :documents_pages,    :documentsPages
-      alias_method :documents_pages=,   :documentsPages=
+      alias_accessor :owner_id,          :ownerId
+      alias_accessor :owner_guid,        :ownerGuid
+      alias_accessor :reminder_time,     :reminderTime
+      alias_accessor :step_expire_time,  :stepExpireTime
+      alias_accessor :owner_should_sign, :ownerShouldSign
+      alias_accessor :ordered_signature, :orderedSignature
+      alias_accessor :email_subject,     :emailSubject
+      alias_accessor :email_body,        :emailBody
+      alias_accessor :documents_count,   :documentsCount
+      alias_accessor :documents_pages,   :documentsPages
 
       #
       # Converts each recipient to GroupDocs::Signature::Recipient object.

@@ -4,16 +4,11 @@ describe GroupDocs::Document::MetaData do
 
   it_behaves_like GroupDocs::Api::Entity
 
-  it { should respond_to(:id)           }
-  it { should respond_to(:id=)          }
-  it { should respond_to(:guid)         }
-  it { should respond_to(:guid=)        }
-  it { should respond_to(:page_count)   }
-  it { should respond_to(:page_count=)  }
-  it { should respond_to(:views_count)  }
-  it { should respond_to(:views_count=) }
-  it { should respond_to(:last_view)    }
-  it { should respond_to(:last_view=)   }
+  it { should have_accessor(:id)          }
+  it { should have_accessor(:guid)        }
+  it { should have_accessor(:page_count)  }
+  it { should have_accessor(:views_count) }
+  it { should have_accessor(:last_view)   }
 
   describe '#last_view=' do
     it 'converts passed hash to GroupDocs::Document::View object' do

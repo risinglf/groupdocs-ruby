@@ -4,14 +4,10 @@ describe GroupDocs::Document::Field do
 
   it_behaves_like GroupDocs::Api::Entity
 
-  it { should respond_to(:page)        }
-  it { should respond_to(:page=)       }
-  it { should respond_to(:name)        }
-  it { should respond_to(:name=)       }
-  it { should respond_to(:type)        }
-  it { should respond_to(:type=)       }
-  it { should respond_to(:rectangle)   }
-  it { should respond_to(:rectangle=)  }
+  it { should have_accessor(:page)      }
+  it { should have_accessor(:name)      }
+  it { should have_accessor(:type)      }
+  it { should have_accessor(:rectangle) }
 
   it { should have_alias(:rect=, :rectangle=) }
 

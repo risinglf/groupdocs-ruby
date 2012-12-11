@@ -39,20 +39,13 @@ module GroupDocs
     alias_method :annotationGuid=, :guid=
 
     # Human-readable accessors
-    alias_method :session_guid,         :sessionGuid
-    alias_method :session_guid=,        :sessionGuid=
-    alias_method :document_guid,        :documentGuid
-    alias_method :document_guid=,       :documentGuid=
-    alias_method :creator_guid,         :creatorGuid
-    alias_method :creator_guid=,        :creatorGuid=
-    alias_method :reply_guid,           :replyGuid
-    alias_method :reply_guid=,          :replyGuid=
-    alias_method :created_on,           :createdOn
-    alias_method :created_on=,          :createdOn=
-    alias_method :annotation_position,  :annotationPosition
-    alias_method :annotation_position=, :annotationPosition=
-    alias_method :position,             :annotationPosition
-    alias_method :position=,            :annotationPosition=
+    alias_accessor :session_guid,        :sessionGuid
+    alias_accessor :document_guid,       :documentGuid
+    alias_accessor :creator_guid,        :creatorGuid
+    alias_accessor :reply_guid,          :replyGuid
+    alias_accessor :created_on,          :createdOn
+    alias_accessor :annotation_position, :annotationPosition
+    alias_accessor :position,            :annotationPosition
 
     #
     # Creates new GroupDocs::Document::Annotation.

@@ -69,24 +69,15 @@ module GroupDocs
     attr_accessor :status
 
     # Human-readable accessors
-    alias_method :owner_guid,                     :ownerGuid
-    alias_method :owner_guid=,                    :ownerGuid=
-    alias_method :template_guid,                  :templateGuid
-    alias_method :template_guid=,                 :templateGuid=
-    alias_method :created_time_stamp,             :createdTimeStamp
-    alias_method :created_time_stamp=,            :createdTimeStamp=
-    alias_method :status_date_time,               :statusDateTime
-    alias_method :status_date_time=,              :statusDateTime=
-    alias_method :documents_count,                :documentsCount
-    alias_method :documents_count=,               :documentsCount=
-    alias_method :documents_pages,                :documentsPages
-    alias_method :documents_pages=,               :documentsPages=
-    alias_method :participants_count,             :participantsCount
-    alias_method :participants_count=,            :participantsCount=
-    alias_method :fields_in_final_file_name,      :fieldsInFinalFileName
-    alias_method :fields_in_final_file_name=,     :fieldsInFinalFileName=
-    alias_method :can_participant_download_form,  :canParticipantDownloadForm
-    alias_method :can_participant_download_form=, :canParticipantDownloadForm=
+    alias_accessor :owner_guid,                    :ownerGuid
+    alias_accessor :template_guid,                 :templateGuid
+    alias_accessor :created_time_stamp,            :createdTimeStamp
+    alias_accessor :status_date_time,              :statusDateTime
+    alias_accessor :documents_count,               :documentsCount
+    alias_accessor :documents_pages,               :documentsPages
+    alias_accessor :participants_count,            :participantsCount
+    alias_accessor :fields_in_final_file_name,     :fieldsInFinalFileName
+    alias_accessor :can_participant_download_form, :canParticipantDownloadForm
 
     #
     # Converts status to human-readable format.

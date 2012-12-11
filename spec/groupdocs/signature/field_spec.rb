@@ -28,101 +28,54 @@ describe GroupDocs::Signature::Field do
     end
   end
 
-  it { should respond_to(:id)                 }
-  it { should respond_to(:id=)                }
-  it { should respond_to(:templateId)         }
-  it { should respond_to(:templateId=)        }
-  it { should respond_to(:recipientId)        }
-  it { should respond_to(:recipientId=)       }
-  it { should respond_to(:signatureFieldId)   }
-  it { should respond_to(:signatureFieldId=)  }
-  it { should respond_to(:graphSizeW)         }
-  it { should respond_to(:graphSizeW=)        }
-  it { should respond_to(:graphSizeW)         }
-  it { should respond_to(:graphSizeW=)        }
-  it { should respond_to(:graphSizeH)         }
-  it { should respond_to(:graphSizeH=)        }
-  it { should respond_to(:graphSizeH)         }
-  it { should respond_to(:graphSizeH=)        }
-  it { should respond_to(:getDataFrom)        }
-  it { should respond_to(:getDataFrom=)       }
-  it { should respond_to(:regularExpression)  }
-  it { should respond_to(:regularExpression=) }
-  it { should respond_to(:fontName)           }
-  it { should respond_to(:fontName=)          }
-  it { should respond_to(:fontColor)          }
-  it { should respond_to(:fontColor=)         }
-  it { should respond_to(:fontSize)           }
-  it { should respond_to(:fontSize=)          }
-  it { should respond_to(:fontBold)           }
-  it { should respond_to(:fontBold=)          }
-  it { should respond_to(:fontItalic)         }
-  it { should respond_to(:fontItalic=)        }
-  it { should respond_to(:fontUnderline)      }
-  it { should respond_to(:fontUnderline=)     }
-  it { should respond_to(:isSystem)           }
-  it { should respond_to(:isSystem=)          }
-  it { should respond_to(:fieldType)          }
-  it { should respond_to(:fieldType=)         }
-  it { should respond_to(:acceptableValues)   }
-  it { should respond_to(:acceptableValues=)  }
-  it { should respond_to(:defaultValue)       }
-  it { should respond_to(:defaultValue=)      }
-  it { should respond_to(:tooltip)            }
-  it { should respond_to(:tooltip=)           }
-  it { should respond_to(:input)              }
-  it { should respond_to(:input=)             }
-  it { should respond_to(:order)              }
-  it { should respond_to(:order=)             }
-  it { should respond_to(:textRows)           }
-  it { should respond_to(:textRows=)          }
-  it { should respond_to(:textColumns)        }
-  it { should respond_to(:textColumns=)       }
-  it { should respond_to(:location)           }
-  it { should respond_to(:location=)          }
-  it { should respond_to(:locations)          }
-  it { should respond_to(:locations=)         }
+  it { should have_accessor(:id)                }
+  it { should have_accessor(:templateId)        }
+  it { should have_accessor(:recipientId)       }
+  it { should have_accessor(:signatureFieldId)  }
+  it { should have_accessor(:graphSizeW)        }
+  it { should have_accessor(:graphSizeW)        }
+  it { should have_accessor(:graphSizeH)        }
+  it { should have_accessor(:graphSizeH)        }
+  it { should have_accessor(:getDataFrom)       }
+  it { should have_accessor(:regularExpression) }
+  it { should have_accessor(:fontName)          }
+  it { should have_accessor(:fontColor)         }
+  it { should have_accessor(:fontSize)          }
+  it { should have_accessor(:fontBold)          }
+  it { should have_accessor(:fontItalic)        }
+  it { should have_accessor(:fontUnderline)     }
+  it { should have_accessor(:isSystem)          }
+  it { should have_accessor(:fieldType)         }
+  it { should have_accessor(:acceptableValues)  }
+  it { should have_accessor(:defaultValue)      }
+  it { should have_accessor(:tooltip)           }
+  it { should have_accessor(:input)             }
+  it { should have_accessor(:order)             }
+  it { should have_accessor(:textRows)          }
+  it { should have_accessor(:textColumns)       }
+  it { should have_accessor(:location)          }
+  it { should have_accessor(:locations)         }
 
-  it { should have_alias(:template_id,         :templateId)         }
-  it { should have_alias(:template_id=,        :templateId=)        }
-  it { should have_alias(:recipient_id,        :recipientId)        }
-  it { should have_alias(:recipient_id=,       :recipientId=)       }
-  it { should have_alias(:signature_field_id,  :signatureFieldId)   }
-  it { should have_alias(:signature_field_id=, :signatureFieldId=)  }
-  it { should have_alias(:graph_size_w,        :graphSizeW)         }
-  it { should have_alias(:graph_size_w=,       :graphSizeW=)        }
-  it { should have_alias(:graph_size_width,    :graphSizeW)         }
-  it { should have_alias(:graph_size_width=,   :graphSizeW=)        }
-  it { should have_alias(:graph_size_h,        :graphSizeH)         }
-  it { should have_alias(:graph_size_h=,       :graphSizeH=)        }
-  it { should have_alias(:graph_size_height,   :graphSizeH)         }
-  it { should have_alias(:graph_size_height=,  :graphSizeH=)        }
-  it { should have_alias(:get_data_from,       :getDataFrom)        }
-  it { should have_alias(:get_data_from=,      :getDataFrom=)       }
-  it { should have_alias(:regular_expression,  :regularExpression)  }
-  it { should have_alias(:regular_expression=, :regularExpression=) }
-  it { should have_alias(:font_name,           :fontName)           }
-  it { should have_alias(:font_name=,          :fontName=)          }
-  it { should have_alias(:font_color,          :fontColor)          }
-  it { should have_alias(:font_color=,         :fontColor=)         }
-  it { should have_alias(:font_size,           :fontSize)           }
-  it { should have_alias(:font_size=,          :fontSize=)          }
-  it { should have_alias(:font_bold,           :fontBold)           }
-  it { should have_alias(:font_bold=,          :fontBold=)          }
-  it { should have_alias(:font_italic,         :fontItalic)         }
-  it { should have_alias(:font_italic=,        :fontItalic=)        }
-  it { should have_alias(:font_underline,      :fontUnderline)      }
-  it { should have_alias(:font_underline=,     :fontUnderline=)     }
-  it { should have_alias(:is_system,           :isSystem)           }
-  it { should have_alias(:is_system=,          :isSystem=)          }
-  it { should have_alias(:acceptable_values,   :acceptableValues)   }
-  it { should have_alias(:acceptable_values=,  :acceptableValues=)  }
-  it { should have_alias(:default_value,       :defaultValue)       }
-  it { should have_alias(:default_value=,      :defaultValue=)      }
-  it { should have_alias(:text_rows,           :textRows)           }
-  it { should have_alias(:text_rows=,          :textRows=)          }
-  it { should have_alias(:text_columns,        :textColumns)        }
-  it { should have_alias(:text_columns=,       :textColumns=)       }
+  it { should alias_accessor(:template_id,        :templateId)        }
+  it { should alias_accessor(:recipient_id,       :recipientId)       }
+  it { should alias_accessor(:signature_field_id, :signatureFieldId)  }
+  it { should alias_accessor(:graph_size_w,       :graphSizeW)        }
+  it { should alias_accessor(:graph_size_width,   :graphSizeW)        }
+  it { should alias_accessor(:graph_size_h,       :graphSizeH)        }
+  it { should alias_accessor(:graph_size_height,  :graphSizeH)        }
+  it { should alias_accessor(:get_data_from,      :getDataFrom)       }
+  it { should alias_accessor(:regular_expression, :regularExpression) }
+  it { should alias_accessor(:font_name,          :fontName)          }
+  it { should alias_accessor(:font_color,         :fontColor)         }
+  it { should alias_accessor(:font_size,          :fontSize)          }
+  it { should alias_accessor(:font_bold,          :fontBold)          }
+  it { should alias_accessor(:font_italic,        :fontItalic)        }
+  it { should alias_accessor(:font_underline,     :fontUnderline)     }
+  it { should alias_accessor(:is_system,          :isSystem)          }
+  it { should alias_accessor(:acceptable_values,  :acceptableValues)  }
+  it { should alias_accessor(:default_value,      :defaultValue)      }
+  it { should alias_accessor(:text_rows,          :textRows)          }
+  it { should alias_accessor(:text_columns,       :textColumns)       }
 
   describe '#location=' do
     it 'converts location to GroupDocs::Signature::Field::Location object if hash is passed' do
