@@ -1,0 +1,145 @@
+%script{:src => "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js", :type => "text/javascript"}
+%script{:src => "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js", :type => "text/javascript"}
+%script{:src => "http://dev-apps.groupdocs.com/content/signaturewidgets/groupdocs.sign.js", :type => "text/javascript"}
+
+%h3{:style => "text-align:center;"}
+  %a{:href => "/"} GroupDocs Ruby SDK Samples
+  \- Sample6
+.samplecontent{:style => "padding:10px;"}
+  %i This sample will show how to add provided signature to provided document using Ruby SDK. Signed file will be uploaded to GroupDocs account and its GUID will be returned and embed into webpage with GroupDocs Ebedded Viewer.
+  %br/
+  #files_form
+    %form{:action => "#", :onsubmit => "return false;"}
+      %br/
+      %label{:for => "client_id"} GroupDocs ClientID
+      %br/
+      %input{:type=>'text', :id=>'client_id'}
+      %br/
+      %label{:for => "private_key"} GroupDocs PrivateKey
+      %br/
+      %input{:type=>'text', :id=>'private_key'}
+      %br/
+      %label{:for => "file_document"} Document to sign
+      %br/
+      %input#fi_document{:type => "file"}/
+      %br/
+      %label{:for => "file_signature"} Signature
+      %br/
+      %input#fi_signature{:type => "file"}/
+      %br/
+      %br/
+      %input#btnLoad{:onclick => "load();", :type => "button", :value => "Upload and sign the document"}
+      %br/
+      %br/
+  %div{:style => "padding:20px; border:1px solid black;"}
+    %p
+      Results:
+      %span#results_status{:style => "color:red;display:none;"} (Please wait for ajax response)
+    %iframe#viewer{:frameborder => "0", :height => "500", :src => "", :width => "600"}
+%div{:style => "padding:10px;"}
+  Choose another one sample:
+  %ul
+    %li
+      %a{:href => "/sample1"} Sample1 - How to login to GroupDocs using the API
+    %li
+      %a{:href => "/sample2"} Sample2 - How to list files within GroupDocs Storage using the Storage API
+    %li
+      %a{:href => "/sample3"} Sample3 - How to upload a file to GroupDocs using the Storage API
+    %li
+      %a{:href => "/sample4"} Sample4 - How to download a file from GroupDocs Storage using the Storage API
+    %li
+      %a{:href => "/sample5"} Sample5 - How to copy / move a file using the GroupDocs Storage API
+    %li
+      %a{:href => "/sample6"} Sample6 - How to add a Signature to a document in GroupDocs Signature
+    %li
+      %a{:href => "/sample7"} Sample7 - How to create a list of thumbnails for a document
+    %li
+      %a{:href => "/sample8"} Sample8 - How to return a URL representing a single page of a Document
+    %li
+      %a{:href => "/sample9"} Sample9 - How to generate an embedded Viewer URL for a Document
+    %li
+      %a{:href => "/sample10"} Sample10 - How to share a document to other users
+:javascript
+  function load() {
+      var inputDocument, inputSignature, fileDocument, fileSignature, frDocument, frSignature;
+
+      if (typeof window.FileReader !== 'function') {
+          $("body").append("p", "The file API isn't supported on this browser yet.");
+          return;
+      }
+
+      inputDocument = document.getElementById('fi_document');
+      if (!inputDocument) {
+          $("body").append("p", "Um, couldn't find the fileinput element.");
+      }
+      else if (!inputDocument.files) {
+          $("body").append("p", "This browser doesn't seem to support the `files` property of file inputs.");
+      }
+      else if (!inputDocument.files[0]) {
+          $("#files_form").append("Please select a file before clicking 'Load'");
+      }
+      else {
+          $('#results_status').fadeIn("slow");
+          $('#sample6').fadeOut("slow");
+
+          fileDocument = inputDocument.files[0];
+          frDocument = new FileReader();
+          frDocument.onload = receivedDocument;
+          frDocument.readAsDataURL(fileDocument);
+      }
+
+      function receivedDocument() {
+
+          inputSignature = document.getElementById('fi_signature');
+          if (!inputSignature) {
+              $("body").append("Um, couldn't find the fileinput element.");
+          }
+          else if (!inputSignature.files) {
+              $("body").append("p", "This browser doesn't seem to support the `files` property of file inputs.");
+          }
+          else if (!inputSignature.files[0]) {
+              $("body").append("Please select a file before clicking 'Load'");
+          }
+          else {
+              fileSignature = inputSignature.files[0];
+              frSignature = new FileReader();
+              frSignature.onload = receivedSignature;
+              frSignature.readAsDataURL(fileSignature);
+          }
+      }
+
+      function receivedSignature() {
+          var span = document.createElement('span');
+          span.innerHTML = [''].join('');
+          signDocument();
+      }
+
+      function signDocument() {
+          $("body").sign({
+              userId: $('#client_id').val(),
+              privateKey: $('#private_key').val(),
+              signMethod: "/sample6",
+              onerr: function (e, data) {
+                  alert(data);
+              },
+              onSigned: function (e, data) {
+                  $("#viewer").attr("src", "https://apps.groupdocs.com/document-viewer/Embed/" + data.documentId);
+                  $('#results_status').fadeOut("slow");
+                  $('#viewer').fadeIn("slow");
+              }
+          });
+          $("body").sign("addDocument", {
+              name: fileDocument.name,
+              data: frDocument.result
+          });
+          $("body").sign("addSigner", {
+              name: 'Marketplace Team',
+              top: 0.03319,
+              left: 0.52171,
+              width: 100,
+              height: 40,
+              data: frSignature.result
+          });
+          $("body").sign("sign");
+      }
+  }

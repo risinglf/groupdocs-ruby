@@ -1,0 +1,69 @@
+%h3{:style => "text-align:center;"}
+  %a{:href => "/"} GroupDocs Ruby SDK Samples
+  \- Sample10
+.samplecontent{:style => "padding:10px;"}
+  %i This sample will show how to share particular document from your GroupDocs account to other GroupDocs users using Ruby SDK
+  %br/
+  %br/
+  %p
+    You entered:
+  %p
+    client_id = #{(defined? client_id) ? client_id : ""}
+  %p
+    private_key = #{(defined? private_key) ? private_key : ""}
+  %p
+    File GUID = #{(defined? guid) ? guid : ""}
+  %p
+    Email = #{(defined? email) ? email : ""}
+  %p
+    %font{:color => "red"} #{(defined? err) ? err : ""}
+  #requestForm{:style => "padding:20px; border:1px solid black;"}
+    %p Enter data for request and press "Make request" button
+    %form{:action => "/sample10", :enctype => "multipart/form-data", :method => "post"}
+      %label{:for => "client_id"} GroupDocs ClientID
+      %br/
+      <input type='text', name='client_id' value="#{(defined? client_id) ? client_id : ""}" />
+      %br/
+      %label{:for => "private_key"} GroupDocs private_key
+      %br/
+      <input type='text', name='private_key'  value="#{(defined? private_key) ? private_key : ""}" />
+      %br/
+      %label{:for => "file_Id"} GroupDocs File GUID
+      %br/
+      <input type='text', name='guid'  value="#{(defined? guid) ? guid : ""}" />
+      %br/
+      %label{:for => "email"} Your email
+      %br/
+      <input type='text', name='email'  value="#{(defined? email) ? email : ""}" />
+      %br/
+      %input{:type => "submit", :value => "Make Request"}/
+    %div{:style => "padding:20px; border:1px solid black;"}
+      %p
+        %h3
+          %font{:color => "green"}
+            Document shared to user with e-mail
+            %h1 #{(defined? shared) ? shared : ""}
+          %br/
+%div{:style => "padding:10px;"}
+  Choose anothe one sample:
+  %ul
+    %li
+      %a{:href => "/sample1"} Sample1 - How to login to GroupDocs using the API
+    %li
+      %a{:href => "/sample2"} Sample2 - How to list files within GroupDocs Storage using the Storage API
+    %li
+      %a{:href => "/sample3"} Sample3 - How to upload a file to GroupDocs using the Storage API
+    %li
+      %a{:href => "/sample4"} Sample4 - How to download a file from GroupDocs Storage using the Storage API
+    %li
+      %a{:href => "/sample5"} Sample5 - How to copy / move a file using the GroupDocs Storage API
+    %li
+      %a{:href => "/sample6"} Sample6 - How to add a Signature to a document in GroupDocs Signature
+    %li
+      %a{:href => "/sample7"} Sample7 - How to create a list of thumbnails for a document
+    %li
+      %a{:href => "/sample8"} Sample8 - How to return a URL representing a single page of a Document
+    %li
+      %a{:href => "/sample9"} Sample9 - How to generate an embedded Viewer URL for a Document
+    %li
+      %a{:href => "/sample10"} Sample10 - How to share a document to other users
