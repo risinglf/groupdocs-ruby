@@ -7,19 +7,23 @@ module GroupDocs
     attr_accessor :name
     # @attr [String] type
     attr_accessor :type
-    # @attr [GroupDocs::Document::Rectangle] rectangle
-    attr_accessor :rectangle
+    # @attr [GroupDocs::Document::Rectangle] rect
+    attr_accessor :rect
 
     #
     # Coverts passed hash to GroupDocs::Document::Rectangle object.
     # @param [Hash] options
     #
-    def rectangle=(options)
-      @rectangle = GroupDocs::Document::Rectangle.new(options) if options
+    def rect=(rectangle)
+      if rectangle.is_a?(Hash)
+        rectangle = GroupDocs::Document::Rectangle.new(rectangle)
+      end
+
+      @rect = rectangle
     end
 
-    # Compatibility with response JSON
-    alias_method :rect=, :rectangle=
+    # Human-readable accessors
+    alias_accessor :rectangle, :rect
 
   end # Document::Field
 end # GroupDocs
