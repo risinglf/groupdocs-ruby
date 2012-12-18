@@ -92,8 +92,12 @@ describe GroupDocs::Storage::Folder do
 
     it 'capitalizes :order_by option' do
       options = { order_by: 'field' }
-      options[:order_by].should_receive(:capitalize!)
-      subject.list!(options)
+      -> { subject.list!(options) }.should change { options[:order_by] }.to('Field')
+    end
+
+    it 'camelizes :order_by option' do
+      options = { order_by: 'modified_on' }
+      -> { subject.list!(options) }.should change { options[:order_by] }.to('ModifiedOn')
     end
 
     it 'returns array' do
