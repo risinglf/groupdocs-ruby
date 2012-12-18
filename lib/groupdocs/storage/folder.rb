@@ -111,7 +111,10 @@ module GroupDocs
       # @return [Array<GroupDocs::Storage::Folder, GroupDocs::Storage::File>]
       #
       def list!(options = {}, access = {})
-        options[:order_by].capitalize! if options[:order_by]
+        if options[:order_by]
+          options[:order_by] = accessor_to_variable(options[:order_by].capitalize).to_s.delete(?@)
+        end
+
         full_path = prepare_path("#{path}/#{name}")
 
         api = Api::Request.new do |request|
