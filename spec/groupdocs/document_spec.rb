@@ -50,6 +50,77 @@ describe GroupDocs::Document do
     end
   end
 
+  describe '.sign_documents!' do
+    before(:each) do
+      mock_api_server(load_json('sign_documents'))
+    end
+
+    let(:documents) do
+      [GroupDocs::Document.new(file: GroupDocs::Storage::File.new(name: 'Document1', local_path: __FILE__)),
+       GroupDocs::Document.new(file: GroupDocs::Storage::File.new(name: 'Document2', local_path: 'spec/support/files/resume.pdf'))]
+    end
+    let(:signatures) { [GroupDocs::Signature.new(name: 'John Smith', image_path: 'spec/support/files/signature.png', position: {})] }
+
+    it 'accepts access credentials hash' do
+      lambda do
+        described_class.sign_documents!(documents, signatures, {}, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'raises error if document is not GroupDocs::Document object' do
+      -> { described_class.sign_documents!(['Document'], signatures) }.should raise_error(ArgumentError)
+    end
+
+    it 'raises error if document file does not have name' do
+      documents = [GroupDocs::Document.new(file: GroupDocs::Storage::File.new(local_path: __FILE__))]
+      -> { described_class.sign_documents!(documents, signatures) }.should raise_error(ArgumentError)
+    end
+
+    it 'raises error if document file does not have local path' do
+      documents = [GroupDocs::Document.new(file: GroupDocs::Storage::File.new(name: 'Document'))]
+      -> { described_class.sign_documents!(documents, signatures) }.should raise_error(ArgumentError)
+    end
+
+    it 'raises error if signature is not GroupDocs::Signature object' do
+      -> { described_class.sign_documents!(documents, ['Signature']) }.should raise_error(ArgumentError)
+    end
+
+    it 'raises error if signature does not have name' do
+      signatures = [GroupDocs::Signature.new(image_path: __FILE__, position: {})]
+      -> { described_class.sign_documents!(documents, signatures) }.should raise_error(ArgumentError)
+    end
+
+    it 'raises error if signature does not have image path' do
+      signatures = [GroupDocs::Signature.new(name: 'John Smith', position: {})]
+      -> { described_class.sign_documents!(documents, signatures) }.should raise_error(ArgumentError)
+    end
+
+    it 'raises error if signature does not have position' do
+      signatures = [GroupDocs::Signature.new(name: 'John Smith', image_path: __FILE__)]
+      -> { described_class.sign_documents!(documents, signatures) }.should raise_error(ArgumentError)
+    end
+
+    it 'detects each document and signature file MIME type' do
+      documents.each  { |document| described_class.should_receive(:mime_type).with(document.file.local_path).once }
+      signatures.each { |signature| described_class.should_receive(:mime_type).with(signature.image_path).once }
+      described_class.sign_documents!(documents, signatures)
+    end
+
+    it 'returns array of GroupDocs::Document.objects' do
+      signed_documents = described_class.sign_documents!(documents, signatures)
+      signed_documents.should be_an(Array)
+      signed_documents.each do |document|
+        document.should be_a(GroupDocs::Document)
+      end
+    end
+
+    it 'calculates file name for each signed document' do
+      signed_documents = described_class.sign_documents!(documents, signatures)
+      signed_documents[0].file.name.should == "#{documents[0].file.name}_signed.pdf"
+      signed_documents[1].file.name.should == "#{documents[1].file.name}_signed.pdf"
+    end
+  end
+
   it { should have_accessor(:file)           }
   it { should have_accessor(:process_date)   }
   it { should have_accessor(:outputs)        }

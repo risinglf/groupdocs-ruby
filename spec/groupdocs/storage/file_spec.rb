@@ -74,6 +74,7 @@ describe GroupDocs::Storage::File do
   it { should have_accessor(:type)        }
   it { should have_accessor(:file_type)   }
   it { should have_accessor(:path)        }
+  it { should have_accessor(:local_path)  }
 
   it { should have_alias(:adj_name=, :name=) }
 

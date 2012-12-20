@@ -39,6 +39,7 @@ describe GroupDocs::Signature do
   it { should have_accessor(:signatureImageUrl)    }
   it { should have_accessor(:initialsImageUrl)     }
   it { should have_accessor(:createdTimeStamp)     }
+  it { should have_accessor(:image_path)           }
 
   it { should alias_accessor(:user_guid, :userGuid)                           }
   it { should alias_accessor(:recipient_id, :recipientId)                     }

@@ -11,6 +11,8 @@ module GroupDocs
     require 'groupdocs/signature/role'
     require 'groupdocs/signature/template'
 
+    include Api::Helpers::MIME
+
     #
     # Returns a list of all user signatures.
     #
@@ -61,8 +63,8 @@ module GroupDocs
     attr_accessor :initialsImageUrl
     # @attr [String] createdTimeStamp
     attr_accessor :createdTimeStamp
-    # @attr [String] data
-    attr_accessor :data
+    # @attr [String] image_path
+    attr_accessor :image_path
 
     # Human-readable accessors
     alias_accessor :user_guid,               :userGuid

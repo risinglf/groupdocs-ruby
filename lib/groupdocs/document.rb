@@ -18,6 +18,7 @@ module GroupDocs
     include Api::Helpers::AccessMode
     include Api::Helpers::AccessRights
     include Api::Helpers::Status
+    extend Api::Helpers::MIME
 
     #
     # Returns an array of views for all documents.
@@ -68,48 +69,75 @@ module GroupDocs
     #
     # Signs given documents with signatures.
     #
-    # @examples
-    #   file_data_one = Base64.strict_encode64(File.read('document_one.doc'))
-    #   file_data_two = Base64.strict_encode64(File.read('document_two.doc'))
-    #   document_one = GroupDocs::Storage::File.new(name: 'document_one', data: file_data_one).to_document
-    #   document_two = GroupDocs::Storage::File.new(name: 'document_two', data: file_data_two).to_document
-    #   signature = GroupDocs::Signature.new
-    #   signature.name = 'John Smith'
-    #   signature.data = Base64.strict_encode64(File.read('signature.png'))
-    #   signature.position = { top: 0.1, left: 0.07, width: 1.2, height: 0.08 }
-    #   GroupDocs::Document.sign_documents! [document_one, document_two], [signature]
+    # @example
+    #   # prepare documents
+    #   file_one = GroupDocs::Storage::File.new(name: 'document_one.doc', local_path: '~/Documents/document_one.doc')
+    #   file_two = GroupDocs::Storage::File.new(name: 'document_one.pdf', local_path: '~/Documents/document_one.pdf')
+    #   document_one = file_one.to_document
+    #   document_two = file_two.to_document
+    #   # prepare signatures
+    #   signature_one = GroupDocs::Signature.new(name: 'John Smith', image_path: '~/Documents/signature_one.png')
+    #   signature_two = GroupDocs::Signature.new(name: 'Sara Smith', image_path: '~/Documents/signature_two.png')
+    #   signature_one.position = { top: 0.1, left: 0.07, width: 50, height: 50 }
+    #   signature_two.position = { top: 0.2, left: 0.2, width: 100, height: 100 }
+    #   # sign documents and download results
+    #   signed_documents = GroupDocs::Document.sign_documents!([document_one, document_two], [signature_one, signature_two])
+    #   signed_documents.each do |document|
+    #     document.file.download! '~/Documents'
+    #   end
     #
-    # @param [Array<GroupDocs::Document>] documents Each document should have "#data"
-    # @param [Array<GroupDocs::Signature>] signatures Each signature should have "#data" and "#position"
+    # @param [Array<GroupDocs::Document>] documents Each document file should have "#name" and "#local_path"
+    # @param [Array<GroupDocs::Signature>] signatures Each signature should have "#name", "#image_path" and "#position"
     #
-    def self.sign_documents!(documents, signatures, access = {})
+    def self.sign_documents!(documents, signatures, options = {}, access = {})
       documents.each do |document|
         document.is_a?(Document) or raise ArgumentError, "Each document should be GroupDocs::Document object, received: #{document.inspect}"
-        document.data or raise ArgumentError, "Each document should have ##{data}, received: #{document.data.inspect}"
+        document.file.name       or raise ArgumentError, "Each document file should have name, received: #{document.file.name.inspect}"
+        document.file.local_path or raise ArgumentError, "Each document file should have local_path, received: #{document.file.local_path.inspect}"
       end
       signatures.each do |signature|
         signature.is_a?(Signature) or raise ArgumentError, "Each signature should be GroupDocs::Signature object, received: #{signature.inspect}"
-        signature.data or raise ArgumentError, "Each signature should have ##{data}, received: #{signature.data.inspect}"
-        signature.position or raise ArgumentError, "Each signature should have ##{position}, received: #{signature.position.inspect}"
+        signature.name             or raise ArgumentError, "Each signature should have name, received: #{signature.name.inspect}"
+        signature.image_path       or raise ArgumentError, "Each signature should have image_path, received: #{signature.image_path.inspect}"
+        signature.position         or raise ArgumentError, "Each signature should have position, received: #{signature.position.inspect}"
       end
 
-      files = documents.map(&:file)
+      documents_to_sign = []
+      documents.map(&:file).each do |file|
+        document = { name: file.name }
+        contents = File.read(file.local_path)
+        contents = Base64.strict_encode64(contents)
+        document.merge!(data: "data:#{mime_type(file.local_path)};base64,#{contents}")
+
+        documents_to_sign << document
+      end
+
       signers = []
       signatures.each do |signature|
-        signers << { name: signature.name }.merge(signature.position)
+        contents = File.read(signature.image_path)
+        contents = Base64.strict_encode64(contents)
+        signer = { name: signature.name, data: "data:#{mime_type(signature.image_path)};base64,#{contents}" }
+        signer.merge!(signature.position)
+        # place signature on is not implemented yet
+        signer.merge!(placeSignatureOn: nil)
+
+        signers << signer
       end
-      payload = {
-        documents: files.map(&:to_hash),
-        signers:   signers
-      }
-      payload[:signers][0][:placeSingatureOn] = '1'
 
       json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :POST
         request[:path] = '/signature/{{client_id}}/sign'
-        request[:request_body] = payload
+        request[:request_body] = { documents: documents_to_sign, signers: signers }
       end.execute!
+
+      signed_documents = []
+      json[:documents].each_with_index do |document, i|
+        file = Storage::File.new(guid: document[:documentId], name: "#{documents[i].file.name}_signed.pdf")
+        signed_documents << Document.new(file: file)
+      end
+
+      signed_documents
     end
 
     # @attr [GroupDocs::Storage::File] file
