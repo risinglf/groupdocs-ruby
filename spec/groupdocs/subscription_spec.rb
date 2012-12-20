@@ -40,33 +40,22 @@ describe GroupDocs::Subscription do
     end
   end
 
-  it { should respond_to(:Id)             }
-  it { should respond_to(:Id=)            }
-  it { should respond_to(:Name)           }
-  it { should respond_to(:Name=)          }
-  it { should respond_to(:PricingPlanId)  }
-  it { should respond_to(:PricingPlanId=) }
-  it { should respond_to(:Price)          }
-  it { should respond_to(:Price=)         }
-  it { should respond_to(:CurrencyCode)   }
-  it { should respond_to(:CurrencyCode=)  }
+  it { should have_accessor(:Id)            }
+  it { should have_accessor(:Name)          }
+  it { should have_accessor(:PricingPlanId) }
+  it { should have_accessor(:Price)         }
+  it { should have_accessor(:CurrencyCode)  }
 
-  it { should have_alias(:id, :Id)                           }
-  it { should have_alias(:id=, :Id=)                         }
-  it { should have_alias(:name, :Name)                       }
-  it { should have_alias(:name=, :Name=)                     }
-  it { should have_alias(:pricing_plan_id, :PricingPlanId)   }
-  it { should have_alias(:pricing_plan_id=, :PricingPlanId=) }
-  it { should have_alias(:price, :Price)                     }
-  it { should have_alias(:price=, :Price=)                   }
-  it { should have_alias(:currency_code, :CurrencyCode)      }
-  it { should have_alias(:currency_code=, :CurrencyCode=)    }
+  it { should alias_accessor(:id, :Id)                         }
+  it { should alias_accessor(:name, :Name)                     }
+  it { should alias_accessor(:pricing_plan_id, :PricingPlanId) }
+  it { should alias_accessor(:price, :Price)                   }
+  it { should alias_accessor(:currency_code, :CurrencyCode)    }
 
   it { should have_alias(:ref_id=, :id=) }
 
   GroupDocs::Subscription::LIMITS.each do |snake, camel|
-    it { should respond_to(:"#{camel}")  }
-    it { should respond_to(:"#{camel}=") }
+    it { should have_accessor(camel) }
 
     # reader is overwritten
     it { should have_alias(:"#{snake}=", :"#{camel}=") }

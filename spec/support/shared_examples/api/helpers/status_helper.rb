@@ -1,6 +1,5 @@
 shared_examples_for GroupDocs::Api::Helpers::Status do
-  it { should respond_to(:status)  }
-  it { should respond_to(:status=) }
+  it { should have_accessor(:status) }
 
   describe '#status' do
     it 'returns converted to human-readable format status' do

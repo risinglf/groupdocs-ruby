@@ -92,48 +92,27 @@ module GroupDocs
     attr_accessor :locations
 
     # Human-readable accessors
-    alias_method :template_id,         :templateId
-    alias_method :template_id=,        :templateId=
-    alias_method :recipient_id,        :recipientId
-    alias_method :recipient_id=,       :recipientId=
-    alias_method :signature_field_id,  :signatureFieldId
-    alias_method :signature_field_id=, :signatureFieldId=
-    alias_method :graph_size_w,        :graphSizeW
-    alias_method :graph_size_w=,       :graphSizeW=
-    alias_method :graph_size_w,        :graphSizeW
-    alias_method :graph_size_w=,       :graphSizeW=
-    alias_method :graph_size_width,    :graphSizeW
-    alias_method :graph_size_width=,   :graphSizeW=
-    alias_method :graph_size_h,        :graphSizeH
-    alias_method :graph_size_h=,       :graphSizeH=
-    alias_method :graph_size_height,   :graphSizeH
-    alias_method :graph_size_height=,  :graphSizeH=
-    alias_method :get_data_from,       :getDataFrom
-    alias_method :get_data_from=,      :getDataFrom=
-    alias_method :regular_expression,  :regularExpression
-    alias_method :regular_expression=, :regularExpression=
-    alias_method :font_name,           :fontName
-    alias_method :font_name=,          :fontName=
-    alias_method :font_color,          :fontColor
-    alias_method :font_color=,         :fontColor=
-    alias_method :font_size,           :fontSize
-    alias_method :font_size=,          :fontSize=
-    alias_method :font_bold,           :fontBold
-    alias_method :font_bold=,          :fontBold=
-    alias_method :font_italic,         :fontItalic
-    alias_method :font_italic=,        :fontItalic=
-    alias_method :font_underline,      :fontUnderline
-    alias_method :font_underline=,     :fontUnderline=
-    alias_method :is_system,           :isSystem
-    alias_method :is_system=,          :isSystem=
-    alias_method :acceptable_values,   :acceptableValues
-    alias_method :acceptable_values=,  :acceptableValues=
-    alias_method :default_value,       :defaultValue
-    alias_method :default_value=,      :defaultValue=
-    alias_method :text_rows,           :textRows
-    alias_method :text_rows=,          :textRows=
-    alias_method :text_columns,        :textColumns
-    alias_method :text_columns=,       :textColumns=
+    alias_accessor :template_id,        :templateId
+    alias_accessor :recipient_id,       :recipientId
+    alias_accessor :signature_field_id, :signatureFieldId
+    alias_accessor :graph_size_w,       :graphSizeW
+    alias_accessor :graph_size_w,       :graphSizeW
+    alias_accessor :graph_size_width,   :graphSizeW
+    alias_accessor :graph_size_h,       :graphSizeH
+    alias_accessor :graph_size_height,  :graphSizeH
+    alias_accessor :get_data_from,      :getDataFrom
+    alias_accessor :regular_expression, :regularExpression
+    alias_accessor :font_name,          :fontName
+    alias_accessor :font_color,         :fontColor
+    alias_accessor :font_size,          :fontSize
+    alias_accessor :font_bold,          :fontBold
+    alias_accessor :font_italic,        :fontItalic
+    alias_accessor :font_underline,     :fontUnderline
+    alias_accessor :is_system,          :isSystem
+    alias_accessor :acceptable_values,  :acceptableValues
+    alias_accessor :default_value,      :defaultValue
+    alias_accessor :text_rows,          :textRows
+    alias_accessor :text_columns,       :textColumns
 
     #
     # Converts location to GroupDocs::Signature::Field::Location object.

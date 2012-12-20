@@ -20,47 +20,27 @@ describe GroupDocs::User do
     end
   end
 
-  it { should respond_to(:id)                  }
-  it { should respond_to(:id=)                 }
-  it { should respond_to(:guid)                }
-  it { should respond_to(:guid=)               }
-  it { should respond_to(:nickname)            }
-  it { should respond_to(:nickname=)           }
-  it { should respond_to(:firstname)           }
-  it { should respond_to(:firstname=)          }
-  it { should respond_to(:lastname)            }
-  it { should respond_to(:lastname=)           }
-  it { should respond_to(:primary_email)       }
-  it { should respond_to(:primary_email=)      }
-  it { should respond_to(:private_key)         }
-  it { should respond_to(:private_key=)        }
-  it { should respond_to(:password_salt)       }
-  it { should respond_to(:password_salt=)      }
-  it { should respond_to(:claimed_id)          }
-  it { should respond_to(:claimed_id=)         }
-  it { should respond_to(:token)               }
-  it { should respond_to(:token=)              }
-  it { should respond_to(:storage)             }
-  it { should respond_to(:storage=)            }
-  it { should respond_to(:photo)               }
-  it { should respond_to(:photo=)              }
-  it { should respond_to(:active)              }
-  it { should respond_to(:active=)             }
-  it { should respond_to(:news_enabled)        }
-  it { should respond_to(:news_enabled=)       }
-  it { should respond_to(:signed_up_on)        }
-  it { should respond_to(:signed_up_on=)       }
-  it { should respond_to(:color)               }
-  it { should respond_to(:color=)              }
-  it { should respond_to(:customEmailMessage)  }
-  it { should respond_to(:customEmailMessage=) }
+  it { should have_accessor(:id)                 }
+  it { should have_accessor(:guid)               }
+  it { should have_accessor(:nickname)           }
+  it { should have_accessor(:firstname)          }
+  it { should have_accessor(:lastname)           }
+  it { should have_accessor(:primary_email)      }
+  it { should have_accessor(:private_key)        }
+  it { should have_accessor(:password_salt)      }
+  it { should have_accessor(:claimed_id)         }
+  it { should have_accessor(:token)              }
+  it { should have_accessor(:storage)            }
+  it { should have_accessor(:photo)              }
+  it { should have_accessor(:active)             }
+  it { should have_accessor(:news_enabled)       }
+  it { should have_accessor(:signed_up_on)       }
+  it { should have_accessor(:color)              }
+  it { should have_accessor(:customEmailMessage) }
 
-  it { should have_alias(:first_name, :firstname)                      }
-  it { should have_alias(:first_name=, :firstname=)                    }
-  it { should have_alias(:last_name, :lastname)                        }
-  it { should have_alias(:last_name=, :lastname=)                      }
-  it { should have_alias(:custom_email_message, :customEmailMessage)   }
-  it { should have_alias(:custom_email_message=, :customEmailMessage=) }
+  it { should alias_accessor(:first_name, :firstname)                    }
+  it { should alias_accessor(:last_name, :lastname)                      }
+  it { should alias_accessor(:custom_email_message, :customEmailMessage) }
 
   it { should have_alias(:pkey=, :private_key=)        }
   it { should have_alias(:pswd_salt=, :password_salt=) }

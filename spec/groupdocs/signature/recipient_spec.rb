@@ -4,29 +4,18 @@ describe GroupDocs::Signature::Recipient do
 
   it_behaves_like GroupDocs::Api::Entity
 
-  it { should respond_to(:id)         }
-  it { should respond_to(:id=)        }
-  it { should respond_to(:email)      }
-  it { should respond_to(:email=)     }
-  it { should respond_to(:firstName)  }
-  it { should respond_to(:firstName=) }
-  it { should respond_to(:lastName)   }
-  it { should respond_to(:lastName=)  }
-  it { should respond_to(:nickname)   }
-  it { should respond_to(:nickname=)  }
-  it { should respond_to(:roleId)     }
-  it { should respond_to(:roleId=)    }
-  it { should respond_to(:order)      }
-  it { should respond_to(:order=)     }
-  it { should respond_to(:status)     }
-  it { should respond_to(:status=)    }
+  it { should have_accessor(:id)        }
+  it { should have_accessor(:email)     }
+  it { should have_accessor(:firstName) }
+  it { should have_accessor(:lastName)  }
+  it { should have_accessor(:nickname)  }
+  it { should have_accessor(:roleId)    }
+  it { should have_accessor(:order)     }
+  it { should have_accessor(:status)    }
 
-  it { should have_alias(:first_name,  :firstName)  }
-  it { should have_alias(:first_name=, :firstName=) }
-  it { should have_alias(:last_name,   :lastName)   }
-  it { should have_alias(:last_name=,  :lastName=)  }
-  it { should have_alias(:role_id,     :roleId)     }
-  it { should have_alias(:role_id=,    :roleId=)    }
+  it { should alias_accessor(:first_name, :firstName) }
+  it { should alias_accessor(:last_name,  :lastName)  }
+  it { should alias_accessor(:role_id,    :roleId)    }
 
   describe '#status' do
     it 'converts status to human-readable format' do

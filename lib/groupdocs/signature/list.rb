@@ -31,8 +31,7 @@ module GroupDocs
     attr_accessor :defaultValue
 
     # Human-readable accessors
-    alias_method :default_value,  :defaultValue
-    alias_method :default_value=, :defaultValue=
+    alias_accessor :default_value, :defaultValue
 
     #
     # Converts values to API compatible view.

@@ -60,31 +60,19 @@ describe GroupDocs::Questionnaire do
     end
   end
 
-  it { should respond_to(:id)                   }
-  it { should respond_to(:id=)                  }
-  it { should respond_to(:guid)                 }
-  it { should respond_to(:guid=)                }
-  it { should respond_to(:name)                 }
-  it { should respond_to(:name=)                }
-  it { should respond_to(:descr)                }
-  it { should respond_to(:descr=)               }
-  it { should respond_to(:pages)                }
-  it { should respond_to(:pages=)               }
-  it { should respond_to(:resolved_executions)  }
-  it { should respond_to(:resolved_executions=) }
-  it { should respond_to(:assigned_questions)   }
-  it { should respond_to(:assigned_questions=)  }
-  it { should respond_to(:total_questions)      }
-  it { should respond_to(:total_questions=)     }
-  it { should respond_to(:modified)             }
-  it { should respond_to(:modified=)            }
-  it { should respond_to(:expires)              }
-  it { should respond_to(:expires=)             }
-  it { should respond_to(:document_ids)         }
-  it { should respond_to(:document_ids=)        }
+  it { should have_accessor(:id)                  }
+  it { should have_accessor(:guid)                }
+  it { should have_accessor(:name)                }
+  it { should have_accessor(:descr)               }
+  it { should have_accessor(:pages)               }
+  it { should have_accessor(:resolved_executions) }
+  it { should have_accessor(:assigned_questions)  }
+  it { should have_accessor(:total_questions)     }
+  it { should have_accessor(:modified)            }
+  it { should have_accessor(:expires)             }
+  it { should have_accessor(:document_ids)        }
 
-  it { should have_alias(:description, :descr)   }
-  it { should have_alias(:description=, :descr=) }
+  it { should alias_accessor(:description, :descr) }
 
   describe '#pages=' do
     it 'converts each page to GroupDocs::Questionnaire::Page object if hash is passed' do
@@ -140,10 +128,14 @@ describe GroupDocs::Questionnaire do
       subject.create!
     end
 
-    it 'updates identifier of questionnaire' do
+    it 'updates questionnaire attributes' do
       lambda do
         subject.create!
-      end.should change(subject, :id)
+      end.should change {
+        subject.id
+        subject.guid
+        subject.name
+      }
     end
   end
 
@@ -216,36 +208,6 @@ describe GroupDocs::Questionnaire do
     end
   end
 
-  describe '#create_execution!' do
-    before(:each) do
-      mock_api_server(load_json('questionnaire_execution_create'))
-    end
-
-    let(:execution) { GroupDocs::Questionnaire::Execution.new }
-    let(:email)     { 'email@email.com' }
-
-    it 'accepts access credentials hash' do
-      lambda do
-        subject.create_execution!(execution, email, client_id: 'client_id', private_key: 'private_key')
-      end.should_not raise_error(ArgumentError)
-    end
-
-    it 'raises error if execution is not GroupDocs::Questionnaire::Execution object' do
-      -> { subject.create_execution!('Execution', email) }.should raise_error(ArgumentError)
-    end
-
-    it 'uses hashed version of execution along with executive payload' do
-      hash = {}
-      execution.should_receive(:to_hash).and_return(hash)
-      hash.should_receive(:merge).with({ executive: { primary_email: email } })
-      subject.create_execution!(execution, email)
-    end
-
-    it 'returns GroupDocs::Questionnaire::Execution object' do
-      subject.create_execution!(execution, email).should be_a(GroupDocs::Questionnaire::Execution)
-    end
-  end
-
   describe '#collectors!' do
     before(:each) do
       mock_api_server(load_json('questionnaire_collectors'))
@@ -257,11 +219,70 @@ describe GroupDocs::Questionnaire do
       end.should_not raise_error(ArgumentError)
     end
 
-    it 'returns an array of GroupDocs::Questionnaire::Execution objects' do
+    it 'returns an array of GroupDocs::Questionnaire::Collector objects' do
       collectors = subject.collectors!
       collectors.should be_an(Array)
       collectors.each do |collector|
         collector.should be_a(GroupDocs::Questionnaire::Collector)
+      end
+    end
+  end
+
+  describe '#metadata!' do
+    before(:each) do
+      mock_api_server(load_json('questionnaire_get'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.metadata!(client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns GroupDocs::Questionnaire object' do
+      subject.metadata!.should be_a(GroupDocs::Questionnaire)
+    end
+  end
+
+  describe '#update_metadata!' do
+    before(:each) do
+      mock_api_server('{ "status": "Ok", "result": { "questionnaire_id": 123456 }}')
+    end
+
+    let!(:metadata) { GroupDocs::Questionnaire.new }
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.update_metadata!(metadata, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'raises error if metadata is not GroupDocs::Questionnaire object' do
+      -> { subject.update_metadata!('Metadata') }.should raise_error(ArgumentError)
+    end
+
+    it 'uses hashed version as payload' do
+      metadata.should_receive(:to_hash)
+      subject.update_metadata!(metadata)
+    end
+  end
+
+  describe '#fields!' do
+    before(:each) do
+      mock_api_server(load_json('document_fields'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.fields!(client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns array of GroupDocs::Document::Field objects' do
+      fields = subject.fields!
+      fields.should be_an(Array)
+      fields.each do |field|
+        field.should be_a(GroupDocs::Document::Field)
       end
     end
   end

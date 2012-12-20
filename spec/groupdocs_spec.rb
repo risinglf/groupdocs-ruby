@@ -34,14 +34,10 @@ describe GroupDocs do
     end
   end
 
-  it { should respond_to(:client_id)    }
-  it { should respond_to(:client_id=)   }
-  it { should respond_to(:private_key)  }
-  it { should respond_to(:private_key=) }
-  it { should respond_to(:api_server)   }
-  it { should respond_to(:api_server=)  }
-  it { should respond_to(:api_version)  }
-  it { should respond_to(:api_version=) }
+  it { should have_accessor(:client_id)   }
+  it { should have_accessor(:private_key) }
+  it { should have_accessor(:api_server)  }
+  it { should have_accessor(:api_version) }
 
   describe '#api_server' do
     it 'returns default URL if it has not been overwritten' do

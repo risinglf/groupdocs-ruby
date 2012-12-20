@@ -49,26 +49,16 @@ describe GroupDocs::Storage::Folder do
     end
   end
 
-  it { should respond_to(:id)            }
-  it { should respond_to(:id=)           }
-  it { should respond_to(:size)          }
-  it { should respond_to(:size=)         }
-  it { should respond_to(:folder_count)  }
-  it { should respond_to(:folder_count=) }
-  it { should respond_to(:file_count)    }
-  it { should respond_to(:file_count=)   }
-  it { should respond_to(:created_on)    }
-  it { should respond_to(:created_on=)   }
-  it { should respond_to(:modified_on)   }
-  it { should respond_to(:modified_on=)  }
-  it { should respond_to(:url)           }
-  it { should respond_to(:url=)          }
-  it { should respond_to(:name)          }
-  it { should respond_to(:name=)         }
-  it { should respond_to(:version)       }
-  it { should respond_to(:version=)      }
-  it { should respond_to(:type)          }
-  it { should respond_to(:type=)         }
+  it { should have_accessor(:id)           }
+  it { should have_accessor(:size)         }
+  it { should have_accessor(:folder_count) }
+  it { should have_accessor(:file_count)   }
+  it { should have_accessor(:created_on)   }
+  it { should have_accessor(:modified_on)  }
+  it { should have_accessor(:url)          }
+  it { should have_accessor(:name)         }
+  it { should have_accessor(:version)      }
+  it { should have_accessor(:type)         }
 
   describe '#created_on' do
     it 'returns converted to Time object Unix timestamp' do

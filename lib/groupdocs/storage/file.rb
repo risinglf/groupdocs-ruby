@@ -98,6 +98,8 @@ module GroupDocs
       attr_accessor :access
       # @attr [String] path
       attr_accessor :path
+      # @attr [String] local_path
+      attr_accessor :local_path
 
       # Compatibility with response JSON
       alias_method :adj_name=, :name=
@@ -175,7 +177,7 @@ module GroupDocs
         response = Api::Request.new do |request|
           request[:access] = access
           request[:method] = :DOWNLOAD
-          request[:path] = "/storage/{{client_id}}/files/#{id}"
+          request[:path] = "/storage/{{client_id}}/files/#{guid}"
         end.execute!
 
         filepath = "#{path}/#{name}"

@@ -4,12 +4,9 @@ describe GroupDocs::Questionnaire::Page do
 
   it_behaves_like GroupDocs::Api::Entity
 
-  it { should respond_to(:questions)  }
-  it { should respond_to(:questions=) }
-  it { should respond_to(:number)     }
-  it { should respond_to(:number=)    }
-  it { should respond_to(:title)      }
-  it { should respond_to(:title=)     }
+  it { should have_accessor(:questions) }
+  it { should have_accessor(:number)    }
+  it { should have_accessor(:title)     }
 
   describe '#questions=' do
     it 'converts each question to GroupDocs::Questionnaire::Question object if hash is passed' do

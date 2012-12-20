@@ -30,49 +30,28 @@ describe GroupDocs::Signature::Form do
     end
   end
 
-  it { should respond_to(:id)                          }
-  it { should respond_to(:id=)                         }
-  it { should respond_to(:name)                        }
-  it { should respond_to(:name=)                       }
-  it { should respond_to(:ownerGuid)                   }
-  it { should respond_to(:ownerGuid=)                  }
-  it { should respond_to(:templateGuid)                }
-  it { should respond_to(:templateGuid=)               }
-  it { should respond_to(:createdTimeStamp)            }
-  it { should respond_to(:createdTimeStamp=)           }
-  it { should respond_to(:statusDateTime)              }
-  it { should respond_to(:statusDateTime=)             }
-  it { should respond_to(:documentsCount)              }
-  it { should respond_to(:documentsCount=)             }
-  it { should respond_to(:documentsPages)              }
-  it { should respond_to(:documentsPages=)             }
-  it { should respond_to(:participantsCount)           }
-  it { should respond_to(:participantsCount=)          }
-  it { should respond_to(:fieldsInFinalFileName)       }
-  it { should respond_to(:fieldsInFinalFileName=)      }
-  it { should respond_to(:canParticipantDownloadForm)  }
-  it { should respond_to(:canParticipantDownloadForm=) }
-  it { should respond_to(:status)                      }
-  it { should respond_to(:status=)                     }
+  it { should have_accessor(:id)                         }
+  it { should have_accessor(:name)                       }
+  it { should have_accessor(:ownerGuid)                  }
+  it { should have_accessor(:templateGuid)               }
+  it { should have_accessor(:createdTimeStamp)           }
+  it { should have_accessor(:statusDateTime)             }
+  it { should have_accessor(:documentsCount)             }
+  it { should have_accessor(:documentsPages)             }
+  it { should have_accessor(:participantsCount)          }
+  it { should have_accessor(:fieldsInFinalFileName)      }
+  it { should have_accessor(:canParticipantDownloadForm) }
+  it { should have_accessor(:status)                     }
 
-  it { should have_alias(:owner_guid, :ownerGuid)                                       }
-  it { should have_alias(:owner_guid=, :ownerGuid=)                                     }
-  it { should have_alias(:template_guid, :templateGuid)                                 }
-  it { should have_alias(:template_guid=, :templateGuid=)                               }
-  it { should have_alias(:created_time_stamp, :createdTimeStamp)                        }
-  it { should have_alias(:created_time_stamp=, :createdTimeStamp=)                      }
-  it { should have_alias(:status_date_time, :statusDateTime)                            }
-  it { should have_alias(:status_date_time=, :statusDateTime=)                          }
-  it { should have_alias(:documents_count, :documentsCount)                             }
-  it { should have_alias(:documents_count=, :documentsCount=)                           }
-  it { should have_alias(:documents_pages, :documentsPages)                             }
-  it { should have_alias(:documents_pages=, :documentsPages=)                           }
-  it { should have_alias(:participants_count, :participantsCount)                       }
-  it { should have_alias(:participants_count=, :participantsCount=)                     }
-  it { should have_alias(:fields_in_final_file_name, :fieldsInFinalFileName)            }
-  it { should have_alias(:fields_in_final_file_name=, :fieldsInFinalFileName=)          }
-  it { should have_alias(:can_participant_download_form, :canParticipantDownloadForm)   }
-  it { should have_alias(:can_participant_download_form=, :canParticipantDownloadForm=) }
+  it { should alias_accessor(:owner_guid, :ownerGuid)                                     }
+  it { should alias_accessor(:template_guid, :templateGuid)                               }
+  it { should alias_accessor(:created_time_stamp, :createdTimeStamp)                      }
+  it { should alias_accessor(:status_date_time, :statusDateTime)                          }
+  it { should alias_accessor(:documents_count, :documentsCount)                           }
+  it { should alias_accessor(:documents_pages, :documentsPages)                           }
+  it { should alias_accessor(:participants_count, :participantsCount)                     }
+  it { should alias_accessor(:fields_in_final_file_name, :fieldsInFinalFileName)          }
+  it { should alias_accessor(:can_participant_download_form, :canParticipantDownloadForm) }
 
   describe '#status' do
     it 'converts status to human-readable format' do

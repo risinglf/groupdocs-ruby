@@ -18,6 +18,7 @@ module GroupDocs
     include Api::Helpers::AccessMode
     include Api::Helpers::AccessRights
     include Api::Helpers::Status
+    extend Api::Helpers::MIME
 
     #
     # Returns an array of views for all documents.
@@ -34,7 +35,7 @@ module GroupDocs
       api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
-        request[:path] = "/doc/{{client_id}}/views"
+        request[:path] = '/doc/{{client_id}}/views'
       end
       api.add_params(options)
       json = api.execute!
@@ -42,6 +43,101 @@ module GroupDocs
       json[:views].map do |view|
         Document::View.new(view)
       end
+    end
+
+    #
+    # Returns an array of all templates (documents with fields).
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<GroupDocs::Document>]
+    #
+    def self.templates!(options = {}, access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = '/merge/{{client_id}}/templates'
+      end.execute!
+
+      json[:templates].map do |template|
+        template.merge!(file: Storage::File.new(template))
+        Document.new(template)
+      end
+    end
+
+    #
+    # Signs given documents with signatures.
+    #
+    # @example
+    #   # prepare documents
+    #   file_one = GroupDocs::Storage::File.new(name: 'document_one.doc', local_path: '~/Documents/document_one.doc')
+    #   file_two = GroupDocs::Storage::File.new(name: 'document_one.pdf', local_path: '~/Documents/document_one.pdf')
+    #   document_one = file_one.to_document
+    #   document_two = file_two.to_document
+    #   # prepare signatures
+    #   signature_one = GroupDocs::Signature.new(name: 'John Smith', image_path: '~/Documents/signature_one.png')
+    #   signature_two = GroupDocs::Signature.new(name: 'Sara Smith', image_path: '~/Documents/signature_two.png')
+    #   signature_one.position = { top: 0.1, left: 0.07, width: 50, height: 50 }
+    #   signature_two.position = { top: 0.2, left: 0.2, width: 100, height: 100 }
+    #   # sign documents and download results
+    #   signed_documents = GroupDocs::Document.sign_documents!([document_one, document_two], [signature_one, signature_two])
+    #   signed_documents.each do |document|
+    #     document.file.download! '~/Documents'
+    #   end
+    #
+    # @param [Array<GroupDocs::Document>] documents Each document file should have "#name" and "#local_path"
+    # @param [Array<GroupDocs::Signature>] signatures Each signature should have "#name", "#image_path" and "#position"
+    #
+    def self.sign_documents!(documents, signatures, options = {}, access = {})
+      documents.each do |document|
+        document.is_a?(Document) or raise ArgumentError, "Each document should be GroupDocs::Document object, received: #{document.inspect}"
+        document.file.name       or raise ArgumentError, "Each document file should have name, received: #{document.file.name.inspect}"
+        document.file.local_path or raise ArgumentError, "Each document file should have local_path, received: #{document.file.local_path.inspect}"
+      end
+      signatures.each do |signature|
+        signature.is_a?(Signature) or raise ArgumentError, "Each signature should be GroupDocs::Signature object, received: #{signature.inspect}"
+        signature.name             or raise ArgumentError, "Each signature should have name, received: #{signature.name.inspect}"
+        signature.image_path       or raise ArgumentError, "Each signature should have image_path, received: #{signature.image_path.inspect}"
+        signature.position         or raise ArgumentError, "Each signature should have position, received: #{signature.position.inspect}"
+      end
+
+      documents_to_sign = []
+      documents.map(&:file).each do |file|
+        document = { name: file.name }
+        contents = File.read(file.local_path)
+        contents = Base64.strict_encode64(contents)
+        document.merge!(data: "data:#{mime_type(file.local_path)};base64,#{contents}")
+
+        documents_to_sign << document
+      end
+
+      signers = []
+      signatures.each do |signature|
+        contents = File.read(signature.image_path)
+        contents = Base64.strict_encode64(contents)
+        signer = { name: signature.name, data: "data:#{mime_type(signature.image_path)};base64,#{contents}" }
+        signer.merge!(signature.position)
+        # place signature on is not implemented yet
+        signer.merge!(placeSignatureOn: nil)
+
+        signers << signer
+      end
+
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :POST
+        request[:path] = '/signature/{{client_id}}/sign'
+        request[:request_body] = { documents: documents_to_sign, signers: signers }
+      end.execute!
+
+      signed_documents = []
+      json[:documents].each_with_index do |document, i|
+        file = Storage::File.new(guid: document[:documentId], name: "#{documents[i].file.name}_signed.pdf")
+        signed_documents << Document.new(file: file)
+      end
+
+      signed_documents
     end
 
     # @attr [GroupDocs::Storage::File] file
@@ -54,8 +150,10 @@ module GroupDocs
     attr_accessor :output_formats
     # @attr [Symbol] status
     attr_accessor :status
-    # @attr [Integet] order
+    # @attr [Integer] order
     attr_accessor :order
+    # @attr [Integer] field_count
+    attr_accessor :field_count
 
     #
     # Coverts passed array of attributes hash to array of GroupDocs::Storage::File.
@@ -112,6 +210,39 @@ module GroupDocs
       super(options, &blk)
       file.is_a?(GroupDocs::Storage::File) or raise ArgumentError,
         "You have to pass GroupDocs::Storage::File object: #{file.inspect}."
+    end
+
+    #
+    # Returns array of URLs to images representing document pages.
+    #
+    # @example
+    #   file = GroupDocs::Storage::Folder.list!.last
+    #   document = file.to_document
+    #   document.page_images! 1024, 768, first_page: 0, page_count: 1
+    #
+    # @param [Integer] width Image width
+    # @param [Integer] height Image height
+    # @param [Hash] options
+    # @option options [Integer] :first_page Start page to return image for (starting with 0)
+    # @option options [Integer] :page_count Number of pages to return image for
+    # @option options [Integer] :quality
+    # @option options [Boolean] :use_pdf
+    # @option options [Boolean] :token
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<String>]
+    #
+    def page_images!(width, height, options = {}, access = {})
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/doc/{{client_id}}/files/#{file.guid}/pages/images/#{width}x#{height}/urls"
+      end
+      api.add_params(options)
+      json = api.execute!
+
+      json[:url]
     end
 
     #

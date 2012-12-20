@@ -4,12 +4,9 @@ describe GroupDocs::Document::View do
 
   it_behaves_like GroupDocs::Api::Entity
 
-  it { should respond_to(:document)     }
-  it { should respond_to(:document=)    }
-  it { should respond_to(:short_url)    }
-  it { should respond_to(:short_url=)   }
-  it { should respond_to(:viewed_on)    }
-  it { should respond_to(:viewed_on=)   }
+  it { should have_accessor(:document)  }
+  it { should have_accessor(:short_url) }
+  it { should have_accessor(:viewed_on) }
 
   describe '#document=' do
     it 'sets document if GroupDocs::Document object is passed' do

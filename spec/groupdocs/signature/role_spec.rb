@@ -28,27 +28,17 @@ describe GroupDocs::Signature::Role do
     end
   end
 
-  it { should respond_to(:id)           }
-  it { should respond_to(:id=)          }
-  it { should respond_to(:name)         }
-  it { should respond_to(:name=)        }
-  it { should respond_to(:canEdit)      }
-  it { should respond_to(:canEdit=)     }
-  it { should respond_to(:canSign)      }
-  it { should respond_to(:canSign=)     }
-  it { should respond_to(:canAnnotate)  }
-  it { should respond_to(:canAnnotate=) }
-  it { should respond_to(:canDelegate)  }
-  it { should respond_to(:canDelegate=) }
+  it { should have_accessor(:id)          }
+  it { should have_accessor(:name)        }
+  it { should have_accessor(:canEdit)     }
+  it { should have_accessor(:canSign)     }
+  it { should have_accessor(:canAnnotate) }
+  it { should have_accessor(:canDelegate) }
 
-  it { should have_alias(:can_edit, :canEdit)           }
-  it { should have_alias(:can_edit=, :canEdit=)         }
-  it { should have_alias(:can_sign, :canSign)           }
-  it { should have_alias(:can_sign=, :canSign=)         }
-  it { should have_alias(:can_annotate, :canAnnotate)   }
-  it { should have_alias(:can_annotate=, :canAnnotate=) }
-  it { should have_alias(:can_delegate, :canDelegate)   }
-  it { should have_alias(:can_delegate=, :canDelegate=) }
+  it { should alias_accessor(:can_edit, :canEdit)         }
+  it { should alias_accessor(:can_sign, :canSign)         }
+  it { should alias_accessor(:can_annotate, :canAnnotate) }
+  it { should alias_accessor(:can_delegate, :canDelegate) }
 
   describe '#can_edit?' do
     it 'returns true if role can edit' do

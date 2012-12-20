@@ -2,6 +2,8 @@ module GroupDocs
   module Api
     class Entity
 
+      extend Api::Helpers::Accessor
+
       #
       # Implements flexible API object creation.
       #
