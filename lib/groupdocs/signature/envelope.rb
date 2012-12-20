@@ -92,12 +92,9 @@ module GroupDocs
     attr_accessor :status
 
     # Human-readable accessors
-    alias_method :creation_date_time,    :creationDateTime
-    alias_method :creation_date_time=,   :creationDateTime=
-    alias_method :status_date_time,      :statusDateTime
-    alias_method :status_date_time=,     :statusDateTime=
-    alias_method :envelope_expire_time,  :envelopeExpireTime
-    alias_method :envelope_expire_time=, :envelopeExpireTime=
+    alias_accessor :creation_date_time,   :creationDateTime
+    alias_accessor :status_date_time,     :statusDateTime
+    alias_accessor :envelope_expire_time, :envelopeExpireTime
 
     #
     # Converts status to human-readable format.

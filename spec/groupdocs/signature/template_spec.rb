@@ -34,11 +34,9 @@ describe GroupDocs::Signature::Template do
     end
   end
 
-  it { should respond_to(:templateExpireTime)  }
-  it { should respond_to(:templateExpireTime=) }
+  it { should have_accessor(:templateExpireTime) }
 
-  it { should have_alias(:template_expire_time, :templateExpireTime)   }
-  it { should have_alias(:template_expire_time=, :templateExpireTime=) }
+  it { should alias_accessor(:template_expire_time, :templateExpireTime) }
 
   describe '#add_recipient!' do
     let(:recipient) do

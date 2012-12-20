@@ -58,23 +58,15 @@ describe GroupDocs::Signature::Envelope do
     end
   end
 
-  it { should respond_to(:creationDateTime)    }
-  it { should respond_to(:creationDateTime=)   }
-  it { should respond_to(:status)              }
-  it { should respond_to(:status=)             }
-  it { should respond_to(:statusDateTime)      }
-  it { should respond_to(:statusDateTime=)     }
-  it { should respond_to(:envelopeExpireTime)  }
-  it { should respond_to(:envelopeExpireTime=) }
-  it { should respond_to(:status)              }
-  it { should respond_to(:status=)             }
+  it { should have_accessor(:creationDateTime)   }
+  it { should have_accessor(:status)             }
+  it { should have_accessor(:statusDateTime)     }
+  it { should have_accessor(:envelopeExpireTime) }
+  it { should have_accessor(:status)             }
 
-  it { should have_alias(:creation_date_time, :creationDateTime)       }
-  it { should have_alias(:creation_date_time=, :creationDateTime=)     }
-  it { should have_alias(:status_date_time, :statusDateTime)           }
-  it { should have_alias(:status_date_time=, :statusDateTime=)         }
-  it { should have_alias(:envelope_expire_time, :envelopeExpireTime)   }
-  it { should have_alias(:envelope_expire_time=, :envelopeExpireTime=) }
+  it { should alias_accessor(:creation_date_time, :creationDateTime)     }
+  it { should alias_accessor(:status_date_time, :statusDateTime)         }
+  it { should alias_accessor(:envelope_expire_time, :envelopeExpireTime) }
 
   describe '#status' do
     it 'converts status to human-readable format' do

@@ -35,7 +35,7 @@ module GroupDocs
       json = api.execute!
 
       json[:questionnaires].map do |questionnaire|
-        Questionnaire.new(questionnaire)
+        new(questionnaire)
       end
     end
 
@@ -55,7 +55,7 @@ module GroupDocs
         request[:path] = "/merge/{{client_id}}/questionnaires/#{id}"
       end.execute!
 
-      Questionnaire.new(json[:questionnaire])
+      new(json[:questionnaire])
     rescue RestClient::ResourceNotFound
       nil
     end
@@ -86,8 +86,7 @@ module GroupDocs
     attr_accessor :document_ids
 
     # Human-readable accessors
-    alias_method :description,  :descr
-    alias_method :description=, :descr=
+    alias_accessor :description, :descr
 
     #
     # Converts each page to GroupDocs::Questionnaire::Page object.
@@ -145,6 +144,8 @@ module GroupDocs
       end.execute!
 
       self.id = json[:questionnaire_id]
+      self.guid = json[:questionnaire_guid]
+      self.name = json[:adjusted_name]
     end
 
     #
@@ -222,46 +223,12 @@ module GroupDocs
     end
 
     #
-    # Creates new questionnaire execution.
-    #
-    # @example
-    #   execution = GroupDocs::Questionnaire::Execution.new
-    #   questionnaire = GroupDocs::Questionnaire.get!(1)
-    #   # make sure to save execution as it has updated attributes
-    #   execution = questionnaire.create_execution!(execution, 'user@email.com')
-    #   #=> #<GroupDocs::Questionnaire::Execution @id=1, @questionnaire_id=1>
-    #
-    # @param [GroupDocs::Questionnaire::Execution] execution
-    # @param [String] email
-    # @param [Hash] access Access credentials
-    # @option access [String] :client_id
-    # @option access [String] :private_key
-    # @return [GroupDocs::Questionnaire::Execution] updated execution
-    #
-    def create_execution!(execution, email, access = {})
-      execution.is_a?(GroupDocs::Questionnaire::Execution) or raise ArgumentError,
-        "Execution should be GroupDocs::Questionnaire::Execution object, received: #{execution.inspect}"
-
-      json = Api::Request.new do |request|
-        request[:access] = access
-        request[:method] = :POST
-        request[:path] = "/merge/{{client_id}}/questionnaires/#{id}/executions"
-        request[:request_body] = execution.to_hash.merge(executive: { primary_email: email })
-      end.execute!
-
-      execution.id = json[:execution_id]
-      execution.questionnaire_id = json[:questionnaire_id]
-
-      execution
-    end
-
-    #
     # Returns an array of questionnaire collectors.
     #
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
-    # @return [Array<GroupDocs::Questionnaire::Execution>]
+    # @return [Array<GroupDocs::Questionnaire::Collector>]
     #
     def collectors!(access = {})
       json = Api::Request.new do |request|
@@ -271,7 +238,74 @@ module GroupDocs
       end.execute!
 
       json[:collectors].map do |collector|
+        collector.merge!(questionnaire: self)
         Collector.new(collector)
+      end
+    end
+
+    #
+    # Returns questionnaire metadata.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [GroupDocs::Questionnaire]
+    #
+    def metadata!(access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/merge/{{client_id}}/questionnaires/#{guid}/metadata"
+      end.execute!
+
+      Questionnaire.new(json[:questionnaire])
+    end
+
+    #
+    # Updates questionnaire metadata.
+    #
+    # @example
+    #   questionnaire = GroupDocs::Questionnaire.get!(1)
+    #   metadata = questionnaire.metadata!
+    #   metadata.name = 'New questionnaire name'
+    #   questionnaire.update_metadata! metadata
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @raise [ArgumentError] if metadata is not GroupDocs::Questionnaire
+    #
+    def update_metadata!(metadata, access = {})
+      metadata.is_a?(GroupDocs::Questionnaire) or raise ArgumentError,
+        "Metadata should be GroupDocs::Questionnaire object, received: #{metadata.inspect}"
+
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/merge/{{client_id}}/questionnaires/#{guid}/metadata"
+        request[:request_body] = metadata.to_hash
+      end.execute!
+    end
+
+    #
+    # Returns an array of document fields for questionnaire.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<GroupDocs::Document::Field>]
+    #
+    def fields!(access = {})
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/merge/{{client_id}}/questionnaires/#{guid}/fields"
+      end
+      api.add_params(include_geometry: true)
+      json = api.execute!
+
+      json[:fields].map do |field|
+        Document::Field.new(field)
       end
     end
 

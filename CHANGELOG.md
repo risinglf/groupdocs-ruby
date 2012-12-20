@@ -1,3 +1,44 @@
+## v1.2
+
+**New**
+
+* Added `Annotation::Collector` class
+* Added `Collector.get!`
+* Added `Collector#add!`
+* Added `Collector#update!`
+* Added `Collector#remove!`
+* Added `Collector#executions!`
+* Added `Collector#add_execution!`
+* Added `Collector#fill!`
+* Added `Document.templates!`
+* Added `Questionnaire#executions!`
+* Added `Questionnaire#collectors!`
+* Added `Questionnaire#metadata!`
+* Added `Questionnaire#update_metadata!`
+* Added `Questionnaire#fields!`
+* Added `Execution.get!`
+* Added `Execution#delete!`
+* Added `Execution#fill!`
+* Added `Document.sign_documents!`
+* Added `Document#page_images!`
+* Added MIME helper
+
+**Changes**
+
+* Fixed `Questionnaire#create!`
+* Fixed `Field#rectangle=`
+* Fixed `File#download!`
+* Fixed `Folder#list!` params handling (see issue #30)
+* Fixed coordinates-related responses (they now have downcased fields)
+* Fixed `Job#add_datasource!`
+* `Questionnaire.all!` now accepts optional paging and status filter params
+* New attributes for a lot of entities
+
+**Removed**
+
+* Removed `Questionnaire#create_execution!`
+
+
 ## v1.1
 
 **New**

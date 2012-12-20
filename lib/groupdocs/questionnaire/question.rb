@@ -19,8 +19,7 @@ module GroupDocs
     attr_accessor :answers
 
     # Human-readable accessors
-    alias_method :default_answer,  :def_answer
-    alias_method :default_answer=, :def_answer=
+    alias_accessor :default_answer, :def_answer
 
     #
     # Converts each answer to GroupDocs::Questionnaire::Question::Answer object.

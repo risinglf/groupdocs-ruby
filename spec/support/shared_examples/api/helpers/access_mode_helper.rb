@@ -1,6 +1,5 @@
 shared_examples_for GroupDocs::Api::Helpers::AccessMode do
-  it { should respond_to(:access)  }
-  it { should respond_to(:access=) }
+  it { should have_accessor(:access) }
 
   describe '#access' do
     it 'returns converted to human-readable format access mode' do

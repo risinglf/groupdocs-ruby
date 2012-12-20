@@ -39,14 +39,10 @@ module GroupDocs
     attr_accessor :canDelegate
 
     # Human-readable accessors
-    alias_method :can_edit,      :canEdit
-    alias_method :can_edit=,     :canEdit=
-    alias_method :can_sign,      :canSign
-    alias_method :can_sign=,     :canSign=
-    alias_method :can_annotate,  :canAnnotate
-    alias_method :can_annotate=, :canAnnotate=
-    alias_method :can_delegate,  :canDelegate
-    alias_method :can_delegate=, :canDelegate=
+    alias_accessor :can_edit,     :canEdit
+    alias_accessor :can_sign,     :canSign
+    alias_accessor :can_annotate, :canAnnotate
+    alias_accessor :can_delegate, :canDelegate
 
     #
     # Returns true if role can edit.

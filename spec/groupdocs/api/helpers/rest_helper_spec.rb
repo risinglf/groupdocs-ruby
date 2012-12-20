@@ -16,6 +16,10 @@ describe GroupDocs::Api::Helpers::REST do
     it 'includes "Content-length: 0"' do
       subject.should include(content_length: 0)
     end
+
+    it 'includes Groupdocs-Referrer with SDK version' do
+      subject.should include(groupdocs_referrer: "ruby/#{GroupDocs::VERSION}")
+    end
   end
 
   describe '#prepare_request' do

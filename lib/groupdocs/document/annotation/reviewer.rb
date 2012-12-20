@@ -51,10 +51,8 @@ module GroupDocs
     attr_accessor :FullName
 
     # Human-readable accessors
-    alias_method :email_address,         :emailAddress
-    alias_method :email_address=,        :emailAddress=
-    alias_method :full_name,             :FullName
-    alias_method :full_name=,            :FullName=
+    alias_accessor :email_address, :emailAddress
+    alias_accessor :full_name,     :FullName
 
   end # Document::Annotation::Reviewer
 end # GroupDocs

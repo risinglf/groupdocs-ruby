@@ -7,8 +7,9 @@ module GroupDocs
       module REST
 
         DEFAULT_HEADERS = {
-          accept:         'application/json',
-          content_length: 0
+          accept: 'application/json',
+          content_length: 0,
+          groupdocs_referrer: "ruby/#{VERSION}"
         }
 
         private
