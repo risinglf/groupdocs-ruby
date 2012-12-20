@@ -46,7 +46,7 @@ module GroupDocs
     end
 
     #
-    # Returns an array of all templates (documents with fields).
+    # Returns an array of all templates (documents in "Templates" directory).
     #
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
