@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'rest-client', '~> 1.6'
   s.add_runtime_dependency 'json'       , '~> 1.7'
+  s.add_runtime_dependency 'mime-types' , '~> 1.19'
 
   s.add_development_dependency 'rspec'    , '~> 2.11'
   s.add_development_dependency 'fuubar'   , '~> 1.1'

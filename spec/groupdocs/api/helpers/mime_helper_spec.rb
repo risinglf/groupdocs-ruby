@@ -7,7 +7,10 @@ describe GroupDocs::Api::Helpers::MIME do
 
   describe '#mime_type' do
     it 'returns first MIME type of file' do
-      subject.send(:mime_type, __FILE__).should == 'application/ruby'
+      types = ['application/ruby']
+      ::MIME::Types.should_receive(:type_for).with(__FILE__).and_return(types)
+      types.should_receive(:first).and_return('application/ruby')
+      subject.send(:mime_type, __FILE__)
     end
   end
 end
