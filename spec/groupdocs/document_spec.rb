@@ -121,6 +121,31 @@ describe GroupDocs::Document do
     end
   end
 
+  describe ',metadata!' do
+    before(:each) do
+      mock_api_server(load_json('document_metadata'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        described_class.metadata!('document_one.doc', client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns GroupDocs::Document::MetaData object' do
+      described_class.metadata!('document_one.doc').should be_a(GroupDocs::Document::MetaData)
+    end
+
+    it 'sets last view as GroupDocs::Document::View object if document was viewed at least once' do
+      described_class.metadata!('document_one.doc').last_view.should be_a(GroupDocs::Document::View)
+    end
+
+    it 'does not set last view if document has never been viewed' do
+      mock_api_server('{ "status": "Ok", "result": { "last_view": null }}')
+      described_class.metadata!('document_one.doc').last_view.should be_nil
+    end
+  end
+
   it { should have_accessor(:file)           }
   it { should have_accessor(:process_date)   }
   it { should have_accessor(:outputs)        }
