@@ -43,28 +43,31 @@ module GroupDocs
 
       #
       # Prepares, signs and returns absolute URL.
+      #
+      # It performs the following actions step by step:
+      #   * Parses path (i.e. replaces client ID)
+      #   * URL encodes path
+      #   * Signs URL
+      #
       # @return [String]
       #
       def prepare_and_sign_url
         unless @signed
           parse_path
-          prepend_version
           url_encode_path
           sign_url
           @signed = true
         end
 
-        "%s%s" % [GroupDocs.api_server, options[:path]]
+        options[:path]
       end
 
       #
       # Executes API request to server.
       #
       # It performs the following actions step by step:
-      #   * Parses path (i.e. replaces client ID)
       #   * Prepends path with version if it's set
-      #   * URL encodes path
-      #   * Signs URL
+      #   * Prepares and signs URL
       #   * Prepare request (add headers, converts payload to JSON, etc.)
       #   * Sends request to server
       #   * Parses response
@@ -72,6 +75,7 @@ module GroupDocs
       # @return [Hash, String] Parsed response
       #
       def execute!
+        prepend_version
         prepare_and_sign_url
         prepare_request
         send_request

@@ -41,11 +41,6 @@ describe GroupDocs::Api::Request do
       subject.prepare_and_sign_url
     end
 
-    it 'prepends path with version' do
-      subject.should_receive(:prepend_version)
-      subject.prepare_and_sign_url
-    end
-
     it 'URL encodes path' do
       subject.should_receive(:url_encode_path)
       subject.prepare_and_sign_url
@@ -72,6 +67,11 @@ describe GroupDocs::Api::Request do
       subject.options[:path]    = '/folders'
       subject.options[:headers] = {}
       mock_api_server('{"status":"Ok"}')
+    end
+
+    it 'prepends path with version' do
+      subject.should_receive(:prepend_version)
+      subject.execute!
     end
 
     it 'prepares and signs url' do
