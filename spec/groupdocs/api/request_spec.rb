@@ -35,6 +35,36 @@ describe GroupDocs::Api::Request do
     end
   end
 
+  describe '#prepare_and_sign_url' do
+    it 'parses path' do
+      subject.should_receive(:parse_path)
+      subject.prepare_and_sign_url
+    end
+
+    it 'prepends path with version' do
+      subject.should_receive(:prepend_version)
+      subject.prepare_and_sign_url
+    end
+
+    it 'URL encodes path' do
+      subject.should_receive(:url_encode_path)
+      subject.prepare_and_sign_url
+    end
+
+    it 'signs url' do
+      subject.should_receive(:sign_url)
+      subject.prepare_and_sign_url
+    end
+
+    it 'returns prepared and signed url' do
+      subject.prepare_and_sign_url.should be_a(String)
+    end
+
+    it 'does nothing if url is already signed' do
+      subject.prepare_and_sign_url.should == subject.prepare_and_sign_url
+    end
+  end
+
   describe '#execute!' do
     before(:each) do
       GroupDocs.stub(private_key: 'private_key')
@@ -44,23 +74,8 @@ describe GroupDocs::Api::Request do
       mock_api_server('{"status":"Ok"}')
     end
 
-    it 'parses path' do
-      subject.should_receive(:parse_path)
-      subject.execute!
-    end
-
-    it 'prepends path with version' do
-      subject.should_receive(:prepend_version)
-      subject.execute!
-    end
-
-    it 'URL encodes path' do
-      subject.should_receive(:url_encode_path)
-      subject.execute!
-    end
-
-    it 'signs url' do
-      subject.should_receive(:sign_url)
+    it 'prepares and signs url' do
+      subject.should_receive(:prepare_and_sign_url)
       subject.execute!
     end
 
