@@ -140,6 +140,34 @@ module GroupDocs
       signed_documents
     end
 
+    #
+    # Returns a document metadata by given path.
+    #
+    # @param [String] path Full path to document
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<GroupDocs::Document::View>]
+    #
+    def self.metadata!(path, access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/doc/{{client_id}}/files/#{path}"
+      end.execute!
+
+      Document::MetaData.new do |metadata|
+        metadata.id = json[:id]
+        metadata.guid = json[:guid]
+        metadata.page_count = json[:page_count]
+        metadata.views_count = json[:views_count]
+        if json[:last_view]
+          metadata.last_view = json[:last_view]
+          metadata.last_view.document = new(file: Storage::File.new(json))
+        end
+      end
+    end
+
     # @attr [GroupDocs::Storage::File] file
     attr_accessor :file
     # @attr [Time] process_date
