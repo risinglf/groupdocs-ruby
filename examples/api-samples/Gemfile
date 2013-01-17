@@ -1,5 +1,5 @@
 source :rubygems
 
 gem 'sinatra'
-gem 'groupdocs', :git => 'git://github.com/p0deje/groupdocs-ruby.git'
+gem 'groupdocs', "1.2"
 gem 'haml'
