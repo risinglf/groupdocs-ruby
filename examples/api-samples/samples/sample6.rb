@@ -23,8 +23,9 @@ post '/sample6' do
     signature_one.position = { top: 0.1, left: 0.07, width: 50, height: 50}
 
     signed_documents = GroupDocs::Document.sign_documents!([document_one], [signature_one], {}, { :client_id => settings.client_id, :private_key => settings.private_key })
+    guid = signed_documents.first.file.guid
     if signed_documents
-    	iframe = "<iframe src='https://apps.groupdocs.com/document-viewer/Embed/#{signed_documents}' frameborder='0' width='720' height='600'></iframe>"
+      iframe = "<iframe src='https://apps.groupdocs.com/document-viewer/Embed/#{guid}' frameborder='0' width='720' height='600'></iframe>"
     end
   rescue Exception => e
   	pp e
