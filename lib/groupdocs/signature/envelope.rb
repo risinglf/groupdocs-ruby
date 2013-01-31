@@ -327,15 +327,17 @@ module GroupDocs
     #
     # Sends envelope.
     #
+    # @param [String] webhook URL to be hooked after envelope is completed
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
     #
-    def send!(access = {})
+    def send!(webhook = nil, access = {})
       Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
         request[:path] = "/signature/{{client_id}}/envelopes/#{id}/send"
+        request[:request_body] = webhook if webhook
       end.execute!
     end
 
