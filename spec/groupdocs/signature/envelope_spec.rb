@@ -257,8 +257,12 @@ describe GroupDocs::Signature::Envelope do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.send!(client_id: 'client_id', private_key: 'private_key')
+        subject.send!(nil, client_id: 'client_id', private_key: 'private_key')
       end.should_not raise_error(ArgumentError)
+    end
+
+    it 'accepts webhook callback URL' do
+      subject.send! 'http://mywebsite.com'
     end
   end
 
