@@ -261,7 +261,7 @@ describe GroupDocs::Signature::Envelope do
       end.should_not raise_error(ArgumentError)
     end
 
-    it 'accepts webhook callback URL' do
+    it 'accepts webhook callback URL and sends it as plain text' do
       subject.send! 'http://mywebsite.com'
     end
   end
