@@ -2,6 +2,20 @@ get '/envelope-sample' do
   haml :envelope_sample
 end
 
+get '/envelope-sample/sign' do
+  outFile = File.new("signed", "w")
+  outFile.close
+end
+
+get '/envelope-sample/check' do
+  if File.exist?('signed')
+    File.delete('signed')
+    'true'
+  else 
+    'false'
+  end
+end
+
 post '/envelope-sample' do
   set :client_id, params[:client_id]
   set :private_key, params[:private_key]
@@ -43,18 +57,22 @@ post '/envelope-sample' do
      
     # update recipient object after it's created
     recipient = envelope.recipients!.first
-     
+    
+    #
+    # You could add fields manually.
+    #
+
     # add city field to envelope
-    field = GroupDocs::Signature::Field.get!.detect { |f| f.type == :single_line }
-    field.name = 'City'
-    field.location = { location_x: 0.3, location_y: 0.2, page: 1 }
-    envelope.add_field! field, document, recipient
+    #field = GroupDocs::Signature::Field.get!.detect { |f| f.type == :single_line }
+    #field.name = 'City'
+    #field.location = { location_x: 0.3, location_y: 0.2, page: 1 }
+    #envelope.add_field! field, document, recipient
      
     # add signature field to envelope
-    field = GroupDocs::Signature::Field.get!.detect { |f| f.type == :signature }
-    field.location = { location_x: 0.3, location_y: 0.3, page: 1 }
-    envelope.add_field! field, document, recipient
-     
+    #field = GroupDocs::Signature::Field.get!.detect { |f| f.type == :signature }
+    #field.location = { location_x: 0.3, location_y: 0.3, page: 1 }
+    #envelope.add_field! field, document, recipient
+
     # send envelope
     envelope.send!
      
