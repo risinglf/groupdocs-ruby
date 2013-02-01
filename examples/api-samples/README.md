@@ -16,3 +16,8 @@
     bundle exec ruby app.rb
 
 ####Now open `http://localhost:4567` and try it!
+
+
+
+### Live Demo
+See live demo for api samples [here](http://groupdocs-ruby-samples.herokuapp.com)
