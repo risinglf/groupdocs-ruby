@@ -2,13 +2,13 @@ get '/envelope-sample' do
   haml :envelope_sample
 end
 
-get '/envelope-sample/sign' do
-  params = { 'name' => 'Bob', 'phone' => '111-111-1111' } 
-  begin  
-      raise "Empty params!" if params.empty?
+post '/envelope-sample/sign' do
+  data = JSON.parse(request.body.read)
+  begin
+      raise "Empty params!" if data.empty?
       outFile = File.new("signed", "w")
-        params.each do |key, value|
-            outFile.write("#{key}: #{value} \n") 
+        data.each do |key, value|
+          outFile.write("#{key}: #{value} \n")
         end
       outFile.close
   rescue Exception => e
@@ -16,11 +16,36 @@ get '/envelope-sample/sign' do
   end
 end
 
-get '/envelope-sample/check/' do
+#
+# Dowload envelop when document signed
+#
+
+#post '/envelope-sample/sign' do
+#  data = JSON.parse(request.body.read)
+#  begin  
+#      raise "Empty params!" if data.empty?
+#      GroupDocs.configure do |groupdocs|
+#          groupdocs.client_id = ''
+#          groupdocs.private_key = ''
+#          groupdocs.api_server = 'https://api.groupdocs.com' # change it to production
+#      end
+#      outFile = File.new("signed", "w")
+#      data.each do |key, value|
+#        if key == 'SourceId'
+#          envelope = GroupDocs::Signature::Envelope.new id: value,
+#                                                      name: value
+#          envelope.signed_documents! '.'
+#        end
+#      end
+#      outFile.close
+#  rescue Exception => e
+#    err = e.message
+#  end
+#end
+
+get '/envelope-sample/check' do
   if File.exist?('signed')
-    puts "1"
     File.readlines('signed').each do |line|
-      puts "#{line}asdasdasd"
     end
   else 
     'Have not signed yet'
