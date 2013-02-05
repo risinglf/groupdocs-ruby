@@ -3,16 +3,27 @@ get '/envelope-sample' do
 end
 
 get '/envelope-sample/sign' do
-  outFile = File.new("signed", "w")
-  outFile.close
+  params = { 'name' => 'Bob', 'phone' => '111-111-1111' } 
+  begin  
+      raise "Empty params!" if params.empty?
+      outFile = File.new("signed", "w")
+        params.each do |key, value|
+            outFile.write("#{key}: #{value} \n") 
+        end
+      outFile.close
+  rescue Exception => e
+    err = e.message
+  end
 end
 
-get '/envelope-sample/check' do
+get '/envelope-sample/check/' do
   if File.exist?('signed')
-    File.delete('signed')
-    'true'
+    puts "1"
+    File.readlines('signed').each do |line|
+      puts "#{line}asdasdasd"
+    end
   else 
-    'false'
+    'Have not signed yet'
   end
 end
 
@@ -26,6 +37,7 @@ post '/envelope-sample' do
     GroupDocs.configure do |groupdocs|
       groupdocs.client_id = params[:client_id]
       groupdocs.private_key = params[:private_key]
+      groupdocs.api_server = 'https://api.groupdocs.com' # change it to production
     end
      
     # upload document
@@ -58,6 +70,8 @@ post '/envelope-sample' do
     # update recipient object after it's created
     recipient = envelope.recipients!.first
     
+    
+
     #
     # You could add fields manually.
     #
@@ -74,23 +88,13 @@ post '/envelope-sample' do
     #envelope.add_field! field, document, recipient
 
     # send envelope
-    envelope.send!
+    webhook = 'http://groupdocs-ruby-samples.herokuapp.com/envelope-sample/sign'
+    envelope.send! webhook
      
     # construct embedded signature url
     url = "https://apps.groupdocs.com/signature/signembed/#{envelope.id}/#{recipient.id}"
     iframe = "<iframe src='#{url}' frameborder='0' width='720' height='600'></iframe>"
    
-    #
-    # there we wait for document to be signed
-    # assuming it's signed, we can proceed
-    #
-     
-    # wait until envelope status has changed to signed
-    #envelope = GroupDocs::Signature::Envelope.get! envelope.id
-    #until envelope.status == :completed
-    #envelope = GroupDocs::Signature::Envelope.get! envelope.id
-    #end
-     
     # download signed documents as archive
     #zip = envelope.signed_documents! '.'
      
