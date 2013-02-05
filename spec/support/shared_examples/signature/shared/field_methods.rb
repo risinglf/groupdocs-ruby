@@ -42,7 +42,7 @@ shared_examples_for GroupDocs::Signature::FieldMethods do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.add_field!(field, document, recipient, client_id: 'client_id', private_key: 'private_key')
+        subject.add_field!(field, document, recipient, { force_new_field: false }, client_id: 'client_id', private_key: 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -63,7 +63,7 @@ shared_examples_for GroupDocs::Signature::FieldMethods do
       -> { subject.add_field!(field, document, recipient) }.should raise_error(ArgumentError)
     end
 
-    it 'uses field, field location and forcedNewField flag as payload' do
+    it 'uses field and field locationas payload' do
       hash_one = {}
       payload = {}
       location = {}
@@ -72,6 +72,17 @@ shared_examples_for GroupDocs::Signature::FieldMethods do
       payload.should_receive(:merge!).with(location).and_return(payload)
       payload.should_receive(:merge!).with(forceNewField: true).and_return({})
       subject.add_field!(field, document, recipient)
+    end
+
+    it 'allows overriding force new field flag' do
+      hash_one = {}
+      payload = {}
+      location = {}
+      field.should_receive(:to_hash).and_return(payload)
+      field.location.should_receive(:to_hash).and_return(location)
+      payload.should_receive(:merge!).with(location).and_return(payload)
+      payload.should_receive(:merge!).with(forceNewField: false).and_return({})
+      subject.add_field!(field, document, recipient, force_new_field: false)
     end
   end
 

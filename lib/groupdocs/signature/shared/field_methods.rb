@@ -72,6 +72,8 @@ module GroupDocs
       # @param [GroupDocs::Signature::Field] field
       # @param [GroupDocs::Document] document
       # @param [GroupDocs::Signature::Recipient] recipient
+      # @param [Hash] options
+      # @option options [Boolean] :force_new_field Set to true to force new field create
       # @param [Hash] access Access credentials
       # @option access [String] :client_id
       # @option access [String] :private_key
@@ -80,7 +82,7 @@ module GroupDocs
       # @raise [ArgumentError] if recipient is not GroupDocs::Signature::Recipient
       # @raise [ArgumentError] if field does not specify location
       #
-      def add_field!(field, document, recipient, access = {})
+      def add_field!(field, document, recipient, opts = {}, access = {})
         field.is_a?(GroupDocs::Signature::Field) or raise ArgumentError,
           "Field should be GroupDocs::Signature::Field object, received: #{field.inspect}"
         document.is_a?(GroupDocs::Document) or raise ArgumentError,
@@ -90,9 +92,10 @@ module GroupDocs
         field.location or raise ArgumentError,
           "You have to specify field location, received: #{field.location.inspect}"
 
+        opts[:force_new_field] = true if opts[:force_new_field].nil?
         payload = field.to_hash # field itself
         payload.merge!(field.location.to_hash) # location should added in plain view (i.e. not "location": {...})
-        payload.merge!(forceNewField: true) # create new field flag
+        payload.merge!(forceNewField: opts[:force_new_field]) # create new field flag
 
         Api::Request.new do |request|
           request[:access] = access
