@@ -46,8 +46,14 @@ describe GroupDocs::Api::Helpers::URL do
   describe '#url_encode_path' do
     it 'URL encodes path' do
       subject.options[:path] = '/folder/Test 123'
-      subject.options.should_receive(:[]=).with(:path, '/folder/Test%20123')
       subject.send(:url_encode_path)
+      subject.options[:path].should == '/folder/Test%20123'
+    end
+
+    it 'replaces + with %2B' do
+      subject.options[:path] = '/?email=john+1@smith.com'
+      subject.send(:url_encode_path)
+      subject.options[:path].should == '/?email=john%2B1@smith.com'
     end
   end
 
