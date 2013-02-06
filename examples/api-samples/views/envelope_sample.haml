@@ -1,11 +1,11 @@
 %h3{:style => "text-align:center;"}
   %a{:href => "/"} GroupDocs Ruby SDK Samples
-  \- Sample4
+  \- Envelope sample
 .samplecontent{:style => "padding:10px;"}
-  %i This sample will show how to download particular file from GroupDocs account using Ruby SDK
+  %i This sample will show how to use envelope and signature API using Ruby SDK
   %br/
   %i You can find documentation for this sample 
-  %a{:href => "/docs/sample4.html"} here
+  %a{:href => "/docs/envelope-sample.html"} here
   %br/
   %br/
   %p
@@ -15,12 +15,11 @@
   %p
     PrivateKey = #{(defined? privateKey) ? privateKey : ""}
   %p
-    FileId = #{(defined? file_id) ? file_id : ""}
-  %p
     %font{:color => "red"} #{(defined? err) ? err : ""}
+  %br/
   #requestForm{:style => "padding:20px; border:1px solid black;"}
-    %p Enter data for request and press "Download" button
-    %form{:action => "/sample4", :enctype => "multipart/form-data", :method => "post"}
+    %p Enter data for request and press "Make request" button
+    %form{:action => "/envelope-sample", :enctype => "multipart/form-data", :method => "post"}
       %label{:for => "client_id"} GroupDocs ClientID
       %br/
       %input{:type=>"text", :name=>"client_id"}
@@ -29,15 +28,20 @@
       %br/
       %input{:type=>"text", :name=>"private_key"}
       %br/
-      %label{:for => "private_key"} FileID
+      %label{:for => "file"} File
       %br/
-      %input{:type=>"text", :name=>"file_id"}
+      %input{:name => "file", :type => "file"}/
       %br/
-      %input{:type => "submit", :value => "Download"}/
-    #{(defined? massage) ? massage : ""}
-  %br/
+      %br/
+      %input{:type => "submit", :value => "Upload"}/
+    %div{:style => "padding:20px; border:1px solid black;"}
+      %p 
+        Results:
+        #{(defined? iframe) ? iframe : ""}
+        
+            
 %div{:style => "padding:10px;"}
-  Choose another one sample:
+  Choose anothe one sample:
   %ul
     %li
       %a{:href => "/sample1"} Sample1 - How to login to GroupDocs using the API
@@ -59,19 +63,3 @@
       %a{:href => "/sample9"} Sample9 - How to generate an embedded Viewer URL for a Document
     %li
       %a{:href => "/sample10"} Sample10 - How to share a document to other users
-    %li
-      %a{:href => "/sample11"}Sample11 - How programmatically create and post an annotation into document. How to delete the annotation
-    %li
-      %a{:href => "/sample12"}Sample12 - How to list all annotations from document
-    %li
-      %a{:href => "/sample13"}Sample13 - How to add collaborator to doc with annotations
-    %li
-      %a{:href => "/sample14"}Sample14 - How to check the list of shares for a folder
-    %li
-      %a{:href => "/sample15"}Sample15 - How to check the number of document's views
-    %li
-      %a{:href => "/sample16"}Sample16 - How to insert Assembly questionary into webpage
-    %li
-      %a{:href => "/sample17"}Sample17 - How to upload a file into the storage and compress it into zip archive
-    %li
-      %a{:href => "/envelope-sample"}Envelope sample - How to use envelope and signature API
