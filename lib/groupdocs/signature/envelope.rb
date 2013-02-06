@@ -297,7 +297,7 @@ module GroupDocs
       end.execute!
 
       filepath = "#{path}/#{name}.zip"
-      Object::File.open(filepath, 'w') do |file|
+      Object::File.open(filepath, 'wb') do |file|
         file.write(response)
       end
 
