@@ -220,7 +220,7 @@ describe GroupDocs::Signature::Envelope do
 
     it 'downloads file to given path' do
       file = stub('file')
-      Object::File.should_receive(:open).with("#{path}/#{subject.name}.zip", 'w').and_yield(file)
+      Object::File.should_receive(:open).with("#{path}/#{subject.name}.zip", 'wb').and_yield(file)
       file.should_receive(:write).with(File.read('spec/support/files/envelope.zip'))
       subject.signed_documents!(path)
     end
