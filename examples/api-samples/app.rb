@@ -3,8 +3,6 @@ require 'groupdocs'
 require 'haml'
 require 'pp'
 
-GroupDocs.api_version = '2.0'
-
 get '/' do
   haml :index
 end
