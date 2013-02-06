@@ -46,6 +46,7 @@ module GroupDocs
         #
         def url_encode_path
           options[:path] = URI.escape(options[:path])
+          options[:path].gsub! ?+, '%2B'
         end
 
         #
