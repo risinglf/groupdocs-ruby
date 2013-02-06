@@ -138,7 +138,7 @@ describe GroupDocs::Storage::File do
 
     it 'downloads file to given path' do
       file = stub('file')
-      Object::File.should_receive(:open).with("#{path}/resume.pdf", 'w').and_yield(file)
+      Object::File.should_receive(:open).with("#{path}/resume.pdf", 'wb').and_yield(file)
       file.should_receive(:write).with(File.read('spec/support/files/resume.pdf'))
       subject.download!(path)
     end
