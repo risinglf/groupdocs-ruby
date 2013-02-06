@@ -25,7 +25,7 @@ post '/sample4' do
 
   rescue Exception => e
     err = e.message
-  end  
+  end
   
   haml :sample4, :locals => { :userId => settings.client_id, :privateKey => settings.private_key, :file_id => settings.file_id, :massage => massage, :err => err }
 end
