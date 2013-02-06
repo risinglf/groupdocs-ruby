@@ -1,11 +1,8 @@
 %h3{:style => "text-align:center;"}
   %a{:href => "/"} GroupDocs Ruby SDK Samples
-  \- Sample3
+  \- Sample15
 .samplecontent{:style => "padding:10px;"}
-  %i This sample will show how to use StorageApi to upload test file to GroupDocs account using Ruby SDK
-  %br/
-  %i You can find documentation for this sample 
-  %a{:href => "/docs/sample3.html"} here
+  %i This sample will show how to check the number of document's views using Ruby SDK
   %br/
   %br/
   %p
@@ -19,7 +16,7 @@
   %br/
   #requestForm{:style => "padding:20px; border:1px solid black;"}
     %p Enter data for request and press "Make request" button
-    %form{:action => "/sample3", :enctype => "multipart/form-data", :method => "post"}
+    %form{:action => "/sample15", :method => "post"}
       %label{:for => "client_id"} GroupDocs ClientID
       %br/
       %input{:type=>"text", :name=>"client_id"}
@@ -28,20 +25,15 @@
       %br/
       %input{:type=>"text", :name=>"private_key"}
       %br/
-      %label{:for => "file"} File
-      %br/
-      %input{:name => "file", :type => "file"}/
-      %br/
-      %br/
-      %input{:type => "submit", :value => "Upload"}/
+      %input{:type => "submit", :value => "Make request"}/
     %div{:style => "padding:20px; border:1px solid black;"}
-      %p 
-        Results:
-        #{(defined? massage) ? massage : ""}
-        #{(defined? iframe) ? iframe : ""}
-            
+      %p
+        Result:
+        - if defined? total
+          #{total}
+
 %div{:style => "padding:10px;"}
-  Choose anothe one sample:
+  Choose another one sample:
   %ul
     %li
       %a{:href => "/sample1"} Sample1 - How to login to GroupDocs using the API
@@ -77,5 +69,3 @@
       %a{:href => "/sample16"}Sample16 - How to insert Assembly questionary into webpage
     %li
       %a{:href => "/sample17"}Sample17 - How to upload a file into the storage and compress it into zip archive
-    %li
-      %a{:href => "/envelope-sample"}Envelope sample - How to use envelope and signature API
