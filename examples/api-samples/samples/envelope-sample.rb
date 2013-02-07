@@ -3,7 +3,7 @@ get '/envelope-sample' do
   haml :envelope_sample
 end
 
-# POST request for callback
+# POST request to handle callback when document was signed
 post '/envelope-sample/sign' do
   # Content Type of callback is application/json
   data = JSON.parse(request.body.read)
@@ -21,32 +21,30 @@ post '/envelope-sample/sign' do
   end
 end
 
-#
-# Dowload envelop when document signed
-#
 
-#post '/envelope-sample/sign' do
-#  data = JSON.parse(request.body.read)
-#  begin  
-#    raise "Empty params!" if data.empty?
-#    GroupDocs.configure do |groupdocs|
-#        groupdocs.client_id = ''
-#        groupdocs.private_key = ''
-#        groupdocs.api_server = 'https://api.groupdocs.com'
-#    end
-#    data.each do |key, value|
-#      if key == 'SourceId'
-#        # Create envelop with id and name as SourceId parameter from callback
-#        envelope = GroupDocs::Signature::Envelope.new id: value,
-#                                                    name: value
-#        # Download ziped envelop to current directory
-#        envelope.signed_documents! '.'
-#      end
-#    end
-#  rescue Exception => e
-#    err = e.message
-#  end
-#end
+# POST request to handle callback and download envelop when document was signed
+post '/envelope-sample/sign-and-download' do
+  data = JSON.parse(request.body.read)
+  begin  
+    raise "Empty params!" if data.empty?
+    GroupDocs.configure do |groupdocs|
+        groupdocs.client_id = '' # Your client Client ID here
+        groupdocs.private_key = '' # Your API Key here
+        groupdocs.api_server = 'https://api.groupdocs.com'
+    end
+    data.each do |key, value|
+      if key == 'SourceId'
+        # Create envelop with id and name as SourceId parameter from callback
+        envelope = GroupDocs::Signature::Envelope.new id: value,
+                                                    name: value
+        # download signed documents as archive
+        envelope.signed_documents! '.'
+      end
+    end
+  rescue Exception => e
+    err = e.message
+  end
+end
 
 # GET request to check if envelop was signed
 get '/envelope-sample/check' do
@@ -101,11 +99,9 @@ post '/envelope-sample' do
      
     # update recipient object after it's created
     recipient = envelope.recipients!.first
-    
-    
 
     #
-    # You could add fields manually.
+    # You can add fields manually.
     #
 
     # add city field to envelope
@@ -119,16 +115,16 @@ post '/envelope-sample' do
     #field.location = { location_x: 0.3, location_y: 0.3, page: 1 }
     #envelope.add_field! field, document, recipient
 
-    # send envelope
+    # URL for callback
     webhook = 'http://groupdocs-ruby-samples.herokuapp.com/envelope-sample/sign'
+
+    # send envelope
     envelope.send! webhook
      
     # construct embedded signature url
     url = "https://apps.groupdocs.com/signature/signembed/#{envelope.id}/#{recipient.id}"
     iframe = "<iframe src='#{url}' frameborder='0' width='720' height='600'></iframe>"
-   
-    # download signed documents as archive
-    #zip = envelope.signed_documents! '.'
+
   rescue Exception => e
     err = e.message
   end
