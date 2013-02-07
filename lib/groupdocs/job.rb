@@ -150,7 +150,7 @@ module GroupDocs
     # @return [Array<Symbol>]
     #
     def actions
-      @actions.split(', ').map { |action| variable_to_accessor(action) }
+      @actions.split(', ').map { |action| variable_to_accessor(action) } if @actions
     end
 
     #
