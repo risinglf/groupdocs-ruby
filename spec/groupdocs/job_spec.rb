@@ -128,6 +128,12 @@ describe GroupDocs::Job do
       subject.actions = 'Convert, Combine, CompressZip'
       subject.actions.should == [:convert, :combine, :compress_zip]
     end
+
+    it 'doesn nothing if there are no actions' do
+      subject.actions = nil
+      subject.actions.should be_nil
+    end
+
   end
 
   describe '#documents!' do
