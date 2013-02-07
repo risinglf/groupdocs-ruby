@@ -53,11 +53,13 @@ module GroupDocs
     # @return [GroupDocs::Job]
     #
     def self.get!(id, access = {})
-      json = Api::Request.new do |request|
+      api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
         request[:path] = "/async/{{client_id}}/jobs/#{id}"
-      end.execute!
+      end
+      api.add_params(format: 'json')
+      json = api.execute!
 
       Job.new(json)
     end
