@@ -1,16 +1,21 @@
+# GET request
 get '/envelope-sample' do
   haml :envelope_sample
 end
 
+# POST request for callback
 post '/envelope-sample/sign' do
+  # Content Type of callback is application/json
   data = JSON.parse(request.body.read)
   begin
-      raise "Empty params!" if data.empty?
-      outFile = File.new("signed", "w")
-        data.each do |key, value|
-          outFile.write("#{key}: #{value} \n")
-        end
-      outFile.close
+    raise "Empty params!" if data.empty?
+
+    #create empty file and write data as "key: value" to it
+    outFile = File.new("signed", "w")
+      data.each do |key, value|
+        outFile.write("#{key}: #{value} \n")
+      end
+    outFile.close
   rescue Exception => e
     err = e.message
   end
@@ -23,26 +28,27 @@ end
 #post '/envelope-sample/sign' do
 #  data = JSON.parse(request.body.read)
 #  begin  
-#      raise "Empty params!" if data.empty?
-#      GroupDocs.configure do |groupdocs|
-#          groupdocs.client_id = ''
-#          groupdocs.private_key = ''
-#          groupdocs.api_server = 'https://api.groupdocs.com' # change it to production
+#    raise "Empty params!" if data.empty?
+#    GroupDocs.configure do |groupdocs|
+#        groupdocs.client_id = ''
+#        groupdocs.private_key = ''
+#        groupdocs.api_server = 'https://api.groupdocs.com'
+#    end
+#    data.each do |key, value|
+#      if key == 'SourceId'
+#        # Create envelop with id and name as SourceId parameter from callback
+#        envelope = GroupDocs::Signature::Envelope.new id: value,
+#                                                    name: value
+#        # Download ziped envelop to current directory
+#        envelope.signed_documents! '.'
 #      end
-#      outFile = File.new("signed", "w")
-#      data.each do |key, value|
-#        if key == 'SourceId'
-#          envelope = GroupDocs::Signature::Envelope.new id: value,
-#                                                      name: value
-#          envelope.signed_documents! '.'
-#        end
-#      end
-#      outFile.close
+#    end
 #  rescue Exception => e
 #    err = e.message
 #  end
 #end
 
+# GET request to check if envelop was signed
 get '/envelope-sample/check' do
   if File.exist?('signed')
     File.readlines('signed').each do |line|
@@ -52,6 +58,7 @@ get '/envelope-sample/check' do
   end
 end
 
+# POST request
 post '/envelope-sample' do
   set :client_id, params[:client_id]
   set :private_key, params[:private_key]
@@ -62,7 +69,7 @@ post '/envelope-sample' do
     GroupDocs.configure do |groupdocs|
       groupdocs.client_id = params[:client_id]
       groupdocs.private_key = params[:private_key]
-      groupdocs.api_server = 'https://api.groupdocs.com' # change it to production
+      groupdocs.api_server = 'https://api.groupdocs.com'
     end
      
     # upload document
@@ -122,9 +129,6 @@ post '/envelope-sample' do
    
     # download signed documents as archive
     #zip = envelope.signed_documents! '.'
-     
-    # archive envelope
-    #envelope.archive!
   rescue Exception => e
     err = e.message
   end
