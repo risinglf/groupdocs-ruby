@@ -19,9 +19,9 @@
   %p
     You entered:
   %p
-    UserId = #{(defined? userId) ? userId : ""}
+    UserId = #{(defined? client_id) ? client_id : ""}
   %p
-    PrivateKey = #{(defined? privateKey) ? privateKey : ""}
+    PrivateKey = #{(defined? private_key) ? private_key : ""}
   %p
     %font{:color => "red"} #{(defined? err) ? err : ""}
   %br/
