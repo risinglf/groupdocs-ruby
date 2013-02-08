@@ -4,6 +4,14 @@
 .samplecontent{:style => "padding:10px;"}
   %i This sample will show how to use envelope and signature API using Ruby SDK
   %br/
+  %i This sample create fields for signing automatically from pdf document, you can find example of such document
+  %a{:href => "https://github.com/groupdocs/groupdocs-ruby/blob/master/examples/api-samples/public/GroupDocs_Signature_Demo.pdf?raw=true"} here
+  %br/
+  %br/
+  %i To check callback click
+  %a{:href => "/envelope-sample/check"} here
+  %br/
+  %br/
   %i You can find documentation for this sample 
   %a{:href => "/docs/envelope-sample.html"} here
   %br/
@@ -11,9 +19,9 @@
   %p
     You entered:
   %p
-    UserId = #{(defined? userId) ? userId : ""}
+    UserId = #{(defined? client_id) ? client_id : ""}
   %p
-    PrivateKey = #{(defined? privateKey) ? privateKey : ""}
+    PrivateKey = #{(defined? private_key) ? private_key : ""}
   %p
     %font{:color => "red"} #{(defined? err) ? err : ""}
   %br/

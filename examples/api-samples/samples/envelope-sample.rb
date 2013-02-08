@@ -9,12 +9,11 @@ post '/envelope-sample/sign' do
   data = JSON.parse(request.body.read)
   begin
     raise "Empty params!" if data.empty?
-
     #create empty file and write data as "key: value" to it
     outFile = File.new("signed", "w")
-      data.each do |key, value|
-        outFile.write("#{key}: #{value} \n")
-      end
+    data.each do |key, value|
+      outFile.write("#{key}: #{value} \n")
+    end
     outFile.close
   rescue Exception => e
     err = e.message
@@ -67,7 +66,7 @@ post '/envelope-sample' do
     GroupDocs.configure do |groupdocs|
       groupdocs.client_id = params[:client_id]
       groupdocs.private_key = params[:private_key]
-      groupdocs.api_server = 'https://api.groupdocs.com'
+      groupdocs.api_server = 'https://stage-api.groupdocs.com'
     end
      
     # upload document
@@ -122,7 +121,7 @@ post '/envelope-sample' do
     envelope.send! webhook
      
     # construct embedded signature url
-    url = "https://apps.groupdocs.com/signature/signembed/#{envelope.id}/#{recipient.id}"
+    url = "https://stage-apps.groupdocs.com/signature/signembed/#{envelope.id}/#{recipient.id}"
     iframe = "<iframe src='#{url}' frameborder='0' width='720' height='600'></iframe>"
 
   rescue Exception => e
