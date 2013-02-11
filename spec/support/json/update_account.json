@@ -1,10 +1,10 @@
 {
- "result" : {
+  "result": {
     "id": 510,
     "guid": "2d58a57067966405",
     "primary_email": "john@smith.com"
   },
- "status": "Ok",
- "error_message": nil,
- "composedOn": 1360592389774
+  "status": "Ok",
+  "error_message": nil,
+  "composedOn": 1360592389774
 }

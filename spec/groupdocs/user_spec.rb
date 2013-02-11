@@ -36,6 +36,10 @@ describe GroupDocs::User do
     it 'raises error if user is not an instance of GroupDocs::User' do
       -> { described_class.update_account!('user') }.should raise_error(ArgumentError)
     end
+
+    it 'returns GroupDocs::User object' do
+      described_class.update_account!.should be_a(GroupDocs::User)
+    end
   end
 
   it { should have_accessor(:id)                 }
