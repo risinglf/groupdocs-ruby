@@ -38,7 +38,7 @@ describe GroupDocs::User do
     end
 
     it 'returns GroupDocs::User object' do
-      described_class.update_account!.should be_a(GroupDocs::User)
+      described_class.update_account!(user).should be_a(GroupDocs::User)
     end
   end
 

@@ -46,15 +46,16 @@ module GroupDocs
     def self.update_account!(user, access = {})
       user.is_a?(GroupDocs::User) or raise ArgumentError,
         "User should be GroupDocs::User object, received: #{user.inspect}"
-      
+
+      data = user.to_hash
       json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
         request[:path] = "/mgmt/{{client_id}}/account/users/#{user.nickname}"
-        request[:request_body] = user.to_hash
+        request[:request_body] = data
       end.execute!
-      
-      GroupDocs::User.new user.to_hash.merge(json[:result])
+
+      GroupDocs::User.new data.merge(json)
     end
 
     # @attr [Integer] id

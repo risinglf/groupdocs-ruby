@@ -5,6 +5,6 @@
     "primary_email": "john@smith.com"
   },
   "status": "Ok",
-  "error_message": nil,
+  "error_message": null,
   "composedOn": 1360592389774
 }
