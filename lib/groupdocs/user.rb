@@ -35,7 +35,8 @@ module GroupDocs
     #   user.nickname = 'johnsmith'
     #   user.first_name = 'John'
     #   user.last_name = 'Smith'
-    #   new_user = GroupDocs::User.update_account!(user)
+    #   # make sure to save user as it has updated attributes
+    #   user = GroupDocs::User.update_account!(user)
     #
     # @param [GroupDocs::User] user
     # @param [Hash] access Access credentials
