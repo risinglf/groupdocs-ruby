@@ -20,6 +20,24 @@ describe GroupDocs::User do
     end
   end
 
+  describe '.update_account!' do
+    before(:each) do
+      mock_api_server(load_json('update_account'))
+    end
+
+    let!(:user) { GroupDocs::User.new }
+
+    it 'accepts access credentials hash' do
+      lambda do
+        described_class.update_account!(user, client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'raises error if user is not an instance of GroupDocs::User' do
+      -> { described_class.update_account!('user') }.should raise_error(ArgumentError)
+    end
+  end
+
   it { should have_accessor(:id)                 }
   it { should have_accessor(:guid)               }
   it { should have_accessor(:nickname)           }
