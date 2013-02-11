@@ -26,6 +26,37 @@ module GroupDocs
       new(json[:user])
     end
 
+    #
+    # Updates user account if it's created, otherwise creates new.
+    #
+    # @example
+    #   user = GroupDocs::User.new
+    #   user.primary_email = 'john@smith.com'
+    #   user.nickname = 'johnsmith'
+    #   user.first_name = 'John'
+    #   user.last_name = 'Smith'
+    #   new_user = GroupDocs::User.update_account!(user)
+    #
+    # @param [GroupDocs::User] user
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [GroupDocs::User]
+    #
+    def self.update_account!(user, access = {})
+      user.is_a?(GroupDocs::User) or raise ArgumentError,
+        "User should be GroupDocs::User object, received: #{user.inspect}"
+      
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/mgmt/{{client_id}}/account/users/#{user.nickname}"
+        request[:request_body] = user.to_hash
+      end.execute!
+      
+      GroupDocs::User.new user.to_hash.merge(json[:result])
+    end
+
     # @attr [Integer] id
     attr_accessor :id
     # @attr [String] guid
