@@ -27,7 +27,7 @@ module GroupDocs
     end
 
     #
-    # Update or Create user for account.
+    # Updates user account if it's created, otherwise creates new.
     #
     # @example
     #   user = GroupDocs::User.new
@@ -35,7 +35,6 @@ module GroupDocs
     #   user.nickname = 'johnsmith'
     #   user.first_name = 'John'
     #   user.last_name = 'Smith'
-    #   
     #   new_user = GroupDocs::User.update_account!(user)
     #
     # @param [GroupDocs::User] user
@@ -54,6 +53,7 @@ module GroupDocs
         request[:path] = "/mgmt/{{client_id}}/account/users/#{user.nickname}"
         request[:request_body] = user.to_hash
       end.execute!
+      
       GroupDocs::User.new user.to_hash.merge(json[:result])
     end
 
