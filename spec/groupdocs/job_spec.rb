@@ -151,17 +151,29 @@ describe GroupDocs::Job do
       subject.status.should == :archived
     end
 
-    it 'returns array of GroupDocs::Document objects' do
-      documents = subject.documents!
+    it 'returns hash' do
+      subject.documents!.should be_a(Hash)
+    end
+
+    it 'returns array of input documents' do
+      documents = subject.documents![:inputs]
       documents.should be_an(Array)
       documents.each do |document|
         document.should be_a(GroupDocs::Document)
       end
     end
 
-    it 'returns empty array if null is returned instead of inputs array' do
+    it 'returns array of output documents' do
+      documents = subject.documents![:outputs]
+      documents.should be_an(Array)
+      documents.each do |document|
+        document.should be_a(GroupDocs::Document)
+      end
+    end
+
+    it 'returns empty arrays if there are no documents' do
       mock_api_server('{ "status": "Ok", "result": {}}')
-      subject.documents!.should be_empty
+      subject.documents!.should == { inputs: [], outputs: [] }
     end
   end
 
