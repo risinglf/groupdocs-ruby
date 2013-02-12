@@ -25,7 +25,7 @@ module GroupDocs
       #   end
       #
       # @param [Hash] options
-      # @option options [Symbol] :method HTTP method. One of :GET, :DOWNLOAD, :POST, :PUT or :DELETE.
+      # @option options [Symbol, String] :method HTTP method. One of :GET, :DOWNLOAD, :POST, :PUT or :DELETE.
       # @option options [String] :path Path to send request to
       # @option options [Hash] :headers Additional HTTP headers
       # @option options [Hash] :access Access credentials hash

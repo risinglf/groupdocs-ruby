@@ -156,12 +156,12 @@ module GroupDocs
     end
 
     #
-    # Returns an array of documents associated to job.
+    # Returns an hash of input and output documents associated to job.
     #
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
-    # @return [Array<GroupDocs::Document>]
+    # @return [Hash]
     #
     def documents!(access = {})
       json = Api::Request.new do |request|
@@ -171,14 +171,28 @@ module GroupDocs
       end.execute!
 
       self.status = json[:job_status]
+      documents = {
+        inputs:  [],
+        outputs: [],
+      }
+
+      # add input documents
       if json[:inputs]
-        json[:inputs].map do |document|
+        json[:inputs].each do |document|
           document.merge!(file: GroupDocs::Storage::File.new(document))
-          Document.new(document)
+          documents[:inputs] << Document.new(document)
         end
-      else
-        []
       end
+
+      # add output documents
+      if json[:outputs]
+        json[:outputs].each do |document|
+          document.merge!(file: GroupDocs::Storage::File.new(document))
+          documents[:outputs] << Document.new(document)
+        end
+      end
+
+      documents
     end
 
     #
