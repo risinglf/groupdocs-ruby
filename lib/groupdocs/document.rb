@@ -814,11 +814,28 @@ module GroupDocs
     # @return [Array<Symbol>]
     #
     def set_shared_link_access_rights!(rights, access = {})
-      json = Api::Request.new do |request|
+      Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
         request[:path] = "/ant/{{client_id}}/files/#{file.guid}/sharedLinkAccessRights"
         request[:request_body] = convert_access_rights_to_byte(rights)
+      end.execute!
+    end
+
+    #
+    # Sets session callback URL.
+    #
+    # @param [String] url Callback URL
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def set_session_callback!(url, access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/ant/{{client_id}}/files/#{file.guid}/sessionCallbackUrl"
+        request[:request_body] = url
       end.execute!
     end
 
