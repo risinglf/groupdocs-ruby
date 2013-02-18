@@ -281,7 +281,9 @@ module GroupDocs
     end
 
     #
-    # Downloads all signed documents as ZIP file to given pat.
+    # Downloads signed documents to given path.
+    # If there is only one file in envelope, it's saved as PDF.
+    # If there are two or more files in envelope, it's saved as ZIP.
     #
     # @param [String] path Directory to download file to
     # @param [Hash] access Access credentials
@@ -296,7 +298,13 @@ module GroupDocs
         request[:path] = "/signature/{{client_id}}/envelopes/#{id}/documents/get"
       end.execute!
 
-      filepath = "#{path}/#{name}.zip"
+      filepath = "#{path}/#{name}."
+      if documents!.size == 1
+        filepath << 'pdf'
+      else
+        filepath << 'zip'
+      end
+
       Object::File.open(filepath, 'wb') do |file|
         file.write(response)
       end

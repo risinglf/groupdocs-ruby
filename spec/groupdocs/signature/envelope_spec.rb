@@ -206,8 +206,8 @@ describe GroupDocs::Signature::Envelope do
 
   describe '#signed_documents!' do
     before(:each) do
-      mock_api_server(File.read('spec/support/files/envelope.zip'))
-      subject.stub(name: 'envelope')
+      mock_api_server(File.read('spec/support/files/resume.pdf'))
+      subject.name = 'envelope'
     end
 
     let(:path) { Dir.tmpdir }
@@ -218,15 +218,51 @@ describe GroupDocs::Signature::Envelope do
       end.should_not raise_error(ArgumentError)
     end
 
-    it 'downloads file to given path' do
-      file = stub('file')
-      Object::File.should_receive(:open).with("#{path}/#{subject.name}.zip", 'wb').and_yield(file)
-      file.should_receive(:write).with(File.read('spec/support/files/envelope.zip'))
-      subject.signed_documents!(path)
+    it 'returns saved file path' do
+      subject.stub(documents!: [1])
+      subject.signed_documents!(path).should == "#{path}/#{subject.name}.pdf"
     end
 
-    it 'returns saved file path' do
-      subject.signed_documents!(path).should == "#{path}/#{subject.name}.zip"
+    context 'no documents' do
+      before(:each) do
+        mock_api_server(File.read('spec/support/files/envelope.zip'))
+      end
+
+      it 'downloads ZIP file' do
+        file = stub('file')
+        subject.stub(documents!: [])
+        Object::File.should_receive(:open).with("#{path}/#{subject.name}.zip", 'wb').and_yield(file)
+        file.should_receive(:write).with(File.read('spec/support/files/envelope.zip'))
+        subject.signed_documents!(path)
+      end
+    end
+
+    context 'single document' do
+      before(:each) do
+        mock_api_server(File.read('spec/support/files/resume.pdf'))
+      end
+
+      it 'downloads ZIP file' do
+        file = stub('file')
+        subject.stub(documents!: [1])
+        Object::File.should_receive(:open).with("#{path}/#{subject.name}.pdf", 'wb').and_yield(file)
+        file.should_receive(:write).with(File.read('spec/support/files/resume.pdf'))
+        subject.signed_documents!(path)
+      end
+    end
+
+    context 'multiple documents' do
+      before(:each) do
+        mock_api_server(File.read('spec/support/files/envelope.zip'))
+      end
+
+      it 'downloads ZIP file' do
+        file = stub('file')
+        subject.stub(documents!: [1, 2])
+        Object::File.should_receive(:open).with("#{path}/#{subject.name}.zip", 'wb').and_yield(file)
+        file.should_receive(:write).with(File.read('spec/support/files/envelope.zip'))
+        subject.signed_documents!(path)
+      end
     end
   end
 
