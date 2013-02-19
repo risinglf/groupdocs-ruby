@@ -12,7 +12,13 @@
   %p
     PrivateKey = #{(defined? private_key) ? private_key : ""}
   %p
-    File name = #{(defined? file_name) ? file_name : ""}
+    Email = #{(defined? email) ? email : ""}
+  %p
+    First Name = #{(defined? first_name) ? first_name : ""}
+  %p
+    Last Name = #{(defined? last_name) ? last_name : ""}
+  %p
+    File Name = #{(defined? file_name) ? file_name : ""}
   %p
     %font{:color => "red"} #{(defined? err) ? err : ""}
   %br/
@@ -27,9 +33,21 @@
       %br/
       %input{:type=>"text", :name=>"private_key"}
       %br/
-      %label{:for => "file"} File name with extension (filename.doc)
+      %label{:for => "private_key"} Email
       %br/
-      %input{:type => "text", :name => "file_name" }/
+      %input{:type=>"text", :name=>"email"}
+      %br/
+      %label{:for => "first_name"} First Name
+      %br/
+      %input{:type=>"text", :name=>"first_name"}
+      %br/
+      %label{:for => "last_name"} Last Name
+      %br/
+      %input{:type=>"text", :name=>"last_name"}
+      %br/
+      %label{:for => "file_guid"} File Name (filename.doc)
+      %br/
+      %input{:type => "file_name", :name => "file_name"}/
       %br/
       %br/
       %input{:type => "submit", :value => "Submit"}/
@@ -37,7 +55,7 @@
       %p 
         Results: 
         %br/
-        #{(defined? iframe_url) ? iframe_url : ""}
+        #{(defined? iframe) ? iframe : ""}
             
 %div{:style => "padding:10px;"}
   Choose anothe one sample:
@@ -62,3 +80,7 @@
       %a{:href => "/sample9"} Sample9 - How to generate an embedded Viewer URL for a Document
     %li
       %a{:href => "/sample10"} Sample10 - How to share a document to other users
+    %li
+      %a{:href => "/envelope-sample"}Envelope sample - How to use envelope and signature API
+    %li
+      %a{:href => "/annotation-sample"}Annotation sample - How to use annotation and creating users API
