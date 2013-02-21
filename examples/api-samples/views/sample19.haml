@@ -1,8 +1,8 @@
 %h3{:style => "text-align:center;"}
   %a{:href => "/"} GroupDocs Ruby SDK Samples
-  \- Sample13
+  \- Sample19
 .samplecontent{:style => "padding:10px;"}
-  %i This sample will show how to add collaborator to doc with annotations using Ruby SDK
+  %i This sample will show how to Compare documents using Ruby SDK
   %br/
   %br/
   %p
@@ -12,15 +12,17 @@
   %p
     PrivateKey = #{(defined? privateKey) ? privateKey : ""}
   %p
-    FileId = #{(defined? fileId) ? fileId : ""}
+    Source File ID = #{(defined? sourceFileId) ? sourceFileId : ""}
   %p
-    Email = #{(defined? email) ? email : ""}
+    Target File ID = #{(defined? targetFileId) ? targetFileId : ""}
+  %p
+    Callback Url = #{(defined? callbackUrl) ? callbackUrl : ""}
   %p
     %font{:color => "red"} #{(defined? err) ? err : ""}
   %br/
   #requestForm{:style => "padding:20px; border:1px solid black;"}
     %p Enter data for request and press "Make request" button
-    %form{:action => "/sample13", :method => "post"}
+    %form{:action => "/sample19", :method => "post"}
       %label{:for => "client_id"} GroupDocs ClientID
       %br/
       %input{:type=>"text", :name=>"client_id"}
@@ -29,22 +31,24 @@
       %br/
       %input{:type=>"text", :name=>"private_key"}
       %br/
-      %label{:for => "file_id"} GroupDocs FileID
+      %label{:for => "sourceFileId"} Source File ID
       %br/
-      %input{:type=>"text", :name=>"fileId"}
+      %input{:type=>"text", :name=>"sourceFileId"}
       %br/
-      %label{:for => "email"} Collaborator Email
+      %label{:for => "targetFileId"} Target File ID
       %br/
-      %input{:type=>"text", :name=>"email"}
+      %input{:type=>"text", :name=>"targetFileId"}
       %br/
+      %label{:for => "callbackUrl"} Callback Url
+      %br/
+      %input{:type=>"text", :name=>"callbackUrl"}
       %br/
       %input{:type => "submit", :value => "Make request"}/
+      %br/
     %div{:style => "padding:20px; border:1px solid black;"}
       %p
         Result:
-
-        - if defined? result.first
-          #{result.first.primary_email}
+        #{(defined? iframe) ? iframe : ""}
 
 
 %div{:style => "padding:10px;"}
