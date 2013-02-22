@@ -7,10 +7,6 @@ end
 post '/annotation-sample' do
   set :client_id, params[:client_id]
   set :private_key, params[:private_key]
-
-  set :email, params[:email]
-  set :first_name, params[:first_name]
-  set :last_name, params[:last_name]
   set :file_name, params[:file_name]
 
   begin
@@ -22,15 +18,15 @@ post '/annotation-sample' do
       groupdocs.api_server = 'https://api.groupdocs.com'
     end
     # get document metadata
-    metadata = GroupDocs::Document.metadata!(settings.file_name)
+    metadata = GroupDocs::Document.metadata!('resume.pdf')
     document = GroupDocs::Storage::File.new(id: metadata.id, guid: metadata.guid).to_document
      
     # create new user
     user = GroupDocs::User.new
-    user.nickname = settings.email
-    user.primary_email = settings.email
-    user.first_name = settings.first_name
-    user.last_name = settings.last_name
+    user.nickname = 'test_account'
+    user.primary_email = 'test_email@email.com'
+    user.first_name = 'First name'
+    user.last_name = 'Last name'
     user = GroupDocs::User.update_account!(user)
      
     # add collaborator
@@ -44,13 +40,11 @@ post '/annotation-sample' do
     "/document-viewer/embed?quality=50&guid=#{document.file.guid}&uid=#{user.guid}&download=True"
     end
 
-    # you can sign document
-    #url = GroupDocs::Api::Request.new(path: url).prepare_and_sign_url
-
-    iframe = "<iframe src='https://apps.groupdocs.com#{url}' frameborder='0' width='720' height='600'></iframe>"
+    url = GroupDocs::Api::Request.new(path: url).prepare_and_sign_url
+    iframe_url = "https://apps.groupdocs.com#{url}"
   rescue Exception => e
     err = e.message
   end
 
-  haml :annotation_sample, :locals => { :client_id => settings.client_id, :private_key => settings.private_key, :err => err, :file_name => settings.file_name, :email => settings.email, :first_name => settings.first_name, :last_name => settings.last_name, :iframe => iframe}
+  haml :annotation_sample, :locals => { :client_id => settings.client_id, :private_key => settings.private_key, :err => err, :file_name => settings.file_name, :iframe_url => iframe_url}
 end

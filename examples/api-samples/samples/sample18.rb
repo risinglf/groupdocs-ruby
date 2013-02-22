@@ -27,11 +27,12 @@ post '/sample18' do
     end
 
     message = ""
+    iframe = ""
     unless document.instance_of? String
 
       # convert file
       convert = document.to_document.convert!(settings.convert_type, {}, {:client_id => settings.client_id, :private_key => settings.private_key})
-      sleep(3)
+      sleep(5)
 
       if convert.instance_of? GroupDocs::Job
         # get all jobs
@@ -46,6 +47,14 @@ post '/sample18' do
         end
 
         if job.status == :archived
+          # get job by ID
+          job = GroupDocs::Job.new(id: convert.id)
+          # get all job documents
+          documents = job.documents!({:client_id => settings.client_id, :private_key => settings.private_key})
+          # get compared file giud
+          guid =  documents[:inputs].first.outputs.first.guid
+          # construct result iframe
+          iframe = "<iframe src='https://apps.groupdocs.com/document-viewer/embed/#{guid}' frameborder='0' width='100%' height='600'></iframe>"
           message = "<p>Converted file saved successfully."
         end
 
@@ -57,5 +66,5 @@ post '/sample18' do
   end
 
   # set variables for template
-  haml :sample18, :locals => { :userId => settings.client_id, :privateKey => settings.private_key, :fileId => settings.file_id, :message => message, :err => err }
+  haml :sample18, :locals => { :userId => settings.client_id, :privateKey => settings.private_key, :fileId => settings.file_id, :message => message, :iframe => iframe, :err => err }
 end
