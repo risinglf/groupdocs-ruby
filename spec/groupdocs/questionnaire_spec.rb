@@ -12,13 +12,13 @@ describe GroupDocs::Questionnaire do
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.all!({}, client_id: 'client_id', private_key: 'private_key')
+        described_class.all!({}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'accepts options hash' do
       lambda do
-        described_class.all!(status: :draft)
+        described_class.all!(:status => :draft)
       end.should_not raise_error(ArgumentError)
     end
 
@@ -27,7 +27,7 @@ describe GroupDocs::Questionnaire do
       subject = described_class.new
       described_class.should_receive(:new).any_number_of_times.and_return(subject)
       subject.should_receive(:parse_status).with(status)
-      described_class.all!(status: status)
+      described_class.all!(:status => status)
     end
 
     it 'returns an array of GroupDocs::Questionnaire objects' do
@@ -46,7 +46,7 @@ describe GroupDocs::Questionnaire do
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.get!(1, client_id: 'client_id', private_key: 'private_key')
+        described_class.get!(1, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -76,7 +76,7 @@ describe GroupDocs::Questionnaire do
 
   describe '#pages=' do
     it 'converts each page to GroupDocs::Questionnaire::Page object if hash is passed' do
-      subject.pages = [{ number: 1, title: 'Page1' }, { number: 2, title: 'Page2' }]
+      subject.pages = [{ :number => 1, :title => 'Page1' }, { :number => 2, :title => 'Page2' }]
       pages = subject.pages
       pages.should be_an(Array)
       pages.each do |page|
@@ -85,8 +85,8 @@ describe GroupDocs::Questionnaire do
     end
 
     it 'saves each page if it is GroupDocs::Questionnaire::Page object' do
-      page1 = GroupDocs::Questionnaire::Page.new(number: 1)
-      page2 = GroupDocs::Questionnaire::Page.new(number: 2)
+      page1 = GroupDocs::Questionnaire::Page.new(:number => 1)
+      page2 = GroupDocs::Questionnaire::Page.new(:number => 2)
       subject.pages = [page1, page2]
       subject.pages.should include(page1)
       subject.pages.should include(page2)
@@ -101,7 +101,7 @@ describe GroupDocs::Questionnaire do
 
   describe '#add_page' do
     it 'raises error if page is not GroupDocs::Questionnaire::Page object' do
-      -> { subject.add_page('Page') }.should raise_error(ArgumentError)
+      lambda { subject.add_page('Page') }.should raise_error(ArgumentError)
     end
 
     it 'adds page to pages instance variable' do
@@ -119,7 +119,7 @@ describe GroupDocs::Questionnaire do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.create!(client_id: 'client_id', private_key: 'private_key')
+        subject.create!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -146,7 +146,7 @@ describe GroupDocs::Questionnaire do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.update!(client_id: 'client_id', private_key: 'private_key')
+        subject.update!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -163,7 +163,7 @@ describe GroupDocs::Questionnaire do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.remove!(client_id: 'client_id', private_key: 'private_key')
+        subject.remove!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
   end
@@ -175,7 +175,7 @@ describe GroupDocs::Questionnaire do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.datasources!(client_id: 'client_id', private_key: 'private_key')
+        subject.datasources!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -195,7 +195,7 @@ describe GroupDocs::Questionnaire do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.executions!(client_id: 'client_id', private_key: 'private_key')
+        subject.executions!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -215,7 +215,7 @@ describe GroupDocs::Questionnaire do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.collectors!(client_id: 'client_id', private_key: 'private_key')
+        subject.collectors!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -235,7 +235,7 @@ describe GroupDocs::Questionnaire do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.metadata!(client_id: 'client_id', private_key: 'private_key')
+        subject.metadata!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -253,12 +253,12 @@ describe GroupDocs::Questionnaire do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.update_metadata!(metadata, client_id: 'client_id', private_key: 'private_key')
+        subject.update_metadata!(metadata, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'raises error if metadata is not GroupDocs::Questionnaire object' do
-      -> { subject.update_metadata!('Metadata') }.should raise_error(ArgumentError)
+      lambda { subject.update_metadata!('Metadata') }.should raise_error(ArgumentError)
     end
 
     it 'uses hashed version as payload' do
@@ -274,7 +274,7 @@ describe GroupDocs::Questionnaire do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.fields!(client_id: 'client_id', private_key: 'private_key')
+        subject.fields!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 

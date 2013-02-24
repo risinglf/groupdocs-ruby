@@ -32,10 +32,10 @@ module GroupDocs
         def array_from_byte(byte, value_byte_hash)
           values = []
 
-          value_byte_hash.reverse_each do |value, flag|
-            decreased_byte = byte - flag
+          value_byte_hash.sort { |a, b| b[1] <=> a[1] }.each do |value_byte|
+            decreased_byte = byte - value_byte[1]
             if decreased_byte >= 0
-              values << value
+              values << value_byte[0]
               byte = decreased_byte
             end
           end

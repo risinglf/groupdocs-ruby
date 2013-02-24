@@ -5,10 +5,10 @@ module GroupDocs
     extend  Signature::ResourceMethods
 
     STATUSES = {
-      draft:      -1,
-      in_progress: 1,
-      completed:   2,
-      archived:    3,
+      :draft       => -1,
+      :in_progress =>  1,
+      :completed   =>  2,
+      :archived    =>  3,
     }
 
     #
@@ -117,7 +117,7 @@ module GroupDocs
         request[:path] = '/signature/{{client_id}}/form'
         request[:request_body] = to_hash
       end
-      api.add_params(options.merge(name: name, templateId: template.id))
+      api.add_params(options.merge(:name => name, :templateId => template.id))
       json = api.execute!
 
       self.id = json[:form][:id]
@@ -139,8 +139,8 @@ module GroupDocs
       end.execute!
 
       json[:documents].map do |document|
-        file = Storage::File.new(guid: document[:documentId], name: document[:name])
-        Document.new(document.merge(file: file))
+        file = Storage::File.new(:guid => document[:documentId], :name => document[:name])
+        Document.new(document.merge(:file => file))
       end
     end
 

@@ -11,13 +11,13 @@ describe GroupDocs::DataSource do
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.get!(1, {}, client_id: 'client_id', private_key: 'private_key')
+        described_class.get!(1, {}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'accepts options hash' do
       lambda do
-        described_class.get!(1, field: %w(field1 field2))
+        described_class.get!(1, :field => %w(field1 field2))
       end.should_not raise_error(ArgumentError)
     end
 
@@ -56,7 +56,7 @@ describe GroupDocs::DataSource do
 
   describe '#fields=' do
     it 'converts each field to GroupDocs::DataSource::Field object if hash is passed' do
-      subject.fields = [{ name: 'field1', values: %w(value1 value2), type: 1 }]
+      subject.fields = [{ :name => 'field1', :values => %w(value1 value2), :type => 1 }]
       fields = subject.fields
       fields.should be_an(Array)
       fields.each do |field|
@@ -65,8 +65,8 @@ describe GroupDocs::DataSource do
     end
 
     it 'saves each field if it is GroupDocs::DataSource::Field object' do
-      field1 = GroupDocs::DataSource::Field.new(name: 'field1')
-      field2 = GroupDocs::DataSource::Field.new(name: 'field2')
+      field1 = GroupDocs::DataSource::Field.new(:name => 'field1')
+      field2 = GroupDocs::DataSource::Field.new(:name => 'field2')
       subject.fields = [field1, field2]
       subject.fields.should include(field1)
       subject.fields.should include(field2)
@@ -81,7 +81,7 @@ describe GroupDocs::DataSource do
 
   describe '#add_field' do
     it 'raises error if field is not GroupDocs::DataSource::Field object' do
-      -> { subject.add_field('Field') }.should raise_error(ArgumentError)
+      lambda { subject.add_field('Field') }.should raise_error(ArgumentError)
     end
 
     it 'saves field' do
@@ -98,7 +98,7 @@ describe GroupDocs::DataSource do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.add!(client_id: 'client_id', private_key: 'private_key')
+        subject.add!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -121,7 +121,7 @@ describe GroupDocs::DataSource do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.update!(client_id: 'client_id', private_key: 'private_key')
+        subject.update!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -138,7 +138,7 @@ describe GroupDocs::DataSource do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.remove!(client_id: 'client_id', private_key: 'private_key')
+        subject.remove!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
   end

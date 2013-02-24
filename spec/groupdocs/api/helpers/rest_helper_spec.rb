@@ -3,29 +3,29 @@ require 'spec_helper'
 describe GroupDocs::Api::Helpers::REST do
 
   subject do
-    GroupDocs::Api::Request.new(method: :GET)
+    GroupDocs::Api::Request.new(:method => :GET)
   end
 
   describe 'DEFAULT_HEADERS' do
     subject { described_class::DEFAULT_HEADERS }
 
     it 'includes "Accept: application/json"' do
-      subject.should include(accept: 'application/json')
+      subject.should include(:accept => 'application/json')
     end
 
     it 'includes "Content-length: 0"' do
-      subject.should include(content_length: 0)
+      subject.should include(:content_length => 0)
     end
 
     it 'includes Groupdocs-Referrer with SDK version' do
-      subject.should include(groupdocs_referrer: "ruby/#{GroupDocs::VERSION}")
+      subject.should include(:groupdocs_referrer => "ruby/#{GroupDocs::VERSION}")
     end
   end
 
   describe '#prepare_request' do
     it 'merges default headers with passed' do
-      subject.options[:headers] = { keep_alive: 300 }
-      merged_headers = described_class::DEFAULT_HEADERS.merge(keep_alive: 300)
+      subject.options[:headers] = { :keep_alive => 300 }
+      merged_headers = described_class::DEFAULT_HEADERS.merge(:keep_alive => 300)
       lambda do
         subject.send(:prepare_request)
       end.should change { subject.options[:headers] }.to(merged_headers)
@@ -52,7 +52,7 @@ describe GroupDocs::Api::Helpers::REST do
 
     it 'coverts request body to JSON' do
       subject.options[:method] = :POST
-      subject.options[:request_body] = { body: 'test' }
+      subject.options[:request_body] = { :body => 'test' }
       lambda do
         subject.send(:prepare_request)
       end.should change { subject.options[:request_body] }.to('{"body":"test"}')
@@ -69,7 +69,7 @@ describe GroupDocs::Api::Helpers::REST do
     it 'calculates and sets Content-length' do
       subject.options[:method] = :POST
       subject.options[:headers] = {}
-      subject.options[:request_body] = { body: 'test' }
+      subject.options[:request_body] = { :body => 'test' }
       lambda do
         subject.send(:prepare_request)
       end.should change { subject.options[:headers][:content_length] }.to(15)
@@ -78,7 +78,7 @@ describe GroupDocs::Api::Helpers::REST do
     it 'sets Content-Type header if necessary' do
       subject.options[:method] = :POST
       subject.options[:headers] = {}
-      subject.options[:request_body] = { body: 'test' }
+      subject.options[:request_body] = { :body => 'test' }
       lambda do
         subject.send(:prepare_request)
       end.should change { subject.options[:headers][:content_type] }.to('application/json')
@@ -108,7 +108,7 @@ describe GroupDocs::Api::Helpers::REST do
 
     it 'raises error if incorrect method has been passed' do
       subject.options[:method] = :TEST
-      -> { subject.send(:send_request) }.should raise_error(GroupDocs::UnsupportedMethodError)
+      lambda { subject.send(:send_request) }.should raise_error(GroupDocs::UnsupportedMethodError)
     end
 
     it 'saves response' do
@@ -133,14 +133,14 @@ describe GroupDocs::Api::Helpers::REST do
 
     it 'returns JSON result key value' do
       mock_response('{"status": "Ok", "result": { "entities": [] }}')
-      parsed_json = { status: 'Ok', result: { entities: [] } }
-      JSON.should_receive(:parse).with(subject.response, symbolize_names: true).and_return(parsed_json)
-      subject.send(:parse_response).should == { entities: [] }
+      parsed_json = { :status => 'Ok', :result => { :entities => [] } }
+      JSON.should_receive(:parse).with(subject.response, :symbolize_names => true).and_return(parsed_json)
+      subject.send(:parse_response).should == { :entities => [] }
     end
 
     it 'raises error if response status is not "Ok"' do
       unparsed_json = '{"status": "Failed", "error_message": "The source path is not found."}'
-      parsed_json   = { status: "Failed", error_message: "The source path is not found." }
+      parsed_json   = { :status => "Failed", :error_message => "The source path is not found." }
       mock_response(unparsed_json)
       subject.should_receive(:raise_bad_request_error).with(parsed_json)
       subject.send(:parse_response)
@@ -149,7 +149,7 @@ describe GroupDocs::Api::Helpers::REST do
 
   describe '#raise_bad_request_error' do
     let(:json) do
-      { status: 'Failed', error_message: 'The source path is not found.' }
+      { :status => 'Failed', :error_message => 'The source path is not found.' }
     end
 
     it 'raises error with message from response' do

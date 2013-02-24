@@ -3,26 +3,26 @@ require 'spec_helper'
 describe GroupDocs::Api::Helpers::URL do
 
   subject do
-    GroupDocs::Api::Request.new(path: '/1/files/2?new_name=invoice.docx')
+    GroupDocs::Api::Request.new(:path => '/1/files/2?new_name=invoice.docx')
   end
 
   describe '#add_params' do
     it 'adds parameters to query' do
       subject.options[:path].should_receive(:<<).with('&param=value')
-      subject.add_params({ param: 'value' })
+      subject.add_params({ :param => 'value' })
     end
 
     it 'joins values with comma if it is array' do
       subject.options[:path] = '/1/files/2'
       value = [1, 2]
-      value.should_receive(:join).with(?,).and_return('1,2')
-      subject.add_params({ param: value })
+      value.should_receive(:join).with(',').and_return('1,2')
+      subject.add_params({ :param => value })
     end
 
     it 'determines correct URL separator' do
       subject.options[:path] = '/1/files/2'
       subject.should_receive(:separator)
-      subject.add_params({ param: 'value' })
+      subject.add_params({ :param => 'value' })
     end
   end
 
@@ -64,14 +64,14 @@ describe GroupDocs::Api::Helpers::URL do
     end
 
     it 'adds signature to path' do
-      subject.options[:access] = { private_key: 'e98ea443354183fd1fb434047232c687' }
-      GroupDocs.stub(api_version: nil)
+      subject.options[:access] = { :private_key => 'e98ea443354183fd1fb434047232c687' }
+      GroupDocs.stub(:api_version => nil)
       subject.send(:sign_url)
       subject.options[:path].should == '/1/files/2?new_name=invoice.docx&signature=gw%2BLupOB3krtliSSM0dvUBSznJY'
     end
 
     it 'determines correct URL separator' do
-      subject.options[:access] = { private_key: 'e98ea443354183fd1fb434047232c687' }
+      subject.options[:access] = { :private_key => 'e98ea443354183fd1fb434047232c687' }
       subject.should_receive(:separator)
       subject.send(:sign_url)
     end
@@ -90,15 +90,15 @@ describe GroupDocs::Api::Helpers::URL do
 
   describe '#prepend_version' do
     it 'does not modify URL if API version is not specified' do
-      GroupDocs.stub(api_version: nil)
+      GroupDocs.stub(:api_version => nil)
       subject.options.should_not_receive(:[]=).with(:path, '/v2.0/1/files/2?new_name=invoice.docx')
       subject.send(:prepend_version)
     end
 
     it 'prepends API version number' do
-      GroupDocs.stub(api_version: '2.0')
+      GroupDocs.stub(:api_version => '2.0')
       path = '/1/files/2?new_name=invoice.docx'
-      subject = GroupDocs::Api::Request.new(path: path)
+      subject = GroupDocs::Api::Request.new(:path => path)
       subject.options.should_receive(:[]=).with(:path, "/v2.0#{path}").and_return("/v2.0#{path}")
       subject.send(:prepend_version)
     end

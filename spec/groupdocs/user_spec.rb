@@ -11,7 +11,7 @@ describe GroupDocs::User do
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.get!(client_id: 'client_id', private_key: 'private_key')
+        described_class.get!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -29,12 +29,12 @@ describe GroupDocs::User do
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.update_account!(user, client_id: 'client_id', private_key: 'private_key')
+        described_class.update_account!(user, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'raises error if user is not an instance of GroupDocs::User' do
-      -> { described_class.update_account!('user') }.should raise_error(ArgumentError)
+      lambda { described_class.update_account!('user') }.should raise_error(ArgumentError)
     end
 
     it 'returns GroupDocs::User object' do
@@ -101,7 +101,7 @@ describe GroupDocs::User do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.update!(client_id: 'client_id', private_key: 'private_key')
+        subject.update!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -118,7 +118,7 @@ describe GroupDocs::User do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.users!(client_id: 'client_id', private_key: 'private_key')
+        subject.users!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 

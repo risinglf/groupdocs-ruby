@@ -12,13 +12,13 @@ describe GroupDocs::Storage::File do
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.upload!(__FILE__, {}, client_id: 'client_id', private_key: 'private_key')
+        described_class.upload!(__FILE__, {}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'accepts options hash' do
       lambda do
-        described_class.upload!(__FILE__, path: 'folder1')
+        described_class.upload!(__FILE__, :path => 'folder1')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -35,7 +35,7 @@ describe GroupDocs::Storage::File do
     end
 
     it 'uses name if passed' do
-      opts = { name: 'file.pdf' }
+      opts = { :name => 'file.pdf' }
       described_class.upload!(__FILE__, opts)
       opts[:name].should == opts[:name]
     end
@@ -52,7 +52,7 @@ describe GroupDocs::Storage::File do
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.upload_web!('http://www.google.com', client_id: 'client_id', private_key: 'private_key')
+        described_class.upload_web!('http://www.google.com', :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -90,7 +90,7 @@ describe GroupDocs::Storage::File do
     end
 
     it 'raises error if type is unknown' do
-      -> { subject.type = :unknown }.should raise_error(ArgumentError)
+      lambda { subject.type = :unknown }.should raise_error(ArgumentError)
     end
   end
 
@@ -125,14 +125,14 @@ describe GroupDocs::Storage::File do
   describe '#download!' do
     before(:each) do
       mock_api_server(File.read('spec/support/files/resume.pdf'))
-      subject.stub(name: 'resume.pdf')
+      subject.stub(:name => 'resume.pdf')
     end
 
     let(:path) { Dir.tmpdir }
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.download!(path, client_id: 'client_id', private_key: 'private_key')
+        subject.download!(path, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -155,13 +155,13 @@ describe GroupDocs::Storage::File do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.move!('folder1', {}, client_id: 'client_id', private_key: 'private_key')
+        subject.move!('folder1', {}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'accepts options credentials hash' do
       lambda do
-        subject.move!('folder1', name: 'file.pdf')
+        subject.move!('folder1', :name => 'file.pdf')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -173,7 +173,7 @@ describe GroupDocs::Storage::File do
     end
 
     it 'uses name if passed' do
-      opts = { name: 'file.pdf' }
+      opts = { :name => 'file.pdf' }
       subject.move!('folder1', opts)
       opts[:name].should == opts[:name]
     end
@@ -190,12 +190,12 @@ describe GroupDocs::Storage::File do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.rename!('resume.pdf', client_id: 'client_id', private_key: 'private_key')
+        subject.rename!('resume.pdf', :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'uses #move! to rename file' do
-      subject.should_receive(:move!).with(subject.path, { name: 'resume2.pdf' }, {})
+      subject.should_receive(:move!).with(subject.path, { :name => 'resume2.pdf' }, {})
       subject.rename!('resume2.pdf')
     end
   end
@@ -207,13 +207,13 @@ describe GroupDocs::Storage::File do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.copy!('resume.pdf', {}, client_id: 'client_id', private_key: 'private_key')
+        subject.copy!('resume.pdf', {}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'accepts options credentials hash' do
       lambda do
-        subject.copy!('folder1', name: 'file.pdf')
+        subject.copy!('folder1', :name => 'file.pdf')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -225,7 +225,7 @@ describe GroupDocs::Storage::File do
     end
 
     it 'uses name if passed' do
-      opts = { name: 'file.pdf' }
+      opts = { :name => 'file.pdf' }
       subject.copy!('folder1', opts)
       opts[:name].should == opts[:name]
     end
@@ -242,17 +242,17 @@ describe GroupDocs::Storage::File do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.compress!(client_id: 'client_id', private_key: 'private_key')
+        subject.compress!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'returns archived file' do
-      subject.stub(name: 'resume.pdf')
+      subject.stub(:name => 'resume.pdf')
       subject.compress!.should be_a(GroupDocs::Storage::File)
     end
 
     it 'creates archive filename as filename + archive type' do
-      subject.stub(name: 'resume.pdf')
+      subject.stub(:name => 'resume.pdf')
       subject.compress!.name.should == 'resume.pdf.zip'
     end
   end
@@ -260,7 +260,7 @@ describe GroupDocs::Storage::File do
   describe '#delete!' do
     it 'accepts access credentials hash' do
       lambda do
-        subject.delete!(client_id: 'client_id', private_key: 'private_key')
+        subject.delete!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -274,7 +274,7 @@ describe GroupDocs::Storage::File do
   describe '#move_to_trash!' do
     it 'accepts access credentials hash' do
       lambda do
-        subject.move_to_trash!(client_id: 'client_id', private_key: 'private_key')
+        subject.move_to_trash!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
   end

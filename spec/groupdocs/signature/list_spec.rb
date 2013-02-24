@@ -11,7 +11,7 @@ describe GroupDocs::Signature::List do
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.get!(client_id: 'client_id', private_key: 'private_key')
+        described_class.get!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -57,7 +57,7 @@ describe GroupDocs::Signature::List do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.add!(client_id: 'client_id', private_key: 'private_key')
+        subject.add!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -80,7 +80,7 @@ describe GroupDocs::Signature::List do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.delete!(client_id: 'client_id', private_key: 'private_key')
+        subject.delete!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
   end

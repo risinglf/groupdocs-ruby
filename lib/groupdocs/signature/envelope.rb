@@ -4,14 +4,14 @@ module GroupDocs
     require 'groupdocs/signature/envelope/log'
 
     STATUSES = {
-      draft:      -1,
-      annotation:  0,
-      in_progress: 1,
-      expired:     2,
-      canceled:    3,
-      failed:      4,
-      completed:   5,
-      archived:    6,
+      :draft       => -1,
+      :annotation  =>  0,
+      :in_progress =>  1,
+      :expired     =>  2,
+      :canceled    =>  3,
+      :failed      =>  4,
+      :completed   =>  5,
+      :archived    =>  6,
     }
 
     include Signature::DocumentMethods
@@ -132,11 +132,11 @@ module GroupDocs
         request[:method] = :POST
         request[:path] = "/signature/{{client_id}}/envelopes/#{id}/recipient"
       end
-      api.add_params(email:     recipient.email,
-                     firstname: recipient.first_name,
-                     lastname:  recipient.last_name,
-                     role:      recipient.role_id,
-                     order:     recipient.order)
+      api.add_params(:email     => recipient.email,
+                     :firstname => recipient.first_name,
+                     :lastname  => recipient.last_name,
+                     :role      => recipient.role_id,
+                     :order     => recipient.order)
       api.execute!
     end
 
@@ -164,11 +164,11 @@ module GroupDocs
         request[:method] = :PUT
         request[:path] = "/signature/{{client_id}}/envelopes/#{id}/recipient/#{recipient.id}"
       end
-      api.add_params(email:     recipient.email,
-                     firstname: recipient.first_name,
-                     lastname:  recipient.last_name,
-                     role:      recipient.role_id,
-                     order:     recipient.order)
+      api.add_params(:email     => recipient.email,
+                     :firstname => recipient.first_name,
+                     :lastname  => recipient.last_name,
+                     :role      => recipient.role_id,
+                     :order     => recipient.order)
       api.execute!
     end
 
@@ -227,7 +227,7 @@ module GroupDocs
 
       type = field.field_type
       if type == :signature && value.is_a?(GroupDocs::Signature)
-        api.add_params(signatureId: value.id)
+        api.add_params(:signatureId => value.id)
       else
         if type == :checkbox
           value = (value ? 'on' : 'off')

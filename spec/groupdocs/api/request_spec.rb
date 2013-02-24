@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe GroupDocs::Api::Request do
 
-  subject { described_class.new(method: :GET, path: '/folders') }
+  subject { described_class.new(:method => :GET, :path => '/folders') }
 
   it { should respond_to(:resource)    }
   it { should have_accessor(:response) }
@@ -10,17 +10,17 @@ describe GroupDocs::Api::Request do
 
   describe '#initialize' do
     it 'allows passing options' do
-      options = { method: :GET, path: '/folders' }
+      options = { :method => :GET, :path => '/folders' }
       request = described_class.new(options)
       request.options.should == options
     end
 
     it 'allows passing block to configure options' do
       described_class.new do |request|
-        request[:access] = { client_id: 'client_id', private_key: 'private_key' }
+        request[:access] = { :client_id => 'client_id', :private_key => 'private_key' }
         request[:method] = :GET
         request[:path] = '/folders'
-      end.options.should == { method: :GET, path: '/folders', access: { client_id: 'client_id', private_key: 'private_key' }}
+      end.options.should == { :method => :GET, :path => '/folders', :access => { :client_id => 'client_id', :private_key => 'private_key' }}
     end
 
     it 'sets access hash to empty if it was not passed' do
@@ -30,7 +30,7 @@ describe GroupDocs::Api::Request do
     end
 
     it 'creates resource as API server' do
-      GroupDocs.stub(api_server: 'https://dev-api.groupdocs.com')
+      GroupDocs.stub(:api_server => 'https://dev-api.groupdocs.com')
       subject.resource.should be_a(RestClient::Resource)
     end
   end
@@ -62,7 +62,7 @@ describe GroupDocs::Api::Request do
 
   describe '#execute!' do
     before(:each) do
-      GroupDocs.stub(private_key: 'private_key')
+      GroupDocs.stub(:private_key => 'private_key')
       subject.options[:method]  = :get
       subject.options[:path]    = '/folders'
       subject.options[:headers] = {}

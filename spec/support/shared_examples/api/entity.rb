@@ -5,16 +5,16 @@ shared_examples_for GroupDocs::Api::Entity do
     # stub required attributes
     case described_class.name
     when 'GroupDocs::Document'
-      described_class.any_instance.stub(file: GroupDocs::Storage::File.new)
+      described_class.any_instance.stub(:file => GroupDocs::Storage::File.new)
     when 'GroupDocs::Document::Annotation'
-      GroupDocs::Document.any_instance.stub(file: GroupDocs::Storage::File.new)
-      described_class.any_instance.stub(document: GroupDocs::Document.new)
+      GroupDocs::Document.any_instance.stub(:file => GroupDocs::Storage::File.new)
+      described_class.any_instance.stub(:document => GroupDocs::Document.new)
     when 'GroupDocs::Document::Annotation::Reply'
-      GroupDocs::Document.any_instance.stub(file: GroupDocs::Storage::File.new)
-      GroupDocs::Document::Annotation.any_instance.stub(document: GroupDocs::Document.new)
-      described_class.any_instance.stub(annotation: GroupDocs::Document::Annotation.new)
+      GroupDocs::Document.any_instance.stub(:file => GroupDocs::Storage::File.new)
+      GroupDocs::Document::Annotation.any_instance.stub(:document => GroupDocs::Document.new)
+      described_class.any_instance.stub(:annotation => GroupDocs::Document::Annotation.new)
     when 'GroupDocs::Questionnaire::Collector'
-      described_class.any_instance.stub(questionnaire: GroupDocs::Questionnaire.new)
+      described_class.any_instance.stub(:questionnaire => GroupDocs::Questionnaire.new)
     end
   end
 
@@ -22,7 +22,7 @@ shared_examples_for GroupDocs::Api::Entity do
 
   describe '#initialize' do
     it 'allows passing options' do
-      object = described_class.new(id: 1, test: 'Test')
+      object = described_class.new(:id => 1, :test => 'Test')
       object.id.should == 1
       object.test.should == 'Test'
     end

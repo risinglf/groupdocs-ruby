@@ -66,7 +66,7 @@ module GroupDocs
     #
     def type=(type)
       if type.is_a?(Symbol)
-        type = accessor_to_variable(type).to_s.delete(?@)
+        type = type.to_s.camelize
         TYPES.include?(type) or raise ArgumentError, "Unknown type: #{type.inspect}"
       end
 
@@ -79,7 +79,7 @@ module GroupDocs
     # @return [Symbol]
     #
     def type
-      variable_to_accessor(@type)
+      @type.underscore.to_sym
     end
 
     #
@@ -130,7 +130,7 @@ module GroupDocs
           if reply.is_a?(GroupDocs::Document::Annotation::Reply)
             reply
           else
-            reply.merge!(annotation: self)
+            reply.merge!(:annotation => self)
             Document::Annotation::Reply.new(reply)
           end
         end
@@ -221,10 +221,10 @@ module GroupDocs
         request[:access] = access
         request[:method] = :PUT
         request[:path] = "/ant/{{client_id}}/annotations/#{guid}/position"
-        request[:request_body] = { x: x, y: y }
+        request[:request_body] = { :x => x, :y => y }
       end.execute!
 
-      self.annotation_position = { x: x, y: y }
+      self.annotation_position = { :x => x, :y => y }
     end
 
     #
@@ -241,14 +241,14 @@ module GroupDocs
         request[:access] = access
         request[:method] = :PUT
         request[:path] = "/ant/{{client_id}}/annotations/#{guid}/markerPosition"
-        request[:request_body] = { x: x, y: y }
+        request[:request_body] = { :x => x, :y => y }
       end.execute!
 
       if box
         box.x = x
         box.y = y
       else
-        self.box = { x: x, y: y }
+        self.box = { :x => x, :y => y }
       end
     end
 

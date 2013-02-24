@@ -49,7 +49,7 @@ module GroupDocs
         json.each do |key, value|
           resources[key] = case key
                            when :documents
-                             value.map { |doc| Document.new(file: Storage::File.new(doc)) }
+                             value.map { |doc| Document.new(:file => Storage::File.new(doc)) }
                            when :recipients
                              value.map { |recipient| Signature::Recipient.new(recipient) }
                            else

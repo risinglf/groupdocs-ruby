@@ -15,8 +15,8 @@ module GroupDocs
         #
         def parse_status(status)
           case status
-          when Symbol then accessor_to_variable(status).to_s.delete(?@)
-          when String then variable_to_accessor(status)
+          when Symbol then status.to_s.camelize
+          when String then status.underscore.to_sym
           else raise ArgumentError, "Expected string/symbol, received: #{status.class}"
           end
         end

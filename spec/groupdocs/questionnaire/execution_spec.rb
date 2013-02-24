@@ -12,7 +12,7 @@ describe GroupDocs::Questionnaire::Execution do
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.get!('45dsfh9348uf0fj834y92h', client_id: 'client_id', private_key: 'private_key')
+        described_class.get!('45dsfh9348uf0fj834y92h', :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -41,14 +41,14 @@ describe GroupDocs::Questionnaire::Execution do
   %w(owner executive approver).each do |method|
     describe "##{method}=" do
       it 'converts passed hash to GroupDocs::User object' do
-        subject.send(:"#{method}=", { first_name: 'Test' })
+        subject.send(:"#{method}=", { :first_name => 'Test' })
         user = subject.send(:"#{method}")
         user.should be_a(GroupDocs::User)
         user.first_name.should == 'Test'
       end
 
       it 'does nothing if GroupDocs::User is passed' do
-        subject.send(:"#{method}=", GroupDocs::User.new(first_name: 'Test'))
+        subject.send(:"#{method}=", GroupDocs::User.new(:first_name => 'Test'))
         subject.send(:"#{method}").first_name.should == 'Test'
       end
     end
@@ -63,12 +63,12 @@ describe GroupDocs::Questionnaire::Execution do
 
   describe "#document=" do
     it 'converts passed hash to GroupDocs::Storage::File object' do
-      subject.document = { id: 123 }
+      subject.document = { :id => 123 }
       subject.document.should be_a(GroupDocs::Storage::File)
     end
 
     it 'gets file from passed GroupDocs::Document' do
-      document = GroupDocs::Document.new(file: GroupDocs::Storage::File.new)
+      document = GroupDocs::Document.new(:file => GroupDocs::Storage::File.new)
       subject.document = document
       subject.document.should == document.file
     end
@@ -86,7 +86,7 @@ describe GroupDocs::Questionnaire::Execution do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.set_status!(:submitted, client_id: 'client_id', private_key: 'private_key')
+        subject.set_status!(:submitted, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -108,7 +108,7 @@ describe GroupDocs::Questionnaire::Execution do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.update!(client_id: 'client_id', private_key: 'private_key')
+        subject.update!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -125,7 +125,7 @@ describe GroupDocs::Questionnaire::Execution do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.delete!(client_id: 'client_id', private_key: 'private_key')
+        subject.delete!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
   end
@@ -136,23 +136,23 @@ describe GroupDocs::Questionnaire::Execution do
     end
 
     let(:datasource) do
-      GroupDocs::DataSource.new(id: 1)
+      GroupDocs::DataSource.new(:id => 1)
     end
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.fill!(datasource, {}, client_id: 'client_id', private_key: 'private_key')
+        subject.fill!(datasource, {}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'accepts options hash' do
       lambda do
-        subject.fill!(datasource, new_type: :pdf)
+        subject.fill!(datasource, :new_type => :pdf)
       end.should_not raise_error(ArgumentError)
     end
 
     it 'raises error if datasource is not GroupDocs::Datasource object' do
-      -> { subject.fill!('Datasource') }.should raise_error(ArgumentError)
+      lambda { subject.fill!('Datasource') }.should raise_error(ArgumentError)
     end
 
     it 'returns GroupDocs::Job object' do

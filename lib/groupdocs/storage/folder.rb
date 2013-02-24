@@ -42,7 +42,7 @@ module GroupDocs
       #
       def self.list!(path = '', options = {}, access = {})
         path = prepare_path(path)
-        new(path: path).list!(options, access)
+        new(:path => path).list!(options, access)
       end
 
       # @attr [Integer] id
@@ -115,7 +115,7 @@ module GroupDocs
       #
       def list!(options = {}, access = {})
         if options[:order_by]
-          options[:order_by] = accessor_to_variable(options[:order_by].capitalize).to_s.delete(?@)
+          options[:order_by] = options[:order_by].camelize
         end
 
         full_path = prepare_path("#{path}/#{name}")
@@ -129,11 +129,11 @@ module GroupDocs
         json = api.execute!
 
         folders = json[:folders].map do |folder|
-          folder.merge!(path: full_path)
+          folder.merge!(:path => full_path)
           Storage::Folder.new(folder)
         end
         files = json[:files].map do |file|
-          file.merge!(path: full_path)
+          file.merge!(:path => full_path)
           Storage::File.new(file)
         end
 

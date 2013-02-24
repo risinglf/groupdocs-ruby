@@ -2,17 +2,17 @@ module GroupDocs
   class Job < Api::Entity
 
     ACTIONS = {
-      none:                 0,
-      convert:              1,
-      combine:              2,
-      compress_zip:         4,
-      compress_rar:         8,
-      trace:               16,
-      convert_body:        32,
-      bind_data:           64,
-      print:              128,
-      compare:            256,
-      import_annotations: 512,
+      :none               =>   0,
+      :convert            =>   1,
+      :combine            =>   2,
+      :compress_zip       =>   4,
+      :compress_rar       =>   8,
+      :trace              =>  16,
+      :convert_body       =>  32,
+      :bind_data          =>  64,
+      :print              => 128,
+      :compare            => 256,
+      :import_annotations => 512,
     }
 
     extend Api::Helpers::ByteFlag
@@ -58,7 +58,7 @@ module GroupDocs
         request[:method] = :GET
         request[:path] = "/async/{{client_id}}/jobs/#{id}"
       end
-      api.add_params(format: 'json')
+      api.add_params(:format => 'json')
       json = api.execute!
 
       Job.new(json)
@@ -90,7 +90,7 @@ module GroupDocs
       end
       json = api.execute!
 
-      Job.new(id: json[:job_id], guid: json[:job_guid])
+      Job.new(:id => json[:job_id], :guid => json[:job_guid])
     end
 
     # @attr [Integer] id
@@ -122,7 +122,7 @@ module GroupDocs
     def documents=(documents)
       if documents
         @documents = documents[:inputs].map do |document|
-          document.merge!(file: GroupDocs::Storage::File.new(document))
+          document.merge!(:file => GroupDocs::Storage::File.new(document))
           Document.new(document)
         end
       end
@@ -152,7 +152,7 @@ module GroupDocs
     # @return [Array<Symbol>]
     #
     def actions
-      @actions.split(', ').map { |action| variable_to_accessor(action) } if @actions
+      @actions.split(', ').map { |action| action.underscore.to_sym } if @actions
     end
 
     #
@@ -172,14 +172,14 @@ module GroupDocs
 
       self.status = json[:job_status]
       documents = {
-        inputs:  [],
-        outputs: [],
+        :inputs =>  [],
+        :outputs => [],
       }
 
       # add input documents
       if json[:inputs]
         json[:inputs].each do |document|
-          document.merge!(file: GroupDocs::Storage::File.new(document))
+          document.merge!(:file => GroupDocs::Storage::File.new(document))
           documents[:inputs] << Document.new(document)
         end
       end
@@ -187,7 +187,7 @@ module GroupDocs
       # add output documents
       if json[:outputs]
         json[:outputs].each do |document|
-          document.merge!(file: GroupDocs::Storage::File.new(document))
+          document.merge!(:file => GroupDocs::Storage::File.new(document))
           documents[:outputs] << Document.new(document)
         end
       end
@@ -276,7 +276,7 @@ module GroupDocs
     # @return [Integer] Document ID
     #
     def add_url!(url, options = {}, access = {})
-      options.merge!(absolute_url: url)
+      options.merge!(:absolute_url => url)
 
       api = Api::Request.new do |request|
         request[:access] = access

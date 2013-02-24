@@ -29,7 +29,7 @@ shared_examples_for GroupDocs::Signature::EntityFields do
 
   describe '#recipients=' do
     it 'converts each recipient to GroupDocs::Signature::Recipient object if hash is passed' do
-      subject.recipients = [{ nickname: 'John' }]
+      subject.recipients = [{ :nickname => 'John' }]
       recipients = subject.recipients
       recipients.should be_an(Array)
       recipients.each do |recipient|
@@ -38,8 +38,8 @@ shared_examples_for GroupDocs::Signature::EntityFields do
     end
 
     it 'saves each recipient if it is GroupDocs::Signature::Recipient object' do
-      recipient1 = GroupDocs::Signature::Recipient.new(nickname: 'recipient1')
-      recipient2 = GroupDocs::Signature::Recipient.new(nickname: 'recipient2')
+      recipient1 = GroupDocs::Signature::Recipient.new(:nickname => 'recipient1')
+      recipient2 = GroupDocs::Signature::Recipient.new(:nickname => 'recipient2')
       subject.recipients = [recipient1, recipient2]
       subject.recipients.should include(recipient1)
       subject.recipients.should include(recipient2)

@@ -6,10 +6,10 @@ module GroupDocs
         include Api::Helpers::ByteFlag
 
         ACCESS_RIGHTS = {
-          export:   1,
-          download: 2,
-          proof:    4,
-          view:     8,
+          :export   => 1,
+          :download => 2,
+          :proof    => 4,
+          :view     => 8,
         }
 
         private

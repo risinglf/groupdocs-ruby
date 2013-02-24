@@ -6,9 +6,9 @@ describe GroupDocs::Document::Annotation::Reply do
 
   subject do
     file = GroupDocs::Storage::File.new
-    document = GroupDocs::Document.new(file: file)
-    annotation = GroupDocs::Document::Annotation.new(document: document)
-    described_class.new(annotation: annotation)
+    document = GroupDocs::Document.new(:file => file)
+    annotation = GroupDocs::Document::Annotation.new(:document => document)
+    described_class.new(:annotation => annotation)
   end
 
   describe '.get!' do
@@ -17,34 +17,34 @@ describe GroupDocs::Document::Annotation::Reply do
     end
 
     let(:annotation) do
-      document = GroupDocs::Document.new(file: GroupDocs::Storage::File.new)
-      GroupDocs::Document::Annotation.new(document: document)
+      document = GroupDocs::Document.new(:file => GroupDocs::Storage::File.new)
+      GroupDocs::Document::Annotation.new(:document => document)
     end
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.get!(annotation, {}, client_id: 'client_id', private_key: 'private_key')
+        described_class.get!(annotation, {}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'accepts options hash' do
       lambda do
-        described_class.get!(annotation, after: Time.now)
+        described_class.get!(annotation, :after => Time.now)
       end.should_not raise_error(ArgumentError)
     end
 
     it 'raises error if annotation is not an instance of GroupDocs::Document::Annotation' do
-      -> { described_class.get!('Annotation') }.should raise_error(ArgumentError)
+      lambda { described_class.get!('Annotation') }.should raise_error(ArgumentError)
     end
 
     it 'raises error if option :after is not an instance of Time' do
-      -> { described_class.get!(annotation, after: 'Yesterday') }.should raise_error(ArgumentError)
+      lambda { described_class.get!(annotation, :after => 'Yesterday') }.should raise_error(ArgumentError)
     end
 
     it 'converts option :after to Unix timestamp' do
       time = Time.now
       time.should_receive(:to_i).and_return(1334125808)
-      described_class.get!(annotation, after: time)
+      described_class.get!(annotation, :after => time)
     end
 
     it 'returns an array of GroupDocs::Document::Annotation::Reply objects' do
@@ -74,11 +74,11 @@ describe GroupDocs::Document::Annotation::Reply do
 
   describe '#initialize' do
     it 'raises error if annotation is not specified' do
-      -> { described_class.new }.should raise_error(ArgumentError)
+      lambda { described_class.new }.should raise_error(ArgumentError)
     end
 
     it 'raises error if annotation is not an instance of GroupDocs::Document::Annotation' do
-      -> { described_class.new(annotation: '') }.should raise_error(ArgumentError)
+      lambda { described_class.new(:annotation => '') }.should raise_error(ArgumentError)
     end
   end
 
@@ -96,7 +96,7 @@ describe GroupDocs::Document::Annotation::Reply do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.create!(client_id: 'client_id', private_key: 'private_key')
+        subject.create!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -122,7 +122,7 @@ describe GroupDocs::Document::Annotation::Reply do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.edit!(client_id: 'client_id', private_key: 'private_key')
+        subject.edit!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
   end
@@ -134,7 +134,7 @@ describe GroupDocs::Document::Annotation::Reply do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.remove!(client_id: 'client_id', private_key: 'private_key')
+        subject.remove!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
   end

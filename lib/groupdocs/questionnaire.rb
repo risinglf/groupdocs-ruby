@@ -238,7 +238,7 @@ module GroupDocs
       end.execute!
 
       json[:collectors].map do |collector|
-        collector.merge!(questionnaire: self)
+        collector.merge!(:questionnaire => self)
         Collector.new(collector)
       end
     end
@@ -301,7 +301,7 @@ module GroupDocs
         request[:method] = :GET
         request[:path] = "/merge/{{client_id}}/questionnaires/#{guid}/fields"
       end
-      api.add_params(include_geometry: true)
+      api.add_params(:include_geometry => true)
       json = api.execute!
 
       json[:fields].map do |field|

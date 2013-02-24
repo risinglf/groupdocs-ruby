@@ -12,13 +12,13 @@ describe GroupDocs::Job do
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.all!({}, client_id: 'client_id', private_key: 'private_key')
+        described_class.all!({}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'accepts options hash' do
       lambda do
-        described_class.all!(page: 1, count: 2)
+        described_class.all!(:page => 1, :count => 2)
       end.should_not raise_error(ArgumentError)
     end
 
@@ -38,7 +38,7 @@ describe GroupDocs::Job do
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.get!(1, client_id: 'client_id', private_key: 'private_key')
+        described_class.get!(1, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -56,27 +56,27 @@ describe GroupDocs::Job do
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.create!({ actions: %w(convert) }, client_id: 'client_id', private_key: 'private_key')
+        described_class.create!({ :actions => %w(convert) }, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'raises error if actions are passed' do
-      -> { described_class.create!({}) }.should raise_error(ArgumentError)
+      lambda { described_class.create!({}) }.should raise_error(ArgumentError)
     end
 
     it 'convert actions to byte flag' do
       described_class.should_receive(:convert_actions_to_byte).with(actions).and_return(5)
-      described_class.create!(actions: actions)
+      described_class.create!(:actions => actions)
     end
 
     it 'converts array of out formats to string' do
       formats = %w(pdf txt)
       formats.should_receive(:join).with(?;)
-      described_class.create!(actions: actions, out_formats: formats)
+      described_class.create!(:actions => actions, :out_formats => formats)
     end
 
     it 'returns GroupDocs::Job object' do
-      described_class.create!(actions: actions).should be_a(GroupDocs::Job)
+      described_class.create!(:actions => actions).should be_a(GroupDocs::Job)
     end
   end
 
@@ -93,9 +93,9 @@ describe GroupDocs::Job do
   describe '#documents=' do
     let(:response) do
       {
-        inputs: [
-          { id: 1, guid: 'fhy9yh94u238dgf', status: 0, outputs: [] },
-          { id: 2, guid: 'ofh9rhy9rfohf9s', status: 2, outputs: [] }
+        :inputs => [
+          { :id => 1, :guid => 'fhy9yh94u238dgf', :status => 0, :outputs => [] },
+          { :id => 2, :guid => 'ofh9rhy9rfohf9s', :status => 2, :outputs => [] }
         ]
       }
     end
@@ -142,7 +142,7 @@ describe GroupDocs::Job do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.documents!(client_id: 'client_id', private_key: 'private_key')
+        subject.documents!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -173,7 +173,7 @@ describe GroupDocs::Job do
 
     it 'returns empty arrays if there are no documents' do
       mock_api_server('{ "status": "Ok", "result": {}}')
-      subject.documents!.should == { inputs: [], outputs: [] }
+      subject.documents!.should == { :inputs => [], :outputs => [] }
     end
   end
 
@@ -183,23 +183,23 @@ describe GroupDocs::Job do
     end
 
     let(:document) do
-      GroupDocs::Document.new(file: GroupDocs::Storage::File.new)
+      GroupDocs::Document.new(:file => GroupDocs::Storage::File.new)
     end
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.add_document!(document, {}, client_id: 'client_id', private_key: 'private_key')
+        subject.add_document!(document, {}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'accepts options hash' do
       lambda do
-        subject.add_document!(document, output_formats: %w(pdf txt))
+        subject.add_document!(document, :output_formats => %w(pdf txt))
       end.should_not raise_error(ArgumentError)
     end
 
     it 'raises error if document is not an instance of GroupDocs::Document' do
-      -> { subject.add_document!('Document') }.should raise_error(ArgumentError)
+      lambda { subject.add_document!('Document') }.should raise_error(ArgumentError)
     end
 
     it 'returns document ID' do
@@ -214,7 +214,7 @@ describe GroupDocs::Job do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.delete_document!('a9ufg8s7dfgsdf', client_id: 'client_id', private_key: 'private_key')
+        subject.delete_document!('a9ufg8s7dfgsdf', :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -225,7 +225,7 @@ describe GroupDocs::Job do
 
   describe '#add_datasource!' do
     let(:document) do
-      GroupDocs::Document.new(file: GroupDocs::Storage::File.new)
+      GroupDocs::Document.new(:file => GroupDocs::Storage::File.new)
     end
 
     let(:datasource) do
@@ -234,16 +234,16 @@ describe GroupDocs::Job do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.add_datasource!(document, datasource, client_id: 'client_id', private_key: 'private_key')
+        subject.add_datasource!(document, datasource, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'raises error if document is not an instance of GroupDocs::Document' do
-      -> { subject.add_datasource!('Document') }.should raise_error(ArgumentError)
+      lambda { subject.add_datasource!('Document') }.should raise_error(ArgumentError)
     end
 
     it 'raises error if datasource is not an instance of GroupDocs::DataSource' do
-      -> { subject.add_datasource!(document, 'DataSource') }.should raise_error(ArgumentError)
+      lambda { subject.add_datasource!(document, 'DataSource') }.should raise_error(ArgumentError)
     end
   end
 
@@ -256,13 +256,13 @@ describe GroupDocs::Job do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.add_url!(url, {}, client_id: 'client_id', private_key: 'private_key')
+        subject.add_url!(url, {}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'accepts options hash' do
       lambda do
-        subject.add_url!(url, out_formats: %W(pdf txt))
+        subject.add_url!(url, :out_formats => %W(pdf txt))
       end.should_not raise_error(ArgumentError)
     end
 
@@ -278,13 +278,13 @@ describe GroupDocs::Job do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.update!({}, client_id: 'client_id', private_key: 'private_key')
+        subject.update!({}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'parses status' do
       subject.should_receive(:parse_status).with(:draft).and_return(-1)
-      subject.update!(status: :draft)
+      subject.update!(:status => :draft)
     end
   end
 
@@ -295,7 +295,7 @@ describe GroupDocs::Job do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.delete!(client_id: 'client_id', private_key: 'private_key')
+        subject.delete!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
   end
@@ -304,11 +304,11 @@ describe GroupDocs::Job do
     let(:actions) { %w(convert compare) }
 
     it 'raises error if actions is not an array' do
-      -> { described_class.convert_actions_to_byte(:export) }.should raise_error(ArgumentError)
+      lambda { described_class.convert_actions_to_byte(:export) }.should raise_error(ArgumentError)
     end
 
     it 'raises error if action is unknown' do
-      -> { described_class.convert_actions_to_byte(%w(unknown)) }.should raise_error(ArgumentError)
+      lambda { described_class.convert_actions_to_byte(%w(unknown)) }.should raise_error(ArgumentError)
     end
 
     it 'converts each action to Symbol' do

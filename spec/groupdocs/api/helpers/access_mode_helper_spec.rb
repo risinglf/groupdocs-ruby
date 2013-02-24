@@ -15,7 +15,7 @@ describe GroupDocs::Api::Helpers::AccessMode do
     end
 
     it 'raises error if argument is not string or symbol' do
-      -> { subject.send(:parse_access_mode, 1) }.should raise_error(ArgumentError)
+      lambda { subject.send(:parse_access_mode, 1) }.should raise_error(ArgumentError)
     end
   end
 end

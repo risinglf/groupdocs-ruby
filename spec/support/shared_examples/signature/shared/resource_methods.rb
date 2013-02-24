@@ -7,12 +7,12 @@ shared_examples_for GroupDocs::Signature::ResourceMethods do
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.resources!({}, client_id: 'client_id', private_key: 'private_key')
+        described_class.resources!({}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'allows passing options' do
-      -> { described_class.resources!(status_ids: %w(sdfj943fjof043fj)) }.should_not raise_error(ArgumentError)
+      lambda { described_class.resources!(:status_ids => %w(sdfj943fjof043fj)) }.should_not raise_error(ArgumentError)
     end
 
     it 'returns resources hash' do

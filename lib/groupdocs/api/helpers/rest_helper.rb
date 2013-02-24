@@ -7,9 +7,9 @@ module GroupDocs
       module REST
 
         DEFAULT_HEADERS = {
-          accept: 'application/json',
-          content_length: 0,
-          groupdocs_referrer: "ruby/#{VERSION}"
+          :accept             => 'application/json',
+          :content_length     => 0,
+          :groupdocs_referrer => "ruby/#{VERSION}"
         }
 
         private
@@ -26,7 +26,7 @@ module GroupDocs
             options[:headers] = DEFAULT_HEADERS.dup
           end
 
-          options[:method] = options[:method].downcase.to_sym
+          options[:method] = options[:method].to_s.downcase.to_sym
 
           if options[:request_body] && !options[:request_body].is_a?(Object::File)
             unless options[:plain]
@@ -68,7 +68,7 @@ module GroupDocs
             response
           # for all other requests, parse JSON
           else
-            json = JSON.parse(response, symbolize_names: true)
+            json = JSON.parse(response, :symbolize_names => true)
             json[:status] == 'Ok' ? json[:result] : raise_bad_request_error(json)
           end
         end

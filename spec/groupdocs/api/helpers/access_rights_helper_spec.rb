@@ -9,11 +9,11 @@ describe GroupDocs::Api::Helpers::AccessRights do
     let(:rights) { %w(export view proof download) }
 
     it 'raises error if rights is not an array' do
-      -> { subject.send(:convert_access_rights_to_byte, :export) }.should raise_error(ArgumentError)
+      lambda { subject.send(:convert_access_rights_to_byte, :export) }.should raise_error(ArgumentError)
     end
 
     it 'raises error if right is unknown' do
-      -> { subject.send(:convert_access_rights_to_byte, %w(unknown)) }.should raise_error(ArgumentError)
+      lambda { subject.send(:convert_access_rights_to_byte, %w(unknown)) }.should raise_error(ArgumentError)
     end
 
     it 'converts each right to Symbol' do
@@ -33,7 +33,7 @@ describe GroupDocs::Api::Helpers::AccessRights do
     let(:rights) { %w(export view proof) }
 
     it 'raises error if rights is not an integer' do
-      -> { subject.send(:convert_byte_to_access_rights, :export) }.should raise_error(ArgumentError)
+      lambda { subject.send(:convert_byte_to_access_rights, :export) }.should raise_error(ArgumentError)
     end
 
     it 'returns correct rights array flag' do

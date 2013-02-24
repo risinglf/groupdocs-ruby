@@ -27,20 +27,18 @@ module GroupDocs
 
     #
     # Returns hostname of API server.
-    #
     # @return [String] API hostname. Default one if it has not been explicitly set
     #
     def api_server
-      @api_server || 'https://api.groupdocs.com'
+      @api_server ||= 'https://api.groupdocs.com'
     end
 
     #
     # Returns version of API.
-    #
     # @return [String] API version. Default one if it has not been explicitly set
     #
     def api_version
-      @api_version || '2.0'
+      @api_version ||= '2.0'
     end
 
     #

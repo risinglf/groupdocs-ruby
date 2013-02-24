@@ -174,7 +174,7 @@ module GroupDocs
       api.add_params(options)
       json = api.execute!
 
-      Job.new(id: json[:job_id])
+      Job.new(:id => json[:job_id])
     end
 
   end # Questionnaire::Execution

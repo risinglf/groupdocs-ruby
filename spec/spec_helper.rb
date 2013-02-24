@@ -1,9 +1,11 @@
-require 'simplecov'
-SimpleCov.configure do
-  add_filter('spec/')
-  add_filter('vendor/')
+unless RUBY_VERSION.to_f < 1.9
+  require 'simplecov'
+  SimpleCov.configure do
+    add_filter('spec/')
+    add_filter('vendor/')
+  end
+  SimpleCov.start
 end
-SimpleCov.start
 
 require 'webmock/rspec'
 require 'groupdocs'
@@ -55,8 +57,8 @@ end
 #
 def mock_api_server(json, headers = {})
   request = stub_request(:any, /#{GroupDocs.api_server}.*/)
-  request = request.with(headers: headers) unless headers.empty?
-  request.to_return(body: json)
+  request = request.with(:headers => headers) unless headers.empty?
+  request.to_return(:body => json)
 end
 
 #

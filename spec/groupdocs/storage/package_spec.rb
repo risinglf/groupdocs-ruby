@@ -22,12 +22,12 @@ describe GroupDocs::Storage::Package do
   describe '#create!' do
     before(:each) do
       mock_api_server(load_json('package_create'))
-      subject.objects = [stub(name: 'object 1')]
+      subject.objects = [stub(:name => 'object 1')]
     end
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.create!(client_id: 'client_id', private_key: 'private_key')
+        subject.create!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 

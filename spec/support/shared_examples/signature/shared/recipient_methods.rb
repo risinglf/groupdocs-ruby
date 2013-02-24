@@ -7,7 +7,7 @@ shared_examples_for GroupDocs::Signature::RecipientMethods do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.recipients!(client_id: 'client_id', private_key: 'private_key')
+        subject.recipients!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -31,12 +31,12 @@ shared_examples_for GroupDocs::Signature::RecipientMethods do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.remove_recipient!(recipient, client_id: 'client_id', private_key: 'private_key')
+        subject.remove_recipient!(recipient, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'raises error if recipient is not GroupDocs::Signature::Recipient object' do
-      -> { subject.remove_recipient!('Recipient') }.should raise_error(ArgumentError)
+      lambda { subject.remove_recipient!('Recipient') }.should raise_error(ArgumentError)
     end
   end
 end

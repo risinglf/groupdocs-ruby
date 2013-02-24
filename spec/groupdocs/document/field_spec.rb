@@ -10,7 +10,7 @@ describe GroupDocs::Document::Field do
 
   describe '#rect=' do
     it 'converts passed hash to GroupDocs::Document::Rectangle object' do
-      subject.rect = { x: 0.90, y: 0.05, width: 0.06745, height: 0.005967 }
+      subject.rect = { :x => 0.90, :y => 0.05, :width => 0.06745, :height => 0.005967 }
       subject.rectangle.should be_a(GroupDocs::Document::Rectangle)
       subject.rectangle.x.should == 0.90
       subject.rectangle.y.should == 0.05
