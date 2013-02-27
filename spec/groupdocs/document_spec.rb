@@ -236,13 +236,13 @@ describe GroupDocs::Document do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.thumbnails!({}, client_id: 'client_id', private_key: 'private_key')
+        subject.thumbnails!({}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'accepts options hash' do
       lambda do
-        subject.thumbnails!(page_number: 0, page_count: 1)
+        subject.thumbnails!(:page_number => 0, :page_count => 1)
       end.should_not raise_error(ArgumentError)
     end
 
