@@ -10,23 +10,23 @@ describe GroupDocs::Api::Entity do
   describe '#to_hash' do
     it 'converts object attributes to hash' do
       subject.test = 'Test'
-      subject.to_hash.should == { id: 1, test: 'Test' }
+      subject.to_hash.should == { :id => 1, :test => 'Test' }
     end
 
     it 'converts attribute to hash if it is object' do
-      object = described_class.new(id: 1)
-      object.should_receive(:to_hash).and_return({ id: 1 })
+      object = described_class.new(:id => 1)
+      object.should_receive(:to_hash).and_return({ :id => 1 })
       subject.test = object
-      subject.to_hash.should == { id: 1, test: { id: 1 } }
+      subject.to_hash.should == { :id => 1, :test => { :id => 1 } }
     end
 
     it 'converts attribute to hash if it is array' do
-      object1 = described_class.new(id: 1)
-      object2 = described_class.new(id: 2)
-      object1.should_receive(:to_hash).and_return({ id: 1 })
-      object2.should_receive(:to_hash).and_return({ id: 2 })
+      object1 = described_class.new(:id => 1)
+      object2 = described_class.new(:id => 2)
+      object1.should_receive(:to_hash).and_return({ :id => 1 })
+      object2.should_receive(:to_hash).and_return({ :id => 2 })
       subject.test = [object1, object2]
-      subject.to_hash.should == { id: 1, test: [{ id: 1 }, { id: 2 }] }
+      subject.to_hash.should == { :id => 1, :test => [{ :id => 1 }, { :id => 2 }] }
     end
   end
 
@@ -34,7 +34,7 @@ describe GroupDocs::Api::Entity do
     it 'uses accessors instead of instance variables' do
       subject.instance_variable_set(:@test1, 1)
       subject.instance_variable_set(:@test2, 1)
-      subject.instance_eval('def test1; { fire: 1 }.invert[@test1] end')
+      subject.instance_eval('def test1; { :fire => 1 }.invert[@test1] end')
       subject.instance_eval('def test2; { 1 => "fire" }[@test2] end')
       subject.inspect.should include('@test1=:fire')
       subject.inspect.should include('@test2="fire"')
@@ -46,37 +46,10 @@ describe GroupDocs::Api::Entity do
     end
   end
 
-  describe '#variable_to_accessor' do
-    it 'converts instance variable symbol to accessor method symbol' do
-      subject.send(:variable_to_accessor, :@test).should == :test
-    end
-
-    it 'converts camelized words to underscored' do
-      subject.send(:variable_to_accessor, :@TestOneAndTWO).should == :test_one_and_two
-    end
-  end
-
-  describe '#accessor_to_variable' do
-    it 'converts accessor method symbol to instance variable symbol' do
-      subject.send(:accessor_to_variable, :test).should == :@Test
-    end
-
-    it 'converts underscored words to camelized ' do
-      subject.send(:accessor_to_variable, :test_one_and_two).should == :@TestOneAndTwo
-    end
-  end
-
   describe '#class_name' do
     it 'returns downcased class name' do
       object = GroupDocs::Storage::File.new
       object.send(:class_name).should == 'file'
-    end
-  end
-
-  describe '#pluralized_class_name' do
-    it 'returns class name ending with s' do
-      object = GroupDocs::Storage::File.new
-      object.send(:pluralized_class_name).should == 'files'
     end
   end
 end

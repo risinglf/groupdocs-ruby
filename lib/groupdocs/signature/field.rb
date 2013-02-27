@@ -4,12 +4,12 @@ module GroupDocs
     require 'groupdocs/signature/field/location'
 
     FIELD_TYPES = {
-      signature:   1,
-      single_line: 2,
-      multiline:   3,
-      date:        4,
-      dropdown:    5,
-      checkbox:    6,
+      :signature    => 1,
+      :single_line  => 2,
+      :multiline    => 3,
+      :date         => 4,
+      :dropdown     => 5,
+      :checkbox     => 6,
     }
 
     #

@@ -7,7 +7,7 @@ shared_examples_for GroupDocs::Signature::EntityMethods do
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.get!("j5498fre9fje9f", client_id: 'client_id', private_key: 'private_key')
+        described_class.get!("j5498fre9fje9f", :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -25,13 +25,13 @@ shared_examples_for GroupDocs::Signature::EntityMethods do
 
       it 'accepts access credentials hash' do
         lambda do
-          subject.create!({}, client_id: 'client_id', private_key: 'private_key')
+          subject.create!({}, :client_id => 'client_id', :private_key => 'private_key')
         end.should_not raise_error(ArgumentError)
       end
 
       it 'accepts options hash' do
         lambda do
-          subject.create!(template_id: 'aodfh43yr9834hf943h')
+          subject.create!(:template_id => 'aodfh43yr9834hf943h')
         end.should_not raise_error(ArgumentError)
       end
 
@@ -55,7 +55,7 @@ shared_examples_for GroupDocs::Signature::EntityMethods do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.modify!(client_id: 'client_id', private_key: 'private_key')
+        subject.modify!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -72,7 +72,7 @@ shared_examples_for GroupDocs::Signature::EntityMethods do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.rename!('Name', client_id: 'client_id', private_key: 'private_key')
+        subject.rename!('Name', :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -80,17 +80,17 @@ shared_examples_for GroupDocs::Signature::EntityMethods do
     if described_class == GroupDocs::Signature::Form
       it 'uses new_name as parameter' do
         api = stub(GroupDocs::Api::Request)
-        api.stub!(execute!: {})
-        GroupDocs::Api::Request.stub(new: api)
-        api.should_receive(:add_params).with(new_name: 'Name')
+        api.stub!(:execute! => {})
+        GroupDocs::Api::Request.stub(:new => api)
+        api.should_receive(:add_params).with(:new_name => 'Name')
         subject.rename!('Name')
       end
     else
       it 'uses name as parameter' do
         api = stub(GroupDocs::Api::Request)
-        api.stub!(execute!: {})
-        GroupDocs::Api::Request.stub(new: api)
-        api.should_receive(:add_params).with(name: 'Name')
+        api.stub!(:execute! => {})
+        GroupDocs::Api::Request.stub(:new => api)
+        api.should_receive(:add_params).with(:name => 'Name')
         subject.rename!('Name')
       end
     end
@@ -109,7 +109,7 @@ shared_examples_for GroupDocs::Signature::EntityMethods do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.delete!(client_id: 'client_id', private_key: 'private_key')
+        subject.delete!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
   end

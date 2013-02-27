@@ -70,7 +70,7 @@ module GroupDocs
           request[:path] = "/signature/{{client_id}}/#{class_name}"
           request[:request_body] = to_hash
         end
-        api.add_params(options.merge(name: name))
+        api.add_params(options.merge(:name => name))
         json = api.execute!
 
         self.id = json[class_name.to_sym][:id]
@@ -99,7 +99,7 @@ module GroupDocs
         Api::Request.new do |request|
           request[:access] = access
           request[:method] = :POST
-          request[:path] = "/signature/{{client_id}}/#{pluralized_class_name}/#{id}"
+          request[:path] = "/signature/{{client_id}}/#{class_name.pluralize}/#{id}"
           request[:request_body] = to_hash
         end.execute!
       end
@@ -116,7 +116,7 @@ module GroupDocs
         api = Api::Request.new do |request|
           request[:access] = access
           request[:method] = :PUT
-          request[:path] = "/signature/{{client_id}}/#{pluralized_class_name}/#{id}"
+          request[:path] = "/signature/{{client_id}}/#{class_name.pluralize}/#{id}"
         end
         key = (class_name == 'form' ? :new_name : :name )
         api.add_params(key => name)
@@ -136,7 +136,7 @@ module GroupDocs
         Api::Request.new do |request|
           request[:access] = access
           request[:method] = :DELETE
-          request[:path] = "/signature/{{client_id}}/#{pluralized_class_name}/#{id}"
+          request[:path] = "/signature/{{client_id}}/#{class_name.pluralize}/#{id}"
         end.execute!
       end
 

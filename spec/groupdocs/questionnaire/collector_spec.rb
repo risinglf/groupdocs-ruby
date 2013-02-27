@@ -7,7 +7,7 @@ describe GroupDocs::Questionnaire::Collector do
 
   subject do
     questionnaire = GroupDocs::Questionnaire.new
-    described_class.new(questionnaire: questionnaire)
+    described_class.new(:questionnaire => questionnaire)
   end
 
   describe '.get!' do
@@ -17,7 +17,7 @@ describe GroupDocs::Questionnaire::Collector do
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.get!('9fh349hfdskf', client_id: 'client_id', private_key: 'private_key')
+        described_class.get!('9fh349hfdskf', :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -37,11 +37,11 @@ describe GroupDocs::Questionnaire::Collector do
 
   describe '#initialize' do
     it 'raises error if questionnaire is not specified' do
-      -> { described_class.new }.should raise_error(ArgumentError)
+      lambda { described_class.new }.should raise_error(ArgumentError)
     end
 
     it 'raises error if questionnaire is not an instance of GroupDocs::Questionnaire' do
-      -> { described_class.new(questionnaire: '') }.should raise_error(ArgumentError)
+      lambda { described_class.new(:questionnaire => '') }.should raise_error(ArgumentError)
     end
   end
 
@@ -75,17 +75,13 @@ describe GroupDocs::Questionnaire::Collector do
   describe '#add!' do
     before(:each) do
       mock_api_server(load_json('questionnaire_collectors_add'))
+      subject.questionnaire = GroupDocs::Questionnaire.new
     end
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.add!(client_id: 'client_id', private_key: 'private_key')
+        subject.add!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
-    end
-
-    it 'gets questionnaire id' do
-      subject.questionnaire.should_receive(:guid)
-      subject.add!
     end
 
     it 'updates id and guid with response' do
@@ -105,7 +101,7 @@ describe GroupDocs::Questionnaire::Collector do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.update!(client_id: 'client_id', private_key: 'private_key')
+        subject.update!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
   end
@@ -117,7 +113,7 @@ describe GroupDocs::Questionnaire::Collector do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.remove!(client_id: 'client_id', private_key: 'private_key')
+        subject.remove!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
   end
@@ -129,7 +125,7 @@ describe GroupDocs::Questionnaire::Collector do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.executions!(client_id: 'client_id', private_key: 'private_key')
+        subject.executions!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -151,12 +147,12 @@ describe GroupDocs::Questionnaire::Collector do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.add_execution!(execution, client_id: 'client_id', private_key: 'private_key')
+        subject.add_execution!(execution, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'raises error if execution is not GroupDocs::Questionnaire::Execution object' do
-      -> { subject.add_execution!('Execution') }.should raise_error(ArgumentError)
+      lambda { subject.add_execution!('Execution') }.should raise_error(ArgumentError)
     end
 
     it 'uses hashed version of execution along with executive payload' do
@@ -175,23 +171,23 @@ describe GroupDocs::Questionnaire::Collector do
     end
 
     let(:datasource) do
-      GroupDocs::DataSource.new(id: 1)
+      GroupDocs::DataSource.new(:id => 1)
     end
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.fill!(datasource, {}, client_id: 'client_id', private_key: 'private_key')
+        subject.fill!(datasource, {}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'accepts options hash' do
       lambda do
-        subject.fill!(datasource, new_type: :pdf)
+        subject.fill!(datasource, :new_type => :pdf)
       end.should_not raise_error(ArgumentError)
     end
 
     it 'raises error if datasource is not GroupDocs::Datasource object' do
-      -> { subject.fill!('Datasource') }.should raise_error(ArgumentError)
+      lambda { subject.fill!('Datasource') }.should raise_error(ArgumentError)
     end
 
     it 'returns GroupDocs::Job object' do

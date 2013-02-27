@@ -10,17 +10,17 @@ describe GroupDocs::Document::View do
 
   describe '#document=' do
     it 'sets document if GroupDocs::Document object is passed' do
-      document = GroupDocs::Document.new(file: GroupDocs::Storage::File.new)
+      document = GroupDocs::Document.new(:file => GroupDocs::Storage::File.new)
       subject.document = document
       subject.document.should == document
     end
 
     it 'creates new GroupDocs::Document object from passed hash' do
-      subject.document = { id: 1, name: 'test.pdf' }
+      subject.document = { :id => 1, :name => 'test.pdf' }
       document = subject.document
       document.should be_a(GroupDocs::Document)
-      document.id.should   == 1
-      document.name.should == 'test.pdf'
+      document.file.id.should == 1
+      document.file.name.should == 'test.pdf'
     end
   end
 

@@ -101,7 +101,7 @@ module GroupDocs
         request[:path] = '/signature/{{client_id}}/signature'
         request[:request_body] = to_hash
       end
-      api.add_params(name: title)
+      api.add_params(:name => title)
       json = api.execute!
 
       self.id = json[:signature][:id]

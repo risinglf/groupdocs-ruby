@@ -49,7 +49,7 @@ module GroupDocs
       def to_hash
         hash = {}
         instance_variables.each do |variable|
-          key = variable.to_s.delete(?@).to_sym
+          key = variable.to_s.delete('@').to_sym
           value = instance_variable_get(variable)
 
           hash[key] = case value
@@ -69,16 +69,15 @@ module GroupDocs
 
       #
       # Inspects object using accessors instead of instance variables values.
-      #
       # @api private
       #
       def inspect
         not_nil_variables = instance_variables.select do |variable|
-          !send(variable_to_accessor(variable)).nil?
+          !send(variable.to_s.underscore.delete('@')).nil?
         end
 
         variables = not_nil_variables.map  do |variable|
-          accessor = variable_to_accessor(variable)
+          accessor = variable.to_s.underscore.delete('@').to_sym
           value = send(accessor)
           value = case value
                   when Symbol then ":#{value}"
@@ -101,42 +100,11 @@ module GroupDocs
       private
 
       #
-      # Converts instance variable symbol to accessor method symbol.
-      # @api private
-      #
-      def variable_to_accessor(variable)
-        word = variable.to_s.delete(?@)
-        word.gsub!(/(?<=[a-z])[A-Z]/) { |match| "_#{match}" }
-        word.downcase!
-        word.to_sym
-      end
-
-      #
-      # Converts accessor symbol to instance variable symbol.
-      # @api private
-      #
-      def accessor_to_variable(accessor)
-        word = accessor.to_s
-        word.capitalize!
-        word.gsub!(/_([a-z])/) { |match| match.upcase }
-        word.gsub!(/_/, '')
-        "@#{word}".to_sym
-      end
-
-      #
       # Returns class name.
       # @api private
       #
       def class_name
-        self.class.name.split('::').last.downcase
-      end
-
-      #
-      # Returns pluralized class name.
-      # @api private
-      #
-      def pluralized_class_name
-        "#{class_name}s"
+        self.class.name.demodulize.downcase
       end
 
     end # Entity

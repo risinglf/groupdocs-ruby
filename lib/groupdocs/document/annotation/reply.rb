@@ -32,7 +32,7 @@ module GroupDocs
       json = api.execute!
 
       json[:replies].map do |reply|
-        reply.merge!(annotation: annotation)
+        reply.merge!(:annotation => annotation)
         Document::Annotation::Reply.new(reply)
       end
     end
@@ -99,7 +99,7 @@ module GroupDocs
         request[:access] = access
         request[:method] = :POST
         request[:path] = "/ant/{{client_id}}/annotations/#{get_annotation_guid}/replies"
-        request[:request_body] = { text: text }
+        request[:request_body] = { :text => text }
       end.execute!
 
       self.guid            = json[:replyGuid]

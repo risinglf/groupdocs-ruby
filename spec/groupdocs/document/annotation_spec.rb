@@ -7,8 +7,8 @@ describe GroupDocs::Document::Annotation do
 
   subject do
     file = GroupDocs::Storage::File.new
-    document = GroupDocs::Document.new(file: file)
-    described_class.new(document: document)
+    document = GroupDocs::Document.new(:file => file)
+    described_class.new(:document => document)
   end
 
   it { should have_accessor(:document)           }
@@ -38,11 +38,11 @@ describe GroupDocs::Document::Annotation do
 
   describe '#initialize' do
     it 'raises error if document is not specified' do
-      -> { described_class.new }.should raise_error(ArgumentError)
+      lambda { described_class.new }.should raise_error(ArgumentError)
     end
 
     it 'raises error if document is not an instance of GroupDocs::Document' do
-      -> { described_class.new(document: '') }.should raise_error(ArgumentError)
+      lambda { described_class.new(:document => '') }.should raise_error(ArgumentError)
     end
   end
 
@@ -58,7 +58,7 @@ describe GroupDocs::Document::Annotation do
     end
 
     it 'raises error if type is unknown' do
-      -> { subject.type = :unknown }.should raise_error(ArgumentError)
+      lambda { subject.type = :unknown }.should raise_error(ArgumentError)
     end
   end
 
@@ -90,7 +90,7 @@ describe GroupDocs::Document::Annotation do
 
   describe '#box=' do
     it 'converts passed hash to GroupDocs::Document::Rectangle object' do
-      subject.box = { x: 0.90, y: 0.05, width: 0.06745, height: 0.005967 }
+      subject.box = { :x => 0.90, :y => 0.05, :width => 0.06745, :height => 0.005967 }
       subject.box.should be_a(GroupDocs::Document::Rectangle)
       subject.box.x.should == 0.90
       subject.box.y.should == 0.05
@@ -111,8 +111,8 @@ describe GroupDocs::Document::Annotation do
     end
 
     it 'saves each reply if it is GroupDocs::Document::Annotation::Reply object' do
-      reply1 = GroupDocs::Document::Annotation::Reply.new(annotation: subject)
-      reply2 = GroupDocs::Document::Annotation::Reply.new(annotation: subject)
+      reply1 = GroupDocs::Document::Annotation::Reply.new(:annotation => subject)
+      reply2 = GroupDocs::Document::Annotation::Reply.new(:annotation => subject)
       subject.replies = [reply1, reply2]
       subject.replies.should include(reply1)
       subject.replies.should include(reply2)
@@ -127,11 +127,11 @@ describe GroupDocs::Document::Annotation do
 
   describe '#add_reply' do
     it 'raises error if reply is not GroupDocs::Document::Annotation::Reply object' do
-      -> { subject.add_reply('Reply') }.should raise_error(ArgumentError)
+      lambda { subject.add_reply('Reply') }.should raise_error(ArgumentError)
     end
 
     it 'saves reply' do
-      reply = GroupDocs::Document::Annotation::Reply.new(annotation: subject)
+      reply = GroupDocs::Document::Annotation::Reply.new(:annotation => subject)
       subject.add_reply(reply)
       subject.replies.should == [reply]
     end
@@ -144,7 +144,7 @@ describe GroupDocs::Document::Annotation do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.create!(client_id: 'client_id', private_key: 'private_key')
+        subject.create!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -173,7 +173,7 @@ describe GroupDocs::Document::Annotation do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.remove!(client_id: 'client_id', private_key: 'private_key')
+        subject.remove!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
   end
@@ -192,14 +192,14 @@ describe GroupDocs::Document::Annotation do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.move!(10, 10, client_id: 'client_id', private_key: 'private_key')
+        subject.move!(10, 10, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'updates annotation position' do
       lambda do
         subject.move!(10, 10)
-      end.should change(subject, :annotation_position).to(x: 10, y: 10)
+      end.should change(subject, :annotation_position).to(:x => 10, :y => 10)
     end
   end
 
@@ -210,12 +210,12 @@ describe GroupDocs::Document::Annotation do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.move_marker!(10, 10, client_id: 'client_id', private_key: 'private_key')
+        subject.move_marker!(10, 10, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'updates box coordinates if it is set' do
-      subject.box = { x: 1, y: 2 }
+      subject.box = { :x => 1, :y => 2 }
       subject.move_marker! 10, 10
       subject.box.x.should == 10
       subject.box.y.should == 10
@@ -235,7 +235,7 @@ describe GroupDocs::Document::Annotation do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.set_access!(:private, client_id: 'client_id', private_key: 'private_key')
+        subject.set_access!(:private, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 

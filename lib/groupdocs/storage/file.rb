@@ -43,7 +43,7 @@ module GroupDocs
           request[:path] = "/storage/{{client_id}}/folders/#{path}"
           request[:request_body] = Object::File.new(filepath, 'rb')
         end
-        api.add_params(description: options[:description]) if options[:description]
+        api.add_params(:description => options[:description]) if options[:description]
         json = api.execute!
 
         Storage::File.new(json)
@@ -64,7 +64,7 @@ module GroupDocs
           request[:method] = :POST
           request[:path] = '/storage/{{client_id}}/urls'
         end
-        api.add_params(url: url)
+        api.add_params(:url => url)
         json = api.execute!
 
         Storage::File.new(json)
@@ -223,7 +223,7 @@ module GroupDocs
       # @return [GroupDocs::Storage::File] Renamed file
       #
       def rename!(name, access = {})
-        move!(path, { name: name }, access)
+        move!(path, { :name => name }, access)
       end
 
       #
@@ -307,7 +307,7 @@ module GroupDocs
       # @return [GroupDocs::Document]
       #
       def to_document
-        Document.new(file: self)
+        Document.new(:file => self)
       end
 
     end # File

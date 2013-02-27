@@ -4,21 +4,21 @@ module GroupDocs
     require 'groupdocs/subscription/limit'
 
     LIMITS = {
-      annotations_limit:      'AnnotationsLimit',
-      apicalls:               'APICalls',
-      apiemails:              'APIEmails',
-      assembly_limit:         'AssemblyLimit',
-      branded:                'Branded',
-      comparison_limit:       'ComparisonLimit',
-      conversion_limit:       'ConversionLimit',
-      documents_limit:        'DocumentsLimit',
-      document_history_limit: 'DocumentHistoryLimit',
-      document_size_limit:    'DocumentSizeLimit',
-      document_tokens_limit:  'DocumentTokensLimit',
-      sharing_limit:          'SharingLimit',
-      signature_limit:        'SignatureLimit',
-      storage_space_limit:    'StorageSpaceLimit',
-      users_limit:            'UsersLimit',
+      :annotations_limit       => 'AnnotationsLimit',
+      :apicalls                => 'APICalls',
+      :apiemails               => 'APIEmails',
+      :assembly_limit          => 'AssemblyLimit',
+      :branded                 => 'Branded',
+      :comparison_limit        => 'ComparisonLimit',
+      :conversion_limit        => 'ConversionLimit',
+      :documents_limit         => 'DocumentsLimit',
+      :document_history_limit  => 'DocumentHistoryLimit',
+      :document_size_limit     => 'DocumentSizeLimit',
+      :document_tokens_limit   => 'DocumentTokensLimit',
+      :sharing_limit           => 'SharingLimit',
+      :signature_limit         => 'SignatureLimit',
+      :storage_space_limit     => 'StorageSpaceLimit',
+      :users_limit             => 'UsersLimit',
     }
 
     #

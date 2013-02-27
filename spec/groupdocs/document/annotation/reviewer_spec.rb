@@ -11,7 +11,7 @@ describe GroupDocs::Document::Annotation::Reviewer do
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.all!(client_id: 'client_id', private_key: 'private_key')
+        described_class.all!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -29,11 +29,11 @@ describe GroupDocs::Document::Annotation::Reviewer do
       mock_api_server(load_json('annotation_reviewers_get'))
     end
 
-    let!(:reviewers) { [described_class.new(email_address: 'test@test.com')] }
+    let!(:reviewers) { [described_class.new(:email_address => 'test@test.com')] }
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.set!(reviewers, client_id: 'client_id', private_key: 'private_key')
+        described_class.set!(reviewers, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 

@@ -9,10 +9,10 @@ module GroupDocs
     require 'groupdocs/document/view'
 
     ACCESS_MODES = {
-      private:    0,
-      restricted: 1,
-      inherited:  2,
-      public:     3,
+      :private    => 0,
+      :restricted => 1,
+      :inherited  => 2,
+      :public     => 3,
     }
 
     include Api::Helpers::AccessMode
@@ -61,7 +61,7 @@ module GroupDocs
       end.execute!
 
       json[:templates].map do |template|
-        template.merge!(file: Storage::File.new(template))
+        template.merge!(:file => Storage::File.new(template))
         Document.new(template)
       end
     end
@@ -104,10 +104,10 @@ module GroupDocs
 
       documents_to_sign = []
       documents.map(&:file).each do |file|
-        document = { name: file.name }
+        document = { :name => file.name }
         contents = File.read(file.local_path)
         contents = Base64.strict_encode64(contents)
-        document.merge!(data: "data:#{mime_type(file.local_path)};base64,#{contents}")
+        document.merge!(:data => "data:#{mime_type(file.local_path)};base64,#{contents}")
 
         documents_to_sign << document
       end
@@ -116,10 +116,10 @@ module GroupDocs
       signatures.each do |signature|
         contents = File.read(signature.image_path)
         contents = Base64.strict_encode64(contents)
-        signer = { name: signature.name, data: "data:#{mime_type(signature.image_path)};base64,#{contents}" }
+        signer = { :name => signature.name, :data => "data:#{mime_type(signature.image_path)};base64,#{contents}" }
         signer.merge!(signature.position)
         # place signature on is not implemented yet
-        signer.merge!(placeSignatureOn: nil)
+        signer.merge!(:placeSignatureOn => nil)
 
         signers << signer
       end
@@ -128,13 +128,13 @@ module GroupDocs
         request[:access] = access
         request[:method] = :POST
         request[:path] = '/signature/{{client_id}}/sign'
-        request[:request_body] = { documents: documents_to_sign, signers: signers }
+        request[:request_body] = { :documents => documents_to_sign, :signers => signers }
       end.execute!
 
       signed_documents = []
       json[:documents].each_with_index do |document, i|
-        file = Storage::File.new(guid: document[:documentId], name: "#{documents[i].file.name}_signed.pdf")
-        signed_documents << Document.new(file: file)
+        file = Storage::File.new(:guid => document[:documentId], :name => "#{documents[i].file.name}_signed.pdf")
+        signed_documents << Document.new(:file => file)
       end
 
       signed_documents
@@ -163,7 +163,7 @@ module GroupDocs
         metadata.views_count = json[:views_count]
         if json[:last_view]
           metadata.last_view = json[:last_view]
-          metadata.last_view.document = new(file: Storage::File.new(json))
+          metadata.last_view.document = new(:file => Storage::File.new(json))
         end
       end
     end
@@ -202,7 +202,7 @@ module GroupDocs
     # @return [Array<Symbol>]
     #
     def output_formats
-      @output_formats.split(?,).map(&:to_sym)
+      @output_formats.split(',').map(&:to_sym)
     end
 
     #
@@ -337,7 +337,7 @@ module GroupDocs
         request[:method] = :PUT
         request[:path] = "/doc/{{client_id}}/files/#{file.id}/accessinfo"
       end
-      api.add_params(mode: ACCESS_MODES[mode])
+      api.add_params(:mode => ACCESS_MODES[mode])
       json = api.execute!
 
       parse_access_mode(json[:access])
@@ -406,7 +406,7 @@ module GroupDocs
         request[:method] = :GET
         request[:path] = "/doc/{{client_id}}/files/#{file.guid}/fields"
       end
-      api.add_params(include_geometry: true)
+      api.add_params(:include_geometry => true)
       json = api.execute!
 
       json[:fields].map do |field|
@@ -498,7 +498,7 @@ module GroupDocs
     # @return [GroupDocs::Job] Created job
     #
     def convert!(format, options = {}, access = {})
-      options.merge!(new_type: format)
+      options.merge!(:new_type => format)
 
       api = Api::Request.new do |request|
         request[:access] = access
@@ -508,7 +508,7 @@ module GroupDocs
       api.add_params(options)
       json = api.execute!
 
-      Job.new(id: json[:job_id])
+      Job.new(:id => json[:job_id])
     end
 
     #
@@ -537,7 +537,7 @@ module GroupDocs
       api.add_params(options)
       json = api.execute!
 
-      Job.new(id: json[:job_id])
+      Job.new(:id => json[:job_id])
     end
 
     #
@@ -645,7 +645,7 @@ module GroupDocs
 
       if json[:annotations]
         json[:annotations].map do |annotation|
-          annotation.merge!(document: self)
+          annotation.merge!(:document => self)
           Document::Annotation.new(annotation)
         end
       else
@@ -667,7 +667,7 @@ module GroupDocs
         request[:method] = :GET
         request[:path] = "/comparison/{{client_id}}/comparison/document"
       end
-      api.add_params(guid: file.guid)
+      api.add_params(:guid => file.guid)
       api.execute!
     end
 
@@ -691,10 +691,10 @@ module GroupDocs
         request[:method] = :GET
         request[:path] = "/comparison/{{client_id}}/comparison/compare"
       end
-      api.add_params(source: file.guid, target: document.file.guid)
+      api.add_params(:source => file.guid, :target => document.file.guid)
       json = api.execute!
 
-      Job.new(id: json[:job_id])
+      Job.new(:id => json[:job_id])
     end
 
     #
@@ -718,7 +718,7 @@ module GroupDocs
         request[:method] = :GET
         request[:path] = "/comparison/{{client_id}}/comparison/changes"
       end
-      api.add_params(resultFileId: file.guid)
+      api.add_params(:resultFileId => file.guid)
       json = api.execute!
 
       json[:changes].map do |change|

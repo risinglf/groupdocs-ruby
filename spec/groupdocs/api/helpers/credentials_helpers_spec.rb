@@ -3,12 +3,12 @@ require 'spec_helper'
 describe GroupDocs::Api::Helpers::Credentials do
 
   subject do
-    GroupDocs::Api::Request.new(method: :GET)
+    GroupDocs::Api::Request.new(:method => :GET)
   end
 
   describe '#client_id' do
     it 'returns passed to method client ID' do
-      subject.options[:access] = { client_id: 'method_client_id' }
+      subject.options[:access] = { :client_id => 'method_client_id' }
       subject.options[:access].should_receive(:[]).with(:client_id).and_return('method_client_id')
       subject.send(:client_id).should == 'method_client_id'
     end
@@ -22,13 +22,13 @@ describe GroupDocs::Api::Helpers::Credentials do
     it 'raises error if client ID has not been set' do
       subject.options[:access] = {}
       GroupDocs.client_id = nil
-      -> { subject.send(:client_id) }.should raise_error(GroupDocs::NoClientIdError)
+      lambda { subject.send(:client_id) }.should raise_error(GroupDocs::NoClientIdError)
     end
   end
 
   describe '#private_key' do
     it 'returns passed to method private key' do
-      subject.options[:access] = { private_key: 'method_private_key' }
+      subject.options[:access] = { :private_key => 'method_private_key' }
       subject.options[:access].should_receive(:[]).with(:private_key).and_return('method_private_key')
       subject.send(:private_key).should == 'method_private_key'
     end
@@ -42,7 +42,7 @@ describe GroupDocs::Api::Helpers::Credentials do
     it 'raises error if private key has not been set' do
       subject.options[:access] = {}
       GroupDocs.private_key = nil
-      -> { subject.send(:private_key) }.should raise_error(GroupDocs::NoPrivateKeyError)
+      lambda { subject.send(:private_key) }.should raise_error(GroupDocs::NoPrivateKeyError)
     end
   end
 end

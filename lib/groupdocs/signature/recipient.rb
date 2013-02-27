@@ -2,12 +2,12 @@ module GroupDocs
   class Signature::Recipient < Api::Entity
 
     STATUSES = {
-      none:     -1,
-      waiting:   0,
-      notified:  1,
-      delegated: 2,
-      rejected:  3,
-      signed:    4,
+      :none       => -1,
+      :waiting    =>  0,
+      :notified   =>  1,
+      :delegated  =>  2,
+      :rejected   =>  3,
+      :signed     =>  4,
     }
 
     # @attr [String] id

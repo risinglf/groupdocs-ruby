@@ -38,7 +38,7 @@ module GroupDocs
     # @param [Array<String>, String] values
     #
     def values=(values)
-      @values = values.is_a?(Array) ? values.join(?;) : values
+      @values = values.is_a?(Array) ? values.join(';') : values
     end
 
     #
@@ -46,7 +46,7 @@ module GroupDocs
     # @return [Array<String>]
     #
     def values
-      @values.split(?;)
+      @values.split(';')
     end
 
     #

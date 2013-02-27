@@ -7,7 +7,7 @@ describe GroupDocs::Document do
 
   subject do
     file = GroupDocs::Storage::File.new
-    described_class.new(file: file)
+    described_class.new(:file => file)
   end
 
   describe '.views!' do
@@ -17,7 +17,7 @@ describe GroupDocs::Document do
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.views!({}, client_id: 'client_id', private_key: 'private_key')
+        described_class.views!({}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -37,7 +37,7 @@ describe GroupDocs::Document do
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.templates!(client_id: 'client_id', private_key: 'private_key')
+        described_class.templates!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -56,48 +56,48 @@ describe GroupDocs::Document do
     end
 
     let(:documents) do
-      [GroupDocs::Document.new(file: GroupDocs::Storage::File.new(name: 'Document1', local_path: __FILE__)),
-       GroupDocs::Document.new(file: GroupDocs::Storage::File.new(name: 'Document2', local_path: 'spec/support/files/resume.pdf'))]
+      [GroupDocs::Document.new(:file => GroupDocs::Storage::File.new(:name => 'Document1', :local_path => __FILE__)),
+       GroupDocs::Document.new(:file => GroupDocs::Storage::File.new(:name => 'Document2', :local_path => 'spec/support/files/resume.pdf'))]
     end
-    let(:signatures) { [GroupDocs::Signature.new(name: 'John Smith', image_path: 'spec/support/files/signature.png', position: {})] }
+    let(:signatures) { [GroupDocs::Signature.new(:name => 'John Smith', :image_path => 'spec/support/files/signature.png', :position => {})] }
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.sign_documents!(documents, signatures, {}, client_id: 'client_id', private_key: 'private_key')
+        described_class.sign_documents!(documents, signatures, {}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'raises error if document is not GroupDocs::Document object' do
-      -> { described_class.sign_documents!(['Document'], signatures) }.should raise_error(ArgumentError)
+      lambda { described_class.sign_documents!(['Document'], signatures) }.should raise_error(ArgumentError)
     end
 
     it 'raises error if document file does not have name' do
-      documents = [GroupDocs::Document.new(file: GroupDocs::Storage::File.new(local_path: __FILE__))]
-      -> { described_class.sign_documents!(documents, signatures) }.should raise_error(ArgumentError)
+      documents = [GroupDocs::Document.new(:file => GroupDocs::Storage::File.new(:local_path => __FILE__))]
+      lambda { described_class.sign_documents!(documents, signatures) }.should raise_error(ArgumentError)
     end
 
     it 'raises error if document file does not have local path' do
-      documents = [GroupDocs::Document.new(file: GroupDocs::Storage::File.new(name: 'Document'))]
-      -> { described_class.sign_documents!(documents, signatures) }.should raise_error(ArgumentError)
+      documents = [GroupDocs::Document.new(:file => GroupDocs::Storage::File.new(:name => 'Document'))]
+      lambda { described_class.sign_documents!(documents, signatures) }.should raise_error(ArgumentError)
     end
 
     it 'raises error if signature is not GroupDocs::Signature object' do
-      -> { described_class.sign_documents!(documents, ['Signature']) }.should raise_error(ArgumentError)
+      lambda { described_class.sign_documents!(documents, ['Signature']) }.should raise_error(ArgumentError)
     end
 
     it 'raises error if signature does not have name' do
-      signatures = [GroupDocs::Signature.new(image_path: __FILE__, position: {})]
-      -> { described_class.sign_documents!(documents, signatures) }.should raise_error(ArgumentError)
+      signatures = [GroupDocs::Signature.new(:image_path => __FILE__, :position => {})]
+      lambda { described_class.sign_documents!(documents, signatures) }.should raise_error(ArgumentError)
     end
 
     it 'raises error if signature does not have image path' do
-      signatures = [GroupDocs::Signature.new(name: 'John Smith', position: {})]
-      -> { described_class.sign_documents!(documents, signatures) }.should raise_error(ArgumentError)
+      signatures = [GroupDocs::Signature.new(:name => 'John Smith', :position => {})]
+      lambda { described_class.sign_documents!(documents, signatures) }.should raise_error(ArgumentError)
     end
 
     it 'raises error if signature does not have position' do
-      signatures = [GroupDocs::Signature.new(name: 'John Smith', image_path: __FILE__)]
-      -> { described_class.sign_documents!(documents, signatures) }.should raise_error(ArgumentError)
+      signatures = [GroupDocs::Signature.new(:name => 'John Smith', :image_path => __FILE__)]
+      lambda { described_class.sign_documents!(documents, signatures) }.should raise_error(ArgumentError)
     end
 
     it 'detects each document and signature file MIME type' do
@@ -128,7 +128,7 @@ describe GroupDocs::Document do
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.metadata!('document_one.doc', client_id: 'client_id', private_key: 'private_key')
+        described_class.metadata!('document_one.doc', :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -158,8 +158,8 @@ describe GroupDocs::Document do
   describe '#outputs=' do
     let(:response) do
       [
-        { ftype: 1, guid: 'fhy9yh94u238dgf' },
-        { ftype: 2, guid: 'ofh9rhy9rfohf9s' }
+        { :ftype => 1, :guid => 'fhy9yh94u238dgf' },
+        { :ftype => 2, :guid => 'ofh9rhy9rfohf9s' }
       ]
     end
 
@@ -195,11 +195,11 @@ describe GroupDocs::Document do
 
   describe '#initialize' do
     it 'raises error if file is not specified' do
-      -> { described_class.new }.should raise_error(ArgumentError)
+      lambda { described_class.new }.should raise_error(ArgumentError)
     end
 
     it 'raises error if file is not an instance of GroupDocs::Storage::File' do
-      -> { described_class.new(file: '') }.should raise_error(ArgumentError)
+      lambda { described_class.new(:file => '') }.should raise_error(ArgumentError)
     end
   end
 
@@ -210,13 +210,13 @@ describe GroupDocs::Document do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.page_images!(640, 480, {}, client_id: 'client_id', private_key: 'private_key')
+        subject.page_images!(640, 480, {}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'accepts options hash' do
       lambda do
-        subject.page_images!(640, 480, first_page: 0, page_count: 1)
+        subject.page_images!(640, 480, :first_page => 0, :page_count => 1)
       end.should_not raise_error(ArgumentError)
     end
 
@@ -236,13 +236,13 @@ describe GroupDocs::Document do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.thumbnails!({}, client_id: 'client_id', private_key: 'private_key')
+        subject.thumbnails!({}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'accepts options hash' do
       lambda do
-        subject.thumbnails!(page_number: 0, page_count: 1)
+        subject.thumbnails!(:page_number => 0, :page_count => 1)
       end.should_not raise_error(ArgumentError)
     end
 
@@ -262,7 +262,7 @@ describe GroupDocs::Document do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.access_mode!(client_id: 'client_id', private_key: 'private_key')
+        subject.access_mode!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -279,7 +279,7 @@ describe GroupDocs::Document do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.access_mode_set!(:private, client_id: 'client_id', private_key: 'private_key')
+        subject.access_mode_set!(:private, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -305,7 +305,7 @@ describe GroupDocs::Document do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.formats!(client_id: 'client_id', private_key: 'private_key')
+        subject.formats!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -325,7 +325,7 @@ describe GroupDocs::Document do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.metadata!(client_id: 'client_id', private_key: 'private_key')
+        subject.metadata!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -354,7 +354,7 @@ describe GroupDocs::Document do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.fields!(client_id: 'client_id', private_key: 'private_key')
+        subject.fields!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -374,7 +374,7 @@ describe GroupDocs::Document do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.sharers!(client_id: 'client_id', private_key: 'private_key')
+        subject.sharers!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -394,7 +394,7 @@ describe GroupDocs::Document do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.sharers_set!(%w(test1@email.com), client_id: 'client_id', private_key: 'private_key')
+        subject.sharers_set!(%w(test1@email.com), :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -424,7 +424,7 @@ describe GroupDocs::Document do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.sharers_clear!(client_id: 'client_id', private_key: 'private_key')
+        subject.sharers_clear!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -440,13 +440,13 @@ describe GroupDocs::Document do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.convert!(:pdf, {}, client_id: 'client_id', private_key: 'private_key')
+        subject.convert!(:pdf, {}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'accepts options hash' do
       lambda do
-        subject.convert!(:pdf, email_results: true)
+        subject.convert!(:pdf, :email_results => true)
       end.should_not raise_error(ArgumentError)
     end
 
@@ -462,7 +462,7 @@ describe GroupDocs::Document do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.questionnaires!(client_id: 'client_id', private_key: 'private_key')
+        subject.questionnaires!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -477,17 +477,17 @@ describe GroupDocs::Document do
 
   describe '#add_questionnaire!' do
     let(:questionnaire) do
-      GroupDocs::Questionnaire.new(id: 1)
+      GroupDocs::Questionnaire.new(:id => 1)
     end
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.add_questionnaire!(questionnaire, client_id: 'client_id', private_key: 'private_key')
+        subject.add_questionnaire!(questionnaire, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'raises error if questionnaire is not GroupDocs::Questionnaire object' do
-      -> { subject.add_questionnaire!('Questionnaire') }.should raise_error(ArgumentError)
+      lambda { subject.add_questionnaire!('Questionnaire') }.should raise_error(ArgumentError)
     end
   end
 
@@ -497,17 +497,17 @@ describe GroupDocs::Document do
     end
 
     let(:questionnaire) do
-      GroupDocs::Questionnaire.new(name: 'Q1')
+      GroupDocs::Questionnaire.new(:name => 'Q1')
     end
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.create_questionnaire!(questionnaire, client_id: 'client_id', private_key: 'private_key')
+        subject.create_questionnaire!(questionnaire, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'raises error if questionnaire is not GroupDocs::Questionnaire object' do
-      -> { subject.create_questionnaire!('Questionnaire') }.should raise_error(ArgumentError)
+      lambda { subject.create_questionnaire!('Questionnaire') }.should raise_error(ArgumentError)
     end
 
     it 'returns GroupDocs::Questionnaire object' do
@@ -528,17 +528,17 @@ describe GroupDocs::Document do
 
   describe '#remove_questionnaire!' do
     let(:questionnaire) do
-      GroupDocs::Questionnaire.new(id: 1)
+      GroupDocs::Questionnaire.new(:id => 1)
     end
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.remove_questionnaire!(questionnaire, client_id: 'client_id', private_key: 'private_key')
+        subject.remove_questionnaire!(questionnaire, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'raises error if questionnaire is not GroupDocs::Questionnaire object' do
-      -> { subject.remove_questionnaire!('Questionnaire') }.should raise_error(ArgumentError)
+      lambda { subject.remove_questionnaire!('Questionnaire') }.should raise_error(ArgumentError)
     end
   end
 
@@ -548,23 +548,23 @@ describe GroupDocs::Document do
     end
 
     let(:datasource) do
-      GroupDocs::DataSource.new(id: 1)
+      GroupDocs::DataSource.new(:id => 1)
     end
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.datasource!(datasource, {}, client_id: 'client_id', private_key: 'private_key')
+        subject.datasource!(datasource, {}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'accepts options hash' do
       lambda do
-        subject.datasource!(datasource, new_type: :pdf)
+        subject.datasource!(datasource, :new_type => :pdf)
       end.should_not raise_error(ArgumentError)
     end
 
     it 'raises error if datasource is not GroupDocs::Datasource object' do
-      -> { subject.datasource!('Datasource') }.should raise_error(ArgumentError)
+      lambda { subject.datasource!('Datasource') }.should raise_error(ArgumentError)
     end
 
     it 'returns GroupDocs::Job object' do
@@ -580,7 +580,7 @@ describe GroupDocs::Document do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.annotations!(client_id: 'client_id', private_key: 'private_key')
+        subject.annotations!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -605,7 +605,7 @@ describe GroupDocs::Document do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.details!(client_id: 'client_id', private_key: 'private_key')
+        subject.details!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -620,17 +620,17 @@ describe GroupDocs::Document do
     end
 
     let(:document) do
-      GroupDocs::Document.new(file: GroupDocs::Storage::File.new)
+      GroupDocs::Document.new(:file => GroupDocs::Storage::File.new)
     end
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.compare!(document, client_id: 'client_id', private_key: 'private_key')
+        subject.compare!(document, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'raises error if document is not GroupDocs::Document object' do
-      -> { subject.compare!('Document') }.should raise_error(ArgumentError)
+      lambda { subject.compare!('Document') }.should raise_error(ArgumentError)
     end
 
     it 'returns GroupDocs::Job object' do
@@ -645,7 +645,7 @@ describe GroupDocs::Document do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.changes!(client_id: 'client_id', private_key: 'private_key')
+        subject.changes!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -666,7 +666,7 @@ describe GroupDocs::Document do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.collaborators!(client_id: 'client_id', private_key: 'private_key')
+        subject.collaborators!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -686,7 +686,7 @@ describe GroupDocs::Document do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.set_collaborators!(%w(test1@email.com), 1, client_id: 'client_id', private_key: 'private_key')
+        subject.set_collaborators!(%w(test1@email.com), 1, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -714,7 +714,7 @@ describe GroupDocs::Document do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.add_collaborator!(collaborator, client_id: 'client_id', private_key: 'private_key')
+        subject.add_collaborator!(collaborator, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -724,7 +724,7 @@ describe GroupDocs::Document do
     end
 
     it 'raises error if collaborator is not an instance of GroupDocs::User' do
-      -> { subject.add_collaborator!('collaborator') }.should raise_error(ArgumentError)
+      lambda { subject.add_collaborator!('collaborator') }.should raise_error(ArgumentError)
     end
   end
 
@@ -737,7 +737,7 @@ describe GroupDocs::Document do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.set_reviewers!(reviewers, client_id: 'client_id', private_key: 'private_key')
+        subject.set_reviewers!(reviewers, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -756,7 +756,7 @@ describe GroupDocs::Document do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.shared_link_access_rights!(client_id: 'client_id', private_key: 'private_key')
+        subject.shared_link_access_rights!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -786,7 +786,7 @@ describe GroupDocs::Document do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.set_shared_link_access_rights!(%w(view), client_id: 'client_id', private_key: 'private_key')
+        subject.set_shared_link_access_rights!(%w(view), :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -803,18 +803,18 @@ describe GroupDocs::Document do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.set_session_callback!('http://www.example.com', client_id: 'client_id', private_key: 'private_key')
+        subject.set_session_callback!('http://www.example.com', :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
   end
 
   describe '#method_missing' do
     it 'passes unknown methods to file object' do
-      -> { subject.name }.should_not raise_error(NoMethodError)
+      lambda { subject.name }.should_not raise_error(NoMethodError)
     end
 
     it 'raises NoMethodError if neither self nor file responds to method' do
-      -> { subject.unknown_method }.should raise_error(NoMethodError)
+      lambda { subject.unknown_method }.should raise_error(NoMethodError)
     end
   end
 

@@ -12,10 +12,10 @@ describe GroupDocs::Document::MetaData do
 
   describe '#last_view=' do
     it 'converts passed hash to GroupDocs::Document::View object' do
-      subject.last_view = { document: { id: 1, name: 'test.pdf' } }
+      subject.last_view = { :document => { :id => 1, :name => 'test.pdf' } }
       subject.last_view.should be_a(GroupDocs::Document::View)
-      subject.last_view.document.id.should   == 1
-      subject.last_view.document.name.should == 'test.pdf'
+      subject.last_view.document.file.id.should == 1
+      subject.last_view.document.file.name.should == 'test.pdf'
     end
   end
 end

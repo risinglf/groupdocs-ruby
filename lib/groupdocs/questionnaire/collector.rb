@@ -20,7 +20,7 @@ module GroupDocs
       end.execute!
 
       collector = json[:collector]
-      collector.merge!(questionnaire: Questionnaire.new(id: collector[:questionnaire_id]))
+      collector.merge!(:questionnaire => Questionnaire.new(:id => collector[:questionnaire_id]))
 
       new(collector)
     end
@@ -255,7 +255,7 @@ module GroupDocs
       api.add_params(options)
       json = api.execute!
 
-      Job.new(id: json[:job_id])
+      Job.new(:id => json[:job_id])
     end
 
   end # Questionnaire::Collector

@@ -11,12 +11,12 @@ describe GroupDocs::Signature::Field do
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.get!({}, client_id: 'client_id', private_key: 'private_key')
+        described_class.get!({}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'allows passing options' do
-      -> { described_class.get!(id: "dsaoij3928ukr03") }.should_not raise_error(ArgumentError)
+      lambda { described_class.get!(:id => "dsaoij3928ukr03") }.should_not raise_error(ArgumentError)
     end
 
     it 'returns array of GroupDocs::Signature::Field objects' do
@@ -79,19 +79,19 @@ describe GroupDocs::Signature::Field do
 
   describe '#location=' do
     it 'converts location to GroupDocs::Signature::Field::Location object if hash is passed' do
-      subject.location = { id: 'location1' }
+      subject.location = { :id => 'location1' }
       subject.location.should be_a(GroupDocs::Signature::Field::Location)
     end
 
     it 'saves each location if it is GroupDocs::Signature::Field::Location object' do
-      location = GroupDocs::Signature::Field::Location.new(id: 'location')
+      location = GroupDocs::Signature::Field::Location.new(:id => 'location')
       subject.location = location
       subject.location.should == location
     end
 
     it 'appends location to locations if it is not empty' do
-      location1 = GroupDocs::Signature::Field::Location.new(id: 'location1')
-      location2 = GroupDocs::Signature::Field::Location.new(id: 'location2')
+      location1 = GroupDocs::Signature::Field::Location.new(:id => 'location1')
+      location2 = GroupDocs::Signature::Field::Location.new(:id => 'location2')
       subject.locations = [location1]
       subject.location = location2
       subject.locations.should == [location1, location2]
@@ -99,7 +99,7 @@ describe GroupDocs::Signature::Field do
 
     it 'creates locations if it is empty' do
       subject.locations = nil
-      location = GroupDocs::Signature::Field::Location.new(id: 'location')
+      location = GroupDocs::Signature::Field::Location.new(:id => 'location')
       subject.location = location
       subject.locations.should == [location]
     end
@@ -113,7 +113,7 @@ describe GroupDocs::Signature::Field do
 
   describe '#locations=' do
     it 'converts each location to GroupDocs::Signature::Field::Location object if hash is passed' do
-      subject.locations = [{ id: 'location1' }]
+      subject.locations = [{ :id => 'location1' }]
       locations = subject.locations
       locations.should be_an(Array)
       locations.each do |location|
@@ -122,8 +122,8 @@ describe GroupDocs::Signature::Field do
     end
 
     it 'saves each location if it is GroupDocs::Signature::Field::Location object' do
-      location1 = GroupDocs::Signature::Field::Location.new(id: 'location1')
-      location2 = GroupDocs::Signature::Field::Location.new(id: 'location2')
+      location1 = GroupDocs::Signature::Field::Location.new(:id => 'location1')
+      location2 = GroupDocs::Signature::Field::Location.new(:id => 'location2')
       subject.locations = [location1, location2]
       subject.locations.should include(location1)
       subject.locations.should include(location2)
@@ -170,7 +170,7 @@ describe GroupDocs::Signature::Field do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.create!(client_id: 'client_id', private_key: 'private_key')
+        subject.create!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -193,7 +193,7 @@ describe GroupDocs::Signature::Field do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.modify!(client_id: 'client_id', private_key: 'private_key')
+        subject.modify!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -210,7 +210,7 @@ describe GroupDocs::Signature::Field do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.delete!(client_id: 'client_id', private_key: 'private_key')
+        subject.delete!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
   end

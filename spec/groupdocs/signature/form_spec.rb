@@ -13,12 +13,12 @@ describe GroupDocs::Signature::Form do
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.all!({}, client_id: 'client_id', private_key: 'private_key')
+        described_class.all!({}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'allows passing options' do
-      -> { described_class.all!(page: 1, count: 3) }.should_not raise_error(ArgumentError)
+      lambda { described_class.all!(:page => 1, :count => 3) }.should_not raise_error(ArgumentError)
     end
 
     it 'returns array of GroupDocs::Signature::Form objects' do
@@ -69,13 +69,13 @@ describe GroupDocs::Signature::Form do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.create!(template, {}, client_id: 'client_id', private_key: 'private_key')
+        subject.create!(template, {}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'accepts options hash' do
       lambda do
-        subject.create!(template, assembly_id: 'aodfh43yr9834hf943h')
+        subject.create!(template, :assembly_id => 'aodfh43yr9834hf943h')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -91,7 +91,7 @@ describe GroupDocs::Signature::Form do
     end
 
     it 'raises error if template is not GroupDocs::Signature::Template object' do
-      -> { subject.create!('Template') }.should raise_error(ArgumentError)
+      lambda { subject.create!('Template') }.should raise_error(ArgumentError)
     end
   end
 
@@ -102,7 +102,7 @@ describe GroupDocs::Signature::Form do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.documents!(client_id: 'client_id', private_key: 'private_key')
+        subject.documents!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -122,7 +122,7 @@ describe GroupDocs::Signature::Form do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.publish!(client_id: 'client_id', private_key: 'private_key')
+        subject.publish!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
   end
@@ -134,7 +134,7 @@ describe GroupDocs::Signature::Form do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.complete!(client_id: 'client_id', private_key: 'private_key')
+        subject.complete!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
   end
@@ -146,7 +146,7 @@ describe GroupDocs::Signature::Form do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.archive!(client_id: 'client_id', private_key: 'private_key')
+        subject.archive!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
   end

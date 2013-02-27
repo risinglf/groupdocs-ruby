@@ -7,7 +7,7 @@ shared_examples_for GroupDocs::Signature::DocumentMethods do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.documents!(client_id: 'client_id', private_key: 'private_key')
+        subject.documents!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -22,7 +22,7 @@ shared_examples_for GroupDocs::Signature::DocumentMethods do
 
   describe '#add_document!' do
     let(:document) do
-      GroupDocs::Document.new(file: GroupDocs::Storage::File.new)
+      GroupDocs::Document.new(:file => GroupDocs::Storage::File.new)
     end
 
     before(:each) do
@@ -31,24 +31,24 @@ shared_examples_for GroupDocs::Signature::DocumentMethods do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.add_document!(document, {}, client_id: 'client_id', private_key: 'private_key')
+        subject.add_document!(document, {}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'accepts options hash' do
       lambda do
-        subject.add_document!(document, order: 1)
+        subject.add_document!(document, :order => 1)
       end.should_not raise_error(ArgumentError)
     end
 
     it 'raises error if document is not GroupDocs::Document object' do
-      -> { subject.add_document!('Document') }.should raise_error(ArgumentError)
+      lambda { subject.add_document!('Document') }.should raise_error(ArgumentError)
     end
   end
 
   describe '#remove_document!' do
     let(:document) do
-      GroupDocs::Document.new(file: GroupDocs::Storage::File.new)
+      GroupDocs::Document.new(:file => GroupDocs::Storage::File.new)
     end
 
     before(:each) do
@@ -57,12 +57,12 @@ shared_examples_for GroupDocs::Signature::DocumentMethods do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.remove_document!(document, client_id: 'client_id', private_key: 'private_key')
+        subject.remove_document!(document, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'raises error if document is not GroupDocs::Document object' do
-      -> { subject.remove_document!('Document') }.should raise_error(ArgumentError)
+      lambda { subject.remove_document!('Document') }.should raise_error(ArgumentError)
     end
   end
 end

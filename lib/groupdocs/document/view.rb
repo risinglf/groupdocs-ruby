@@ -27,7 +27,7 @@ module GroupDocs
       if object.is_a?(GroupDocs::Document)
         @document = object
       else
-        object.merge!(file: GroupDocs::Storage::File.new(object))
+        object.merge!(:file => GroupDocs::Storage::File.new(object))
         @document = GroupDocs::Document.new(object)
       end
     end

@@ -4,8 +4,6 @@ Ruby SDK for [GroupDocs](http://groupdocs.com) REST API.
 
 ## Installation
 
-GroupDocs requires Ruby 1.9. Ruby 1.8 is not supported!
-
 Install as usually
 
     gem install groupdocs

@@ -16,7 +16,7 @@ describe GroupDocs::Api::Helpers::Status do
     end
 
     it 'raises error if argument is not string or symbol' do
-      -> { subject.send(:parse_status, 1) }.should raise_error(ArgumentError)
+      lambda { subject.send(:parse_status, 1) }.should raise_error(ArgumentError)
     end
   end
 end

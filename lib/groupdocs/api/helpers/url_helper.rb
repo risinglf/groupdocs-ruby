@@ -14,7 +14,7 @@ module GroupDocs
         #
         def add_params(params)
           params.each do |param, value|
-            value = value.join(?,) if value.is_a?(Array)
+            value = value.join(',') if value.is_a?(Array)
             options[:path] << "#{separator}#{param}=#{value}"
           end
         end
@@ -46,7 +46,7 @@ module GroupDocs
         #
         def url_encode_path
           options[:path] = URI.escape(options[:path])
-          options[:path].gsub! ?+, '%2B'
+          options[:path].gsub! '+', '%2B'
         end
 
         #

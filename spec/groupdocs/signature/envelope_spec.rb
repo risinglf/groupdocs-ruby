@@ -17,12 +17,12 @@ describe GroupDocs::Signature::Envelope do
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.all!({}, client_id: 'client_id', private_key: 'private_key')
+        described_class.all!({}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'allows passing options' do
-      -> { described_class.all!(page: 1, count: 3) }.should_not raise_error(ArgumentError)
+      lambda { described_class.all!(:page => 1, :count => 3) }.should_not raise_error(ArgumentError)
     end
 
     it 'returns array of GroupDocs::Signature::Envelope objects' do
@@ -41,12 +41,12 @@ describe GroupDocs::Signature::Envelope do
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.for_me!({}, client_id: 'client_id', private_key: 'private_key')
+        described_class.for_me!({}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'allows passing options' do
-      -> { described_class.for_me!(page: 1, count: 3) }.should_not raise_error(ArgumentError)
+      lambda { described_class.for_me!(:page => 1, :count => 3) }.should_not raise_error(ArgumentError)
     end
 
     it 'returns array of GroupDocs::Signature::Envelope objects' do
@@ -86,12 +86,12 @@ describe GroupDocs::Signature::Envelope do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.add_recipient!(recipient, client_id: 'client_id', private_key: 'private_key')
+        subject.add_recipient!(recipient, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'raises error if recipient is not GroupDocs::Signature::Recipient object' do
-      -> { subject.add_recipient!('Recipient') }.should raise_error(ArgumentError)
+      lambda { subject.add_recipient!('Recipient') }.should raise_error(ArgumentError)
     end
   end
 
@@ -106,18 +106,18 @@ describe GroupDocs::Signature::Envelope do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.modify_recipient!(recipient, client_id: 'client_id', private_key: 'private_key')
+        subject.modify_recipient!(recipient, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'raises error if recipient is not GroupDocs::Signature::Recipient object' do
-      -> { subject.modify_recipient!('Recipient') }.should raise_error(ArgumentError)
+      lambda { subject.modify_recipient!('Recipient') }.should raise_error(ArgumentError)
     end
   end
 
   describe '#fill_field!' do
-    let(:field)     { GroupDocs::Signature::Field.new(location: { location_x: 0.1, page: 1 }) }
-    let(:document)  { GroupDocs::Document.new(file: GroupDocs::Storage::File.new) }
+    let(:field)     { GroupDocs::Signature::Field.new(:location => { :location_x => 0.1, :page => 1 }) }
+    let(:document)  { GroupDocs::Document.new(:file => GroupDocs::Storage::File.new) }
     let(:recipient) { GroupDocs::Signature::Recipient.new }
 
     before(:each) do
@@ -126,20 +126,20 @@ describe GroupDocs::Signature::Envelope do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.fill_field!('test', field, document, recipient, client_id: 'client_id', private_key: 'private_key')
+        subject.fill_field!('test', field, document, recipient, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'raises error if field is not GroupDocs::Signature::Field object' do
-      -> { subject.fill_field!('test', 'Field', document, recipient) }.should raise_error(ArgumentError)
+      lambda { subject.fill_field!('test', 'Field', document, recipient) }.should raise_error(ArgumentError)
     end
 
     it 'raises error if document is not GroupDocs::Document object' do
-      -> { subject.fill_field!('test', field, 'Document', recipient) }.should raise_error(ArgumentError)
+      lambda { subject.fill_field!('test', field, 'Document', recipient) }.should raise_error(ArgumentError)
     end
 
     it 'raises error if recipient is not GroupDocs::Signature::Recipient object' do
-      -> { subject.fill_field!('test', field, document, 'Recipient') }.should raise_error(ArgumentError)
+      lambda { subject.fill_field!('test', field, document, 'Recipient') }.should raise_error(ArgumentError)
     end
 
     it 'returns filled field' do
@@ -148,10 +148,10 @@ describe GroupDocs::Signature::Envelope do
 
     it 'uses signature identifier if field is :signature and GroupDocs::Signature is passed' do
       api = stub(GroupDocs::Api::Request)
-      api.stub!(execute!: { field: {} })
-      GroupDocs::Api::Request.stub(new: api)
-      signature = GroupDocs::Signature.new(id: '123')
-      api.should_receive(:add_params).with(signatureId: '123')
+      api.stub!(:execute! => { :field => {} })
+      GroupDocs::Api::Request.stub(:new => api)
+      signature = GroupDocs::Signature.new(:id => '123')
+      api.should_receive(:add_params).with(:signatureId => '123')
       field.field_type = :signature
       subject.fill_field!(signature, field, document, recipient)
     end
@@ -159,9 +159,9 @@ describe GroupDocs::Signature::Envelope do
     it 'converts boolean value to required string if field is :checkbox' do
       api = stub(GroupDocs::Api::Request)
       options = {}
-      api.stub!(execute!: { field: {} })
-      api.stub!(options: { request_body: nil })
-      GroupDocs::Api::Request.stub(new: api)
+      api.stub!(:execute! => { :field => {} })
+      api.stub!(:options => { :request_body => nil })
+      GroupDocs::Api::Request.stub(:new => api)
       field.field_type = :checkbox
       subject.fill_field!(true, field, document, recipient)
       api.options[:request_body].should == 'on'
@@ -177,12 +177,12 @@ describe GroupDocs::Signature::Envelope do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.sign!(recipient, client_id: 'client_id', private_key: 'private_key')
+        subject.sign!(recipient, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'raises error if recipient is not GroupDocs::Signature::Recipient object' do
-      -> { subject.sign!('Recipient') }.should raise_error(ArgumentError)
+      lambda { subject.sign!('Recipient') }.should raise_error(ArgumentError)
     end
   end
 
@@ -195,12 +195,12 @@ describe GroupDocs::Signature::Envelope do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.decline!(recipient, client_id: 'client_id', private_key: 'private_key')
+        subject.decline!(recipient, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'raises error if recipient is not GroupDocs::Signature::Recipient object' do
-      -> { subject.decline!('Recipient') }.should raise_error(ArgumentError)
+      lambda { subject.decline!('Recipient') }.should raise_error(ArgumentError)
     end
   end
 
@@ -214,12 +214,12 @@ describe GroupDocs::Signature::Envelope do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.signed_documents!(path, client_id: 'client_id', private_key: 'private_key')
+        subject.signed_documents!(path, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'returns saved file path' do
-      subject.stub(documents!: [1])
+      subject.stub(:documents! => [1])
       subject.signed_documents!(path).should == "#{path}/#{subject.name}.pdf"
     end
 
@@ -230,7 +230,7 @@ describe GroupDocs::Signature::Envelope do
 
       it 'downloads ZIP file' do
         file = stub('file')
-        subject.stub(documents!: [])
+        subject.stub(:documents! => [])
         Object::File.should_receive(:open).with("#{path}/#{subject.name}.zip", 'wb').and_yield(file)
         file.should_receive(:write).with(File.read('spec/support/files/envelope.zip'))
         subject.signed_documents!(path)
@@ -244,7 +244,7 @@ describe GroupDocs::Signature::Envelope do
 
       it 'downloads ZIP file' do
         file = stub('file')
-        subject.stub(documents!: [1])
+        subject.stub(:documents! => [1])
         Object::File.should_receive(:open).with("#{path}/#{subject.name}.pdf", 'wb').and_yield(file)
         file.should_receive(:write).with(File.read('spec/support/files/resume.pdf'))
         subject.signed_documents!(path)
@@ -258,7 +258,7 @@ describe GroupDocs::Signature::Envelope do
 
       it 'downloads ZIP file' do
         file = stub('file')
-        subject.stub(documents!: [1, 2])
+        subject.stub(:documents! => [1, 2])
         Object::File.should_receive(:open).with("#{path}/#{subject.name}.zip", 'wb').and_yield(file)
         file.should_receive(:write).with(File.read('spec/support/files/envelope.zip'))
         subject.signed_documents!(path)
@@ -273,7 +273,7 @@ describe GroupDocs::Signature::Envelope do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.logs!(client_id: 'client_id', private_key: 'private_key')
+        subject.logs!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -293,7 +293,7 @@ describe GroupDocs::Signature::Envelope do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.send!(nil, client_id: 'client_id', private_key: 'private_key')
+        subject.send!(nil, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -309,7 +309,7 @@ describe GroupDocs::Signature::Envelope do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.archive!(client_id: 'client_id', private_key: 'private_key')
+        subject.archive!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
   end
@@ -321,7 +321,7 @@ describe GroupDocs::Signature::Envelope do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.restart!(client_id: 'client_id', private_key: 'private_key')
+        subject.restart!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
   end

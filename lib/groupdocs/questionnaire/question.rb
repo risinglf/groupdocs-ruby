@@ -60,7 +60,7 @@ module GroupDocs
     #
     def type=(type)
       if type.is_a?(Symbol)
-        type = accessor_to_variable(type).to_s.delete(?@)
+        type = type.to_s.camelize
         TYPES.include?(type) or raise ArgumentError, "Unknown type: #{type.inspect}"
       end
 
@@ -73,7 +73,7 @@ module GroupDocs
     # @return [Symbol]
     #
     def type
-      variable_to_accessor(@type)
+      @type.underscore.to_sym
     end
 
   end # Questionnaire::Question

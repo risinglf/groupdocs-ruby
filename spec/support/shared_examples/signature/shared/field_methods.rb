@@ -1,7 +1,7 @@
 shared_examples_for GroupDocs::Signature::FieldMethods do
 
   describe '#fields!' do
-    let(:document)  { GroupDocs::Document.new(file: GroupDocs::Storage::File.new) }
+    let(:document)  { GroupDocs::Document.new(:file => GroupDocs::Storage::File.new) }
     let(:recipient) { GroupDocs::Signature::Recipient.new }
 
     before(:each) do
@@ -10,16 +10,16 @@ shared_examples_for GroupDocs::Signature::FieldMethods do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.fields!(document, recipient, client_id: 'client_id', private_key: 'private_key')
+        subject.fields!(document, recipient, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'raises error if document is not GroupDocs::Document object' do
-      -> { subject.fields!('Document', recipient) }.should raise_error(ArgumentError)
+      lambda { subject.fields!('Document', recipient) }.should raise_error(ArgumentError)
     end
 
     it 'raises error if recipient is not GroupDocs::Signature::Recipient object' do
-      -> { subject.fields!(document, 'Recipient') }.should raise_error(ArgumentError)
+      lambda { subject.fields!(document, 'Recipient') }.should raise_error(ArgumentError)
     end
 
     it 'returns array of GroupDocs::Signature::Field objects' do
@@ -32,8 +32,8 @@ shared_examples_for GroupDocs::Signature::FieldMethods do
   end
 
   describe '#add_field!' do
-    let(:field)     { GroupDocs::Signature::Field.new(location: { location_x: 0.1, page: 1 }) }
-    let(:document)  { GroupDocs::Document.new(file: GroupDocs::Storage::File.new) }
+    let(:field)     { GroupDocs::Signature::Field.new(:location => { :location_x => 0.1, :page => 1 }) }
+    let(:document)  { GroupDocs::Document.new(:file => GroupDocs::Storage::File.new) }
     let(:recipient) { GroupDocs::Signature::Recipient.new }
 
     before(:each) do
@@ -42,25 +42,25 @@ shared_examples_for GroupDocs::Signature::FieldMethods do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.add_field!(field, document, recipient, { force_new_field: false }, client_id: 'client_id', private_key: 'private_key')
+        subject.add_field!(field, document, recipient, { :force_new_field => false }, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'raises error if field is not GroupDocs::Signature::Field object' do
-      -> { subject.add_field!('Field', document, recipient) }.should raise_error(ArgumentError)
+      lambda { subject.add_field!('Field', document, recipient) }.should raise_error(ArgumentError)
     end
 
     it 'raises error if document is not GroupDocs::Document object' do
-      -> { subject.add_field!(field, 'Document', recipient) }.should raise_error(ArgumentError)
+      lambda { subject.add_field!(field, 'Document', recipient) }.should raise_error(ArgumentError)
     end
 
     it 'raises error if recipient is not GroupDocs::Signature::Recipient object' do
-      -> { subject.add_field!(field, document, 'Recipient') }.should raise_error(ArgumentError)
+      lambda { subject.add_field!(field, document, 'Recipient') }.should raise_error(ArgumentError)
     end
 
     it 'raises error if field does not specify location' do
       field = GroupDocs::Signature::Field.new
-      -> { subject.add_field!(field, document, recipient) }.should raise_error(ArgumentError)
+      lambda { subject.add_field!(field, document, recipient) }.should raise_error(ArgumentError)
     end
 
     it 'uses field and field locationas payload' do
@@ -70,7 +70,7 @@ shared_examples_for GroupDocs::Signature::FieldMethods do
       field.should_receive(:to_hash).and_return(payload)
       field.location.should_receive(:to_hash).and_return(location)
       payload.should_receive(:merge!).with(location).and_return(payload)
-      payload.should_receive(:merge!).with(forceNewField: true).and_return({})
+      payload.should_receive(:merge!).with(:forceNewField => true).and_return({})
       subject.add_field!(field, document, recipient)
     end
 
@@ -81,14 +81,14 @@ shared_examples_for GroupDocs::Signature::FieldMethods do
       field.should_receive(:to_hash).and_return(payload)
       field.location.should_receive(:to_hash).and_return(location)
       payload.should_receive(:merge!).with(location).and_return(payload)
-      payload.should_receive(:merge!).with(forceNewField: false).and_return({})
-      subject.add_field!(field, document, recipient, force_new_field: false)
+      payload.should_receive(:merge!).with(:forceNewField => false).and_return({})
+      subject.add_field!(field, document, recipient, :force_new_field => false)
     end
   end
 
   describe '#modify_field!' do
     let(:field)    { GroupDocs::Signature::Field.new }
-    let(:document) { GroupDocs::Document.new(file: GroupDocs::Storage::File.new) }
+    let(:document) { GroupDocs::Document.new(:file => GroupDocs::Storage::File.new) }
 
     before(:each) do
       mock_api_server(load_json('signature_field_add'))
@@ -96,16 +96,16 @@ shared_examples_for GroupDocs::Signature::FieldMethods do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.modify_field!(field, document, client_id: 'client_id', private_key: 'private_key')
+        subject.modify_field!(field, document, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'raises error if field is not GroupDocs::Signature::Field object' do
-      -> { subject.modify_field!('Field', document) }.should raise_error(ArgumentError)
+      lambda { subject.modify_field!('Field', document) }.should raise_error(ArgumentError)
     end
 
     it 'raises error if document is not GroupDocs::Document object' do
-      -> { subject.modify_field!(field, 'Document') }.should raise_error(ArgumentError)
+      lambda { subject.modify_field!(field, 'Document') }.should raise_error(ArgumentError)
     end
 
     it 'uses field and first field location as payload' do
@@ -131,19 +131,19 @@ shared_examples_for GroupDocs::Signature::FieldMethods do
     end
 
     it 'raises error if field is not GroupDocs::Signature::Field object' do
-      -> { subject.delete_field!('Field') }.should raise_error(ArgumentError)
+      lambda { subject.delete_field!('Field') }.should raise_error(ArgumentError)
     end
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.delete_field!(field, client_id: 'client_id', private_key: 'private_key')
+        subject.delete_field!(field, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
   end
 
   describe '#modify_field_location!' do
     let(:field)     { GroupDocs::Signature::Field.new }
-    let(:document)  { GroupDocs::Document.new(file: GroupDocs::Storage::File.new) }
+    let(:document)  { GroupDocs::Document.new(:file => GroupDocs::Storage::File.new) }
     let(:recipient) { GroupDocs::Signature::Recipient.new }
     let(:location)  { GroupDocs::Signature::Field::Location.new }
 
@@ -152,24 +152,24 @@ shared_examples_for GroupDocs::Signature::FieldMethods do
     end
 
     it 'raises error if location is not GroupDocs::Signature::Field::Location object' do
-      -> { subject.modify_field_location!('Location', field, document, recipient) }.should raise_error(ArgumentError)
+      lambda { subject.modify_field_location!('Location', field, document, recipient) }.should raise_error(ArgumentError)
     end
 
     it 'raises error if field is not GroupDocs::Signature::Field object' do
-      -> { subject.modify_field_location!(location, 'Field', document, recipient) }.should raise_error(ArgumentError)
+      lambda { subject.modify_field_location!(location, 'Field', document, recipient) }.should raise_error(ArgumentError)
     end
 
     it 'raises error if document is not GroupDocs::Document object' do
-      -> { subject.modify_field_location!(location, field, 'Document', recipient) }.should raise_error(ArgumentError)
+      lambda { subject.modify_field_location!(location, field, 'Document', recipient) }.should raise_error(ArgumentError)
     end
 
     it 'raises error if recipient is not GroupDocs::Signature::Recipient object' do
-      -> { subject.modify_field_location!(location, field, document, 'Recipient') }.should raise_error(ArgumentError)
+      lambda { subject.modify_field_location!(location, field, document, 'Recipient') }.should raise_error(ArgumentError)
     end
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.modify_field_location!(location, field, document, recipient, client_id: 'client_id', private_key: 'private_key')
+        subject.modify_field_location!(location, field, document, recipient, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
   end
@@ -183,16 +183,16 @@ shared_examples_for GroupDocs::Signature::FieldMethods do
     end
 
     it 'raises error if location is not GroupDocs::Signature::Field::Location object' do
-      -> { subject.delete_field_location!('Location', field) }.should raise_error(ArgumentError)
+      lambda { subject.delete_field_location!('Location', field) }.should raise_error(ArgumentError)
     end
 
     it 'raises error if field is not GroupDocs::Signature::Field object' do
-      -> { subject.delete_field_location!(location, 'Field') }.should raise_error(ArgumentError)
+      lambda { subject.delete_field_location!(location, 'Field') }.should raise_error(ArgumentError)
     end
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.delete_field_location!(location, field, client_id: 'client_id', private_key: 'private_key')
+        subject.delete_field_location!(location, field, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
   end

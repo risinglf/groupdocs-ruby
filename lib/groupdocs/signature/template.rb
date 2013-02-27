@@ -65,9 +65,9 @@ module GroupDocs
         request[:method] = :POST
         request[:path] = "/signature/{{client_id}}/templates/#{id}/recipient"
       end
-      api.add_params(nickname: recipient.nickname,
-                     role:     recipient.role_id,
-                     order:    recipient.order)
+      api.add_params(:nickname => recipient.nickname,
+                     :role     => recipient.role_id,
+                     :order    => recipient.order)
       api.execute!
     end
 
@@ -95,7 +95,7 @@ module GroupDocs
         request[:method] = :PUT
         request[:path] = "/signature/{{client_id}}/templates/#{id}/recipient/#{recipient.id}"
       end
-      api.add_params(nickname: recipient.nickname, role: recipient.role_id, order: recipient.order)
+      api.add_params(:nickname => recipient.nickname, :role => recipient.role_id, :order => recipient.order)
       api.execute!
     end
 

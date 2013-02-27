@@ -11,12 +11,12 @@ describe GroupDocs::Signature::Contact do
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.get!({}, client_id: 'client_id', private_key: 'private_key')
+        described_class.get!({}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'allows passing options' do
-      -> { described_class.get!(page: 1, email: 'com') }.should_not raise_error(ArgumentError)
+      lambda { described_class.get!(:page => 1, :email => 'com') }.should_not raise_error(ArgumentError)
     end
 
     it 'returns array of GroupDocs::Signature::Contact objects' do
@@ -30,7 +30,7 @@ describe GroupDocs::Signature::Contact do
 
   describe '.import!' do
     let(:contact) do
-      described_class.new(first_name: 'John', last_name: 'Smith', email: 'john@smith.com')
+      described_class.new(:first_name => 'John', :last_name => 'Smith', :email => 'john@smith.com')
     end
 
     before(:each) do
@@ -39,16 +39,16 @@ describe GroupDocs::Signature::Contact do
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.import!([contact], client_id: 'client_id', private_key: 'private_key')
+        described_class.import!([contact], :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'raises error if contacts is not array' do
-      -> { described_class.import!(contact) }.should raise_error(ArgumentError)
+      lambda { described_class.import!(contact) }.should raise_error(ArgumentError)
     end
 
     it 'raises error if array element is not GroupDocs::Signature::Contact' do
-      -> { described_class.import!(%w(test)) }.should raise_error(ArgumentError)
+      lambda { described_class.import!(%w(test)) }.should raise_error(ArgumentError)
     end
 
     it 'uses hashed version of array elements as request body' do
@@ -74,7 +74,7 @@ describe GroupDocs::Signature::Contact do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.add!(client_id: 'client_id', private_key: 'private_key')
+        subject.add!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -97,7 +97,7 @@ describe GroupDocs::Signature::Contact do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.update!(client_id: 'client_id', private_key: 'private_key')
+        subject.update!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
@@ -114,7 +114,7 @@ describe GroupDocs::Signature::Contact do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.delete!(client_id: 'client_id', private_key: 'private_key')
+        subject.delete!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
   end
