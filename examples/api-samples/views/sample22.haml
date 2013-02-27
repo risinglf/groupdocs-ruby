@@ -1,8 +1,8 @@
 %h3{:style => "text-align:center;"}
   %a{:href => "/"} GroupDocs Ruby SDK Samples
-  \- Sample13
+  \- Sample22
 .samplecontent{:style => "padding:10px;"}
-  %i This sample will show how to add collaborator to doc with annotations using Ruby SDK
+  %i This sample will show how to View Document pages as images using Ruby SDK
   %br/
   %br/
   %p
@@ -16,11 +16,15 @@
   %p
     Email = #{(defined? email) ? email : ""}
   %p
+    First Name = #{(defined? first_name) ? first_name : ""}
+  %p
+    Last Name = #{(defined? last_name) ? last_name : ""}
+  %p
     %font{:color => "red"} #{(defined? err) ? err : ""}
   %br/
   #requestForm{:style => "padding:20px; border:1px solid black;"}
     %p Enter data for request and press "Make request" button
-    %form{:action => "/sample13", :method => "post"}
+    %form{:action => "/sample22", :method => "post"}
       %label{:for => "client_id"} GroupDocs ClientID
       %br/
       %input{:type=>"text", :name=>"client_id"}
@@ -33,19 +37,24 @@
       %br/
       %input{:type=>"text", :name=>"fileId"}
       %br/
-      %label{:for => "email"} Collaborator Email
+      %label{:for => "email"} E-mail
       %br/
       %input{:type=>"text", :name=>"email"}
       %br/
+      %label{:for => "first_name"} First name
+      %br/
+      %input{:type=>"text", :name=>"first_name"}
+      %br/
+      %label{:for => "last_name"} Last name
+      %br/
+      %input{:type=>"text", :name=>"last_name"}
       %br/
       %input{:type => "submit", :value => "Make request"}/
     %div{:style => "padding:20px; border:1px solid black;"}
       %p
-        Result:
-
-        - if defined? result.first
-          #{result.first.primary_email}
-
+        Results:
+        #{(defined? message) ? message : ""}
+        #{(defined? iframe) ? iframe : ""}
 
 %div{:style => "padding:10px;"}
   Choose another one sample:

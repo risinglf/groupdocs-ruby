@@ -274,6 +274,37 @@ module GroupDocs
     end
 
     #
+    # Returns array of URLs to images representing document pages thumbnails.
+    #
+    # @example
+    #   file = GroupDocs::Storage::Folder.list!.last
+    #   document = file.to_document
+    #   document.thumbnails! first_page: 0, page_count: 1, width: 1024
+    #
+    # @param [Hash] options
+    # @option options [Integer] :page_number Start page to return image for (starting with 0)
+    # @option options [Integer] :page_count Number of pages to return image for
+    # @option options [Integer] :width
+    # @option options [Integer] :quality
+    # @option options [Boolean] :use_pdf
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<String>]
+    #
+    def thumbnails!(options = {}, access = {})
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :POST
+        request[:path] = "/doc/{{client_id}}/files/#{file.guid}/thumbnails"
+      end
+      api.add_params(options)
+      json = api.execute!
+
+      json[:image_urls]
+    end
+
+    #
     # Returns access mode of document.
     #
     # @param [Hash] access Access credentials
