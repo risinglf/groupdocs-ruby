@@ -17,47 +17,30 @@ post '/sample18' do
 
     # make a request to API using client_id and private_key
     files_list = GroupDocs::Storage::Folder.list!('/', {}, { :client_id => settings.client_id, :private_key => settings.private_key})
-    document = ''
+    file = nil
 
     # get document by file ID
     files_list.each do |element|
       if element.respond_to?('guid') == true and element.guid == settings.file_id
-        document = element
+        file = element
       end
     end
 
-    message = ""
-    iframe = ""
-    unless document.instance_of? String
+    message = "No file with such GUID"
+    unless file.nil?
 
+      document = file.to_document
       # convert file
-      convert = document.to_document.convert!(settings.convert_type, {}, {:client_id => settings.client_id, :private_key => settings.private_key})
-      sleep(5)
+      convert = document.convert!(settings.convert_type, {}, {:client_id => settings.client_id, :private_key => settings.private_key})
+      sleep(10)
 
-      if convert.instance_of? GroupDocs::Job
-        # get all jobs
-        jobs = GroupDocs::Job::all!({}, {:client_id => settings.client_id, :private_key => settings.private_key})
-
-        # get job by job ID
-        job = ''
-        jobs.each do |element|
-          if element.id == convert.id
-            job = element
-          end
-        end
-
-        if job.status == :archived
-          # get job by ID
-          job = GroupDocs::Job.new(id: convert.id)
-          # get all job documents
-          documents = job.documents!({:client_id => settings.client_id, :private_key => settings.private_key})
-          # get compared file giud
-          guid =  documents[:inputs].first.outputs.first.guid
-          # construct result iframe
-          iframe = "<iframe src='https://apps.groupdocs.com/document-viewer/embed/#{guid}' frameborder='0' width='100%' height='600'></iframe>"
-          message = "<p>Converted file saved successfully."
-        end
-
+      original_document = convert.documents!({:client_id => settings.client_id, :private_key => settings.private_key})
+      # TODO: add Exception if not enough time for convertation
+      guid = original_document[:inputs].first.outputs.first.guid
+      
+      if guid
+        iframe = "<iframe src='https://apps.groupdocs.com/document-viewer/embed/#{guid}' frameborder='0' width='100%' height='600'></iframe>"
+        message = "<p>Converted file saved successfully."
       end
     end
 
