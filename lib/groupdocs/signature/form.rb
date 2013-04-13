@@ -67,6 +67,10 @@ module GroupDocs
     attr_accessor :canParticipantDownloadForm
     # @attr [Symbol] status
     attr_accessor :status
+    # @attr [String] watermarkText
+    attr_accessor :watermarkText
+    # @attr [String] watermarkImage
+    attr_accessor :watermarkImage
 
     # Human-readable accessors
     alias_accessor :owner_guid,                    :ownerGuid
@@ -78,6 +82,8 @@ module GroupDocs
     alias_accessor :participants_count,            :participantsCount
     alias_accessor :fields_in_final_file_name,     :fieldsInFinalFileName
     alias_accessor :can_participant_download_form, :canParticipantDownloadForm
+    alias_accessor :watermark_text,                :watermarkText
+    alias_accessor :watermark_image,               :watermarkImage
 
     #
     # Converts status to human-readable format.
