@@ -121,6 +121,39 @@ shared_examples_for GroupDocs::Signature::FieldMethods do
     end
   end
 
+  describe '#assign_field!' do
+    let(:field)       { GroupDocs::Signature::Field.new }
+    let(:document)    { GroupDocs::Document.new(:file => GroupDocs::Storage::File.new) }
+    let(:assign_from) { GroupDocs::Signature::Recipient.new }
+    let(:assign_to)   { GroupDocs::Signature::Recipient.new }
+
+    before(:each) do
+      mock_api_server(load_json('signature_field_add'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.assign_field!(field, document, assign_from, assign_to, :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'raises error if field is not GroupDocs::Signature::Field object' do
+      lambda { subject.assign_field!('Field', document, assign_from, assign_to) }.should raise_error(ArgumentError)
+    end
+
+    it 'raises error if document is not GroupDocs::Document object' do
+      lambda { subject.assign_field!(field, 'Document', assign_from, assign_to) }.should raise_error(ArgumentError)
+    end
+
+    it 'raises error if assign from is not GroupDocs::Signature::Recipient object' do
+      lambda { subject.assign_field!(field, document, 'Assign', assign_to) }.should raise_error(ArgumentError)
+    end
+
+    it 'raises error if assign to is not GroupDocs::Signature::Recipient object' do
+      lambda { subject.assign_field!(field, document, assign_from, 'Assign') }.should raise_error(ArgumentError)
+    end
+  end
+
   describe '#delete_field!' do
     let(:field) do
       GroupDocs::Signature::Field.new
