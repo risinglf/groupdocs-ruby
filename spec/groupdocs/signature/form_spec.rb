@@ -84,37 +84,31 @@ describe GroupDocs::Signature::Form do
   end
 
   describe '#create!' do
-    let(:template) { GroupDocs::Signature::Template.new }
-
     before(:each) do
       mock_api_server(load_json('form_get'))
     end
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.create!(template, {}, :client_id => 'client_id', :private_key => 'private_key')
+        subject.create!({}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'accepts options hash' do
       lambda do
-        subject.create!(template, :assembly_id => 'aodfh43yr9834hf943h')
+        subject.create!(:assembly_id => 'aodfh43yr9834hf943h')
       end.should_not raise_error(ArgumentError)
     end
 
     it 'uses hashed version of self as request body' do
       subject.should_receive(:to_hash)
-      subject.create!(template)
+      subject.create!
     end
 
     it 'updates identifier of entity' do
       lambda do
-        subject.create!(template)
+        subject.create!
       end.should change(subject, :id)
-    end
-
-    it 'raises error if template is not GroupDocs::Signature::Template object' do
-      lambda { subject.create!('Template') }.should raise_error(ArgumentError)
     end
   end
 

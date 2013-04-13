@@ -117,24 +117,22 @@ module GroupDocs
     # Creates form.
     #
     # @example
-    #   template = GroupDocs::Singature::Template!.get!('09662aab7187f31444476288ebaf7da4')
     #   form = GroupDocs::Signature::Form.new
     #   form.name = "Form"
     #   form.create! template
     #
-    # @param [GroupDocs::Signature::Template] template
     # @param [Hash] options Hash of options
-    # @option options [Integer] :assembly_id Assembly GUID to use
+    # @option options [String] :template_id Template GUID to create form from
+    # @option options [Integer] :assembly_id Questionnaire identifier to create form from
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
     # @raise [ArgumentError] if template is not GroupDocs::Signature::Template
     #
-    def create!(template, options = {}, access = {})
-      template.is_a?(GroupDocs::Signature::Template) or raise ArgumentError,
-        "Template should be GroupDocs::Signature::Template object, received: #{template.inspect}"
-
+    def create!(options = {}, access = {})      
+      template_id = options.delete(:template_id)
       assembly_id = options.delete(:assembly_id)
+      options[:templateId] = template_id if template_id
       options[:assemblyId] = assembly_id if assembly_id
 
       api = Api::Request.new do |request|
@@ -143,7 +141,7 @@ module GroupDocs
         request[:path] = '/signature/{{client_id}}/form'
         request[:request_body] = to_hash
       end
-      api.add_params(options.merge(:name => name, :templateId => template.id))
+      api.add_params(options.merge(:name => name))
       json = api.execute!
 
       self.id = json[:form][:id]
