@@ -38,6 +38,8 @@ describe GroupDocs::Signature do
   it { should have_accessor(:initialsImageFileId)  }
   it { should have_accessor(:signatureImageUrl)    }
   it { should have_accessor(:initialsImageUrl)     }
+  it { should have_accessor(:signatureData)        }
+  it { should have_accessor(:initialsData)         }
   it { should have_accessor(:createdTimeStamp)     }
   it { should have_accessor(:image_path)           }
 
@@ -52,6 +54,8 @@ describe GroupDocs::Signature do
   it { should alias_accessor(:initials_image_file_id, :initialsImageFileId)   }
   it { should alias_accessor(:signature_image_url, :signatureImageUrl)        }
   it { should alias_accessor(:initials_image_url, :initialsImageUrl)          }
+  it { should alias_accessor(:signature_data, :signatureData)                 }
+  it { should alias_accessor(:initials_data, :initialsData)                   }
   it { should alias_accessor(:created_time_stamp, :createdTimeStamp)          }
 
   describe '#create!' do
