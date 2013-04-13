@@ -194,7 +194,7 @@ module GroupDocs
           request[:access] = access
           request[:method] = :POST
           request[:path] = "/signature/{{client_id}}/#{class_name.pluralize}/#{id}/documents/#{document.file.guid}/field/#{field.id}",
-          request[:request_body] = { currentRecipientId: assign_from.id, newRecipientId: assign_to.id }
+          request[:request_body] = { :currentRecipientId => assign_from.id, :newRecipientId => assign_to.id }
         end.execute!
       end
 
