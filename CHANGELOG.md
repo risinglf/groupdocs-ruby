@@ -1,3 +1,35 @@
+## v1.4
+
+**New**
+
+* Added watermark support to `Signature::EntityFields` and `Signature::Form`
+* Added signature and initials data support to `Signature`
+* Added `Signature::Envelope#is_demo`
+* Added `:scheduled` status for `Envelope`
+* Added `Envelope#delegate_recipient!`
+* Added `Envelope#signed_document!`
+* Added `Signature::FieldMethods#assign_field!` support in templates and envelopes
+* Added `Signature::Contact#add_integration!`
+* `Signature::Form` now supports document methods
+* `Signature::Form` now supports field methods
+
+**Changes**
+
+* Fixed `#owner_should_sign` and `#ordered_signature` in `Signature::EntityFields` as API now return boolean values
+* Fixed `Signature::Role#can*` methods as API now return boolean values
+* `Signature::Field#acceptable_values` should properly handle arrays
+* `Signature::Form#fields_in_final_file_name` should properly handle arrays
+* `Signature::DocumentMethods#documents!` now find documents both by `:documentId` and `:id`
+* `Signature::Form#create!` now can be created without template
+
+## v1.3
+
+**New**
+
+* Added Ruby 1.8 support
+* Added Ruby 2.0 support
+* Added `Document#thumbnails!`
+
 ## v1.2
 
 **New**
