@@ -36,6 +36,10 @@ module GroupDocs
       attr_accessor :documentsPages
       # @attr [Array<GroupDocs::Signature::Contact>] recipients
       attr_accessor :recipients
+      # @attr [String] watermarkText
+      attr_accessor :watermarkText
+      # @attr [String] watermarkImage
+      attr_accessor :watermarkImage
 
       # Human-readable accessors
       alias_accessor :owner_id,          :ownerId
@@ -48,6 +52,8 @@ module GroupDocs
       alias_accessor :email_body,        :emailBody
       alias_accessor :documents_count,   :documentsCount
       alias_accessor :documents_pages,   :documentsPages
+      alias_accessor :watermark_text,    :watermarkText
+      alias_accessor :watermark_image,   :watermarkImage
 
       #
       # Converts each recipient to GroupDocs::Signature::Recipient object.
@@ -63,22 +69,6 @@ module GroupDocs
             end
           end
         end
-      end
-
-      #
-      # Returns true if owner should sign.
-      # @return [Boolean]
-      #
-      def owner_should_sign
-        @ownerShouldSign == 1 ? true : false
-      end
-
-      #
-      # Returns ordered signature type.
-      # @return [Symbol]
-      #
-      def ordered_signature
-        @orderedSignature == 1 ? :parallel : :ordered
       end
 
     end # EntityFields
