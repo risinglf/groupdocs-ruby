@@ -88,6 +88,8 @@ module GroupDocs
     attr_accessor :statusDateTime
     # @attr [Integer] envelopeExpireTime
     attr_accessor :envelopeExpireTime
+    # @attr [Boolean] isDemo
+    attr_accessor :isDemo
     # @attr [Symbol] status
     attr_accessor :status
 
@@ -95,6 +97,7 @@ module GroupDocs
     alias_accessor :creation_date_time,   :creationDateTime
     alias_accessor :status_date_time,     :statusDateTime
     alias_accessor :envelope_expire_time, :envelopeExpireTime
+    alias_accessor :is_demo,              :isDemo
 
     #
     # Converts status to human-readable format.
