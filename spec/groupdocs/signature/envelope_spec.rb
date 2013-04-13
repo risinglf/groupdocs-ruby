@@ -117,6 +117,29 @@ describe GroupDocs::Signature::Envelope do
     end
   end
 
+  describe '#delegate_recipient!' do
+    let(:old) { GroupDocs::Signature::Recipient.new }
+    let(:new) { GroupDocs::Signature::Recipient.new }
+
+    before(:each) do
+      mock_api_server('{ "status": "Ok", "result": {}}')
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.delegate_recipient!(old, new, :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'raises error if old recipient is not GroupDocs::Signature::Recipient object' do
+      lambda { subject.delegate_recipient!('Recipient', new) }.should raise_error(ArgumentError)
+    end
+
+    it 'raises error if new recipient is not GroupDocs::Signature::Recipient object' do
+      lambda { subject.delegate_recipient!(old, 'Recipient') }.should raise_error(ArgumentError)
+    end
+  end
+
   describe '#fill_field!' do
     let(:field)     { GroupDocs::Signature::Field.new(:location => { :location_x => 0.1, :page => 1 }) }
     let(:document)  { GroupDocs::Document.new(:file => GroupDocs::Storage::File.new) }

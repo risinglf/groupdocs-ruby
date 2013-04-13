@@ -177,6 +177,44 @@ module GroupDocs
     end
 
     #
+    # Delegates recipient to another one.
+    #
+    # @example
+    #   envelope = GroupDocs::Signature::Envelope.get!("g94h5g84hj9g4gf23i40j")
+    #   old = envelope.recipients!.first
+    #   old.first_name = 'Johnny'
+    #   new = GroupDocs::Signature::Recipient.new
+    #   new.email = 'john@smith.com'
+    #   new.first_name = 'John'
+    #   new.last_name = 'Smith'
+    #   envelope.delegate_recipient! old, new
+    #
+    # @param [GroupDocs::Signature::Recipient] old
+    # @param [GroupDocs::Signature::Recipient] new
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @raise [ArgumentError] if old recipient is not GroupDocs::Signature::Recipient
+    # @raise [ArgumentError] if new recipient is not GroupDocs::Signature::Recipient
+    #
+    def delegate_recipient!(old, new, access = {})
+      old.is_a?(GroupDocs::Signature::Recipient) or raise ArgumentError,
+        "Old recipient should be GroupDocs::Signature::Recipient object, received: #{old.inspect}"
+      new.is_a?(GroupDocs::Signature::Recipient) or raise ArgumentError,
+        "New recipient should be GroupDocs::Signature::Recipient object, received: #{new.inspect}"
+
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :POST
+        request[:path] = "/signature/{{client_id}}/envelopes/#{id}/recipient/#{old.id}/delegate"
+      end
+      api.add_params(:email     => new.email,
+                     :firstname => new.first_name,
+                     :lastname  => new.last_name)
+      api.execute!
+    end
+
+    #
     # Fills field with value.
     #
     # Value differs depending on field type. See examples below.
