@@ -267,7 +267,7 @@ describe GroupDocs::Signature::Envelope do
         mock_api_server(File.read('spec/support/files/resume.pdf'))
       end
 
-      it 'downloads ZIP file' do
+      it 'downloads PDF file' do
         file = stub('file')
         subject.stub(:documents! => [1])
         Object::File.should_receive(:open).with("#{path}/#{subject.name}.pdf", 'wb').and_yield(file)
@@ -288,6 +288,33 @@ describe GroupDocs::Signature::Envelope do
         file.should_receive(:write).with(File.read('spec/support/files/envelope.zip'))
         subject.signed_documents!(path)
       end
+    end
+  end
+
+  describe '#signed_document!' do
+    before(:each) do
+      mock_api_server(File.read('spec/support/files/resume.pdf'))
+      subject.name = 'envelope'
+    end
+
+    let(:path)     { Dir.tmpdir }
+    let(:document) { GroupDocs::Document.new(:file => GroupDocs::Storage::File.new) }
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.signed_document!(document, path, :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns saved file path' do
+      subject.signed_document!(document, path).should == "#{path}/#{subject.name}.pdf"
+    end
+
+    it 'downloads PDF file' do
+      file = stub('file')
+      Object::File.should_receive(:open).with("#{path}/#{subject.name}.pdf", 'wb').and_yield(file)
+      file.should_receive(:write).with(File.read('spec/support/files/resume.pdf'))
+      subject.signed_document!(document, path)
     end
   end
 

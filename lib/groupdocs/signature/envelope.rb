@@ -355,6 +355,35 @@ module GroupDocs
     end
 
     #
+    # Downloads signed document to given path.
+    #
+    # @param [GroupDocs::Document] document Signed document
+    # @param [String] path Directory to download file to
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [String] path to file
+    #
+    def signed_document!(document, path, access = {})
+      document.is_a?(GroupDocs::Document) or raise ArgumentError,
+        "Document should be GroupDocs::Document object, received: #{document.inspect}"
+
+      response = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :DOWNLOAD
+        request[:path] = "/signature/{{client_id}}/envelopes/#{id}/document/#{document.file.guid}"
+      end.execute!
+
+      filepath = "#{path}/#{name}.pdf"
+
+      Object::File.open(filepath, 'wb') do |file|
+        file.write(response)
+      end
+
+      filepath
+    end
+
+    #
     # Returns a list of audit logs.
     #
     # @param [Hash] access Access credentials
