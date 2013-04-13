@@ -55,7 +55,7 @@ module GroupDocs
       #
       # @example Add field to template
       #   template = GroupDocs::Signature::Template.get!("g94h5g84hj9g4gf23i40j")
-      #   field = GroupDocs::Signature::Field.get!.detect { |f| f.name == "Signature" }
+      #   field = GroupDocs::Signature::Field.get!.detect { |f| f.type == :signature }
       #   field.location = { location_x: 0.1, location_y: 0.1, page: 1 }
       #   document = template.documents!.first
       #   recipient = template.recipients!.first
@@ -63,7 +63,7 @@ module GroupDocs
       #
       # @example Add field to envelope
       #   envelope = GroupDocs::Signature::Envelope.get!("g94h5g84hj9g4gf23i40j")
-      #   field = GroupDocs::Signature::Field.get!.detect { |f| f.name == "Signature" }
+      #   field = GroupDocs::Signature::Field.get!.detect { |f| f.type == :signature }
       #   field.location = { location_x: 0.1, location_y: 0.1, page: 1 }
       #   document = envelope.documents!.first
       #   recipient = envelope.recipients!.first
@@ -148,6 +148,53 @@ module GroupDocs
           request[:method] = :PUT
           request[:path] = "/signature/{{client_id}}/#{class_name.pluralize}/#{id}/documents/#{document.file.guid}/field/#{field.id}"
           request[:request_body] = payload
+        end.execute!
+      end
+
+      #
+      # Assigns document field to new recipient.
+      #
+      # @example Assign template field
+      #   template = GroupDocs::Signature::Template.get!("g94h5g84hj9g4gf23i40j")
+      #   document = template.documents!.first
+      #   recipient_one = template.recipients![0]
+      #   recipient_two = template.recipients![1]
+      #   field = template.fields!(document, recipient).first
+      #   template.assign_field! field, document, recipient_one, recipient_two
+      #
+      # @example Assign envelope field
+      #   envelope = GroupDocs::Signature::Envelope.get!("g94h5g84hj9g4gf23i40j")
+      #   document = envelope.documents!.first
+      #   recipient_one = envelope.recipients![0]
+      #   recipient_two = envelope.recipients![1]
+      #   field = envelope.fields!(document, recipient).first
+      #   envelope.assign_field! field, document, recipient_one, recipient_two
+      #
+      # @param [GroupDocs::Signature::Field] field
+      # @param [GroupDocs::Document] document
+      # @param [GroupDocs::Signature::Recipient] assign_from
+      # @param [GroupDocs::Signature::Recipient] assign_to
+      # @param [Hash] access Access credentials
+      # @option access [String] :client_id
+      # @option access [String] :private_key
+      # @raise [ArgumentError] if field is not GroupDocs::Signature::Field
+      # @raise [ArgumentError] if document is not GroupDocs::Document
+      #
+      def assign_field!(field, document, assign_from, assign_to, access = {})
+        field.is_a?(GroupDocs::Signature::Field) or raise ArgumentError,
+          "Field should be GroupDocs::Signature::Field object, received: #{field.inspect}"
+        document.is_a?(GroupDocs::Document) or raise ArgumentError,
+          "Document should be GroupDocs::Document object, received: #{document.inspect}"
+        assign_from.is_a?(GroupDocs::Signature::Recipient) or raise ArgumentError,
+          "Assign from should be GroupDocs::Signature::Recipient object, received: #{assign_from.inspect}"
+        assign_to.is_a?(GroupDocs::Signature::Recipient) or raise ArgumentError,
+          "Assign to should be GroupDocs::Signature::Recipient object, received: #{assign_to.inspect}"
+
+        Api::Request.new do |request|
+          request[:access] = access
+          request[:method] = :POST
+          request[:path] = "/signature/{{client_id}}/#{class_name.pluralize}/#{id}/documents/#{document.file.guid}/field/#{field.id}",
+          request[:request_body] = { :currentRecipientId => assign_from.id, :newRecipientId => assign_to.id }
         end.execute!
       end
 
@@ -258,6 +305,13 @@ module GroupDocs
       #   field = envelope.fields!(document, recipient).first
       #   location = field.locations.first
       #   envelope.delete_field_location! location, field
+      #
+      # @example Delete field location in form
+      #   form = GroupDocs::Signature::Form.get!("g94h5g84hj9g4gf23i40j")
+      #   document = form.documents!.first
+      #   field = form.fields!(document).first
+      #   location = field.locations.first
+      #   form.delete_field_location! location, field
       #
       # @param [GroupDocs::Signature::Field::Location] location
       # @param [GroupDocs::Signature::Field] field

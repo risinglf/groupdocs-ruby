@@ -485,13 +485,16 @@ module GroupDocs
     #   document = GroupDocs::Storage::Folder.list!.first.to_document
     #   job = document.convert!(:docx)
     #   sleep(5) # wait for server to finish converting
-    #   original_document = job.documents!.first
+    #   original_document = job.documents![:inputs].first
     #   converted_file = original_file.outputs.first
     #   converted_file.download!(File.dirname(__FILE__))
     #
     # @param [Symbol] format
     # @param [Hash] options
-    # @option options [Boolean] :email_results Set to true if converted document should be emailed
+    # @option options [Boolean] :email_results
+    # @option options [String] :new_description
+    # @option options [String] :print_script
+    # @option options [String] :callback
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key

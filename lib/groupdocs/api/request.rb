@@ -21,7 +21,7 @@ module GroupDocs
       # @example
       #   api = GroupDocs::Api::Request.new do |request|
       #     request[:method] = :POST
-      #     request[:path] = "/storage/#{GroupDocs.client_id}/info"
+      #     request[:path] = "/storage/{{client_id}}/info"
       #   end
       #
       # @param [Hash] options

@@ -72,7 +72,6 @@ describe GroupDocs::Signature::Field do
   it { should alias_accessor(:font_italic,        :fontItalic)        }
   it { should alias_accessor(:font_underline,     :fontUnderline)     }
   it { should alias_accessor(:is_system,          :isSystem)          }
-  it { should alias_accessor(:acceptable_values,  :acceptableValues)  }
   it { should alias_accessor(:default_value,      :defaultValue)      }
   it { should alias_accessor(:text_rows,          :textRows)          }
   it { should alias_accessor(:text_columns,       :textColumns)       }
@@ -160,6 +159,25 @@ describe GroupDocs::Signature::Field do
 
     it 'is aliased to #type' do
       subject.should have_alias(:type, :field_type)
+    end
+  end
+
+  describe '#acceptable_values=' do
+    it 'converts values in machine-readable format if array is passed' do
+      subject.acceptable_values = %w(on off)
+      subject.instance_variable_get(:@acceptableValues).should == 'on;off'
+    end
+
+    it 'saves values as is if not an array is passed' do
+      subject.acceptable_values = 'on;off'
+      subject.instance_variable_get(:@acceptableValues).should == 'on;off'
+    end
+  end
+
+  describe '#acceptable_values' do
+    it 'returns values in human-readable format' do
+      subject.acceptable_values = %w(on off)
+      subject.acceptable_values.should == %w(on off)
     end
   end
 

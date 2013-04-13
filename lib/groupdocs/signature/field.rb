@@ -72,7 +72,7 @@ module GroupDocs
     attr_accessor :mandatory
     # @attr [Symbol] fieldType
     attr_accessor :fieldType
-    # @attr [Boolean] acceptableValues
+    # @attr [Array<String>] acceptableValues
     attr_accessor :acceptableValues
     # @attr [String] defaultValue
     attr_accessor :defaultValue
@@ -109,7 +109,6 @@ module GroupDocs
     alias_accessor :font_italic,        :fontItalic
     alias_accessor :font_underline,     :fontUnderline
     alias_accessor :is_system,          :isSystem
-    alias_accessor :acceptable_values,  :acceptableValues
     alias_accessor :default_value,      :defaultValue
     alias_accessor :text_rows,          :textRows
     alias_accessor :text_columns,       :textColumns
@@ -164,6 +163,26 @@ module GroupDocs
       FIELD_TYPES.invert[@fieldType]
     end
     alias_method :type, :field_type
+
+    #
+    # Converts array of acceptable values to machine-readable format.
+    # @param [Array<String>] values
+    #
+    def acceptable_values=(values)
+      if values.is_a?(Array)
+        values = values.join(';')
+      end
+
+      @acceptableValues = values
+    end
+
+    #
+    # Converts acceptable values to human-readable format.
+    # @return [Array<String>]
+    #
+    def acceptable_values
+      @acceptableValues.split(';') if @acceptableValues
+    end
 
     #
     # Creates signature field.

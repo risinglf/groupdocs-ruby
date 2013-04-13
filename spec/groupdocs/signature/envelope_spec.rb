@@ -62,11 +62,13 @@ describe GroupDocs::Signature::Envelope do
   it { should have_accessor(:status)             }
   it { should have_accessor(:statusDateTime)     }
   it { should have_accessor(:envelopeExpireTime) }
+  it { should have_accessor(:isDemo)             }
   it { should have_accessor(:status)             }
 
   it { should alias_accessor(:creation_date_time, :creationDateTime)     }
   it { should alias_accessor(:status_date_time, :statusDateTime)         }
   it { should alias_accessor(:envelope_expire_time, :envelopeExpireTime) }
+  it { should alias_accessor(:is_demo, :isDemo)                          }
 
   describe '#status' do
     it 'converts status to human-readable format' do
@@ -112,6 +114,29 @@ describe GroupDocs::Signature::Envelope do
 
     it 'raises error if recipient is not GroupDocs::Signature::Recipient object' do
       lambda { subject.modify_recipient!('Recipient') }.should raise_error(ArgumentError)
+    end
+  end
+
+  describe '#delegate_recipient!' do
+    let(:old) { GroupDocs::Signature::Recipient.new }
+    let(:new) { GroupDocs::Signature::Recipient.new }
+
+    before(:each) do
+      mock_api_server('{ "status": "Ok", "result": {}}')
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.delegate_recipient!(old, new, :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'raises error if old recipient is not GroupDocs::Signature::Recipient object' do
+      lambda { subject.delegate_recipient!('Recipient', new) }.should raise_error(ArgumentError)
+    end
+
+    it 'raises error if new recipient is not GroupDocs::Signature::Recipient object' do
+      lambda { subject.delegate_recipient!(old, 'Recipient') }.should raise_error(ArgumentError)
     end
   end
 
@@ -242,7 +267,7 @@ describe GroupDocs::Signature::Envelope do
         mock_api_server(File.read('spec/support/files/resume.pdf'))
       end
 
-      it 'downloads ZIP file' do
+      it 'downloads PDF file' do
         file = stub('file')
         subject.stub(:documents! => [1])
         Object::File.should_receive(:open).with("#{path}/#{subject.name}.pdf", 'wb').and_yield(file)
@@ -263,6 +288,33 @@ describe GroupDocs::Signature::Envelope do
         file.should_receive(:write).with(File.read('spec/support/files/envelope.zip'))
         subject.signed_documents!(path)
       end
+    end
+  end
+
+  describe '#signed_document!' do
+    before(:each) do
+      mock_api_server(File.read('spec/support/files/resume.pdf'))
+      subject.name = 'envelope'
+    end
+
+    let(:path)     { Dir.tmpdir }
+    let(:document) { GroupDocs::Document.new(:file => GroupDocs::Storage::File.new) }
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.signed_document!(document, path, :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns saved file path' do
+      subject.signed_document!(document, path).should == "#{path}/#{subject.name}.pdf"
+    end
+
+    it 'downloads PDF file' do
+      file = stub('file')
+      Object::File.should_receive(:open).with("#{path}/#{subject.name}.pdf", 'wb').and_yield(file)
+      file.should_receive(:write).with(File.read('spec/support/files/resume.pdf'))
+      subject.signed_document!(document, path)
     end
   end
 

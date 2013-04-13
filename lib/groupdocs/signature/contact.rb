@@ -1,6 +1,12 @@
 module GroupDocs
   class Signature::Contact < Api::Entity
 
+    INTEGRATION_PROVIDERS = {
+      :local     => 0,
+      :groupdocs => 1,
+      :google    => 2,
+    }
+
     #
     # Returns a list of all contacts.
     #
@@ -59,6 +65,42 @@ module GroupDocs
         request[:method] = :POST
         request[:path] = '/signature/{{client_id}}/contacts'
         request[:request_body] = contacts.map { |contact| contact.to_hash }
+      end.execute!
+    end
+
+    #
+    # Adds contact integration.
+    #
+    # @example Add Google contacts integration
+    #   integration = {
+    #     provider:                :google,
+    #     refresh_token:           'token',
+    #     access_token:            'token',
+    #     access_token_expiration: '2014-12-12'
+    #   }
+    #
+    # @param [Hash] integration
+    # @option integration [Symbol] provider One of :local, :groupdocs or :google
+    # @option integration [String] refresh_token
+    # @option integration [String] access_token
+    # @option integration [String] access_token_exipration
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def self.add_integration!(integration, access = {})
+      payload = {
+        :provider              => INTEGRATION_PROVIDERS[integration[:provider]],
+        :refreshToken          => integration[:refresh_token],
+        :accessToken           => integration[:access_token],
+        :accessTokenExpiration => integration[:access_token_expiration],
+      }
+
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :POST
+        request[:path] = '/signature/{{client_id}}/integration'
+        request[:request_body] = payload
       end.execute!
     end
 

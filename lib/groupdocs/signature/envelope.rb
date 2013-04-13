@@ -12,6 +12,7 @@ module GroupDocs
       :failed      =>  4,
       :completed   =>  5,
       :archived    =>  6,
+      :scheduled   => 99,
     }
 
     include Signature::DocumentMethods
@@ -88,6 +89,8 @@ module GroupDocs
     attr_accessor :statusDateTime
     # @attr [Integer] envelopeExpireTime
     attr_accessor :envelopeExpireTime
+    # @attr [Boolean] isDemo
+    attr_accessor :isDemo
     # @attr [Symbol] status
     attr_accessor :status
 
@@ -95,6 +98,7 @@ module GroupDocs
     alias_accessor :creation_date_time,   :creationDateTime
     alias_accessor :status_date_time,     :statusDateTime
     alias_accessor :envelope_expire_time, :envelopeExpireTime
+    alias_accessor :is_demo,              :isDemo
 
     #
     # Converts status to human-readable format.
@@ -169,6 +173,44 @@ module GroupDocs
                      :lastname  => recipient.last_name,
                      :role      => recipient.role_id,
                      :order     => recipient.order)
+      api.execute!
+    end
+
+    #
+    # Delegates recipient to another one.
+    #
+    # @example
+    #   envelope = GroupDocs::Signature::Envelope.get!("g94h5g84hj9g4gf23i40j")
+    #   old = envelope.recipients!.first
+    #   old.first_name = 'Johnny'
+    #   new = GroupDocs::Signature::Recipient.new
+    #   new.email = 'john@smith.com'
+    #   new.first_name = 'John'
+    #   new.last_name = 'Smith'
+    #   envelope.delegate_recipient! old, new
+    #
+    # @param [GroupDocs::Signature::Recipient] old
+    # @param [GroupDocs::Signature::Recipient] new
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @raise [ArgumentError] if old recipient is not GroupDocs::Signature::Recipient
+    # @raise [ArgumentError] if new recipient is not GroupDocs::Signature::Recipient
+    #
+    def delegate_recipient!(old, new, access = {})
+      old.is_a?(GroupDocs::Signature::Recipient) or raise ArgumentError,
+        "Old recipient should be GroupDocs::Signature::Recipient object, received: #{old.inspect}"
+      new.is_a?(GroupDocs::Signature::Recipient) or raise ArgumentError,
+        "New recipient should be GroupDocs::Signature::Recipient object, received: #{new.inspect}"
+
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :POST
+        request[:path] = "/signature/{{client_id}}/envelopes/#{id}/recipient/#{old.id}/delegate"
+      end
+      api.add_params(:email     => new.email,
+                     :firstname => new.first_name,
+                     :lastname  => new.last_name)
       api.execute!
     end
 
@@ -304,6 +346,35 @@ module GroupDocs
       else
         filepath << 'zip'
       end
+
+      Object::File.open(filepath, 'wb') do |file|
+        file.write(response)
+      end
+
+      filepath
+    end
+
+    #
+    # Downloads signed document to given path.
+    #
+    # @param [GroupDocs::Document] document Signed document
+    # @param [String] path Directory to download file to
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [String] path to file
+    #
+    def signed_document!(document, path, access = {})
+      document.is_a?(GroupDocs::Document) or raise ArgumentError,
+        "Document should be GroupDocs::Document object, received: #{document.inspect}"
+
+      response = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :DOWNLOAD
+        request[:path] = "/signature/{{client_id}}/envelopes/#{id}/document/#{document.file.guid}"
+      end.execute!
+
+      filepath = "#{path}/#{name}.pdf"
 
       Object::File.open(filepath, 'wb') do |file|
         file.write(response)

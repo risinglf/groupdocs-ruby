@@ -24,7 +24,8 @@ module GroupDocs
         end.execute!
 
         json[:documents].map do |document|
-          file = Storage::File.new(:guid => document[:documentId], :name => document[:name])
+          id = document[:documentId] || document[:id]
+          file = Storage::File.new(:guid => id, :name => document[:name])
           Document.new(document.merge(:file => file))
         end
       end

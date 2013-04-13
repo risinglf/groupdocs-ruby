@@ -57,6 +57,27 @@ describe GroupDocs::Signature::Contact do
     end
   end
 
+  describe '.add_integration!' do
+    before(:each) do
+      mock_api_server('{ "status": "Ok", "result": { "contact": null }}')
+    end
+
+    let(:integration) do
+      {
+        :provider                => :google,
+        :refresh_token           => 'token',
+        :access_token            => 'token',
+        :access_token_expiration => '2014-12-12'
+      }
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        described_class.add_integration!(integration, :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
   it { should have_accessor(:id)        }
   it { should have_accessor(:firstName) }
   it { should have_accessor(:lastName)  }

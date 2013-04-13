@@ -61,6 +61,10 @@ module GroupDocs
     attr_accessor :signatureImageUrl
     # @attr [String] initialsImageUrl
     attr_accessor :initialsImageUrl
+    # @attr [String] signatureData
+    attr_accessor :signatureData
+    # @attr [String] initialsData
+    attr_accessor :initialsData
     # @attr [String] createdTimeStamp
     attr_accessor :createdTimeStamp
     # @attr [String] image_path
@@ -78,6 +82,8 @@ module GroupDocs
     alias_accessor :initials_image_file_id,  :initialsImageFileId
     alias_accessor :signature_image_url,     :signatureImageUrl
     alias_accessor :initials_image_url,      :initialsImageUrl
+    alias_accessor :signature_data,          :signatureData
+    alias_accessor :initials_data,           :initialsData
     alias_accessor :created_time_stamp,      :createdTimeStamp
 
     #
