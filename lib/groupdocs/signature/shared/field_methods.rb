@@ -55,7 +55,7 @@ module GroupDocs
       #
       # @example Add field to template
       #   template = GroupDocs::Signature::Template.get!("g94h5g84hj9g4gf23i40j")
-      #   field = GroupDocs::Signature::Field.get!.detect { |f| f.name == "Signature" }
+      #   field = GroupDocs::Signature::Field.get!.detect { |f| f.type == :signature }
       #   field.location = { location_x: 0.1, location_y: 0.1, page: 1 }
       #   document = template.documents!.first
       #   recipient = template.recipients!.first
@@ -63,7 +63,7 @@ module GroupDocs
       #
       # @example Add field to envelope
       #   envelope = GroupDocs::Signature::Envelope.get!("g94h5g84hj9g4gf23i40j")
-      #   field = GroupDocs::Signature::Field.get!.detect { |f| f.name == "Signature" }
+      #   field = GroupDocs::Signature::Field.get!.detect { |f| f.type == :signature }
       #   field.location = { location_x: 0.1, location_y: 0.1, page: 1 }
       #   document = envelope.documents!.first
       #   recipient = envelope.recipients!.first

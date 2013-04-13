@@ -52,8 +52,8 @@ module GroupDocs
       #   envelope.create!
       #
       # @param [Hash] options Hash of options
-      # @option options [Integer] :template_id Template GUID to use
-      # @option options [Integer] :envelope_id Envelope GUID to use
+      # @option options [String] :template_id Template GUID to use
+      # @option options [String] :envelope_id Envelope GUID to use
       # @param [Hash] access Access credentials
       # @option access [String] :client_id
       # @option access [String] :private_key
