@@ -12,6 +12,7 @@ module GroupDocs
       :failed      =>  4,
       :completed   =>  5,
       :archived    =>  6,
+      :scheduled   => 99,
     }
 
     include Signature::DocumentMethods
