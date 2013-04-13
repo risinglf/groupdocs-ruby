@@ -81,7 +81,6 @@ module GroupDocs
     alias_accessor :documents_count,               :documentsCount
     alias_accessor :documents_pages,               :documentsPages
     alias_accessor :participants_count,            :participantsCount
-    alias_accessor :fields_in_final_file_name,     :fieldsInFinalFileName
     alias_accessor :can_participant_download_form, :canParticipantDownloadForm
     alias_accessor :watermark_text,                :watermarkText
     alias_accessor :watermark_image,               :watermarkImage
@@ -92,6 +91,26 @@ module GroupDocs
     #
     def status
       STATUSES.invert[@status]
+    end
+
+    #
+    # Converts array of field names to machine-readable format.
+    # @param [Array<String>] fields
+    #
+    def fields_in_final_file_name=(fields)
+      if fields.is_a?(Array)
+        fields = fields.join(',')
+      end
+
+      @fieldsInFinalFileName = fields
+    end
+
+    #
+    # Converts field names to human-readable format.
+    # @return [Array<String>]
+    #
+    def fields_in_final_file_name
+      @fieldsInFinalFileName.split(',') if @fieldsInFinalFileName
     end
 
     #

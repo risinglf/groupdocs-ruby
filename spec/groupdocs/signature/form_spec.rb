@@ -53,7 +53,6 @@ describe GroupDocs::Signature::Form do
   it { should alias_accessor(:documents_count, :documentsCount)                           }
   it { should alias_accessor(:documents_pages, :documentsPages)                           }
   it { should alias_accessor(:participants_count, :participantsCount)                     }
-  it { should alias_accessor(:fields_in_final_file_name, :fieldsInFinalFileName)          }
   it { should alias_accessor(:can_participant_download_form, :canParticipantDownloadForm) }
   it { should alias_accessor(:watermark_text, :watermarkText)                             }
   it { should alias_accessor(:watermark_image, :watermarkImage)                           }
@@ -62,6 +61,25 @@ describe GroupDocs::Signature::Form do
     it 'converts status to human-readable format' do
       subject.status = 1
       subject.status.should == :in_progress
+    end
+  end
+
+  describe '#fields_in_final_file_name=' do
+    it 'converts field names in machine-readable format if array is passed' do
+      subject.fields_in_final_file_name = %w(on off)
+      subject.instance_variable_get(:@fieldsInFinalFileName).should == 'on,off'
+    end
+
+    it 'saves field names as is if not an array is passed' do
+      subject.fields_in_final_file_name = 'on,off'
+      subject.instance_variable_get(:@fieldsInFinalFileName).should == 'on,off'
+    end
+  end
+
+  describe '#fields_in_final_file_name' do
+    it 'returns field names in human-readable format' do
+      subject.fields_in_final_file_name = %w(on off)
+      subject.fields_in_final_file_name.should == %w(on off)
     end
   end
 
