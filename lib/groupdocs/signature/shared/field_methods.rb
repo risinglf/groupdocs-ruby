@@ -306,6 +306,13 @@ module GroupDocs
       #   location = field.locations.first
       #   envelope.delete_field_location! location, field
       #
+      # @example Delete field location in form
+      #   form = GroupDocs::Signature::Form.get!("g94h5g84hj9g4gf23i40j")
+      #   document = form.documents!.first
+      #   field = form.fields!(document).first
+      #   location = field.locations.first
+      #   form.delete_field_location! location, field
+      #
       # @param [GroupDocs::Signature::Field::Location] location
       # @param [GroupDocs::Signature::Field] field
       # @param [Hash] access Access credentials

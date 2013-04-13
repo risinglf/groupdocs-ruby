@@ -5,6 +5,7 @@ describe GroupDocs::Signature::Form do
   it_behaves_like GroupDocs::Api::Entity
   include_examples GroupDocs::Signature::EntityMethods
   include_examples GroupDocs::Signature::DocumentMethods
+  include_examples GroupDocs::Signature::FieldMethods
   include_examples GroupDocs::Signature::ResourceMethods
 
   describe '.all!' do
@@ -164,6 +165,24 @@ describe GroupDocs::Signature::Form do
     it 'accepts access credentials hash' do
       lambda do
         subject.archive!(:client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '#update_from_template!' do
+    let(:template) { GroupDocs::Signature::Template.new }
+
+    before(:each) do
+      mock_api_server('{ "status": "Ok", "result": {}}')
+    end
+
+    it 'raises error if template is not GroupDocs::Signature::Template object' do
+      lambda { subject.update_from_template!('Template') }.should raise_error(ArgumentError)
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.update_from_template!(template, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
   end

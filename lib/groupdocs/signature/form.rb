@@ -3,7 +3,11 @@ module GroupDocs
 
     include Signature::EntityMethods
     include Signature::DocumentMethods
+    include Signature::FieldMethods
     extend  Signature::ResourceMethods
+
+    # form doesn't have recipients
+    undef_method :assign_field!
 
     STATUSES = {
       :draft       => -1,
@@ -210,6 +214,131 @@ module GroupDocs
         request[:access] = access
         request[:method] = :PUT
         request[:path] = "/signature/{{client_id}}/forms/#{id}/archive"
+      end.execute!
+    end
+
+    #
+    # Returns an array of fields for document per participant.
+    #
+    # @param [GroupDocs::Document] document
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @raise [ArgumentError] if document is not GroupDocs::Document
+    #
+    def fields!(document, access = {})
+      document.is_a?(GroupDocs::Document) or raise ArgumentError,
+        "Document should be GroupDocs::Document object, received: #{document.inspect}"
+
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/signature/{{client_id}}/forms/#{id}/documents/#{document.file.guid}/fields"
+      end.execute!
+
+      json[:fields].map do |field|
+        Signature::Field.new(field)
+      end
+    end
+
+    #
+    # Adds field for document.
+    #
+    # @example
+    #   form = GroupDocs::Signature::Form.get!("g94h5g84hj9g4gf23i40j")
+    #   field = GroupDocs::Signature::Field.get!.detect { |f| f.type == :signature }
+    #   field.location = { location_x: 0.1, location_y: 0.1, page: 1 }
+    #   document = form.documents!.first
+    #   form.add_field! field, document
+    #
+    # @param [GroupDocs::Signature::Field] field
+    # @param [GroupDocs::Document] document
+    # @param [Hash] options
+    # @option options [Boolean] :force_new_field Set to true to force new field create
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @raise [ArgumentError] if field is not GroupDocs::Signature::Field
+    # @raise [ArgumentError] if document is not GroupDocs::Document
+    # @raise [ArgumentError] if field does not specify location
+    #
+    def add_field!(field, document, opts = {}, access = {})
+      field.is_a?(GroupDocs::Signature::Field) or raise ArgumentError,
+        "Field should be GroupDocs::Signature::Field object, received: #{field.inspect}"
+      document.is_a?(GroupDocs::Document) or raise ArgumentError,
+        "Document should be GroupDocs::Document object, received: #{document.inspect}"
+      field.location or raise ArgumentError,
+        "You have to specify field location, received: #{field.location.inspect}"
+
+      opts[:force_new_field] = true if opts[:force_new_field].nil?
+      payload = field.to_hash # field itself
+      payload.merge!(field.location.to_hash) # location should added in plain view (i.e. not "location": {...})
+      payload.merge!(:forceNewField => opts[:force_new_field]) # create new field flag
+
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :POST
+        request[:path] = "/signature/{{client_id}}/forms/#{id}/documents/#{document.file.guid}/field/#{field.id}"
+        request[:request_body] = payload
+      end.execute!
+    end
+
+    #
+    # Modifies field location.
+    #
+    # @example Modify field location in template
+    #   form = GroupDocs::Signature::Form.get!("g94h5g84hj9g4gf23i40j")
+    #   document = form.documents!.first
+    #   field = form.fields!(document).first
+    #   location = field.locations.first
+    #   location.x = 0.123
+    #   location.y = 0.123
+    #   location.page = 2
+    #   form.modify_field_location! location, field, document
+    #
+    # @param [GroupDocs::Signature::Field::Location] location
+    # @param [GroupDocs::Signature::Field] field
+    # @param [GroupDocs::Document] document
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @raise [ArgumentError] if location is not GroupDocs::Signature::Field::Location
+    # @raise [ArgumentError] if field is not GroupDocs::Signature::Field
+    # @raise [ArgumentError] if document is not GroupDocs::Document
+    #
+    def modify_field_location!(location, field, document, recipient, access = {})
+      location.is_a?(GroupDocs::Signature::Field::Location) or raise ArgumentError,
+        "Location should be GroupDocs::Signature::Field::Location object, received: #{location.inspect}"
+      field.is_a?(GroupDocs::Signature::Field) or raise ArgumentError,
+        "Field should be GroupDocs::Signature::Field object, received: #{field.inspect}"
+      document.is_a?(GroupDocs::Document) or raise ArgumentError,
+        "Document should be GroupDocs::Document object, received: #{document.inspect}"
+
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/signature/{{client_id}}/forms/#{id}/documents/#{document.file.guid}/fields/#{field.id}/locations/#{location.id}"
+        request[:request_body] = location.to_hash
+      end.execute!
+    end
+
+    #
+    # Updates form adding fields from template.
+    #
+    # @param [GroupDocs::Signature::Template] template
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @raise [ArgumentError] if template is not GroupDocs::Signature::Template
+    #
+    def update_from_template!(template, access = {})
+      template.is_a?(GroupDocs::Signature::Template) or raise ArgumentError,
+        "Template should be GroupDocs::Signature::Template object, received: #{template.inspect}"
+
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :POST
+        request[:path] = "/signature/{{client_id}}/forms/#{form.id}/templates/#{template.id}"
       end.execute!
     end
 
