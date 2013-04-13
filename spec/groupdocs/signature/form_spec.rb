@@ -4,6 +4,7 @@ describe GroupDocs::Signature::Form do
 
   it_behaves_like GroupDocs::Api::Entity
   include_examples GroupDocs::Signature::EntityMethods
+  include_examples GroupDocs::Signature::DocumentMethods
   include_examples GroupDocs::Signature::ResourceMethods
 
   describe '.all!' do

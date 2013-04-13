@@ -2,6 +2,7 @@ module GroupDocs
   class Signature::Form < Api::Entity
 
     include Signature::EntityMethods
+    include Signature::DocumentMethods
     extend  Signature::ResourceMethods
 
     STATUSES = {
