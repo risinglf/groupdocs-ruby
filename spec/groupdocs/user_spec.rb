@@ -49,16 +49,35 @@ describe GroupDocs::User do
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.embed_key!('test-area', client_id: 'client_id', private_key: 'private_key')
+        described_class.embed_key!('test-area', :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
     
     it 'returns new user embed key for defined area' do
-      results = described_class.embed_key!('test-area', client_id: 'client_id', private_key: 'private_key')
-      results.should be_an_instance_of(String)
+      result = described_class.embed_key!('test-area')
+      result.should be_a(String)
     end
   end
 
+  describe '.providers!' do
+    before(:each) do
+      mock_api_server(load_json('user_providers'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        described_class.providers!(:client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns array of GroupDocs::Storage::Provider' do
+      providers = described_class.providers!
+      providers.should be_an(Array)
+      providers.each do |provider|
+        provider.should be_a(GroupDocs::Storage::Provider)
+      end
+    end
+  end
   it { should have_accessor(:id)                 }
   it { should have_accessor(:guid)               }
   it { should have_accessor(:nickname)           }
@@ -145,23 +164,6 @@ describe GroupDocs::User do
       users.each do |user|
         user.should be_a(GroupDocs::User)
       end
-    end
-  end
-
-  describe '#providers!' do
-    before(:each) do
-      mock_api_server(load_json('user_providers'))
-    end
-
-    it 'accepts access credentials hash' do
-      lambda do
-        subject.providers!(:client_id => 'client_id', :private_key => 'private_key')
-      end.should_not raise_error(ArgumentError)
-    end
-
-    it 'returns array' do
-      providers = subject.providers!
-      providers.should be_an(Array)
     end
   end
 

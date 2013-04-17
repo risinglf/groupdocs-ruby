@@ -64,7 +64,6 @@ module GroupDocs
     #
     # @example
     #   embedkey = GroupDocs::User.embed_key!('test-area')
-    #   embedkey
     #   #=> "60a06ef8f23a49cf807977f1444fbdd8"
     #
     # @param [String] area
@@ -81,6 +80,31 @@ module GroupDocs
       end.execute!
 
       json[:key][:guid]
+    end
+
+    #
+    # Returns an array of storage providers.
+    #
+    # @example
+    #   providers = GroupDocs::User.providers!
+    #   providers.first.provider
+    #   #=> "Dropbox"
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<GroupDocs::Storage::Provider>]
+    #
+    def self.providers!(access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = '/mgmt/{{client_id}}/storages'
+      end.execute!
+
+      json[:providers].map do |provider|
+        GroupDocs::Storage::Provider.new(provider)
+      end
     end
 
     # @attr [Integer] id
@@ -196,24 +220,6 @@ module GroupDocs
       json[:users].map do |user|
         GroupDocs::User.new(user)
       end
-    end
-
-    #
-    # Returns an array of storege providers.
-    #
-    # @param [Hash] access Access credentials
-    # @option access [String] :client_id
-    # @option access [String] :private_key
-    # @return [Array]
-    #
-    def providers!(access = {})
-      json = Api::Request.new do |request|
-        request[:access] = access
-        request[:method] = :GET
-        request[:path] = '/mgmt/{{client_id}}/storages'
-      end.execute!
-
-      json[:providers]
     end
 
     #
