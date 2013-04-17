@@ -42,6 +42,23 @@ describe GroupDocs::User do
     end
   end
 
+  describe '.embed_key!' do
+    before(:each) do
+      mock_api_server(load_json('user_embed_key'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        described_class.embed_key!('test-area', client_id: 'client_id', private_key: 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+    
+    it 'returns new user embed key for defined area' do
+      results = described_class.embed_key!('test-area', client_id: 'client_id', private_key: 'private_key')
+      results.should be_an_instance_of(String)
+    end
+  end
+
   it { should have_accessor(:id)                 }
   it { should have_accessor(:guid)               }
   it { should have_accessor(:nickname)           }
@@ -130,4 +147,39 @@ describe GroupDocs::User do
       end
     end
   end
+
+  describe '#providers!' do
+    before(:each) do
+      mock_api_server(load_json('user_providers'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.providers!(:client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns array' do
+      providers = subject.providers!
+      providers.should be_an(Array)
+    end
+  end
+
+  describe '#roles!' do
+    before(:each) do
+      mock_api_server(load_json('user_roles'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.roles!(:client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns array' do
+      roles = subject.roles!
+      roles.should be_an(Array)
+    end
+  end
+
 end

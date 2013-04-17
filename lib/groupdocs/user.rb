@@ -59,6 +59,30 @@ module GroupDocs
       GroupDocs::User.new data.merge(json)
     end
 
+    #
+    # Generates new active user embed key.
+    #
+    # @example
+    #   embedkey = GroupDocs::User.embed_key!('test-area')
+    #   embedkey
+    #   #=> "60a06ef8f23a49cf807977f1444fbdd8"
+    #
+    # @param [String] area
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [String]
+    #
+    def self.embed_key!(area, access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/mgmt/{{client_id}}/embedkey/new/#{area}"
+      end.execute!
+
+      json[:key][:guid]
+    end
+
     # @attr [Integer] id
     attr_accessor :id
     # @attr [String] guid
@@ -172,6 +196,42 @@ module GroupDocs
       json[:users].map do |user|
         GroupDocs::User.new(user)
       end
+    end
+
+    #
+    # Returns an array of storege providers.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def providers!(access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = '/mgmt/{{client_id}}/storages'
+      end.execute!
+
+      json[:providers]
+    end
+
+    #
+    # Returns an array of roles.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def roles!(access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = '/mgmt/{{client_id}}/roles'
+      end.execute!
+
+      json[:roles]
     end
 
   end # User

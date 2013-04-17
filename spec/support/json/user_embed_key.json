@@ -1,0 +1,39 @@
+{
+  "result": {
+    "key": {
+      "user": {
+        "nickname": "test@test.com",
+        "firstname": "First",
+        "lastname": "Last",
+        "pkey": "iwhfsfy8sdufh9hfsfsd9",
+        "pswd_salt": null,
+        "claimed_id": null,
+        "token": null,
+        "storage": null,
+        "photo": null,
+        "active": false,
+        "trial": false,
+        "news_eanbled": null,
+        "alerts_eanbled": null,
+        "support_eanbled": null,
+        "support_email": null,
+        "annotation_branded": null,
+        "viewer_branded": null,
+        "signedupOn": 1335963525287,
+        "signedinOn": 1335963525287,
+        "signin_count": 0,
+        "roles": null,
+        "id": 85,
+        "guid": "8sd7tfsdf",
+        "primary_email": "test@test.com"
+      },
+      "guid": "60a06ef8f23a49cf807977f1444fbdd8",
+      "area": "test-area",
+      "active": true,
+      "hit_count": 0
+    }
+  },
+  "status": "Ok",
+  "error_message": null,
+  "composedOn": 1359383495765
+}
