@@ -63,7 +63,7 @@ module GroupDocs
     # Generates new active user embed key.
     #
     # @example
-    #   embedkey = GroupDocs::User.embed_key!('test-area')
+    #   GroupDocs::User.embed_key!('test-area')
     #   #=> "60a06ef8f23a49cf807977f1444fbdd8"
     #
     # @param [String] area
@@ -103,7 +103,7 @@ module GroupDocs
       end.execute!
 
       json[:providers].map do |provider|
-        GroupDocs::Storage::Provider.new(provider)
+        Storage::Provider.new(provider)
       end
     end
 
