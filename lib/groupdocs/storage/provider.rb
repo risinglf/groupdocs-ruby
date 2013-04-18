@@ -1,7 +1,7 @@
 module GroupDocs
   module Storage
     class Provider < Api::Entity
-    	
+
       # @attr [Integer] id
       attr_accessor :id
       # @attr [String] provider
@@ -21,11 +21,11 @@ module GroupDocs
       # @attr [String] serviceHost
       attr_accessor :serviceHost
 
-	  alias_accessor :public_key,   :publicKey
-	  alias_accessor :private_key,  :privateKey
-	  alias_accessor :root_folder,  :rootFolder
-	  alias_accessor :is_primary,   :isPrimary
-	  alias_accessor :service_host, :serviceHost
+      alias_accessor :public_key,   :publicKey
+      alias_accessor :private_key,  :privateKey
+      alias_accessor :root_folder,  :rootFolder
+      alias_accessor :is_primary,   :isPrimary
+      alias_accessor :service_host, :serviceHost
 
     end # Provider
   end # Storage
