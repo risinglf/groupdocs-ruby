@@ -1,0 +1,25 @@
+{
+  "result": {
+    "roles": [
+      {
+        "id": 1,
+        "name": "SysAdmin"
+      },
+      {
+        "id": 2,
+        "name": "Admin"
+      },
+      {
+        "id": 3,
+        "name": "User"
+      },
+      {
+        "id": 4,
+        "name": "Guest"
+      }
+    ]
+  },
+  "status": "Ok",
+  "error_message": null,
+  "composedOn": 1365660243257
+}
