@@ -1,0 +1,31 @@
+{
+  "result": {
+    "providers": [
+      {
+        "id": 38,
+        "provider": "Dropbox",
+        "type": "Shared",
+        "token": "lWYWx1ZU9mc3RyaW5nc3RyaW5nPjwvQXJyYXlPZktleVZhbHVlT2Z",
+        "publicKey": "kfmwehvfusotcgk",
+        "privateKey": "swaurn5gnfrbh1s",
+        "rootFolder": null,
+        "isPrimary": false,
+        "serviceHost": null
+      },
+      {
+        "id": 54,
+        "provider": "BoxNet",
+        "type": "Shared",
+        "token": "Nnc2MDB3NzFncXBnMjk1YXVidXk2aGd1bnRnemlibWI=",
+        "publicKey": null,
+        "privateKey": "fyypebzyu9tpe4753utoe1fcru",
+        "rootFolder": null,
+        "isPrimary": false,
+        "serviceHost": null
+      }]
+  },
+  "status": "Ok",
+  "error_message": null,
+  "composedOn": 1365653541727
+}
+
