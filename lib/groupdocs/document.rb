@@ -719,7 +719,7 @@ module GroupDocs
       api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
-        request[:path] = "/comparison/{{client_id}}/comparison/changes"
+        request[:path] = '/comparison/{{client_id}}/comparison/changes'
       end
       api.add_params(:resultFileId => file.guid)
       json = api.execute!
