@@ -22,6 +22,8 @@
   %p
     FileId = #{(defined? fileId) ? fileId : ""}
   %p
+    Converted file GUID = #{(defined? converted) ? converted : ""}
+  %p
     %font{:color => "red"} #{(defined? err) ? err : ""}
   %br/
   #requestForm{:style => "padding:20px; border:1px solid black;"}
@@ -39,24 +41,30 @@
       %br/
 
 
-      %input{:type=>"radio", :name=>"sourse", :value=>"guid", :id=>"id", :onClick=>"display('guid');", :checked=>"checked"} File ID (GUID) 
-      %br/
-      %input{:type=>"radio", :name=>"sourse", :value=>"local", :id=>"localField", :onClick=>"display('local');"}Upload local file
-      %br/
-      %input{:type=>"radio", :name=>"sourse", :value=>"url", :id=>"urlField", :onClick=>"display('url');"} Upload file from URL
-      %br/
+      %div.guid_radio
+        %input{:type=>"radio", :name=>"source", :value=>"guid", :checked=>"checked"} File ID (GUID) 
+        %br/
+        %input{:type=>"radio", :name=>"source", :value=>"local"}Upload local file
+        %br/
+        %input{:type=>"radio", :name=>"source", :value=>"url"} Upload file from URL
+        %br/
 
-      %label{:for=>'fileId', :id=>"guid"} File ID (GUID)
-      %br/
-      %input{:type=>'text', :name=>'fileId', :id=>"guidfield", :value=>""}
+      %div.guid_field
+        %label{:for=>'fileId', :id=>"guid"} File ID (GUID)
+        %br/
+        %input{:type=>'text', :name=>'fileId'}
+      
+      %div.guid_field{:style=>"display:none;"}
+        %label{:for=>'file'} Upload local file
+        %br/
+        %input{:type=>'file', :name=>'file'}
 
-      %label{:for=>'url', :style=>"display:none;", :id=>"url"} Upload file from URL
-      %br/
-      %input{:type=>'text', :name=>'url', :value=>"", :id=>"urlfield", :style=>"display:none;"}
+      %div.guid_field{:style=>"display:none;"}
+        %label{:for=>'url', :id=>"url"} Upload file from URL
+        %br/
+        %input{:type=>'text', :name=>'url'}
 
-      %label{:for=>'file', :id=>"file", :style=>"display:none;"} Upload local file
-      %br/
-      %input{:type=>'file', :name=>'file', :id=>"filefield", :style=>"display:none;"}
+
 
       %br/
       %label{:for=>"convert_type"} Result file type
@@ -74,7 +82,7 @@
         %span.optional (Optional)
         %br/ 
         %font{:color=>"grey"} (For test Callback you can use this URL: http://groupdocs-ruby-samples.herokuapp.com/sample18/convert_callback)
-      %input{:type=>"text", :size=>"70", :value=>"", :name=>"callback"}
+      %input{:type=>"text", :size=>"70", :value=>"#{(defined? callback) ? callback : ""}", :name=>"callback"}
 
       %br/
       %br/
@@ -92,7 +100,6 @@
     %div{:style => "padding:20px; border:1px solid black;"}
       %p
         Results:
-        #{(defined? iframe) ? iframe : ""}
         %div#result
         #{(defined? message) ? message : ""}
 
@@ -149,68 +156,25 @@
 
 %script{:src=>"//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"}
 :javascript
-  $(document).ready(setTimeout(check, 5000));
-            
-  function check() {
-
-    if (($("input[name=callbackUrl]").val() != "")) {
-      $.ajax({
-        type: 'GET',
-        url: '/sample18/check',
-        success: function (data) {
-          $('#result').html( data );
-        },
-        dataType: "text"
-      });
-    }
+  function check_file() {
+    $.get('/sample18/check', function(data) {
+      $('#result').html( data );
+      if(data != 'File was not found.') {
+        clearInterval(cf_interval);
+      }
+    }, 'text');  
   }
 
-  function display(_element_id) {
-
-    if (_element_id == "guid") {
-      var element1 = document.getElementById("file");
-      var element2 = document.getElementById("filefield");
-      var element3 = document.getElementById("url");
-      var element4 = document.getElementById("urlfield");
-      var element5 = document.getElementById("guid");
-      var element6 = document.getElementById("guidfield");
-      element1.style.display = "none";
-      element2.style.display = "none";
-      element3.style.display = "none";
-      element4.style.display = "none";
-      element5.style.display = "inline";
-      element6.style.display = "inline";
-
+  $(function($){
+    callbackUrl = $("input[name=callback]").val();
+    
+    if(callbackUrl !== "") {
+      cf_interval = setInterval(check_file, 5000);
     }
 
-    if (_element_id == "local") {
-      var element1 = document.getElementById("file");
-      var element2 = document.getElementById("filefield");
-      var element3 = document.getElementById("url");
-      var element4 = document.getElementById("urlfield");
-      var element5 = document.getElementById("guid");
-      var element6 = document.getElementById("guidfield");
-      element1.style.display = "inline";
-      element2.style.display = "inline";
-      element3.style.display = "none";
-      element4.style.display = "none";
-      element5.style.display = "none";
-      element6.style.display = "none";
-    }
-
-    if (_element_id == "url") {
-      var element1 = document.getElementById("url");
-      var element2 = document.getElementById("urlfield");
-      var element3 = document.getElementById("file");
-      var element4 = document.getElementById("filefield");
-      var element5 = document.getElementById("guid");
-      var element6 = document.getElementById("guidfield");
-      element1.style.display = "inline";
-      element2.style.display = "inline";
-      element3.style.display = "none";
-      element4.style.display = "none";
-      element5.style.display = "none";
-      element6.style.display = "none";
-    }
-
-  }
+    $('.guid_radio input').change(function(){
+      var elementIndex = $(this).parent().children('input').index($(this));
+      $('.guid_field').hide();
+      $('.guid_field').eq(elementIndex).show();
+    });
+  });

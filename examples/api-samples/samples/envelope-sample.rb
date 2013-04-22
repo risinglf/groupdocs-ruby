@@ -115,7 +115,8 @@ post '/envelope-sample' do
     #envelope.add_field! field, document, recipient
 
     # URL for callback
-    webhook = 'http://groupdocs-ruby-samples.herokuapp.com/envelope-sample/sign'
+    #webhook = 'http://groupdocs-ruby-samples.herokuapp.com/envelope-sample/sign'
+    webhook = 'http://77.81.243.48/?q=groupdocs_signature/signature_callback'
 
     # send envelope
     envelope.send! webhook

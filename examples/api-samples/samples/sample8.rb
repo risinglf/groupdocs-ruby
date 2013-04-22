@@ -19,22 +19,30 @@ post '/sample8' do
     # check required variables
     raise "Please enter all required parameters" if settings.client_id.empty? or settings.private_key.empty?
 
-    # make a request to API using client_id and private_key
-    files_list = GroupDocs::Storage::Folder.list!('/', {}, { :client_id => settings.client_id, :private_key => settings.private_key})
-
+    file = nil
     doc = nil
     metadata = nil
-    files_list.each do |element|
-      if element.class.name.split('::').last == 'Folder'
-        next
-      end
 
-      # find document and get metadata
-      if element.guid == settings.guid
-        metadata = element.to_document.metadata!({ :client_id => settings.client_id, :private_key => settings.private_key})
-        doc = element.to_document
-      end
+    # get document by file GUID
+    case settings.source
+    when 'guid'
+      file = GroupDocs::Storage::File.new({:guid => settings.file_id})
+    when 'local'
+      # construct path
+      filepath = "#{Dir.tmpdir}/#{params[:file][:filename]}"
+      # open file
+      File.open(filepath, 'wb') { |f| f.write(params[:file][:tempfile].read) }
+      # make a request to API using client_id and private_key
+      file = GroupDocs::Storage::File.upload!(filepath, {}, client_id: settings.client_id, private_key: settings.private_key)
+    when 'url'
+      file = GroupDocs::Storage::File.upload_web!(settings.url, client_id: settings.client_id, private_key: settings.private_key)
+    else
+      raise "Wrong GUID source."
     end
+
+    doc = file.to_document
+    metadata = doc.metadata!({ :client_id => settings.client_id, :private_key => settings.private_key})
+    
 
     # get document page images
     images =  doc.page_images!(800, 400, {:first_page => 0, :page_count => metadata.page_count}, { :client_id => settings.client_id, :private_key => settings.private_key})
