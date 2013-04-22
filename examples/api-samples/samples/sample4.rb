@@ -9,6 +9,7 @@ post '/sample4' do
   set :client_id, params[:client_id]
   set :private_key, params[:private_key]
   set :file_id, params[:file_id]
+  set :url, params[:url]
 
   begin
     # check required variables
@@ -16,17 +17,27 @@ post '/sample4' do
 
     # make a request to API using client_id and private_key
     files_list = GroupDocs::Storage::Folder.list!('/', {}, { :client_id => settings.client_id, :private_key => settings.private_key})
-    dowload_file = ''
+    file = ''
 
-    # get file by file ID
-    files_list.each do |element|
-      if element.id == Integer(settings.file_id)
-        dowload_file = element
-      end
+    # get document by file GUID
+    case settings.source
+    when 'guid'
+      file = GroupDocs::Storage::File.new({:guid => settings.file_id})
+    when 'local'
+      # construct path
+      filepath = "#{Dir.tmpdir}/#{params[:file][:filename]}"
+      # open file
+      File.open(filepath, 'wb') { |f| f.write(params[:file][:tempfile].read) }
+      # make a request to API using client_id and private_key
+      file = GroupDocs::Storage::File.upload!(filepath, {}, client_id: settings.client_id, private_key: settings.private_key)
+    when 'url'
+      file = GroupDocs::Storage::File.upload_web!(settings.url, client_id: settings.client_id, private_key: settings.private_key)
+    else
+      raise "Wrong GUID source."
     end
 
     # download file
-    dowloaded_file = dowload_file.download!(File.dirname(__FILE__), { :client_id => settings.client_id, :private_key => settings.private_key})
+    dowloaded_file = file.download!(File.dirname(__FILE__), { :client_id => settings.client_id, :private_key => settings.private_key})
     unless dowloaded_file.empty?
       massage = "<font color='green'>File was downloaded to the <font color='blue'>#{dowloaded_file}</font> folder</font> <br />"
     end

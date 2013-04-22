@@ -3,78 +3,26 @@ get '/sample18' do
   haml :sample18
 end
 
-post '/sample18/test_callback' do
-    downloads_path = "#{File.dirname(__FILE__)}/../public/downloads"
-    unless File.directory?(downloads_path)
-      Dir::mkdir(downloads_path)
-    else
-      Dir.foreach(downloads_path) {|f| fn = File.join(downloads_path, f); File.delete(fn) if f != '.' && f != '..'}
-    end
-
-    SourceId = nil
-    client_key = nil
-    private_key = nil
-    
-    data = JSON.parse(request.body.read)
-    data.each do |key, value|
-      if key == 'SourceId'
-        SourceId = value
-      end
-    end
-
-    if File.exist?("#{File.dirname(__FILE__)}/../public/user_info.txt")
-      contents = File.read("#{File.dirname(__FILE__)}/../public/user_info.txt")
-      contents = contents.split(' ')
-      client_key = contents.first
-      private_key = contents.last
-    end
-
-    outFile = File.new("#{File.dirname(__FILE__)}/../public/downloads/signed", "w")
-    outFile.write("private_key: #{private_key} \n")
-    outFile.write("client_key: #{client_key} \n")
-    outFile.write("SourceId: #{SourceId} \n")
-    outFile.close
-
-    job = GroupDocs::Job.new({:id=>SourceId})
-    documents = job.documents!({:client_id => client_key, :private_key => private_key})
-    tttt = documents[:inputs].first.file.download!(downloads_path, {:client_id => client_key, :private_key => private_key})
-
-    outFile = File.new("#{File.dirname(__FILE__)}/../public/downloads/t", "w")
-    outFile.write("documents: #{documents} \n")
-    outFile.write("tttt: #{tttt} \n")
-    outFile.close
-end
-
-# GET request to check if envelop was signed
-get '/sample18/test_check' do
-  if File.exist?("#{File.dirname(__FILE__)}/../public/downloads/signed")
-    File.readlines("#{File.dirname(__FILE__)}/../public/downloads/signed").each do |line|
-    end
-  else 
-    'not yet'
-  end
-end
-
 # 
 post '/sample18/convert_callback' do
   downloads_path = "#{File.dirname(__FILE__)}/../public/downloads"
+
   unless File.directory?(downloads_path)
     Dir::mkdir(downloads_path)
   else
     Dir.foreach(downloads_path) {|f| fn = File.join(downloads_path, f); File.delete(fn) if f != '.' && f != '..'}
   end
- 
+
   data = JSON.parse(request.body.read)
   begin
     raise "Empty params!" if data.empty?
-    SourceId = nil
+    sourceId = nil
     client_key = nil
     private_key = nil
 
-
     data.each do |key, value|
       if key == 'SourceId'
-        SourceId = value
+        sourceId = value
       end
     end
 
@@ -85,9 +33,11 @@ post '/sample18/convert_callback' do
       private_key = contents.last
     end
 
-    job = GroupDocs::Job.new({:id=>SourceId})
+    job = GroupDocs::Job.new({:id=>sourceId})
+
     documents = job.documents!({:client_id => client_key, :private_key => private_key})
-    documents[:inputs].first.file.download!(downloads_path, {:client_id => client_key, :private_key => private_key})
+
+    documents[:inputs].first.outputs.first.download!(downloads_path, {:client_id => client_key, :private_key => private_key})
 
   rescue Exception => e
     err = e.message
@@ -108,7 +58,7 @@ get '/sample18/check' do
   end
 
   if name
-    return name
+    return "<a href='/downloads/#{name}'>#{name}</a>"
   else
     return "File was not found."
   end
@@ -120,13 +70,15 @@ post '/sample18' do
   # set variables
   set :client_id, params[:client_id]
   set :private_key, params[:private_key]
+  set :source, params[:source]
   set :file_id, params[:fileId]
+  set :url, params[:url]
   set :convert_type, params[:convert_type]
   set :callback, params[:callback]
 
   begin
     # check required variables
-    raise "Please enter all required parameters" if settings.client_id.empty? or settings.private_key.empty? or settings.file_id.empty?
+    raise "Please enter all required parameters" if settings.client_id.empty? or settings.private_key.empty?
    
     if settings.callback[0]
       outFile = File.new("#{File.dirname(__FILE__)}/../public/user_info.txt", "w")
@@ -135,16 +87,26 @@ post '/sample18' do
       outFile.close
     end
 
-    # make a request to API using client_id and private_key
-    files_list = GroupDocs::Storage::Folder.list!('/', {}, { :client_id => settings.client_id, :private_key => settings.private_key})
     file = nil
 
-    # get document by file ID
-    files_list.each do |element|
-      if element.respond_to?('guid') == true and element.guid == settings.file_id
-        file = element
-      end
+    # get document by file GUID
+    case settings.source
+    when 'guid'
+      file = GroupDocs::Storage::File.new({:guid => settings.file_id})
+    when 'local'
+      # construct path
+      filepath = "#{Dir.tmpdir}/#{params[:file][:filename]}"
+      # open file
+      File.open(filepath, 'wb') { |f| f.write(params[:file][:tempfile].read) }
+      # make a request to API using client_id and private_key
+      file = GroupDocs::Storage::File.upload!(filepath, {}, client_id: settings.client_id, private_key: settings.private_key)
+    when 'url'
+      file = GroupDocs::Storage::File.upload_web!(settings.url, client_id: settings.client_id, private_key: settings.private_key)
+    else
+      raise "Wrong GUID source."
     end
+
+
 
     message = "No file with such GUID"
     unless file.nil?
@@ -158,9 +120,9 @@ post '/sample18' do
       # TODO: add Exception if not enough time for convertation
       guid = original_document[:inputs].first.outputs.first.guid
       
+  
       if guid
-        iframe = "<iframe src='https://apps.groupdocs.com/document-viewer/embed/#{guid}' frameborder='0' width='100%' height='600'></iframe>"
-        message = "<p>Converted file saved successfully."
+        message = ""
       end
     end
 
@@ -169,5 +131,5 @@ post '/sample18' do
   end
 
   # set variables for template
-  haml :sample18, :locals => { :userId => settings.client_id, :privateKey => settings.private_key, :fileId => settings.file_id, :message => message, :iframe => iframe, :err => err }
+  haml :sample18, :locals => { :userId => settings.client_id, :privateKey => settings.private_key, :fileId => file.guid, :converted => guid, :callback => settings.callback, :message => message, :err => err }
 end

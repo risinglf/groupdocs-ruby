@@ -8,32 +8,33 @@ post '/sample10' do
   # set variables
   set :client_id, params[:client_id]
   set :private_key, params[:private_key]
-  set :guid, params[:guid]
+  set :guid, params[:fileId]
   set :email, params[:email]
 
   begin
     # check required variables
     raise "Please enter all required parameters" if settings.client_id.empty? or settings.private_key.empty? or settings.guid.empty? or settings.email.empty?
 
-    # make a request to API using client_id and private_key
-    files_list = GroupDocs::Storage::Folder.list!('/', {}, { :client_id => settings.client_id, :private_key => settings.private_key})
-
-    name = nil
-    doc = nil
-    files_list.each do |element|
-      if element.class.name.split('::').last == 'Folder'
-        next
-      end
-
-      # get document and document name
-      if element.guid == settings.guid
-        name = element.name 
-        doc = element
-      end
+    # get document by file GUID
+    file = nil
+    case settings.source
+    when 'guid'
+      file = GroupDocs::Storage::File.new({:guid => settings.guid})
+    when 'local'
+      # construct path
+      filepath = "#{Dir.tmpdir}/#{params[:file][:filename]}"
+      # open file
+      File.open(filepath, 'wb') { |f| f.write(params[:file][:tempfile].read) }
+      # make a request to API using client_id and private_key
+      file = GroupDocs::Storage::File.upload!(filepath, {}, client_id: settings.client_id, private_key: settings.private_key)
+    when 'url'
+      file = GroupDocs::Storage::File.upload_web!(settings.url, client_id: settings.client_id, private_key: settings.private_key)
+    else
+      raise "Wrong GUID source."
     end
 
     # Share document. Make a request to API using client_id and private_key
-    shared = doc.to_document.sharers_set!(settings.email.split(" "), { :client_id => settings.client_id, :private_key => settings.private_key});
+    shared = file.to_document.sharers_set!(settings.email.split(" "), { :client_id => settings.client_id, :private_key => settings.private_key});
 
     # result
     if shared

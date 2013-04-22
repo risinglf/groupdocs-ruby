@@ -23,9 +23,29 @@
   #requestForm{:style => "padding:20px; border:1px solid black;"}
     %p Enter data for request and press "Make request" button
     %form{:action => "/sample9", :enctype => "multipart/form-data", :method => "post"}
-      %label{:for => "private_key"} GroupDocs File GUID
-      %br/
-      %input{:type=>"text", :name=>"guid"}
+      %div.guid_radio
+        %input{:type=>"radio", :name=>"source", :value=>"guid", :checked=>"checked"} File ID (GUID) 
+        %br/
+        %input{:type=>"radio", :name=>"source", :value=>"local"}Upload local file
+        %br/
+        %input{:type=>"radio", :name=>"source", :value=>"url"} Upload file from URL
+        %br/
+
+      %div.guid_field
+        %label{:for=>'fileId', :id=>"guid"} File ID (GUID)
+        %br/
+        %input{:type=>'text', :name=>'fileId'}
+        
+      %div.guid_field{:style=>"display:none;"}
+        %label{:for=>'file'} Upload local file
+        %br/
+        %input{:type=>'file', :name=>'file'}
+
+      %div.guid_field{:style=>"display:none;"}
+        %label{:for=>'url', :id=>"url"} Upload file from URL
+        %br/
+        %input{:type=>'text', :name=>'url'}
+        
       %br/
       %label{:for => "private_key"} Width
       %br/
@@ -88,3 +108,14 @@
       %a{:href => "/sample22"}Sample22 - How create or update user and add him to collaborators using PHP SDK
     %li
       %a{:href => "/envelope-sample"}Envelope sample - How to use envelope and signature API
+
+%script{:src=>"//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"}
+:javascript
+
+  $(function($){
+    $('.guid_radio input').change(function(){
+      var elementIndex = $(this).parent().children('input').index($(this));
+      $('.guid_field').hide();
+      $('.guid_field').eq(elementIndex).show();
+    });
+  });
