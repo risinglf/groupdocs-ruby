@@ -13,7 +13,7 @@ post '/sample20' do
   begin
 
     # check required variables
-    raise "Please enter all required parameters" if settings.client_id.empty? or settings.private_key.empty? or settings.resultFileId.empty?
+    raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty? or settings.resultFileId.empty?
 
     # construct new storage file
     file = GroupDocs::Storage::File.new(guid: settings.resultFileId)
@@ -22,7 +22,7 @@ post '/sample20' do
     # get compare changes
     changes = document.changes!({:client_id => settings.client_id, :private_key => settings.private_key})
 
-    result = ""
+    result = ''
     result += "<table class='border'>"
     result += "<tr><td><font color='green'>Change Name</font></td><td><font color='green'>Change</font></td></tr>"
     changes.each do |change|
@@ -39,12 +39,12 @@ post '/sample20' do
       result += "<tr bgcolor='#808080'><td></td><td></td></tr>"
     end
 
-    result += "</table>"
+    result += '</table>'
 
   rescue Exception => e
     err = e.message
   end
 
   # set variables for template
-  haml :sample20, :locals => { :userId => settings.client_id, :privateKey => settings.private_key, :resultFileId => settings.resultFileId, :result => result, :err => err }
+  haml :sample20, :locals => {:userId => settings.client_id, :privateKey => settings.private_key, :resultFileId => settings.resultFileId, :result => result, :err => err}
 end

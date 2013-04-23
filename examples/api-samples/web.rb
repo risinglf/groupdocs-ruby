@@ -3,6 +3,8 @@ require 'groupdocs'
 require 'haml'
 require 'pp'
 
+GroupDocs.api_version = '2.0'
+
 get '/' do
   haml :index
 end
@@ -11,5 +13,4 @@ get '/style.css' do
   sass :style
 end
 
-Dir["samples/*.rb"].each {|file| require_relative file }
-
+Dir['samples/*.rb'].each {|file| require_relative file }

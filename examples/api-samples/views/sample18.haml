@@ -1,7 +1,7 @@
-%h3{:style => "text-align:center;"}
-  %a{:href => "/"} GroupDocs Ruby SDK Samples
+%h3{:style => 'text-align:center;'}
+  %a{:href => '/'} GroupDocs Ruby SDK Samples
   \- Sample18
-.samplecontent{:style => "padding:10px;"}
+.samplecontent{:style => 'padding:10px;'}
   %span.description
     %i 
       This sample will show how to use 
@@ -10,158 +10,157 @@
   %br/
   %br/
   %span.documentation
-    %a{:href => "/docs/sample18.html"} Builtin documentation for this sample
+    %a{:href => '/docs/sample18.html'} Builtin documentation for this sample
   %br/
   %br/
   %p
     You entered:
   %p
-    ClientID = #{(defined? userId) ? userId : ""}
+    ClientID = #{(defined? userId) ? userId : ''}
   %p
-    PrivateKey = #{(defined? privateKey) ? privateKey : ""}
+    PrivateKey = #{(defined? privateKey) ? privateKey : ''}
   %p
-    FileId = #{(defined? fileId) ? fileId : ""}
+    FileId = #{(defined? fileId.guid) ? fileId.guid : ''}
   %p
-    Converted file GUID = #{(defined? converted) ? converted : ""}
+    Converted file GUID = #{(defined? converted) ? converted : ''}
   %p
-    %font{:color => "red"} #{(defined? err) ? err : ""}
+    %font{:color => 'red'} #{(defined? err) ? err : ''}
   %br/
-  #requestForm{:style => "padding:20px; border:1px solid black;"}
+  #requestForm{:style => 'padding:20px; border:1px solid black;'}
     %p Enter data for request and press "Make request" button
-    %form{:action => "/sample18", :method => "post"}
-      %label{:for => "client_id"} GroupDocs ClientID
+    %form{:action => '/sample18', :enctype => 'multipart/form-data', :method => 'post'}
+      %label{:for => 'client_id'} GroupDocs ClientID
       %br/
-      %input{:type=>"text", :name=>"client_id"}
+      %input{:type=>'text', :name=>'client_id'}
       %br/
-      %label{:for => "private_key"} GroupDocs PrivateKey
+      %label{:for => 'private_key'} GroupDocs PrivateKey
       %br/
-      %input{:type=>"text", :name=>"private_key"}
+      %input{:type=>'text', :name=>'private_key'}
       %br/
-      %label{:for => "file_id"} GroupDocs FileID
+      %label{:for => 'file_id'} GroupDocs FileID
       %br/
 
 
       %div.guid_radio
-        %input{:type=>"radio", :name=>"source", :value=>"guid", :checked=>"checked"} File ID (GUID) 
+        %input{:type=>'radio', :name=>'source', :value=>'guid', :checked=>'checked'} File ID (GUID)
         %br/
-        %input{:type=>"radio", :name=>"source", :value=>"local"}Upload local file
+        %input{:type=>'radio', :name=>'source', :value=>'local'}Upload local file
         %br/
-        %input{:type=>"radio", :name=>"source", :value=>"url"} Upload file from URL
+        %input{:type=>'radio', :name=>'source', :value=>'url'} Upload file from URL
         %br/
 
       %div.guid_field
-        %label{:for=>'fileId', :id=>"guid"} File ID (GUID)
+        %label{:for=>'fileId', :id=>'guid'} File ID (GUID)
         %br/
         %input{:type=>'text', :name=>'fileId'}
       
-      %div.guid_field{:style=>"display:none;"}
+      %div.guid_field{:style=>'display:none;'}
         %label{:for=>'file'} Upload local file
         %br/
         %input{:type=>'file', :name=>'file'}
 
-      %div.guid_field{:style=>"display:none;"}
-        %label{:for=>'url', :id=>"url"} Upload file from URL
+      %div.guid_field{:style=>'display:none;'}
+        %label{:for=>'url', :id=>'url'} Upload file from URL
         %br/
         %input{:type=>'text', :name=>'url'}
 
 
 
       %br/
-      %label{:for=>"convert_type"} Result file type
-      %select{:name=>"convert_type", :id=>"convert_type"}
-        %option{:value => "doc"}Doc
-        %option{:value => "docx"}Docx
-        %option{:value => "pdf"}PDF
-        %option{:value => "ppt"}PPT
-        %option{:value => "txt"}TXT
+      %label{:for=>'convert_type'} Result file type
+      %select{:name=>'convert_type', :id=>'convert_type'}
+        %option{:value => 'doc'}Doc
+        %option{:value => 'docx'}Docx
+        %option{:value => 'pdf'}PDF
+        %option{:value => 'ppt'}PPT
+        %option{:value => 'txt'}TXT
         
       %br/
       %br/
-      %label{:for=>"callback"} 
+      %label{:for=>'callback'}
         Callback URL 
         %span.optional (Optional)
         %br/ 
-        %font{:color=>"grey"} (For test Callback you can use this URL: http://groupdocs-ruby-samples.herokuapp.com/sample18/convert_callback)
-      %input{:type=>"text", :size=>"70", :value=>"#{(defined? callback) ? callback : ""}", :name=>"callback"}
+        %font{:color=>'grey'} (For test Callback you can use this URL: http://groupdocs-ruby-samples.herokuapp.com/sample18/convert_callback)
+      %input{:type=>'text', :size=>'70', :value=>"#{(defined? callback) ? callback : ''}", :name=>'callback'}
 
       %br/
       %br/
 
-      %input{:type => "submit", :value => "Make request"}
+      %input{:type => 'submit', :value => 'Make request'}
+      %span{:id=>'results_status', :style=>'color:red;display:none;'} (Please wait for ajax response)
       
       %br/
-      %a{:href=>"/templates/testdocument.html"} Download sample HTML file 1
+      %a{:href=>'/templates/testdocument.html'} Download sample HTML file 1
       %br/
-      %a{:href=>"/templates/base-simple_source.html"} Download sample HTML file 2
+      %a{:href=>'/templates/base-simple_source.html'} Download sample HTML file 2
       %br/
-      %a{:href=>"/templates/sampledoc3.html"} Download sample HTML file 3
+      %a{:href=>'/templates/sampledoc3.html'} Download sample HTML file 3
       %br/
       %br/
-    %div{:style => "padding:20px; border:1px solid black;"}
+    %div{:style => 'padding:20px; border:1px solid black;'}
       %p
         Results:
-        %div#result
-        #{(defined? message) ? message : ""}
+        %iframe{:id=>'downloadframe', :style=>'display:none'}
+        #{(defined? iframe) ? iframe : ''}
 
 
-%div{:style => "padding:10px;"}
+%div{:style => 'padding:10px;'}
   Choose another one sample:
   %ul
     %li
-      %a{:href => "/sample1"} Sample1 - How to login to GroupDocs using the API
+      %a{:href => '/sample1'} Sample1 - How to login to GroupDocs using the API
     %li
-      %a{:href => "/sample2"} Sample2 - How to list files within GroupDocs Storage using the Storage API
+      %a{:href => '/sample2'} Sample2 - How to list files within GroupDocs Storage using the Storage API
     %li
-      %a{:href => "/sample3"} Sample3 - How to upload a file to GroupDocs using the Storage API
+      %a{:href => '/sample3'} Sample3 - How to upload a file to GroupDocs using the Storage API
     %li
-      %a{:href => "/sample4"} Sample4 - How to download a file from GroupDocs Storage using the Storage API
+      %a{:href => '/sample4'} Sample4 - How to download a file from GroupDocs Storage using the Storage API
     %li
-      %a{:href => "/sample5"} Sample5 - How to copy / move a file using the GroupDocs Storage API
+      %a{:href => '/sample5'} Sample5 - How to copy / move a file using the GroupDocs Storage API
     %li
-      %a{:href => "/sample6"} Sample6 - How to add a Signature to a document in GroupDocs Signature
+      %a{:href => '/sample6'} Sample6 - How to add a Signature to a document in GroupDocs Signature
     %li
-      %a{:href => "/sample7"} Sample7 - How to create a list of thumbnails for a document
+      %a{:href => '/sample7'} Sample7 - How to create a list of thumbnails for a document
     %li
-      %a{:href => "/sample8"} Sample8 - How to return a URL representing a single page of a Document
+      %a{:href => '/sample8'} Sample8 - How to return a URL representing a single page of a Document
     %li
-      %a{:href => "/sample9"} Sample9 - How to generate an embedded Viewer URL for a Document
+      %a{:href => '/sample9'} Sample9 - How to generate an embedded Viewer URL for a Document
     %li
-      %a{:href => "/sample10"} Sample10 - How to share a document to other users
+      %a{:href => '/sample10'} Sample10 - How to share a document to other users
     %li
-      %a{:href => "/sample11"}Sample11 - How programmatically create and post an annotation into document. How to delete the annotation
+      %a{:href => '/sample11'}Sample11 - How programmatically create and post an annotation into document. How to delete the annotation
     %li
-      %a{:href => "/sample12"}Sample12 - How to list all annotations from document
+      %a{:href => '/sample12'}Sample12 - How to list all annotations from document
     %li
-      %a{:href => "/sample13"}Sample13 - How to add collaborator to doc with annotations
+      %a{:href => '/sample13'}Sample13 - How to add collaborator to doc with annotations
     %li
-      %a{:href => "/sample14"}Sample14 - How to check the list of shares for a folder
+      %a{:href => '/sample14'}Sample14 - How to check the list of shares for a folder
     %li
-      %a{:href => "/sample15"}Sample15 - How to check the number of document's views
+      %a{:href => '/sample15'}Sample15 - How to check the number of document's views
     %li
-      %a{:href => "/sample16"}Sample16 - How to insert Assembly questionary into webpage
+      %a{:href => '/sample16'}Sample16 - How to insert Assembly questionary into webpage
     %li
-      %a{:href => "/sample17"}Sample17 - How to upload a file into the storage and compress it into zip archive
+      %a{:href => '/sample17'}Sample17 - How to upload a file into the storage and compress it into zip archive
     %li
-      %a{:href => "/sample18"}Sample18 - How to convert Doc to Docx, Docx to Doc, Docx to PDF, PPT to PDF
+      %a{:href => '/sample18'}Sample18 - How to convert Doc to Docx, Docx to Doc, Docx to PDF, PPT to PDF
     %li
-      %a{:href => "/sample19"}Sample19 - How to Compare documents using Ruby SDK
+      %a{:href => '/sample19'}Sample19 - How to Compare documents using Ruby SDK
     %li
-      %a{:href => "/sample20"}Sample20 - How to Get Compare Change list for document using Ruby SDK
+      %a{:href => '/sample20'}Sample20 - How to Get Compare Change list for document using Ruby SDK
     %li
-      %a{:href => "/sample21"}Sample21 - How to Create and Upload Envelop to GroupDocs account using Ruby SDK
+      %a{:href => '/sample21'}Sample21 - How to Create and Upload Envelop to GroupDocs account using Ruby SDK
     %li
-      %a{:href => "/sample22"}Sample22 - How create or update user and add him to collaborators using PHP SDK
+      %a{:href => '/sample22'}Sample22 - How create or update user and add him to collaborators using PHP SDK
     %li
-      %a{:href => "/envelope-sample"}Envelope sample - How to use envelope and signature API
+      %a{:href => '/envelope-sample'}Envelope sample - How to use envelope and signature API
 
-%script{:src=>"//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"}
+%script{:src=>'//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'}
 :javascript
-  function check_file() {
+  function check() {
     $.get('/sample18/check', function(data) {
-      $('#result').html( data );
-      if(data != 'File was not found.') {
-        clearInterval(cf_interval);
-      }
+      $('#results_status').fadeOut("slow");
+      $('#downloadframe').attr("src", "/sample18/downloads/" + data);
     }, 'text');  
   }
 
@@ -169,7 +168,8 @@
     callbackUrl = $("input[name=callback]").val();
     
     if(callbackUrl !== "") {
-      cf_interval = setInterval(check_file, 5000);
+      $('#results_status').fadeIn("slow");
+      setTimeout(check, 5000)
     }
 
     $('.guid_radio input').change(function(){

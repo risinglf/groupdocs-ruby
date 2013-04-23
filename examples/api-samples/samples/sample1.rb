@@ -11,7 +11,7 @@ post '/sample1' do
 
   begin
     # check required variables
-    raise "Please enter all required parameters" if settings.client_id.empty? or settings.private_key.empty?
+    raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty?
 
     # make a request to API using client_id and private_key
     user = GroupDocs::User.get!({:client_id => settings.client_id, :private_key => settings.private_key})
@@ -21,5 +21,5 @@ post '/sample1' do
   end
 
   # set variables for template
-  haml :sample1, :locals => { :userId => settings.client_id, :privateKey => settings.private_key, :user => user, :err => err }
+  haml :sample1, :locals => {:userId => settings.client_id, :privateKey => settings.private_key, :user => user, :err => err}
 end

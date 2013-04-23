@@ -13,7 +13,7 @@
     bundle install
     
 ####Run the web app:
-    bundle exec ruby app.rb
+    bundle exec ruby web.rb
 
 ####Now open `http://localhost:4567` and try it!
 

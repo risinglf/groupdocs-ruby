@@ -16,7 +16,7 @@ post '/sample21' do
   begin
 
     # check required variables
-    raise "Please enter all required parameters" if settings.client_id.empty? or settings.private_key.empty? or settings.email.empty? or settings.name.empty? or settings.lastName.empty? or settings.file.nil?
+    raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty? or settings.email.empty? or settings.name.empty? or settings.lastName.empty? or settings.file.nil?
 
     # construct path
     filepath = "#{Dir.tmpdir}/#{params[:file][:filename]}"
@@ -28,7 +28,7 @@ post '/sample21' do
     # create envelope using user id and entered by user name
     envelope = GroupDocs::Signature::Envelope.new
     envelope.name = params[:file][:filename]
-    envelope.email_subject = "Sing this!"
+    envelope.email_subject = 'Sing this!'
     envelope.create!({}, client_id: settings.client_id, private_key: settings.private_key)
 
     # Add uploaded document to envelope
@@ -42,7 +42,7 @@ post '/sample21' do
     recipient.email = settings.email
     recipient.first_name = settings.name
     recipient.last_name = settings.lastName
-    recipient.role_id = roles.detect { |role| role.name == "Signer" }.id
+    recipient.role_id = roles.detect { |role| role.name == 'Signer' }.id
 
     # Add recipient to envelope
     add = envelope.add_recipient!(recipient, {client_id: settings.client_id, private_key: settings.private_key})
@@ -61,5 +61,5 @@ post '/sample21' do
   end
 
   # set variables for template
-  haml :sample21, :locals => { :userId => settings.client_id, :privateKey => settings.private_key, :email => settings.email, :name => settings.name, :lastName => settings.lastName, :iframe => iframe, :err => err }
+  haml :sample21, :locals => {:userId => settings.client_id, :privateKey => settings.private_key, :email => settings.email, :name => settings.name, :lastName => settings.lastName, :iframe => iframe, :err => err}
 end

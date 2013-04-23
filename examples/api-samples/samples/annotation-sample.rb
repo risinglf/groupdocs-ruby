@@ -14,7 +14,7 @@ post '/annotation-sample' do
   set :file_name, params[:file_name]
 
   begin
-    raise "Please enter all required parameters" if settings.client_id.empty? or settings.private_key.empty? or settings.file_name.empty?
+    raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty? or settings.file_name.empty?
 
     GroupDocs.configure do |groupdocs|
       groupdocs.client_id = params[:client_id]
@@ -24,7 +24,7 @@ post '/annotation-sample' do
     # get document metadata
     metadata = GroupDocs::Document.metadata!(settings.file_name)
     document = GroupDocs::Storage::File.new(id: metadata.id, guid: metadata.guid).to_document
-     
+
     # create new user
     user = GroupDocs::User.new
     user.nickname = settings.email
@@ -32,17 +32,17 @@ post '/annotation-sample' do
     user.first_name = settings.first_name
     user.last_name = settings.last_name
     user = GroupDocs::User.update_account!(user)
-     
+
     # add collaborator
     document.add_collaborator! user unless document.collaborators!.any? { |c| c.guid == user.guid }
-     
+
     # build url
     annotation = true # looks like "IsAnnotation" is some helper method so I stub it here
     url = if annotation
-    "/document-annotation2/embed?quality=50&guid=#{document.file.guid}&uid=#{user.guid}&download=True"
-    else
-    "/document-viewer/embed?quality=50&guid=#{document.file.guid}&uid=#{user.guid}&download=True"
-    end
+            "/document-annotation2/embed?quality=50&guid=#{document.file.guid}&uid=#{user.guid}&download=True"
+          else
+            "/document-viewer/embed?quality=50&guid=#{document.file.guid}&uid=#{user.guid}&download=True"
+          end
 
     # you can sign document
     #url = GroupDocs::Api::Request.new(path: url).prepare_and_sign_url
@@ -52,5 +52,5 @@ post '/annotation-sample' do
     err = e.message
   end
 
-  haml :annotation_sample, :locals => { :client_id => settings.client_id, :private_key => settings.private_key, :err => err, :file_name => settings.file_name, :email => settings.email, :first_name => settings.first_name, :last_name => settings.last_name, :iframe => iframe}
+  haml :annotation_sample, :locals => {:client_id => settings.client_id, :private_key => settings.private_key, :err => err, :file_name => settings.file_name, :email => settings.email, :first_name => settings.first_name, :last_name => settings.last_name, :iframe => iframe}
 end
