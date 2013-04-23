@@ -11,7 +11,7 @@ post '/sample3' do
 
   begin
     # check required variables
-    raise "Please enter all required parameters" if settings.client_id.empty? or settings.private_key.empty?
+    raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty?
 
     # construct path
     filepath = "#{Dir.tmpdir}/#{params[:file][:filename]}"
@@ -23,11 +23,11 @@ post '/sample3' do
     # result massages
     massage = "<p>File was uploaded to GroupDocs. Here you can see your <strong>#{params[:file][:filename]}</strong> file in the GroupDocs Embedded Viewer.</p>"
     iframe = "<iframe src='https://apps.groupdocs.com/document-viewer/Embed/#{file.guid}' frameborder='0' width='720' height='600'></iframe>"
-  
+
   rescue Exception => e
     err = e.message
   end
 
   # set variables for template
-  haml :sample3, :locals => { :userId => settings.client_id, :privateKey => settings.private_key, :iframe=>iframe, :massage => massage, :err => err }
+  haml :sample3, :locals => {:userId => settings.client_id, :privateKey => settings.private_key, :iframe => iframe, :massage => massage, :err => err}
 end

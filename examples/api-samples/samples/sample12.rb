@@ -12,10 +12,10 @@ post '/sample12' do
 
   begin
     # check required variables
-    raise "Please enter all required parameters" if settings.client_id.empty? or settings.private_key.empty? or settings.file_id.empty?
+    raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty? or settings.file_id.empty?
 
     # make a request to API using client_id and private_key
-    files_list = GroupDocs::Storage::Folder.list!('/', {}, { :client_id => settings.client_id, :private_key => settings.private_key})
+    files_list = GroupDocs::Storage::Folder.list!('/', {}, {:client_id => settings.client_id, :private_key => settings.private_key})
     document = ''
 
     # get document by file ID
@@ -35,5 +35,5 @@ post '/sample12' do
   end
 
   # set variables for template
-  haml :sample12, :locals => { :userId => settings.client_id, :privateKey => settings.private_key, :annotations => annotations, :fileId => settings.file_id, :err => err }
+  haml :sample12, :locals => {:userId => settings.client_id, :privateKey => settings.private_key, :annotations => annotations, :fileId => settings.file_id, :err => err}
 end

@@ -11,10 +11,10 @@ post '/sample15' do
 
   begin
     # check required variables
-    raise "Please enter all required parameters" if settings.client_id.empty? or settings.private_key.empty?
+    raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty?
 
     # check the number of document's views. Make a request to API using client_id and private_key
-    views = GroupDocs::Document.views!({}, { :client_id => settings.client_id, :private_key => settings.private_key})
+    views = GroupDocs::Document.views!({}, {:client_id => settings.client_id, :private_key => settings.private_key})
     total = views.count()
 
   rescue Exception => e
@@ -22,5 +22,5 @@ post '/sample15' do
   end
 
   # set variables for template
-  haml :sample15, :locals => { :userId => settings.client_id, :privateKey => settings.private_key, :total => total, :err => err }
+  haml :sample15, :locals => {:userId => settings.client_id, :privateKey => settings.private_key, :total => total, :err => err}
 end

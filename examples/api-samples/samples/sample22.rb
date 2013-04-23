@@ -16,7 +16,7 @@ post '/sample22' do
   begin
 
     # check required variables
-    raise "Please enter all required parameters" if settings.client_id.empty? or settings.private_key.empty? or settings.fileId.empty? or settings.email.empty? or settings.first_name.empty? or settings.last_name.empty?
+    raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty? or settings.fileId.empty? or settings.email.empty? or settings.first_name.empty? or settings.last_name.empty?
 
     # create new user
     user = GroupDocs::User.new
@@ -48,5 +48,5 @@ post '/sample22' do
   end
 
   # set variables for template
-  haml :sample22, :locals => { :userId => settings.client_id, :privateKey => settings.private_key, :fileId => settings.fileId, :email => settings.email, :first_name => settings.first_name, :last_name => settings.last_name }
+  haml :sample22, :locals => {:userId => settings.client_id, :privateKey => settings.private_key, :fileId => settings.fileId, :email => settings.email, :first_name => settings.first_name, :last_name => settings.last_name, :err => err}
 end

@@ -211,12 +211,12 @@ div.footer h5 {
 
 .description {
     font-style: italic;
-    background: url(/images/info.png) no-repeat left;
+    background: url(../images/info.png) no-repeat left;
     padding-left: 25px;
 }
 
 .documentation {
     float: right;
-    background: url(/images/help.png) no-repeat left;
+    background: url(../images/help.png) no-repeat left;
     padding-left: 20px;
 }

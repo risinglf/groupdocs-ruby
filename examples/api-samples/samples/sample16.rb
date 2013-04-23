@@ -10,7 +10,7 @@ post '/sample16' do
 
   begin
     # check required variables
-    raise "Please enter all required parameters" if settings.fileId.empty?
+    raise 'Please enter all required parameters' if settings.fileId.empty?
 
     # construct result iframe
     iframe = "<iframe src='https://apps.groupdocs.com/assembly2/questionnaire-assembly/#{settings.fileId}' frameborder='0' width='100%' height='600'></iframe>"
@@ -20,5 +20,5 @@ post '/sample16' do
   end
 
   # set variables for template
-  haml :sample16, :locals => { :fileId => settings.fileId, :iframe => iframe, :err => err }
+  haml :sample16, :locals => {:fileId => settings.fileId, :iframe => iframe, :err => err}
 end

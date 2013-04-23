@@ -14,10 +14,10 @@ post '/sample19' do
 
   begin
     # check required variables
-    raise "Please enter all required parameters" if settings.client_id.empty? or settings.private_key.empty? or settings.sourceFileId.empty? or settings.targetFileId.empty?
+    raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty? or settings.sourceFileId.empty? or settings.targetFileId.empty?
 
     # make a request to API using client_id and private_key
-    files_list = GroupDocs::Storage::Folder.list!('/', {}, { :client_id => settings.client_id, :private_key => settings.private_key})
+    files_list = GroupDocs::Storage::Folder.list!('/', {}, {:client_id => settings.client_id, :private_key => settings.private_key})
 
     source_document = ''
     target_document = ''
@@ -34,7 +34,7 @@ post '/sample19' do
 
     unless source_document.instance_of? String and target_document.instance_of? String
 
-      info = source_document.to_document.compare!(target_document.to_document, {:client_id => settings.client_id, :private_key => settings.private_key});
+      info = source_document.to_document.compare!(target_document.to_document, {:client_id => settings.client_id, :private_key => settings.private_key})
       sleep(5)
 
       # get job by ID
@@ -42,7 +42,7 @@ post '/sample19' do
       # get all job documents
       documents = job.documents!({:client_id => settings.client_id, :private_key => settings.private_key})
       # get compared file giud
-      guid =  documents[:outputs].first.file.guid
+      guid = documents[:outputs].first.file.guid
 
       # construct result iframe
       iframe = "<iframe src='https://apps.groupdocs.com/document-viewer/embed/#{guid}' frameborder='0' width='100%' height='600'></iframe>"
@@ -54,5 +54,5 @@ post '/sample19' do
   end
 
   # set variables for template
-  haml :sample19, :locals => { :userId => settings.client_id, :privateKey => settings.private_key, :sourceFileId => settings.sourceFileId, :targetFileId => settings.targetFileId, :callbackUrl => settings.callbackUrl, :iframe => iframe, :err => err }
+  haml :sample19, :locals => {:userId => settings.client_id, :privateKey => settings.private_key, :sourceFileId => settings.sourceFileId, :targetFileId => settings.targetFileId, :callbackUrl => settings.callbackUrl, :iframe => iframe, :err => err}
 end

@@ -12,7 +12,7 @@ post '/sample17' do
 
   begin
     # check required variables
-    raise "Please enter all required parameters" if settings.client_id.empty? or settings.private_key.empty? or settings.file.nil?
+    raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty? or settings.file.nil?
 
     # construct path
     filepath = "#{Dir.tmpdir}/#{params[:file][:filename]}"
@@ -32,5 +32,5 @@ post '/sample17' do
   end
 
   # set variables for template
-  haml :sample17, :locals => { :userId => settings.client_id, :privateKey => settings.private_key, :iframe=>iframe, :massage => massage, :err => err }
+  haml :sample17, :locals => {:userId => settings.client_id, :privateKey => settings.private_key, :iframe => iframe, :massage => massage, :err => err}
 end

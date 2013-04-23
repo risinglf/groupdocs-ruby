@@ -7,22 +7,16 @@ end
 post '/sample18/convert_callback' do
   downloads_path = "#{File.dirname(__FILE__)}/../public/downloads"
 
-  unless File.directory?(downloads_path)
-    Dir::mkdir(downloads_path)
-  else
-    Dir.foreach(downloads_path) {|f| fn = File.join(downloads_path, f); File.delete(fn) if f != '.' && f != '..'}
-  end
-
   data = JSON.parse(request.body.read)
   begin
-    raise "Empty params!" if data.empty?
-    sourceId = nil
+    raise 'Empty params!' if data.empty?
+    source_id = nil
     client_key = nil
     private_key = nil
 
     data.each do |key, value|
       if key == 'SourceId'
-        sourceId = value
+        source_id = value
       end
     end
 
@@ -33,7 +27,7 @@ post '/sample18/convert_callback' do
       private_key = contents.last
     end
 
-    job = GroupDocs::Job.new({:id=>sourceId})
+    job = GroupDocs::Job.new({:id => source_id})
 
     documents = job.documents!({:client_id => client_key, :private_key => private_key})
 
@@ -47,9 +41,9 @@ end
 
 # 
 get '/sample18/check' do
-  
+
   unless File.directory?("#{File.dirname(__FILE__)}/../public/downloads")
-    return "Directory was not found."
+    return 'Directory was not found.'
   end
 
   name = nil
@@ -57,11 +51,12 @@ get '/sample18/check' do
     name = file if file != '.' && file != '..'
   end
 
-  if name
-    return "<a href='/downloads/#{name}'>#{name}</a>"
-  else
-    return "File was not found."
-  end
+  name
+end
+
+#
+get '/sample18/downloads/:filename' do |filename|
+  send_file "#{File.dirname(__FILE__)}/../public/downloads/#{filename}", :filename => filename, :type => 'Application/octet-stream'
 end
 
 
@@ -76,54 +71,59 @@ post '/sample18' do
   set :convert_type, params[:convert_type]
   set :callback, params[:callback]
 
+  downloads_path = "#{File.dirname(__FILE__)}/../public/downloads"
+  if File.directory?(downloads_path)
+    Dir.foreach(downloads_path) { |f| fn = File.join(downloads_path, f); File.delete(fn) if f != '.' && f != '..' }
+  else
+    Dir::mkdir(downloads_path)
+  end
+
   begin
     # check required variables
-    raise "Please enter all required parameters" if settings.client_id.empty? or settings.private_key.empty?
-   
+    raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty?
+
     if settings.callback[0]
-      outFile = File.new("#{File.dirname(__FILE__)}/../public/user_info.txt", "w")
-      outFile.write("#{settings.client_id} ")
-      outFile.write("#{settings.private_key}")
-      outFile.close
+      out_file = File.new("#{File.dirname(__FILE__)}/../public/user_info.txt", 'w')
+      out_file.write("#{settings.client_id}")
+      out_file.write("#{settings.private_key}")
+      out_file.close
     end
 
     file = nil
 
     # get document by file GUID
     case settings.source
-    when 'guid'
-      file = GroupDocs::Storage::File.new({:guid => settings.file_id})
-    when 'local'
-      # construct path
-      filepath = "#{Dir.tmpdir}/#{params[:file][:filename]}"
-      # open file
-      File.open(filepath, 'wb') { |f| f.write(params[:file][:tempfile].read) }
-      # make a request to API using client_id and private_key
-      file = GroupDocs::Storage::File.upload!(filepath, {}, client_id: settings.client_id, private_key: settings.private_key)
-    when 'url'
-      file = GroupDocs::Storage::File.upload_web!(settings.url, client_id: settings.client_id, private_key: settings.private_key)
-    else
-      raise "Wrong GUID source."
+      when 'guid'
+        file = GroupDocs::Storage::File.new({:guid => settings.file_id})
+      when 'local'
+        # construct path
+        file_path = "#{Dir.tmpdir}/#{params[:file][:filename]}"
+        # open file
+        File.open(file_path, 'wb') { |f| f.write(params[:file][:tempfile].read) }
+        # make a request to API using client_id and private_key
+        file = GroupDocs::Storage::File.upload!(file_path, {}, client_id: settings.client_id, private_key: settings.private_key)
+      when 'url'
+        file = GroupDocs::Storage::File.upload_web!(settings.url, client_id: settings.client_id, private_key: settings.private_key)
+      else
+        raise 'Wrong GUID source.'
     end
 
+    raise 'No such file' unless file.is_a?(GroupDocs::Storage::File)
 
+    document = file.to_document
+    # convert file
+    convert = document.convert!(settings.convert_type, {:callback => settings.callback}, {:client_id => settings.client_id, :private_key => settings.private_key})
+    sleep(10)
 
-    message = "No file with such GUID"
-    unless file.nil?
+    original_document = convert.documents!({:client_id => settings.client_id, :private_key => settings.private_key})
+    pp original_document
 
-      document = file.to_document
-      # convert file
-      convert = document.convert!(settings.convert_type, {:callback=>settings.callback}, {:client_id => settings.client_id, :private_key => settings.private_key})
-      sleep(10)
+    guid = original_document[:inputs].first.outputs.first.guid
 
-      original_document = convert.documents!({:client_id => settings.client_id, :private_key => settings.private_key})
-      # TODO: add Exception if not enough time for convertation
-      guid = original_document[:inputs].first.outputs.first.guid
-      
-  
-      if guid
-        message = ""
-      end
+    if guid
+      iframe = "<iframe width='100%' height='600' frameborder='0' src='https://apps.groupdocs.com/document-viewer/embed/#{guid}'></iframe>"
+    else
+      raise 'File was not converted'
     end
 
   rescue Exception => e
@@ -131,5 +131,5 @@ post '/sample18' do
   end
 
   # set variables for template
-  haml :sample18, :locals => { :userId => settings.client_id, :privateKey => settings.private_key, :fileId => file.guid, :converted => guid, :callback => settings.callback, :message => message, :err => err }
+  haml :sample18, :locals => {:userId => settings.client_id, :privateKey => settings.private_key, :callback => settings.callback, :fileId => file, :converted => guid, :iframe => iframe, :err => err}
 end
