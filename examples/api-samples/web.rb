@@ -14,3 +14,7 @@ get '/style.css' do
 end
 
 Dir['samples/*.rb'].each {|file| require_relative file }
+
+def partial(page, options={})
+  haml page, options.merge!(:layout => false)
+end
