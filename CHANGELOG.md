@@ -1,3 +1,11 @@
+## v1.4.1
+
+**Changes**
+
+* Fixed file guid lookup in `Form#documents!`
+* URI now can handle `[]` corrrectly
+* `Package#create!` now properly handles objects in sub-directories
+
 ## v1.4
 
 **New**
