@@ -2,6 +2,8 @@ module GroupDocs
   module Storage
     class Package < Api::Entity
 
+      include Api::Helpers::Path
+
       # @attr [String] name Package name
       attr_accessor :name
       # @attr [Array] objects Storage entities to be packed
@@ -27,11 +29,15 @@ module GroupDocs
       # @return [String] URL of package for downloading
       #
       def create!(access = {})
+        paths = @objects.map do |object|
+          prepare_path("#{object.path}/#{object.name}")
+        end
+
         json = Api::Request.new do |request|
           request[:access] = access
           request[:method] = :POST
           request[:path] = "/storage/{{client_id}}/packages/#{name}.zip"
-          request[:request_body] = @objects.map(&:name)
+          request[:request_body] = paths
         end.execute!
 
         json[:url]

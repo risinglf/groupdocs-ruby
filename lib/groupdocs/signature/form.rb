@@ -133,7 +133,7 @@ module GroupDocs
     # @option access [String] :private_key
     # @raise [ArgumentError] if template is not GroupDocs::Signature::Template
     #
-    def create!(options = {}, access = {})      
+    def create!(options = {}, access = {})
       template_id = options.delete(:template_id)
       assembly_id = options.delete(:assembly_id)
       options[:templateId] = template_id if template_id
@@ -167,7 +167,8 @@ module GroupDocs
       end.execute!
 
       json[:documents].map do |document|
-        file = Storage::File.new(:guid => document[:documentId], :name => document[:name])
+        id = document[:documentId] || document[:id]
+        file = Storage::File.new(:guid => id, :name => document[:name])
         Document.new(document.merge(:file => file))
       end
     end

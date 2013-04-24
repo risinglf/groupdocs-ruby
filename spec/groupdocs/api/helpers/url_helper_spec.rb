@@ -55,6 +55,12 @@ describe GroupDocs::Api::Helpers::URL do
       subject.send(:url_encode_path)
       subject.options[:path].should == '/?email=john%2B1@smith.com'
     end
+
+    it 'replaces square brackets' do
+      subject.options[:path] = '/?email=john[1]@smith.com'
+      subject.send(:url_encode_path)
+      subject.options[:path].should == '/?email=john%5B1%5D@smith.com'
+    end
   end
 
   describe '#sign_url' do
