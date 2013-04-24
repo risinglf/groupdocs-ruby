@@ -8,6 +8,9 @@ post '/sample25' do
   # set variables
   set :client_id, params[:client_id]
   set :private_key, params[:private_key]
+  
+  # Set download path
+  downloads_path = "#{File.dirname(__FILE__)}/../public/downloads"
 
   # Remove all files from download directory or create folder if it not there
   if File.directory?(downloads_path)
