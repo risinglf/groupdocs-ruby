@@ -1,0 +1,62 @@
+%h3{:style => 'text-align:center;'}
+  %a{:href => '/'} GroupDocs Ruby SDK Samples
+  \- Sample25
+.samplecontent{:style => 'padding:10px;'}
+  %span.description
+    %i
+      This sample will show how to use
+      %b Merge
+      and
+      %b Convert
+      method to fill the fields in Docx and Convert it to PDF by using GroupDocs Ruby SDK.
+  %br/
+  %br/
+  /
+  %span.documentation
+    %a{:href => '/docs/sample25.html'} Builtin documentation for this sample
+
+  %br/
+  %br/
+  %p
+    You entered:
+  %p
+    ClientID = #{(defined? userId) ? userId : ''}
+  %p
+    PrivateKey = #{(defined? privateKey) ? privateKey : ''}
+  %p
+    %font{:color => 'red'} #{(defined? err) ? err : ''}
+  %br/
+  #requestForm{:style => 'padding:20px; border:1px solid black;'}
+    %p Enter data for request and press "Make request" button
+    %form{:action => '/sample25', :enctype => 'multipart/form-data', :method => 'post'}
+      %label{:for => 'client_id'} GroupDocs ClientID
+      %br/
+      %input{:type=>'text', :name=>'client_id'}
+      %br/
+      %label{:for => 'private_key'} GroupDocs PrivateKey
+      %br/
+      %input{:type=>'text', :name=>'private_key'}
+      %br/
+
+
+      %div.guid_field
+        %label{:for=>'file'} Upload local file
+        %br/
+        %input{:type=>'file', :name=>'file'}
+
+      %br/
+      %br/
+
+      %input{:type => 'submit', :value => 'Make request'}
+
+      %br/
+      %a{:href=>'/templates/merge_feid_doc.docx'} Download sample Docx file
+      %br/
+      %br/
+    %div{:style => 'padding:20px; border:1px solid black;'}
+      %p
+        Results:
+        #{(defined? file_name) ? "<a href='/downloads/#{file_name}'>Download converted file</a>" : ''}
+        #{(defined? iframe) ? iframe : ''}
+
+= partial :_others_samples
