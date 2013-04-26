@@ -13,7 +13,7 @@ post '/sample18/convert_callback' do
   begin
     raise 'Empty params!' if data.empty?
     source_id = nil
-    client_key = nil
+    client_id = nil
     private_key = nil
 
     # Get value of SourceId
@@ -23,11 +23,11 @@ post '/sample18/convert_callback' do
       end
     end
 
-    # Get private key and client_key from file user_info.txt
+    # Get private key and client_id from file user_info.txt
     if File.exist?("#{File.dirname(__FILE__)}/../public/user_info.txt")
       contents = File.read("#{File.dirname(__FILE__)}/../public/user_info.txt")
       contents = contents.split(' ')
-      client_key = contents.first
+      client_id = contents.first
       private_key = contents.last
     end
 
@@ -35,10 +35,10 @@ post '/sample18/convert_callback' do
     job = GroupDocs::Job.new({:id => source_id})
 
     # Get document by job id
-    documents = job.documents!({:client_id => client_key, :private_key => private_key})
+    documents = job.documents!({:client_id => client_id, :private_key => private_key})
 
     # Download converted file
-    documents[:inputs].first.outputs.first.download!(downloads_path, {:client_id => client_key, :private_key => private_key})
+    documents[:inputs].first.outputs.first.download!(downloads_path, {:client_id => client_id, :private_key => private_key})
 
   rescue Exception => e
     err = e.message
@@ -98,7 +98,8 @@ post '/sample18' do
     # Write client and private key to the file for callback job
     if settings.callback[0]
       out_file = File.new("#{File.dirname(__FILE__)}/../public/user_info.txt", 'w')
-      out_file.write("#{settings.client_id}")
+      # white space is required
+      out_file.write("#{settings.client_id} ")
       out_file.write("#{settings.private_key}")
       out_file.close
     end
