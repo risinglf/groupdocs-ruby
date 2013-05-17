@@ -13,8 +13,8 @@ shared_examples_for GroupDocs::Signature::EntityFields do
   it { should have_accessor(:documentsCount)   }
   it { should have_accessor(:documentsPages)   }
   it { should have_accessor(:recipients)       }
-  it { should have_accessor(:watermarkText)    }
-  it { should have_accessor(:watermarkImage)   }
+  it { should have_accessor(:waterMarkText)    }
+  it { should have_accessor(:waterMarkImage)   }
 
   it { should alias_accessor(:owner_id, :ownerId)                   }
   it { should alias_accessor(:owner_guid, :ownerGuid)               }
@@ -26,8 +26,8 @@ shared_examples_for GroupDocs::Signature::EntityFields do
   it { should alias_accessor(:email_body, :emailBody)               }
   it { should alias_accessor(:documents_count, :documentsCount)     }
   it { should alias_accessor(:documents_pages, :documentsPages)     }
-  it { should alias_accessor(:watermark_text, :watermarkText)       }
-  it { should alias_accessor(:watermark_image, :watermarkImage)     }
+  it { should alias_accessor(:water_mark_text, :waterMarkText)      }
+  it { should alias_accessor(:water_mark_image, :waterMarkImage)    }
 
   describe '#recipients=' do
     it 'converts each recipient to GroupDocs::Signature::Recipient object if hash is passed' do
