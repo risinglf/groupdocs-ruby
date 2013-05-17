@@ -36,10 +36,10 @@ module GroupDocs
       attr_accessor :documentsPages
       # @attr [Array<GroupDocs::Signature::Contact>] recipients
       attr_accessor :recipients
-      # @attr [String] watermarkText
-      attr_accessor :watermarkText
-      # @attr [String] watermarkImage
-      attr_accessor :watermarkImage
+      # @attr [String] waterMarkText
+      attr_accessor :waterMarkText
+      # @attr [String] waterMarkImage
+      attr_accessor :waterMarkImage
 
       # Human-readable accessors
       alias_accessor :owner_id,          :ownerId
@@ -52,8 +52,8 @@ module GroupDocs
       alias_accessor :email_body,        :emailBody
       alias_accessor :documents_count,   :documentsCount
       alias_accessor :documents_pages,   :documentsPages
-      alias_accessor :watermark_text,    :watermarkText
-      alias_accessor :watermark_image,   :watermarkImage
+      alias_accessor :water_mark_text,   :waterMarkText
+      alias_accessor :water_mark_image,  :waterMarkImage
 
       #
       # Converts each recipient to GroupDocs::Signature::Recipient object.

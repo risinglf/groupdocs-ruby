@@ -11,8 +11,9 @@ module GroupDocs
     ACCESS_MODES = {
       :private    => 0,
       :restricted => 1,
-      :inherited  => 2,
-      :public     => 3,
+      :public     => 2,
+      :inherited  => 254,
+      :denied     => 255,
     }
 
     include Api::Helpers::AccessMode
@@ -182,6 +183,45 @@ module GroupDocs
     attr_accessor :order
     # @attr [Integer] field_count
     attr_accessor :field_count
+    [
+      :news                            ,
+      :alerts                          ,
+      :support                         ,
+      :is_real_time_broadcast          ,
+      :is_scroll_broadcast             ,
+      :is_zoom_broadcast               ,
+      :is_annotation_navigation_widget ,
+      :is_annotation_zoom_widget       ,
+      :is_annotation_download_widget   ,
+      :is_annotation_print_widget      ,
+      :is_annotation_help_widget       ,
+      :is_right_panel                  ,
+      :is_thumbnails_panel             ,
+      :is_toolbar                      ,
+      :is_text_annotation_button       ,
+      :is_rectangle_annotation_button  ,
+      :is_point_annotation_button      ,
+      :is_strikeout_annotation_button  ,
+      :is_polyline_annotation_button   ,
+      :is_typewriter_annotation_button ,
+      :is_watermark_annotation_button  ,
+      :is_viewer_navigation_widget     ,
+      :is_viewer_zoom_widget           ,
+      :is_viewer_download_widget       ,
+      :is_viewer_print_widget          ,
+      :is_viewer_help_widget           ,
+    ].each do |option|
+      # @attr [Boolean] option
+      attr_accessor :"#{option}_enabled"
+    end
+    [
+      :standard_header_always   ,
+      :annotation_document_name ,
+      :viewer_document_name     ,
+    ].each do |option|
+      # @attr [Boolean] option
+      attr_accessor :"is_#{option}_shown"
+    end
 
     #
     # Coverts passed array of attributes hash to array of GroupDocs::Storage::File.
@@ -708,7 +748,7 @@ module GroupDocs
     #   document_two = GroupDocs::Storage::Folder.list![1].to_document
     #   job = document_one.compare!(document_two)
     #   sleep(5) # wait for server to finish comparing
-    #   result = job.documents!.first
+    #   result = job.documents![:outputs].first
     #   result.changes!
     #
     # @param [Hash] access Access credentials

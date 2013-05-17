@@ -146,12 +146,41 @@ describe GroupDocs::Document do
     end
   end
 
-  it { should have_accessor(:file)           }
-  it { should have_accessor(:process_date)   }
-  it { should have_accessor(:outputs)        }
-  it { should have_accessor(:output_formats) }
-  it { should have_accessor(:order)          }
-  it { should have_accessor(:field_count)    }
+  it { should have_accessor(:file)                                    }
+  it { should have_accessor(:process_date)                            }
+  it { should have_accessor(:outputs)                                 }
+  it { should have_accessor(:output_formats)                          }
+  it { should have_accessor(:order)                                   }
+  it { should have_accessor(:field_count)                             }
+  it { should have_accessor(:news_enabled)                            }
+  it { should have_accessor(:alerts_enabled)                          }
+  it { should have_accessor(:support_enabled)                         }
+  it { should have_accessor(:is_real_time_broadcast_enabled)          }
+  it { should have_accessor(:is_scroll_broadcast_enabled)             }
+  it { should have_accessor(:is_zoom_broadcast_enabled)               }
+  it { should have_accessor(:is_annotation_navigation_widget_enabled) }
+  it { should have_accessor(:is_annotation_zoom_widget_enabled)       }
+  it { should have_accessor(:is_annotation_download_widget_enabled)   }
+  it { should have_accessor(:is_annotation_print_widget_enabled)      }
+  it { should have_accessor(:is_annotation_help_widget_enabled)       }
+  it { should have_accessor(:is_right_panel_enabled)                  }
+  it { should have_accessor(:is_thumbnails_panel_enabled)             }
+  it { should have_accessor(:is_toolbar_enabled)                      }
+  it { should have_accessor(:is_text_annotation_button_enabled)       }
+  it { should have_accessor(:is_rectangle_annotation_button_enabled)  }
+  it { should have_accessor(:is_point_annotation_button_enabled)      }
+  it { should have_accessor(:is_strikeout_annotation_button_enabled)  }
+  it { should have_accessor(:is_polyline_annotation_button_enabled)   }
+  it { should have_accessor(:is_typewriter_annotation_button_enabled) }
+  it { should have_accessor(:is_watermark_annotation_button_enabled)  }
+  it { should have_accessor(:is_viewer_navigation_widget_enabled)     }
+  it { should have_accessor(:is_viewer_zoom_widget_enabled)           }
+  it { should have_accessor(:is_viewer_download_widget_enabled)       }
+  it { should have_accessor(:is_viewer_print_widget_enabled)          }
+  it { should have_accessor(:is_viewer_help_widget_enabled)           }
+  it { should have_accessor(:is_standard_header_always_shown)         }
+  it { should have_accessor(:is_annotation_document_name_shown)       }
+  it { should have_accessor(:is_viewer_document_name_shown)           }
 
   it { should have_alias(:access_mode=, :access_mode_set!) }
 

@@ -6,7 +6,7 @@ module GroupDocs
 
       # @attr [String] name Package name
       attr_accessor :name
-      # @attr [Array] objects Storage entities to be packed
+      # @attr [Array<GroupDocs::Storage::File, GroupDocs::Storage::Folder>] objects Storage entities to be packed
       attr_accessor :objects
 
       #
