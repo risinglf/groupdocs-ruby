@@ -1,3 +1,14 @@
+## v1.4.2
+
+**New**
+
+* Added new `Document` attributes
+
+**Changes**
+
+* Fixed `Signature` attributes
+* Fixed `Document` access modes
+
 ## v1.4.1
 
 **Changes**
