@@ -15,6 +15,7 @@ module GroupDocs
       :scheduled   => 99,
     }
 
+    include Api::Helpers::SignaturePublic
     include Signature::DocumentMethods
     include Signature::EntityFields
     include Signature::EntityMethods
@@ -245,6 +246,8 @@ module GroupDocs
     # @param [GroupDocs::Signature::Field] field
     # @param [GroupDocs::Document] document
     # @param [GroupDocs::Signature::Recipient] recipient
+    # @param [Hash] options
+    # @option options [Boolean] :public Defaults to false
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
@@ -253,7 +256,7 @@ module GroupDocs
     # @raise [ArgumentError] if document is not GroupDocs::Document
     # @raise [ArgumentError] if recipient is not GroupDocs::Signature::Recipient
     #
-    def fill_field!(value, field, document, recipient, access = {})
+    def fill_field!(value, field, document, recipient, options = {}, access = {})
       field.is_a?(GroupDocs::Signature::Field) or raise ArgumentError,
         "Field should be GroupDocs::Signature::Field object, received: #{field.inspect}"
       document.is_a?(GroupDocs::Document) or raise ArgumentError,
@@ -261,10 +264,11 @@ module GroupDocs
       recipient.is_a?(GroupDocs::Signature::Recipient) or raise ArgumentError,
         "Recipient should be GroupDocs::Signature::Recipient object, received: #{recipient.inspect}"
 
+      client_id = client_id(options[:public])
       api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
-        request[:path] = "/signature/{{client_id}}/envelopes/#{id}/documents/#{document.file.guid}/recipient/#{recipient.id}/field/#{field.id}"
+        request[:path] = "/signature/#{client_id}/envelopes/#{id}/documents/#{document.file.guid}/recipient/#{recipient.id}/field/#{field.id}"
       end
 
       type = field.field_type
@@ -286,19 +290,22 @@ module GroupDocs
     # Signs envelope.
     #
     # @param [GroupDocs::Signature::Recipient] recipient
+    # @param [Hash] options
+    # @option options [Boolean] :public Defaults to false
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
     # @raise [ArgumentError] if recipient is not GroupDocs::Signature::Recipient
     #
-    def sign!(recipient, access = {})
+    def sign!(recipient, options = {}, ccess = {})
       recipient.is_a?(GroupDocs::Signature::Recipient) or raise ArgumentError,
         "Recipient should be GroupDocs::Signature::Recipient object, received: #{recipient.inspect}"
 
+      client_id = client_id(options[:public])
       Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
-        request[:path] = "/signature/{{client_id}}/envelopes/#{id}/recipient/#{recipient.id}/sign"
+        request[:path] = "/signature/#{client_id}/envelopes/#{id}/recipient/#{recipient.id}/sign"
       end.execute!
     end
 

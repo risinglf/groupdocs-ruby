@@ -120,8 +120,12 @@ describe GroupDocs::Signature::Form do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.documents!(:client_id => 'client_id', :private_key => 'private_key')
+        subject.documents!({}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
+    end
+
+    it 'can be public' do
+      lambda { subject.documents!(:public => true) }.should_not raise_error(ArgumentError)
     end
 
     it 'returns array of GroupDocs::Document objects' do

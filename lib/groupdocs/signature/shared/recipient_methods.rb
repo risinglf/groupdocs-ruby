@@ -8,19 +8,23 @@ module GroupDocs
     #
     module RecipientMethods
 
+      include Api::Helpers::SignaturePublic
+
       #
       # Returns recipients array.
       #
+      # @param [Hash] options
+      # @option options [Boolean] :public Defaults to false
       # @param [Hash] access Access credentials
       # @option access [String] :client_id
       # @option access [String] :private_key
       # @return [Array<GroupDocs::Signature::Recipient>]
       #
-      def recipients!(access = {})
+      def recipients!(options = {}, access = {})
         json = Api::Request.new do |request|
           request[:access] = access
           request[:method] = :GET
-          request[:path] = "/signature/{{client_id}}/#{class_name.pluralize}/#{id}/recipients"
+          request[:path] = "/signature/#{client_id(options[:public])}/#{class_name.pluralize}/#{id}/recipients"
         end.execute!
 
         json[:recipients].map do |recipient|

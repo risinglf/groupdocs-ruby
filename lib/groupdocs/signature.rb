@@ -33,6 +33,32 @@ module GroupDocs
       end
     end
 
+    #
+    # Returns a list of all signatures for recipient.
+    #
+    # @param [GroupDocs::Signature::Recipient] recipient
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<GroupDocs::Signature>]
+    #
+    def self.get_for_recipient!(recipient, access = {})
+      recipient.is_a?(GroupDocs::Signature::Recipient) or raise ArgumentError,
+        "Recipient should be GroupDocs::Signature::Recipient object, received: #{recipient.inspect}"
+
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = '/signature/public/signatures'
+      end
+      api.add_params(:recipientId => recipient.id)
+      json = api.execute!
+
+      json[:signatures].map do |signature|
+        new(signature)
+      end
+    end
+
     # @attr [String] id
     attr_accessor :id
     # @attr [String] userGuid
@@ -114,6 +140,31 @@ module GroupDocs
     end
 
     #
+    # Creates signature for recipient.
+    #
+    # @param [GroupDocs::Signature::Recipient] recipient
+    # @param [String] title Signature title
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def create_for_recipient!(recipient, title, access = {})
+      recipient.is_a?(GroupDocs::Signature::Recipient) or raise ArgumentError,
+        "Recipient should be GroupDocs::Signature::Recipient object, received: #{recipient.inspect}"
+
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :POST
+        request[:path] = '/signature/public/signature'
+        request[:request_body] = to_hash
+      end
+      api.add_params(:name => title, :recipientId => recipient.id)
+      json = api.execute!
+
+      self.id = json[:signature][:id]
+    end
+
+    #
     # Deletes signature.
     #
     # @param [Hash] access Access credentials
@@ -125,6 +176,36 @@ module GroupDocs
         request[:access] = access
         request[:method] = :DELETE
         request[:path] = "/signature/{{client_id}}/signatures/#{id}"
+      end.execute!
+    end
+
+    #
+    # Returns signature data.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def signature_data!(access = {})
+      self.signature_data = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/signature/public/signatures/signature/#{id}/signatureData"
+      end.execute!
+    end
+
+    #
+    # Returns initials data.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def initials_data!(access = {})
+      self.initials_data = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/signature/public/signatures/signature/#{id}/initialsData"
       end.execute!
     end
 
