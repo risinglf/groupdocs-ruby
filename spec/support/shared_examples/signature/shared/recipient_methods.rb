@@ -7,8 +7,12 @@ shared_examples_for GroupDocs::Signature::RecipientMethods do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.recipients!(:client_id => 'client_id', :private_key => 'private_key')
+        subject.recipients!({}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
+    end
+
+    it 'can be public' do
+      lambda { subject.recipients!(:public => true) }.should_not raise_error(ArgumentError)
     end
 
     it 'returns array of GroupDocs::Signature::Recipient objects' do

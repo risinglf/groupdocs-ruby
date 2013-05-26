@@ -1,6 +1,7 @@
 module GroupDocs
   class Signature::Form < Api::Entity
 
+    include Api::Helpers::SignaturePublic
     include Signature::EntityMethods
     include Signature::DocumentMethods
     include Signature::FieldMethods
@@ -45,6 +46,31 @@ module GroupDocs
 
       json[:forms].map do |form|
         new(form)
+      end
+    end
+
+    #
+    # Returns form by its identifier.
+    #
+    # @param [String] id
+    # @param [Hash] options
+    # @option options [Boolean] :public Defaults to false
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [GroupDocs::Signature::Form]
+    #
+    def self.get!(id, options = {}, access = {})
+      if options[:public]
+        json = Api::Request.new do |request|
+          request[:access] = access
+          request[:method] = :GET
+          request[:path] = "/signature/public/forms/#{id}"
+        end.execute!
+
+        new(json[:form])
+      else
+        super(id, access)
       end
     end
 
@@ -154,16 +180,20 @@ module GroupDocs
     #
     # Returns documents array.
     #
+    # @param [Hash] options
+    # @option options [Boolean] :public Defaults to false
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
     # @return [Array<GroupDocs::Document>]
     #
-    def documents!(access = {})
+    def documents!(options = {}, access = {})
+      client_id = client_id(options[:public])
+
       json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
-        request[:path] = "/signature/{{client_id}}/forms/#{id}/documents"
+        request[:path] = "/signature/#{client_id}/forms/#{id}/documents"
       end.execute!
 
       json[:documents].map do |document|

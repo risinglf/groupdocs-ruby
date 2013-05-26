@@ -4,6 +4,7 @@ module GroupDocs
     # Envelope and template entities share the same set of document methods.
     #
     # @see GroupDocs::Signature::Envelope
+    # @see GroupDocs::Signature::Form
     # @see GroupDocs::Signature::Template
     #
     module DocumentMethods
@@ -11,16 +12,35 @@ module GroupDocs
       #
       # Returns documents array.
       #
+      # @param [Hash] options
+      # @option options [Boolean] :public Defaults to false
+      # @option options [GroupDocs::Signature::Recipient] :recipient Used if :public is true and self is envelope
       # @param [Hash] access Access credentials
       # @option access [String] :client_id
       # @option access [String] :private_key
       # @return [Array<GroupDocs::Document>]
       #
-      def documents!(access = {})
+      def documents!(options = {}, access = {})
+        path = if options[:public]
+                 case class_name
+                 when 'envelope'
+                   options[:recipient].is_a?(GroupDocs::Signature::Recipient) or raise ArgumentError,
+                     "Recipient should be GroupDocs::Signature::Recipient object, received: #{options[:recipient].inspect}"
+
+                   "/signature/public/envelopes/#{id}/recipient/#{options[:recipient].id}/documents"
+                 when 'form'
+                   "/signature/public/forms/#{id}/documents"
+                 else
+                   raise ArgumentError, "Public is supported only for envelope or form."
+                 end
+               else
+                 "/signature/{{client_id}}/#{class_name.pluralize}/#{id}/documents"
+               end
+
         json = Api::Request.new do |request|
           request[:access] = access
           request[:method] = :GET
-          request[:path] = "/signature/{{client_id}}/#{class_name.pluralize}/#{id}/documents"
+          request[:path] = path
         end.execute!
 
         json[:documents].map do |document|

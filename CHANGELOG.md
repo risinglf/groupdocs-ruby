@@ -1,3 +1,21 @@
+## v1.5.0
+
+**New**
+
+* Added `Signature.get_for_recipients!`
+* Added `Signature#create_for_recipient!`
+* Added `Signature#signature_data!`
+* Added `Signature#initials_data!`
+
+**Changes**
+
+* `Signature::Envelope#fill_field!` supports `:public` flag
+* `Signature::Envelope#sign!` supports `:public` flag
+* `Signature::Form.get!` supports `:public` flag
+* `Signature::Form#documents!` supports `:public` flag
+* `Signature::Envelope#documents!` supports `:public` flag
+* `Signature::Envelope#recipients!` supports `:public` flag
+
 ## v1.4.2
 
 **New**

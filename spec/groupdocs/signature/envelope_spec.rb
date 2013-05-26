@@ -151,8 +151,12 @@ describe GroupDocs::Signature::Envelope do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.fill_field!('test', field, document, recipient, :client_id => 'client_id', :private_key => 'private_key')
+        subject.fill_field!('test', field, document, recipient, {}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
+    end
+
+    it 'can be public' do
+      lambda { subject.fill_field!('test', field, document, recipient, :public => true) }.should_not raise_error(ArgumentError)
     end
 
     it 'raises error if field is not GroupDocs::Signature::Field object' do
@@ -202,8 +206,12 @@ describe GroupDocs::Signature::Envelope do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.sign!(recipient, :client_id => 'client_id', :private_key => 'private_key')
+        subject.sign!(recipient, {}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
+    end
+
+    it 'can be public' do
+      lambda { subject.fill_field!('test', field, document, recipient, :public => true) }.should_not raise_error(ArgumentError)
     end
 
     it 'raises error if recipient is not GroupDocs::Signature::Recipient object' do
