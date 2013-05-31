@@ -30,7 +30,8 @@ module GroupDocs
       # @option options [Hash] :headers Additional HTTP headers
       # @option options [Hash] :access Access credentials hash
       # @option options [Hash, String, Array, File] :request_body payload
-      # @option options [Boolean] :plain Send payload as plain text (i.e. do not convert to JSON)
+      # @option options [Boolean] :plain Send payload as plain text (i.e. do not convert to JSON). Defaults to false.
+      # @option options [Boolean] :sign Should URL be signed. Defaults to true.
       #
       # @yieldparam [Hash] options
       #
@@ -38,6 +39,7 @@ module GroupDocs
         @options = options
         yield @options if block_given?
         @options[:access] ||= {}
+        @options[:sign] = true if @options[:sign].nil?
         @resource = RestClient::Resource.new(GroupDocs.api_server)
       end
 
@@ -55,7 +57,7 @@ module GroupDocs
         unless @signed
           parse_path
           url_encode_path
-          sign_url
+          sign_url if @options[:sign]
           @signed = true
         end
 
