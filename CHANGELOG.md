@@ -1,3 +1,9 @@
+## v1.5.1
+
+**New**
+
+* Added `:sign` flag `Api::Request.options` allowing request not to be signed
+
 ## v1.5.0
 
 **New**
