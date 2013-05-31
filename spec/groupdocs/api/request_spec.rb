@@ -16,11 +16,13 @@ describe GroupDocs::Api::Request do
     end
 
     it 'allows passing block to configure options' do
-      described_class.new do |request|
+      api = described_class.new do |request|
         request[:access] = { :client_id => 'client_id', :private_key => 'private_key' }
         request[:method] = :GET
         request[:path] = '/folders'
-      end.options.should == { :method => :GET, :path => '/folders', :access => { :client_id => 'client_id', :private_key => 'private_key' }}
+        request[:sign] = false
+      end
+      api.options.should == { :method => :GET, :path => '/folders', :sign => false, :access => { :client_id => 'client_id', :private_key => 'private_key' }}
     end
 
     it 'sets access hash to empty if it was not passed' do
@@ -43,6 +45,12 @@ describe GroupDocs::Api::Request do
 
     it 'URL encodes path' do
       subject.should_receive(:url_encode_path)
+      subject.prepare_and_sign_url
+    end
+
+    it 'does not sign url if sign options is passed' do
+      subject.options[:sign] = false
+      subject.should_not_receive(:sign_url)
       subject.prepare_and_sign_url
     end
 
