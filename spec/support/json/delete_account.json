@@ -1,0 +1,10 @@
+{
+  "result": {
+    "id": 525,
+    "guid": "822e3b54e009cd52",
+    "primary_email": "test_email@email.com"
+  },
+  "status": "Ok",
+  "error_message": null,
+  "composedOn": 1367123016312
+}

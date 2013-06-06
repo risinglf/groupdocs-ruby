@@ -42,20 +42,73 @@ describe GroupDocs::User do
     end
   end
 
-  describe '.embed_key!' do
+  describe '.delete!' do
+    before(:each) do
+      mock_api_server(load_json('delete_account'))
+    end
+
+    let!(:user) { GroupDocs::User.new }
+
+    it 'accepts access credentials hash' do
+      lambda do
+        described_class.delete!(user, :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'raises error if user is not an instance of GroupDocs::User' do
+      lambda { described_class.delete!('user') }.should raise_error(ArgumentError)
+    end
+
+    it 'returns user guid' do
+      described_class.delete!(user).should be_a(String)
+    end
+  end
+
+  describe '.generate_embed_key!' do
     before(:each) do
       mock_api_server(load_json('user_embed_key'))
     end
 
     it 'accepts access credentials hash' do
       lambda do
-        described_class.embed_key!('test-area', :client_id => 'client_id', :private_key => 'private_key')
+        described_class.generate_embed_key!('test-area', :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
-    
+
     it 'returns new user embed key for defined area' do
-      result = described_class.embed_key!('test-area')
-      result.should be_a(String)
+      described_class.generate_embed_key!('test-area').should be_a(String)
+    end
+  end
+
+  describe '.get_embed_key!' do
+    before(:each) do
+      mock_api_server(load_json('user_get_embed_key'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        described_class.get_embed_key!('test-area', :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns user embed key for defined area' do
+      described_class.get_embed_key!('test-area').should be_a(String)
+    end
+  end
+
+  describe '.area!' do
+    before(:each) do
+      mock_api_server(load_json('user_area'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        described_class.area!('60a06eg8f23a49cf807977f1444fbdd8', :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns area name by defined embed key' do
+      described_class.area!('60a06eg8f23a49cf807977f1444fbdd8').should be_a(String)
     end
   end
 
@@ -78,6 +131,23 @@ describe GroupDocs::User do
       end
     end
   end
+
+  describe '.login!' do
+    before(:each) do
+      mock_api_server(load_json('user_login'))
+    end
+
+    it 'works without access credentials hash' do
+      lambda do
+        described_class.login!('doe@john.com', 'password')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'returns GroupDocs::User object' do
+      described_class.login!('doe@john.com', 'password').should be_a(GroupDocs::User)
+    end
+  end
+
   it { should have_accessor(:id)                 }
   it { should have_accessor(:guid)               }
   it { should have_accessor(:nickname)           }

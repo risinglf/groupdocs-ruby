@@ -60,10 +60,39 @@ module GroupDocs
     end
 
     #
-    # Generates new active user embed key.
+    # Delete account user.
     #
     # @example
-    #   GroupDocs::User.embed_key!('test-area')
+    #   user = GroupDocs::User.get!
+    #   GroupDocs::User.delete!(user.users!.last)
+    #   #=> "826e3b54e009ce51"
+    #
+    # @param [GroupDocs::User] user
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [String]
+    #
+    # @raise [ArgumentError] if user is not GroupDocs::User object
+    #
+    def self.delete!(user, access = {})
+      user.is_a?(GroupDocs::User) or raise ArgumentError,
+        "User should be GroupDocs::User object, received: #{user.inspect}"
+
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :DELETE
+        request[:path] = "/mgmt/{{client_id}}/account/users/#{user.primary_email}"
+      end.execute!
+
+      json[:guid]
+    end
+
+    #
+    # Generates new user embed key.
+    #
+    # @example
+    #   GroupDocs::User.generate_embed_key!('test-area')
     #   #=> "60a06ef8f23a49cf807977f1444fbdd8"
     #
     # @param [String] area
@@ -72,7 +101,7 @@ module GroupDocs
     # @option access [String] :private_key
     # @return [String]
     #
-    def self.embed_key!(area, access = {})
+    def self.generate_embed_key!(area, access = {})
       json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
@@ -80,6 +109,52 @@ module GroupDocs
       end.execute!
 
       json[:key][:guid]
+    end
+
+    #
+    # Get user embed key. Generate new embed key if area not exists.
+    #
+    # @example
+    #   GroupDocs::User.get_embed_key!('test-area')
+    #   #=> "60a06ef8f23a49cf807977f1444fbdd8"
+    #
+    # @param [String] area
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [String]
+    #
+    def self.get_embed_key!(area, access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/mgmt/{{client_id}}/embedkey/#{area}"
+      end.execute!
+
+      json[:key][:guid]
+    end
+
+    #
+    # Get area name by embed key.
+    #
+    # @example
+    #   GroupDocs::User.area!('60a06eg8f23a49cf807977f1444fbdd8')
+    #   #=> "test-area"
+    #
+    # @param [String] embed_key
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [String]
+    #
+    def self.area!(embed_key, access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/mgmt/{{client_id}}/embedkey/guid/#{embed_key}"
+      end.execute!
+
+      json[:key][:area]
     end
 
     #
@@ -105,6 +180,27 @@ module GroupDocs
       json[:providers].map do |provider|
         Storage::Provider.new(provider)
       end
+    end
+
+    #
+    # Logins user using user name and password.
+    #
+    # @example
+    #   user = GroupDocs::User.login!('doe@john.com', 'password')
+    #   user.first_name
+    #   #=> "John"
+    #
+    # @return [GroupDocs::User]
+    #
+    def self.login!(email, password)
+      json = Api::Request.new do |request|
+        request[:sign] = false
+        request[:method] = :POST
+        request[:path] = "/shared/users/#{email}/logins"
+        request[:request_body] = password
+      end.execute!
+
+      new(json[:user])
     end
 
     # @attr [Integer] id
