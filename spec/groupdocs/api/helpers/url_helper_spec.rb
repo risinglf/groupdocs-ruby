@@ -34,11 +34,11 @@ describe GroupDocs::Api::Helpers::URL do
     end
   end
 
-  describe '#parse_path' do
+  describe '#replace_client_id' do
     it 'replaces {{client_id}} with real client ID' do
       subject.options[:path] = '/doc/{{client_id}}/files/123'
       subject.should_receive(:client_id).and_return('real_client_id')
-      subject.send(:parse_path)
+      subject.send(:replace_client_id)
       subject.options[:path].should == '/doc/real_client_id/files/123'
     end
   end

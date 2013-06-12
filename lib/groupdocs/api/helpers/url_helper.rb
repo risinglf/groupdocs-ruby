@@ -31,15 +31,6 @@ module GroupDocs
         end
 
         #
-        # Parses path replacing {{client_id}} with real one.
-        #
-        # @api private
-        #
-        def parse_path
-          options[:path].sub!(/\{\{client_id\}\}/, client_id)
-        end
-
-        #
         # URL encodes path.
         #
         # @api private
@@ -50,6 +41,15 @@ module GroupDocs
           options[:path].gsub!('[', '%5B')
           options[:path].gsub!(']', '%5D')
           options[:path].gsub!('+', '%2B')
+        end
+
+        #
+        # Parses path replacing {{client_id}} with real one.
+        #
+        # @api private
+        #
+        def replace_client_id
+          options[:path].sub!(/\{\{client_id\}\}/, client_id)
         end
 
         #
