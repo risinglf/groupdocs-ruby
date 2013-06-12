@@ -1,3 +1,9 @@
+## v1.5.2
+
+**Changes**
+
+* Do not replace `{{client_id}}` if `:sign` is `false`.
+
 ## v1.5.1
 
 **New**
