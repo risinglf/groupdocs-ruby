@@ -55,9 +55,11 @@ module GroupDocs
       #
       def prepare_and_sign_url
         unless @signed
-          parse_path
           url_encode_path
-          sign_url if @options[:sign]
+          if @options[:sign]
+            replace_client_id
+            sign_url
+          end
           @signed = true
         end
 

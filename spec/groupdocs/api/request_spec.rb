@@ -38,13 +38,19 @@ describe GroupDocs::Api::Request do
   end
 
   describe '#prepare_and_sign_url' do
-    it 'parses path' do
-      subject.should_receive(:parse_path)
+    it 'URL encodes path' do
+      subject.should_receive(:url_encode_path)
       subject.prepare_and_sign_url
     end
 
-    it 'URL encodes path' do
-      subject.should_receive(:url_encode_path)
+    it 'replaces client identifier path' do
+      subject.should_receive(:replace_client_id)
+      subject.prepare_and_sign_url
+    end
+
+    it 'does not replace client identifier path' do
+      subject.options[:sign] = false
+      subject.should_not_receive(:replace_client_id)
       subject.prepare_and_sign_url
     end
 
