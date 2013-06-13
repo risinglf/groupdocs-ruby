@@ -1,3 +1,9 @@
+## v1.5.3
+
+**Changes**
+
+* Fixes critical issue with unauthorized requests.
+
 ## v1.5.2
 
 **Changes**

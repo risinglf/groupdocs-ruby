@@ -55,11 +55,11 @@ module GroupDocs
       #
       def prepare_and_sign_url
         unless @signed
+          # the order is important here and if client_id is replaced after path
+          # is encoded, there might be bad requests
+          replace_client_id if @options[:sign]
           url_encode_path
-          if @options[:sign]
-            replace_client_id
-            sign_url
-          end
+          sign_url          if @options[:sign]
           @signed = true
         end
 
