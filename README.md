@@ -53,6 +53,8 @@ GroupDocs::Storage::Folder.create!('/folder', client_id: 'your_client_id', priva
 
 Reference to [this page](http://rubydoc.info/gems/groupdocs) for docs and examples.
 
+There is rather exhaustive documentation about internal SDK structure at [wiki page](https://github.com/groupdocs/groupdocs-ruby/wiki/Documentation-&-Guide).
+
 There are also some examples in [repository](https://github.com/groupdocs/groupdocs-ruby/tree/master/examples) and on [wiki](https://github.com/groupdocs/groupdocs-ruby/wiki)
 
 ### Entities
