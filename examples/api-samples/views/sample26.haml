@@ -1,0 +1,50 @@
+%h3{:style => 'text-align:center;'}
+  %a{:href => '/'}GroupDocs Ruby SDK Samples
+  \- Sample26
+
+.samplecontent{:style => 'padding:10px;'}
+  %span.description
+    %i This sample will show how to use Login object to be authorized at GroupDocs using Ruby SDK
+    %br/
+    %br/
+    %p
+      %font{:color => 'red'} #{(defined? err) ? err : ''}
+  %div{:style => 'padding:20px; border:1px solid black;'}
+    %p Results:
+    %table{:style => 'border:1px double black;'}
+      %tr
+        %th Field
+        %th Value
+      %tr
+        %td First Name
+        %td #{(defined? user.first_name) ? user.first_name : ''}
+      %tr
+        %td Last Name
+        %td #{(defined? user.last_name) ? user.last_name : ''}
+      %tr
+        %td Nick Name
+        %td #{(defined? user.nickname) ? user.nickname : ''}
+      %tr
+        %td Primary Email
+        %td #{(defined? user.primary_email) ? user.primary_email : ''}
+      %tr
+        %td GUID
+        %td #{(defined? user.guid) ? user.guid : ''}
+      %tr
+        %td Private key
+        %td #{(defined? user.private_key) ? user.private_key : ''}
+    %br/
+    #requestForm{:style => 'padding:20px; border:1px solid black;'}
+      %p Enter data for request and press "Make request" button
+      %form{:action => '/sample26', :enctype => 'multipart/form-data', :method => 'post'}
+        %label{:for => 'email'} Login
+        %br/
+        %input{:type=>'text', :name=>'email'}
+        %br/
+        %label{:for => 'password'} Password
+        %br/
+        %input{:type=>'text', :name=>'password'}
+        %br/
+        %input{:type => 'submit', :value => 'Make Request'}
+
+= partial :_others_samples

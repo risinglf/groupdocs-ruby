@@ -9,6 +9,7 @@ post '/sample1' do
   set :client_id, params[:client_id]
   set :private_key, params[:private_key]
 
+  user = GroupDocs::User.get!({:client_id => settings.client_id, :private_key => settings.private_key})
   begin
     # check required variables
     raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty?
