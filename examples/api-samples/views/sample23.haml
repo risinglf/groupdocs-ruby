@@ -65,18 +65,17 @@
 
   %div{:style => 'padding:20px; border:1px solid black;'}
     %p Results:
-
     #{(defined? file_name) ? "<a href='/downloads/#{file_name}'>Download converted file</a>" : ''}
-    - if page_image
-      - page_image.each do |img|
-        %p
-          %a{:href => img}Page
-        %img{:src => img}
-    - else
-      %p Enter the correct id document
+    - if (defined? page_image)
+      -if page_image
+        - page_image.each do |img|
+          %p
+            %a{:href => img}Page
+          %img{:src => img}
+      - else
+        %p Enter the correct id document
 = partial :_others_samples
 
-%script{:src=>'//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'}
 :javascript
   $(function($){
 

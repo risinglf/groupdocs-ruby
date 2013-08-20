@@ -32,20 +32,20 @@ post '/sample27' do
 
     # get document by file GUID
     case settings.source
-      when 'guid'
+    when 'guid'
         # Create instance of File
         file = GroupDocs::Storage::File.new({:guid => settings.file_id})
-      when 'local'
+    when 'local'
         # Construct path
         file_path = "#{Dir.tmpdir}/#{params[:file][:filename]}"
         # Open file
         File.open(file_path, 'wb') { |f| f.write(params[:file][:tempfile].read) }
         # Make a request to API using client_id and private_key
         file = GroupDocs::Storage::File.upload!(file_path, {}, {:client_id => settings.client_id, :private_key => settings.private_key})
-      when 'url'
+    when 'url'
         # Upload file from defined url
         file = GroupDocs::Storage::File.upload_web!(settings.url, {:client_id => settings.client_id, :private_key => settings.private_key})
-      else
+    else
         raise 'Wrong GUID source.'
     end
 
@@ -59,7 +59,7 @@ post '/sample27' do
     datasource = GroupDocs::DataSource.new
 
     # Get arry of document's fields
-    enteredData = {"sex" => 'man', "name" => 'test', "age"=> 'yes', "sunrise" => 'yes'}
+    enteredData = {"sex" => settings.sex, "name" => settings.name, "age"=> settings.age, "sunrise" => settings.sunrise}
 
     # Create Field instance and fill the fields
     datasource.fields = enteredData.map { |key, value| GroupDocs::DataSource::Field.new(name: key, type: :text, values: Array.new() << value) }
@@ -76,7 +76,7 @@ post '/sample27' do
     document = job.documents!({:client_id => settings.client_id, :private_key => settings.private_key})
 
     # Download file
-    document[:inputs][0].outputs[0].download!("#{File.dirname(__FILE__)}/../public/downloads", {:client_id => settings.client_id, :private_key => settings.private_key})
+    document[:inputs][0].outputs[0].download!(downloads_path, {:client_id => settings.client_id, :private_key => settings.private_key})
 
     # Set converted document GUID
     guid = document[:inputs][0].outputs[0].guid
@@ -92,7 +92,7 @@ post '/sample27' do
     end
 
   rescue Exception => e
-    err = e.message + ' : ' +   test.to_yaml
+    err = e.message
   end
 
   # set variables for template

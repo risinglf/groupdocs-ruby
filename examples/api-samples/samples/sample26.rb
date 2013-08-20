@@ -17,7 +17,6 @@ post '/sample26' do
     user = GroupDocs::User.login!(settings.email, settings.password)
 
   rescue Exception => e
-    puts e.message
     err = e.message
   end
 

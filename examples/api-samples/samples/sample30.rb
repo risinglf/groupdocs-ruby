@@ -18,12 +18,9 @@ post '/sample30' do
     file = GroupDocs::Storage::File.new({:guid => settings.file_id})
 
     # delete file from GroupDocs Storage
-   result = file.delete!({:client_id => settings.client_id, :private_key => settings.private_key})
+    result = file.delete!({:client_id => settings.client_id, :private_key => settings.private_key})
 
-    message = "<font color='green'>File was deleted from GroupDocs Storage</font> <br />"
-
-
-
+    message = 'File was deleted from GroupDocs Storage'
 
   rescue Exception => e
     err = e.message

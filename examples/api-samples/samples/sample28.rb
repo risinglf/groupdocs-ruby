@@ -35,7 +35,7 @@ post '/sample28' do
           annotation.remove!(:client_id => settings.client_id, :private_key => settings.private_key)
       end
 
-      message = "<font color='green'>Annotations was deleted from document</font> <br />"
+      message = 'Annotations was deleted from document'
     end
 
   rescue Exception => e
