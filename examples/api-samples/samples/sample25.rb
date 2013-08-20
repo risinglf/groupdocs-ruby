@@ -29,20 +29,20 @@ post '/sample25' do
 
     # get document by file GUID
     case settings.source
-      when 'guid'
+    when 'guid'
         # Create instance of File
         file = GroupDocs::Storage::File.new({:guid => settings.file_id})
-      when 'local'
+    when 'local'
         # Construct path
         file_path = "#{Dir.tmpdir}/#{params[:file][:filename]}"
         # Open file
         File.open(file_path, 'wb') { |f| f.write(params[:file][:tempfile].read) }
         # Make a request to API using client_id and private_key
         file = GroupDocs::Storage::File.upload!(file_path, {}, {:client_id => settings.client_id, :private_key => settings.private_key})
-      when 'url'
+    when 'url'
         # Upload file from defined url
         file = GroupDocs::Storage::File.upload_web!(settings.url, {:client_id => settings.client_id, :private_key => settings.private_key})
-      else
+    else
         raise 'Wrong GUID source.'
     end
 
