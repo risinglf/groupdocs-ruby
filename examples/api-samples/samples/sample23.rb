@@ -44,7 +44,7 @@ post '/sample23' do
 
     #Create new page
     page_image = document.page_images!(700, 700, {first_page: 0, page_count: 2}, {:client_id => settings.client_id, :private_key => settings.private_key})
-
+    pp page_image
   rescue Exception => e
     err = e.message
   end

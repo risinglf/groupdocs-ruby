@@ -66,7 +66,7 @@ post '/sample27' do
 
 
     # Adds datasource.
-    test = datasource.add!({:client_id => settings.client_id, :private_key => settings.private_key})
+    datasource.add!({:client_id => settings.client_id, :private_key => settings.private_key})
 
     # Creates new job to merge datasource into document.
     job = document.datasource!(datasource, {:new_type => settings.type}, {:client_id => settings.client_id, :private_key => settings.private_key})

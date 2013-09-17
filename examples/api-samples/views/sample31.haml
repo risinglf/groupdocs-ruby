@@ -1,0 +1,111 @@
+%h3{:style => 'text-align:center;'}
+  %a{:href => '/'} GroupDocs Ruby SDK Samples
+  \- Sample31
+.samplecontent{:style => 'padding:10px;'}
+  %span.description
+    %i
+      This sample will show how to dinamically create your own questionary using forms and build signature form from the result document using Ruby SDK
+  %br/
+  %br/
+  %span.documentation
+    %a{:href => '/docs/sample31.html'} Builtin documentation for this sample
+  %br/
+  %br/
+  %p
+    You entered:
+  %p
+    ClientID = #{(defined? userId) ? userId : ''}
+  %p
+    PrivateKey = #{(defined? privateKey) ? privateKey : ''}
+  %p
+    Template file GUID = #{(defined? template_guid) ? template_guid : ''}
+  %p
+    Name = #{(defined? name) ? name : ''}
+  %p
+    Email = #{(defined? email) ? email : ''}
+  %p
+    Country = #{(defined? country) ? country : ''}
+  %p
+    City = #{(defined? city) ? city : ''}
+  %p
+    Street = #{(defined? street) ? street : ''}
+  %p
+    %font{:color => 'red'} #{(defined? err) ? err : ''}
+  %br/
+  #requestForm{:style => 'padding:20px; border:1px solid black;'}
+    %p Enter data for request and press "Make request" button
+    %form{:action => '/sample31', :enctype => 'multipart/form-data', :method => 'post'}
+      %label{:for => 'client_id'} GroupDocs ClientID
+      %br/
+      %input{:type=>'text', :name=>'client_id'}
+      %br/
+      %label{:for => 'private_key'} GroupDocs PrivateKey
+      %br/
+      %input{:type=>'text', :name=>'private_key'}
+      %br/
+      %label{:for => 'template_guid'} Template file GUID
+      %br/
+      %input{:type=>'text', :name=>'template_guid'}
+      %br/
+      %label{:for => 'email'} Email
+      %br/
+      %input{:type=>'text', :name=>'email'}
+      %br/
+      %label{:for => 'name'} Name
+      %br/
+      %input{:type=>'text', :name=>'name'}
+      %br/
+      %label{:for => 'last_name'} Last Name
+      %br/
+      %input{:type=>'text', :name=>'last_name'}
+      %br/
+      %label{:for => 'country'} Country
+      %br/
+      %input{:type=>'text', :name=>'country'}
+      %br/
+      %label{:for => 'city'} City
+      %br/
+      %input{:type=>'text', :name=>'city'}
+      %br/
+      %label{:for => 'street'} Street
+      %br/
+      %input{:type=>'text', :name=>'street'}
+      %br/
+      %label{:for=>'callback'}
+        Callback URL
+        %span.optional (Optional)
+        %br/
+        %font{:color=>'grey'} (For test Callback you can use this URL: http://groupdocs-ruby-samples.herokuapp.com/sample31/callback)
+      %input{:type=>'text', :size=>'70', :value=>"#{(defined? callback) ? callback : ''}", :name=>'callback'}
+
+      %br/
+      %br/
+
+      %input{:type => 'submit', :value => 'Make request'}
+      %span{:id=>'results_status', :style=>'color:red;display:none;'} (Please wait for ajax response)
+
+    %div{:style => 'padding:20px; border:1px solid black;'}
+      %p Results:
+      %iframe{:id=>'downloadframe', :style=>'display:none'}
+      #{(defined? iframe) ? iframe : ''}
+
+= partial :_others_samples
+
+%script{:src=>'//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'}
+:javascript
+  function check() {
+    $.get('/sample31/check', function(data) {
+      $('#results_status').fadeOut("slow");
+      $('#downloadframe').attr("src", "/sample31/downloads/" + data);
+    }, 'text');
+  }
+
+  $(function($){
+    callbackUrl = $("input[name=callback]").val();
+
+    if(callbackUrl !== "") {
+      $('#results_status').fadeIn("slow");
+      setTimeout(check, 5000)
+    }
+
+  });
