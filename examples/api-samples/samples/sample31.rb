@@ -122,11 +122,13 @@ post '/sample31' do
     # Get arry of document's fields
     enteredData = {"email" => settings.email, "name" => settings.name, "last_name" => settings.last_name, "country"=> settings.country, "city" => settings.city, "street" => settings.street}
 
+
     # Create Field instance and fill the fields
     datasource.fields = enteredData.map { |key, value| GroupDocs::DataSource::Field.new(name: key, type: :text, values: Array.new() << value) }
 
     # Adds datasource.
     datasource.add!({:client_id => settings.client_id, :private_key => settings.private_key})
+
 
     # Creates new job to merge datasource into document.
     job = document.datasource!(datasource, {:new_type => "pdf"}, {:client_id => settings.client_id, :private_key => settings.private_key})
@@ -135,25 +137,28 @@ post '/sample31' do
     # Returns an hash of input and output documents associated to job.
     jobInfo = job.documents!({:client_id => settings.client_id, :private_key => settings.private_key})
 
-    # Create envelope using user id and entered by user name
+    # Creates new document to envelope
+    document = jobInfo[:inputs][0].outputs[0].to_document
+
+    # Creates envelope using user id and entered by user name
     envelope = GroupDocs::Signature::Envelope.new
     envelope.name = jobInfo[:inputs][0].outputs[0].name
     envelope.create!({}, {:client_id => settings.client_id, :private_key => settings.private_key})
 
-    # Add uploaded document to envelope
+    # Adds uploaded document to envelope
     envelope.add_document!(document, {}, {:client_id => settings.client_id, :private_key => settings.private_key})
 
     # Get role list for current user
     roles = GroupDocs::Signature::Role.get!({}, {client_id: settings.client_id, private_key: settings.private_key})
 
-    # Create new recipient
+    # Creates new recipient
     recipient = GroupDocs::Signature::Recipient.new
     recipient.email = 'test@test.com'
     recipient.first_name = 'test'
     recipient.last_name = 'test'
     recipient.role_id = roles.detect { |role| role.name == 'Signer' }.id
 
-    # Add recipient to envelope
+    # Adds recipient to envelope
     envelope.add_recipient!(recipient, {client_id: settings.client_id, private_key: settings.private_key})
 
     #Get field
