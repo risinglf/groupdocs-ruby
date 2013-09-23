@@ -8,15 +8,17 @@ post '/sample5' do
   # set variables
   set :client_id, params[:client_id]
   set :private_key, params[:private_key]
-  set :file_id, params[:file_id]
+  set :file_id, params[:fileId]
   set :url, params[:url]
   set :copy, params[:copy]
   set :move, params[:move]
   set :dest_path, params[:dest_path]
+  set :source, params[:source]
 
   begin
+
     # check required variables
-    raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty? or settings.file_id.empty?
+    raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty?
 
     file = nil
     # get document by file GUID
@@ -35,7 +37,7 @@ post '/sample5' do
       else
         raise 'Wrong GUID source.'
     end
-
+     # raise files_list.to_yaml
     # copy file using request to API
     unless settings.copy.nil?
       file = file.copy!(settings.dest_path, {}, {:client_id => settings.client_id, :private_key => settings.private_key})

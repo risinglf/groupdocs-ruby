@@ -25,10 +25,12 @@ post '/sample6' do
     signature_one_path = "#{Dir.tmpdir}/#{params[:signature][:filename]}"
     File.open(signature_one_path, 'wb') { |f| f.write(params[:signature][:tempfile].read) }
 
+
     # add signature to file using API
     signature_one = GroupDocs::Signature.new(name: 'Test', image_path: signature_one_path)
     signature_one.position = {top: 0.1, left: 0.07, width: 50, height: 50}
 
+    #raise signature_one.to_yaml
     # make a request to API using client_id and private_key
     signed_documents = GroupDocs::Document.sign_documents!([document_one], [signature_one], {}, {:client_id => settings.client_id, :private_key => settings.private_key})
     guid = signed_documents.first.file.guid
