@@ -16,7 +16,7 @@
   %p
     PrivateKey = #{(defined? privateKey) ? privateKey : ''}
   %p
-    FileId = #{(defined? fileId) ? fileId : ''}
+    FileId = #{(defined? name) ? name : ''}
   %p
     %font{:color => 'red'} #{(defined? err) ? err : ''}
   %br/
@@ -31,9 +31,9 @@
       %br/
       %input{:type=>'text', :name=>'private_key'}
       %br/
-      %label{:for => 'file_id'} GroupDocs FileID
+      %label{:for => 'name'} GroupDocs File Name
       %br/
-      %input{:type=>'text', :name=>'fileId'}
+      %input{:type=>'text', :name=>'name'}
       %br/
       %br/
       %input{:type => 'submit', :value => 'Delete'}/
