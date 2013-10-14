@@ -65,6 +65,52 @@ module GroupDocs
     end
 
     #
+    # Returns job by its identifier.
+    #
+    # @param [Integer] id
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [GroupDocs::Job]
+    #
+    def self.get_xml!(id, access = {})
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/async/{{client_id}}/jobs/#{id}"
+      end
+      api.add_params(:format => 'xml')
+      json = api.execute!
+
+      Job.new(json)
+    end
+
+
+    #
+    # Returns job by its identifier.
+    #
+    # @param [String] options
+    # @option statusIds [String] :statusIds (required)
+    # @option actions [String] :actions
+    # @option excluded_actions [String] :excluded_actions
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [GroupDocs::Job]
+    #
+    def self.get_resources!(options = {}, access = {})
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/async/{{client_id}}/jobs/resources"
+      end
+      api.add_params(options)
+      json = api.execute!
+
+      json[:dates]
+    end
+
+    #
     # Creates new draft job.
     #
     # @param [Hash] options
@@ -80,7 +126,7 @@ module GroupDocs
     def self.create!(options, access = {})
       options[:actions] or raise ArgumentError, 'options[:actions] is required.'
       options[:actions] = convert_actions_to_byte(options[:actions])
-      options[:out_formats] = options[:out_formats].join(?;) if options[:out_formats]
+      #options[:out_formats] = options[:out_formats].join(?;) if options[:out_formats]
 
       api = Api::Request.new do |request|
         request[:access] = access
@@ -193,6 +239,41 @@ module GroupDocs
       end
 
       documents
+    end
+
+    #
+    # Returns job actions in human-readable format.
+    #
+    # @return [Array<Symbol>]
+    #
+    def actions
+      @actions.split(', ').map { |action| action.underscore.to_sym } if @actions
+    end
+
+    #
+    # Returns an array of input and output documents associated to jobs.
+    #
+    # @param [Hash] options
+    # @option page [String] Page Index
+    # @option count [String] Page Size
+    # @option actions [String] Actions
+    # @option excluded_actions [String] Excluded actions
+    # @option order_by [String] Order by
+    # @option order_asc [String] Order ask
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Hash]
+    #
+    def self.jobs_documents!(options = {}, access = {})
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/async/{{client_id}}/jobs/documents"
+      end
+      api.add_params(options)
+      api.execute!
+
     end
 
     #

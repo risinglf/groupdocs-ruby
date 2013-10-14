@@ -33,6 +33,348 @@ module GroupDocs
       end
     end
 
+
+    #
+    # Fill in envelope field.
+    #
+    # @param [String] envelope Envelope GUID
+    # @param [String] document Document GUID
+    # @param [String] recipient Recipient GUID
+    # @param [String] field Field GUID
+    # @param [Hash] post_data Data to be placed in field
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def fill_envelope!(envelope, document, recipient, field, post_data, access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/signature/public/envelopes/#{envelope}/documents/#{document}/recipient/#{recipient}/field/#{field}"
+        request[:request_body] = post_data
+      end.execute!
+
+      json[:field]
+    end
+
+    #
+    # Sing envelope
+    #
+    # @param [String] envelope Envelope GUID
+    # @param [String] recipient Recipient GUID
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def sign_envelope!(envelope, recipient, access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/signature/public/envelopes/#{envelope}/recipient/#{recipient}/sign"
+      end.execute!
+
+      new(json)
+    end
+
+    #
+    # Sing envelope
+    #
+    # @param [String] envelope Envelope GUID
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def recipient!(envelope, access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/signature/public/envelopes/#{envelope}/recipient/"
+      end.execute!
+
+      json[:recipient]
+    end
+
+    #
+    # Get signature field for document in envelope per recipient.
+    #
+    # @param [String] envelope Envelope GUID
+    # @param [Hash] options
+    # @option [String] document Document GUID
+    # @option [String] recipient Recipient GUID
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def field_envelope_recipient!(envelope, options = {}, access = {})
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/signature/public/envelopes/#{envelope}/fields"
+      end
+      api.add_params(options)
+      json = api.execute!
+
+      json[:field]
+    end
+
+    #
+    # Get signed envelope field data.
+    #
+    # @param [String] envelope Envelope GUID
+    # @param [String] recipient Recipient GUID
+    # @param [String] field Field GUID
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def field_envelope_date!(envelope, recipient, field,access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/signature/public/envelopes/#{envelope}/fields/recipient/#{recipient}/field/#{field}"
+      end.execute!
+
+    end
+
+    #
+    # Get signature envelope.
+    #
+    # @param [String] envelope Envelope GUID
+    # @param [String] recipient Recipient GUID
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def get_sign_envelope!(envelope, recipient, access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/signature/public/envelopes/#{envelope}/recipient/#{recipient}"
+      end.execute!
+
+      json[:envelope]
+    end
+
+    #
+    # Get signature envelope.
+    #
+    # @param [String] envelope Envelope GUID
+    # @param [String] recipient Recipient GUID
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def get_signed_documents!(envelope, recipient, access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/signature/public/envelopes/#{envelope}/recipient/#{recipient}/documents/get"
+      end.execute!
+
+      new(json)
+    end
+
+    #
+    # Get signature envelope.
+    #
+    # @param [String] form Form GUID
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def fill_signature_form!(form, access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/signature/public/forms/#{form}/fill"
+      end.execute!
+
+      json[:participant]
+    end
+
+    #
+    # Fill form field.
+    #
+    # @param [String] form Form GUID
+    # @param [String] document Document GUID
+    # @param [String] participant Participant GUID
+    # @param [String] field Field GUID
+    # @param [String] authentication Authentication signature
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def fill_form_field!(form, document, participant, field, authentication, access = {})
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/signature/public/forms/#{form}/documents/#{document}/participant/#{participant}/field/#{field}"
+      end
+      api.add_params(:participantAuthSignature => authentication)
+      json = api.execute!
+
+      json[:field]
+    end
+
+    #
+    # Sign form.
+    #
+    # @param [String] form Form GUID
+    # @param [String] participant Participant GUID
+    # @param [String] authentication Authentication signature
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def sign_form!(form, participant, authentication, access = {})
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/signature/public/forms/#{form}/participant/#{participant}/sign"
+      end
+      api.add_params(:participantAuthSignature => authentication)
+      json = api.execute!
+
+      json[:field]
+    end
+
+    #
+    #  Get form fields for document in form per participant
+    #
+    # @param [String] form Form GUID
+    # @param [Hash] options
+    # @option [String] document Document GUID
+    # @option [String] participant Participant GUID
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def get_sign_form!(form, options = {}, access = {})
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/signature/public/forms/#{form}/fields"
+      end
+      api.add_params(options)
+      json = api.execute!
+
+      json[:field]
+    end
+
+    #
+    # Get signed form documents.
+    #
+    # @param [String] form Form GUID
+    # @param [String] participant Participant GUID
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def get_signed_documents_form!(form, participant, access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/signature/public/forms/#{form}/participant/#{participant}/documents/get"
+      end.execute!
+
+      new(json)
+    end
+
+    #
+    # Get signature form participant.
+    #
+    # @param [String] form Form GUID
+    # @param [String] participant Participant GUID
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def get_sign_form_participant!(form, participant, access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/signature/public/forms/#{form}/participant/#{participant}"
+      end.execute!
+
+      json[:participant]
+    end
+
+    #
+    #  Sign document
+    #
+    # @param [String] document Document GUID
+    # @param [Hash] settings Settings of the signing document
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def sign_document!(document, settings = {}, access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :POST
+        request[:path] = "/signature/public/documents/#{document}/sign"
+        request[:request_body] = settings
+      end.execute!
+
+      json[:jobId]
+    end
+
+    #
+    #  Verify to document
+    #
+    # @param [String] document Document GUID
+    # @param [Hash] settings Settings of the signing document
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def self.verify!(access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :POST
+        request[:path] = "/signature/public/verify"
+        request[:request_body] = streem
+      end.execute!
+
+      nev(json)
+    end
+
+    #
+    #  Sign document
+    #
+    # @param [String] job Job GUID
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def sign_document_status!(job, access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/signature/public/documents/#{job}/status"
+      end.execute!
+
+       new(json)
+    end
+
+
+
     #
     # Returns a list of all signatures for recipient.
     #

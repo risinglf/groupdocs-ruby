@@ -102,6 +102,9 @@ module GroupDocs
     attr_accessor :waterMarkText
     # @attr [String] waterMarkImage
     attr_accessor :waterMarkImage
+    # @attr [Boolean] notifyOwnerOnSign
+    attr_accessor :notifyOwnerOnSign
+
 
     # Human-readable accessors
     alias_accessor :owner_guid,                    :ownerGuid
@@ -114,6 +117,8 @@ module GroupDocs
     alias_accessor :can_participant_download_form, :canParticipantDownloadForm
     alias_accessor :water_mark_text,               :waterMarkText
     alias_accessor :water_mark_image,              :waterMarkImage
+    alias_accessor :notifyOwnerOnSign,             :notifyOwnerOnSign
+
 
     #
     # Converts status to human-readable format.
@@ -160,17 +165,19 @@ module GroupDocs
     # @raise [ArgumentError] if template is not GroupDocs::Signature::Template
     #
     def create!(options = {}, access = {})
-      template_id = options.delete(:template_id)
-      assembly_id = options.delete(:assembly_id)
-      options[:templateId] = template_id if template_id
-      options[:assemblyId] = assembly_id if assembly_id
+      #template_id = options.delete(:template_id)
+      #assembly_id = options.delete(:assembly_id)
+      #options[:templateId] = template_id if template_id
+      #options[:assemblyId] = assembly_id if assembly_id
 
       api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :POST
         request[:path] = '/signature/{{client_id}}/form'
         request[:request_body] = to_hash
+
       end
+
       api.add_params(options.merge(:name => name))
       json = api.execute!
 
@@ -209,12 +216,14 @@ module GroupDocs
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
+    # @param callbackUrl [String]:callbackUrl  Webhook Callback Url
     #
-    def publish!(access = {})
+    def publish!(callbackUrl, access = {})
       Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
         request[:path] = "/signature/{{client_id}}/forms/#{id}/publish"
+        request[:request_body] = callbackUrl
       end.execute!
     end
 
@@ -370,6 +379,39 @@ module GroupDocs
         request[:access] = access
         request[:method] = :POST
         request[:path] = "/signature/{{client_id}}/forms/#{form.id}/templates/#{template.id}"
+      end.execute!
+    end
+
+    #
+    # Modify signature form document
+    #
+    # @example
+    #   form = GroupDocs::Signature::Form.get!("g94h5g84hj9g4gf23i40j")
+    #   document = envelope.documents!.first
+    #   recipient = envelope.recipients!.first
+    #   field = envelope.fields!(document, recipient).first
+    #   field.name = "Field"
+    #   envelope.modify_field! field, document
+    #
+    #
+    # @param [GroupDocs::Document] document
+    # @param [Hash] options
+    # @option options [Integer] Order
+    # @option options [String] newDocumentGuid
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @raise [ArgumentError] if document is not GroupDocs::Document
+    #
+    def modify_form_document!(document, options = {}, access = {})
+      document.is_a?(GroupDocs::Document) or raise ArgumentError,
+                                                   "Document should be GroupDocs::Document object, received: #{document.inspect}"
+
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/signature/{{client_id}}/forms/#{form}/document/#{document.file.guid}/"
+        request[:request_body] = options
       end.execute!
     end
 

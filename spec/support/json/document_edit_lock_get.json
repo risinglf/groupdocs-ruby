@@ -1,0 +1,10 @@
+{
+    "result": {
+        "doc_guid": null,
+        "file_id": null,
+        "edit_url": null
+    },
+    "status": "Failed",
+    "error_message": "Google Drive integration is not completed.",
+    "composedOn": 1380117251956
+}

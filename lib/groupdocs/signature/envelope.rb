@@ -460,5 +460,61 @@ module GroupDocs
       end.execute!
     end
 
+    #
+    #  Get signed envelope document.
+    #
+    # @example
+    #   envelope = GroupDocs::Signature::Envelope.get!("g94h5g84hj9g4gf23i40j")
+    #   document = GroupDocs::Storage::Folder.list!.last.to_document
+    #   envelope.add_document! document
+    #
+    # @param [GroupDocs::Document] document
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @raise [ArgumentError] if document is not GroupDocs::Document
+    #
+    def get_envelope!(document, access = {})
+      document.is_a?(GroupDocs::Document) or raise ArgumentError,
+                                                   "Document should be GroupDocs::Document object, received: #{document.inspect}"
+
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/signature/{{client_id}}/#{class_name.pluralize}/#{id}/document/#{document.file.guid}"
+      end.execute!
+
+    end
+
+    #
+    # Cancel envelope.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def cancel!( access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/signature/{{client_id}}/envelopes/#{id}/cancel"
+      end.execute!
+    end
+
+    #
+    # Retry sign envelope.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def retry!(access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/signature/{{client_id}}/envelopes/#{id}/retry"
+      end.execute!
+    end
+
   end # Signature::Envelope
 end # GroupDocs

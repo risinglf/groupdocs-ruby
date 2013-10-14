@@ -183,6 +183,60 @@ module GroupDocs
     end
 
     #
+    # Adds a new storage provider configuration.
+    #
+    # @param [String] provider Storage provider name
+    # @param [Hash] access Access credentials
+    # @param [Array] provider_info
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def add_provider!(provider, provider_info = {}, access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :POST
+        request[:path] = "/mgmt/{{client_id}}/storages/#{provider}"
+        request[:request_body] = provider_info
+      end.execute!
+
+    end
+
+    #
+    # Updates user's storage provider configuration.
+    #
+    # @param [String] provider Storage provider name
+    # @param [Hash] access Access credentials
+    # @param [Array] provider_info
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def update_provider!(provider, provider_info = {}, access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/mgmt/{{client_id}}/storages/#{provider}"
+        request[:request_body] = provider_info
+      end.execute!
+
+    end
+
+
+    #
+    # Revoke.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def self.revoke!(access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/mgmt/{{client_id}}/revoke"
+      end.execute!
+
+    end
+    #
     # Logins user using user name and password.
     #
     # @example
@@ -201,6 +255,90 @@ module GroupDocs
       end.execute!
 
       new(json[:user])
+    end
+
+    #
+    # Logins user using user name and password.
+    #
+    # @param [String]guid
+    # @param [Hash] options
+    # @option [String] :filename File name
+    # @option [Boolean] :render Render
+    #
+    def self.download!(path, name, guid, options = {})
+      api = Api::Request.new do |request|
+        request[:sign] = false
+        request[:method] = :DOWNLOAD
+        request[:path] = "/shared/files/#{guid}"
+      end
+      api.add_params(options)
+      response = api.execute!
+
+      filepath = "#{path}/#{name}"
+      Object::File.open(filepath, 'wb') do |file|
+        file.write(response)
+      end
+
+      filepath
+    end
+
+    #
+    # Get file in xml.
+    #
+    #@param [String] guid
+    #
+    def self.get_xml!(path, name, guid)
+      response = Api::Request.new do |request|
+        request[:sign] = false
+        request[:method] = :DOWNLOAD
+        request[:path] = "/shared/files/#{guid}/xml"
+      end.execute!
+
+      filepath = "#{path}/#{name}"
+      Object::File.open(filepath, 'wb') do |file|
+        file.write(response)
+      end
+
+      filepath
+    end
+
+    #
+    # Get file in html.
+    #
+    #@param [String] guid
+    #
+    def self.get_html!(path, name, guid)
+      response = Api::Request.new do |request|
+        request[:sign] = false
+        request[:method] = :DOWNLOAD
+        request[:path] = "/shared/files/#{guid}/html"
+      end.execute!
+
+      filepath = "#{path}/#{name}"
+      Object::File.open(filepath, 'wb') do |file|
+        file.write(response)
+      end
+
+      filepath
+    end
+
+    #
+    # Get file in html.
+    #
+    #@param [String] path
+    #
+    def get_packages!(path)
+      response = Api::Request.new do |request|
+        request[:sign] = false
+        request[:method] = :GET
+        request[:path] = "/shared/packages/#{path}"
+      end.execute!
+
+      Object::File.open(path, 'wb') do |file|
+        file.write(response)
+      end
+
+      path
     end
 
     # @attr [Integer] id
@@ -299,7 +437,73 @@ module GroupDocs
     end
 
     #
-    # Returns an array of users associated to current user account.
+    # Updates user profile.
+    #
+    # @example
+    #   user = GroupDocs::User.get!
+    #   old_password = user.password_salt
+    #   new_password = 'Smith'
+    #   user.update_password!
+    # @param [Array] pas_info ([old_password, new_password, reset_token])
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def self.update_password!(pas_info = {}, access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = '/mgmt/{{client_id}}/profile/password'
+        request[:request_body] = pas_info
+      end.execute!
+    end
+
+    #
+    # Get user profile by reset token
+    #
+    # @param [String] callerId
+    # @param [Array] options
+    # @option [Hash] :token
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [String]
+    #
+    def self.reset_token!(caller_id, options ={}, access = {})
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/mgmt/#{caller_id}/reset-tokens"
+      end
+      api.add_params(options)
+      api.execute!
+
+    end
+
+    #
+    # Get user profile by reset token
+    #
+    # @param [String] callerId
+    # @param [Array] options
+    # @option [Hash] :token
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [String]
+    #
+    def self.verif_token!(caller_id, options ={}, access = {})
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/mgmt/#{caller_id}/verif-tokens"
+      end
+      api.add_params(options)
+      api.execute!
+
+    end
+
+    #
+    # Get user profile by verif token
     #
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
@@ -319,6 +523,152 @@ module GroupDocs
     end
 
     #
+    # Get user profile by claimed token
+    #
+    # @param [String] callerId
+    # @param [Array] options
+    # @option [Hash] :token
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [String]
+    #
+    def self.claimed_token!(caller_id, options ={}, access = {})
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/mgmt/#{caller_id}/claimed-tokens"
+      end
+      api.add_params(options)
+      api.execute!
+
+    end
+
+    #
+    # Get alien user profile
+    #
+    # @param [String] callerId
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [String]
+    #
+    def self.get_profile!(caller_id, access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/mgmt/#{caller_id}/user/{{client_id}}/profile"
+      end.execute!
+
+      json[:user]
+    end
+
+    #
+    # Update alien user profile
+    #
+    # @param [String] callerId
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [String]
+    #
+    def update_profile!(caller_id, access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/mgmt/#{caller_id}/user/{{client_id}}/profile"
+        request[:request_body] = to_hash
+      end.execute!
+
+      json[:user_guid]
+    end
+
+    #
+    # Create new user
+    #
+    # @param [String] callerId
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [GroupDocs::User]
+    #
+    def create_user!(caller_id, access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :POST
+        request[:path] = "/mgmt/#{caller_id}/user"
+        request[:request_body] = to_hash
+      end.execute!
+
+    end
+
+    #
+    # Create new login
+    #
+    # @param [String] callerId
+    # @param [Hash] options
+    # @option options [String] :password
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [GroupDocs::User]
+    #
+    def self.create_login!(caller_id, options = {}, access = {})
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :POST
+        request[:path] = "/mgmt/#{caller_id}/user/{{client_id}}/logins"
+      end
+      api.add_params(options)
+      api.execute!
+
+    end
+
+    #
+    # Change alien user password.
+    #
+    # @example
+    #   user = GroupDocs::User.get!
+    #   old_password = user.password_salt
+    #   new_password = 'Smith'
+    #   user.update_password!
+    #
+    # @param [String] callerId
+    # @param [Array] pas_info ([old_password, new_password, reset_token])
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def self.update_alien_password!(caller_id, pas_info = {}, access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/mgmt/#{caller_id}/users/{{client_id}}password"
+        request[:request_body] = pas_info
+      end.execute!
+
+      json[:user_guid]
+    end
+
+    #
+    # Change alien user password.
+    #
+    # @param [String] callerId
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def self.reset_alien_password!(caller_id, access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :DELETE
+        request[:path] = "/mgmt/#{caller_id}/users/{{client_id}}password"
+      end.execute!
+
+      json[:user_name]
+    end
+
+    #
     # Returns an array of roles.
     #
     # @param [Hash] access Access credentials
@@ -334,6 +684,77 @@ module GroupDocs
       end.execute!
 
       json[:roles]
+    end
+
+    #
+    # Returns an array of roles.
+    #
+    # # @param [String] callerId
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def self.user_roles!(caller_id, access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/mgmt/#{caller_id}/users/{{client_id}}/roles"
+      end.execute!
+
+      json[:roles]
+    end
+
+    #
+    # Set user roles.
+    #
+    # @param [String] callerId
+    # @param [Hash] role_info (:id, :name)
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def self.set_user_roles!(caller_id, role_info = {}, access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/mgmt/#{caller_id}/users/{{client_id}}/roles"
+        request[:request_body] = role_info
+      end.execute!
+
+    end
+
+    #
+    # Returns an account information
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def self.get_account!(access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/mgmt/{{client_id}}/account"
+      end.execute!
+    end
+
+    #
+    # Remove account user.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [String]
+    #
+    def self.remove_account!(access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :DELETE
+        request[:path] = "/mgmt/{{client_id}}/account"
+      end.execute!
     end
 
   end # User

@@ -140,6 +140,28 @@ module GroupDocs
     end
 
     #
+    # Updates datasource.
+    #
+    # @example
+    #   field = GroupDocs::DataSource::Field.new(field: 'test', values: %w(test test))
+    #   datasource = GroupDocs::DataSource.get!(180)
+    #   datasource.add_field(field)
+    #   datasource.update_fields!
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def update_fields!(access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/merge/{{client_id}}/datasources/#{id}/fields"
+        request[:request_body] = to_hash
+      end.execute!
+    end
+
+    #
     # Removes datasource.
     #
     # @param [Hash] access Access credentials

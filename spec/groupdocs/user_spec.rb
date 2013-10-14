@@ -254,4 +254,161 @@ describe GroupDocs::User do
     end
   end
 
+  describe '.update_password!' do
+    before(:each) do
+      mock_api_server('{ "result": { "user_guid": "s8dfts8" }, "status": "Ok" }')
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.update_password!(:client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'works without access credentials hash' do
+      lambda do
+        described_class.update_password!('doe@john.com', 'password')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '.reset_token!' do
+    before(:each) do
+      mock_api_server('{ "result": { "user": "s8dfts8" }, "status": "Ok" }')
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.reset_token!(:client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'accepts options credentials hash' do
+      lambda do
+        subject.reset_token!(:token => 'test')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '.verif_token!' do
+    before(:each) do
+      mock_api_server('{ "result": { "user": "s8dfts8" }, "status": "Ok" }')
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.verif_token!(:client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'accepts options credentials hash' do
+      lambda do
+        subject.verif_token!(:token => 'test')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '.claimed_token!' do
+    before(:each) do
+      mock_api_server('{ "result": { "user": "s8dfts8" }, "status": "Ok" }')
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.claimed_token!(:client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'accepts options credentials hash' do
+      lambda do
+        subject.claimed_token!(:token => 'test')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '.get_profile!' do
+    before(:each) do
+      mock_api_server(load_json('user_get_profile'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.get_profile!(:client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+  end
+
+  describe '#update_profile!' do
+    before(:each) do
+      mock_api_server(load_json('user_get_profile'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.update_profile!(:client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '#create_user!' do
+    before(:each) do
+      mock_api_server(load_json('user_get_profile'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.users!(:client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '.create_login!' do
+    before(:each) do
+      mock_api_server(load_json('user_get_profile'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.users!(:client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '.update_alien_password!' do
+    before(:each) do
+      mock_api_server('{ "result": { "user_guid": "s8dfts8" }, "status": "Ok" }')
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.update_alien_password!(:client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '.reset_alien_password!' do
+    before(:each) do
+      mock_api_server('{ "result": { "user_name": "s8dfts8" }, "status": "Ok" }')
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.update_alien_password!(:client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '#update_provider!' do
+    before(:each) do
+      mock_api_server('{ "result": { "user_name": "s8dfts8" }, "status": "Ok" }')
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.update_alien_password!(:client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
 end

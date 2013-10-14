@@ -234,6 +234,43 @@ module GroupDocs
       end
 
       #
+      #  Rename signature template document
+      #
+      # @example Rename field from template
+      #   template = GroupDocs::Signature::Template.get!("g94h5g84hj9g4gf23i40j")
+      #   document = template.documents!.first
+      #   template.rename_field! (new_name, document)
+      #
+      # @example Rename field from envelope
+      #   envelope = GroupDocs::Signature::Envelope.get!("g94h5g84hj9g4gf23i40j")
+      #   document = envelope.documents!.first
+      #   envelope.rename_field! (new_name, document)
+      #
+      # @example Rename field from form
+      #   envelope = GroupDocs::Signature::Form.get!("g94h5g84hj9g4gf23i40j")
+      #   document = envelope.documents!.first
+      #   envelope.rename_field! (new_name, document)
+      #
+      # @param [GroupDocs::Signature::Field] field
+      # @param [Hash] access Access credentials
+      # @option access [String] :client_id
+      # @option access [String] :private_key
+      # @raise [ArgumentError] if field is not GroupDocs::Signature::Field
+      #
+      def rename_field!(new_name, document, access = {})
+        field.is_a?(GroupDocs::Signature::Field) or raise ArgumentError,
+                                                          "Field should be GroupDocs::Signature::Field object, received: #{field.inspect}"
+
+        api = Api::Request.new do |request|
+          request[:access] = access
+          request[:method] = :PUT
+          request[:path] = "/signature/{{client_id}}/#{class_name.pluralize}/#{id}/document/#{document.file.id}"
+        end
+         api.add_params(new_name).execute!
+
+      end
+
+      #
       # Modifies field location.
       #
       # @example Modify field location in template

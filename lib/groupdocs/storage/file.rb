@@ -53,6 +53,27 @@ module GroupDocs
         Storage::File.new(json)
       end
 
+
+      #
+      # Get shared file.
+      #
+      # @param [String] file_path
+      # @param [String] user_email
+      #
+      def get_shared_file!(user_email, file_path)
+        response = Api::Request.new do |request|
+          request[:access] = access
+          request[:method] = :GET
+          request[:path] = "/storage/shared/#{user_email}/#{file_path}"
+        end.execute!
+
+        Object::File.open(file_path, 'wb') do |file|
+          file.write(response)
+        end
+
+        file_path
+      end
+
       #
       # Uploads web page as file.
       #
@@ -69,6 +90,53 @@ module GroupDocs
           request[:path] = '/storage/{{client_id}}/urls'
         end
         api.add_params(:url => url)
+        json = api.execute!
+
+        Storage::File.new(json)
+      end
+
+      #
+      # Uploads google page as file.
+      #
+      # @param [String] path
+      # @param [Hash] access Access credentials
+      # @option access [String] :client_id
+      # @option access [String] :private_key
+      # @return [GroupDocs::Storage::File]
+      #
+      def upload_google!(path, file_id, access = {})
+        api = Api::Request.new do |request|
+          request[:access] = access
+          request[:method] = :POST
+          request[:path] = "/storage/{{client_id}}/google/files/#{path}/"
+        end
+
+        api.add_params(:file_id => file_id)
+        json = api.execute!
+
+        Storage::File.new(json)
+      end
+
+      #
+      # Uploads and unzip as file.
+      #
+      # @param [String] path
+      # @param [Hash] options
+      # @option description [String]
+      # @option archiveType [String]
+      # @param [Hash] access Access credentials
+      # @option access [String] :client_id
+      # @option access [String] :private_key
+      # @return [GroupDocs::Storage::File]
+      #
+      def decompress!(path, file_zip, options = {}, access = {})
+        api = Api::Request.new do |request|
+          request[:access] = access
+          request[:method] = :POST
+          request[:path] = "/storage/{{client_id}}/decompress/#{path}/"
+          request[:request_body] = file_zip
+        end
+        api.add_params(options)
         json = api.execute!
 
         Storage::File.new(json)
@@ -302,6 +370,21 @@ module GroupDocs
           request[:access] = access
           request[:method] = :PUT
           request[:path] = "/storage/{{client_id}}/trash/#{path}/#{name}"
+        end.execute!
+      end
+
+      #
+      # Restore file from trash on server.
+      #
+      # @param [Hash] access Access credentials
+      # @option access [String] :client_id
+      # @option access [String] :private_key
+      #
+      def restore_to_trash!(path, access = {})
+        Api::Request.new do |request|
+          request[:access] = access
+          request[:method] = :DELETE
+          request[:path] = "/storage/{{client_id}}/trash/#{path}/"
         end.execute!
       end
 

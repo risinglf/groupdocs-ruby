@@ -34,6 +34,15 @@ module GroupDocs
     attr_accessor :replies
     # @attr [Hash] annotationPosition
     attr_accessor :annotationPosition
+    #@attr [Double] AnnotationSizeInfo
+    attr_accessor :width
+    attr_accessor :height
+    #@attr [String]TextFieldInfo
+    attr_accessor :fieldText
+    attr_accessor :fontFamily
+    attr_accessor :fontSize
+    #@attr [String]Font Color
+    attr_accessor :fontColor
 
     # Compatibility with response JSON
     alias_method :annotationGuid=, :guid=
@@ -46,6 +55,7 @@ module GroupDocs
     alias_accessor :created_on,          :createdOn
     alias_accessor :annotation_position, :annotationPosition
     alias_accessor :position,            :annotationPosition
+
 
     #
     # Creates new GroupDocs::Document::Annotation.
@@ -269,6 +279,69 @@ module GroupDocs
       end.execute!
 
       self.access = mode
+    end
+
+    #
+    # Resize annotation.
+    #
+    # @param [Integer, Float] x
+    # @param [Integer, Float] y
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def resize!(x, y, access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/ant/{{client_id}}/annotations/#{guid}/size"
+        request[:request_body] = { :x => x, :y => y }
+      end.execute!
+
+      self.width = x
+      self.height = y
+    end
+
+    #
+    # Save Text Of Text Field.
+    #
+    # @param [String] fieldText
+    # @param [String] fontFamily
+    # @param [Integer, Float] fontSize
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def text_info!(fieldText, fontFamily, fontSize, access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/ant/{{client_id}}/annotations/#{guid}/size"
+        request[:request_body] = { :fieldText => fieldText, :fontFamily => fontFamily, :fontSize => fontSize }
+      end.execute!
+
+      self.fieldText = fieldText
+      self.fontFamily = fontFamily
+      self.fontSize = fontSize
+    end
+
+    #
+    # Save Text Of Text Color.
+    #
+    # @param [Integer, Float] fontColor
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def text_color!(font_color, access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/ant/{{client_id}}/annotations/#{guid}/size"
+        request[:request_body] = { :fontColor => font_color }
+      end.execute!
+
+      self.fontColor = font_color
     end
 
   end # Document::Annotation

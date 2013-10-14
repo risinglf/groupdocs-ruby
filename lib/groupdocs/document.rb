@@ -9,11 +9,11 @@ module GroupDocs
     require 'groupdocs/document/view'
 
     ACCESS_MODES = {
-      :private    => 0,
-      :restricted => 1,
-      :public     => 2,
-      :inherited  => 254,
-      :denied     => 255,
+        :private    => 0,
+        :restricted => 1,
+        :public     => 2,
+        :inherited  => 254,
+        :denied     => 255,
     }
 
     include Api::Helpers::AccessMode
@@ -142,6 +142,24 @@ module GroupDocs
     end
 
     #
+    #  Get sign documents status
+    #
+    # @param [String] job_guid
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def document_status!(job_guid,  access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/signature/{{client_id}}/documents/#{job_guid}"
+      end.execute!
+
+       json[:documents]
+    end
+
+    #
     # Returns a document metadata by given path.
     #
     # @param [String] path Full path to document
@@ -184,40 +202,40 @@ module GroupDocs
     # @attr [Integer] field_count
     attr_accessor :field_count
     [
-      :news                            ,
-      :alerts                          ,
-      :support                         ,
-      :is_real_time_broadcast          ,
-      :is_scroll_broadcast             ,
-      :is_zoom_broadcast               ,
-      :is_annotation_navigation_widget ,
-      :is_annotation_zoom_widget       ,
-      :is_annotation_download_widget   ,
-      :is_annotation_print_widget      ,
-      :is_annotation_help_widget       ,
-      :is_right_panel                  ,
-      :is_thumbnails_panel             ,
-      :is_toolbar                      ,
-      :is_text_annotation_button       ,
-      :is_rectangle_annotation_button  ,
-      :is_point_annotation_button      ,
-      :is_strikeout_annotation_button  ,
-      :is_polyline_annotation_button   ,
-      :is_typewriter_annotation_button ,
-      :is_watermark_annotation_button  ,
-      :is_viewer_navigation_widget     ,
-      :is_viewer_zoom_widget           ,
-      :is_viewer_download_widget       ,
-      :is_viewer_print_widget          ,
-      :is_viewer_help_widget           ,
+        :news                            ,
+        :alerts                          ,
+        :support                         ,
+        :is_real_time_broadcast          ,
+        :is_scroll_broadcast             ,
+        :is_zoom_broadcast               ,
+        :is_annotation_navigation_widget ,
+        :is_annotation_zoom_widget       ,
+        :is_annotation_download_widget   ,
+        :is_annotation_print_widget      ,
+        :is_annotation_help_widget       ,
+        :is_right_panel                  ,
+        :is_thumbnails_panel             ,
+        :is_toolbar                      ,
+        :is_text_annotation_button       ,
+        :is_rectangle_annotation_button  ,
+        :is_point_annotation_button      ,
+        :is_strikeout_annotation_button  ,
+        :is_polyline_annotation_button   ,
+        :is_typewriter_annotation_button ,
+        :is_watermark_annotation_button  ,
+        :is_viewer_navigation_widget     ,
+        :is_viewer_zoom_widget           ,
+        :is_viewer_download_widget       ,
+        :is_viewer_print_widget          ,
+        :is_viewer_help_widget           ,
     ].each do |option|
       # @attr [Boolean] option
       attr_accessor :"#{option}_enabled"
     end
     [
-      :standard_header_always   ,
-      :annotation_document_name ,
-      :viewer_document_name     ,
+        :standard_header_always   ,
+        :annotation_document_name ,
+        :viewer_document_name     ,
     ].each do |option|
       # @attr [Boolean] option
       attr_accessor :"is_#{option}_shown"
@@ -277,7 +295,101 @@ module GroupDocs
     def initialize(options = {}, &blk)
       super(options, &blk)
       file.is_a?(GroupDocs::Storage::File) or raise ArgumentError,
-        "You have to pass GroupDocs::Storage::File object: #{file.inspect}."
+                                                    "You have to pass GroupDocs::Storage::File object: #{file.inspect}."
+    end
+
+    #
+    #  Returns a stream of bytes representing a particular document page image.
+    #
+    #
+    # @param [Integer] page_number Document page number to get image for
+    # @param [Integer] dimension Image dimension "<width>x<height>"(500x600)
+    # @param [Hash] options
+    # @option options [Integer] :quality Image quality in range 1-100.
+    # @option options [Boolean] :use_pdf A flag indicating whether a document should be converted to PDF format before generating the image.
+    # @option options [Boolean] :expires  The date and time in milliseconds since epoch the URL expires.
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return []
+    #
+    def page_image!(path, name, page_number, dimension, options = {}, access = {})
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :DOWNLOAD
+        request[:path] = "/doc/{{client_id}}/files/#{file.guid}/pages/#{page_number}/images/#{dimension}"
+      end
+      api.add_params(options)
+      response = api.execute!
+
+      filepath = "#{path}/#{name}"
+      Object::File.open(filepath, 'wb') do |file|
+        file.write(response)
+      end
+
+      filepath
+
+    end
+
+
+    #
+    # Returns an HTML Fixed representation of a particular document page
+    #
+    #
+    # @param [Integer] page_number Document page number to get html for
+    # @param [Hash] options
+    # @option options [Boolean] :expires  The date and time in milliseconds since epoch the URL expires.
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return []
+    #
+    def page_fixed_html!(path, name, page_number,  options = {}, access = {})
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :DOWNLOAD
+        request[:path] = "/doc/{{client_id}}/files/#{file.guid}/pages/#{page_number}/htmlFixed"
+      end
+      api.add_params(options)
+      response = api.execute!
+
+      filepath = "#{path}/#{name}"
+      Object::File.open(filepath, 'wb') do |file|
+        file.write(response)
+      end
+
+      filepath
+
+    end
+
+    #
+    # Returns an HTML representation of a particular document page
+    #
+    #
+    # @param [Integer] page_number Document page number to get html for
+    # @param [Hash] options
+    # @option options [Boolean] :expires  The date and time in milliseconds since epoch the URL expires.
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return []
+    #
+    def page_html!(path, name, page_number,  options = {}, access = {})
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :DOWNLOAD
+        request[:path] = "/doc/{{client_id}}/files/#{file.guid}/pages/#{page_number}/htmlRepresentations"
+      end
+      api.add_params(options)
+      response = api.execute!
+
+      filepath = "#{path}/#{name}"
+      Object::File.open(filepath, 'wb') do |file|
+        file.write(response)
+      end
+
+      filepath
+
     end
 
     #
@@ -314,6 +426,143 @@ module GroupDocs
     end
 
     #
+    # Returns array of URLs to html representing document pages.
+    #
+    # @example
+    #   file = GroupDocs::Storage::Folder.list!.last
+    #   document = file.to_document
+    #   document.page_html_urls! 1024, 768, first_page: 0, page_count: 1
+    #
+    # @param [Hash] options
+    # @option options [Integer] :first_page Start page to return image for (starting with 0)
+    # @option options [Integer] :page_count Number of pages to return image for
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<String>]
+    #
+    def page_html_urls!(options = {}, access = {})
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/doc/{{client_id}}/files/#{file.guid}/pages/htmlRepresentationUrls"
+      end
+      api.add_params(options)
+      json = api.execute!
+
+      json[:url]
+    end
+
+    #
+    # Returns editing metadata.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def editlock!(access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/doc/{{client_id}}/files/#{file.guid}/editlock"
+      end.execute!
+
+      json[:edit_url]
+    end
+
+    #
+    # Removes edit lock for a document and replaces the document with its edited copy
+    #
+    # @param [Hash] options
+    # @option options [String] :lockId Start page to return image for (starting with 0)
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Integer]
+    #
+    def editlock_clear!(options = {}, access = {})
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :DELETE
+        request[:path] = "/doc/{{client_id}}/files/#{file.guid}/editlock"
+      end
+      api.add_params(options).execute!
+
+    end
+
+    #
+    # Returns tags assigned to the document
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<String>]
+    #
+    def tags!(access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/doc/{{client_id}}/files/#{file.guid}/tags"
+      end.execute!
+
+    end
+
+    #
+    #  Assign tags to the document.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [String]
+    #
+    def tags_set!(access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/doc/{{client_id}}/files/#{file.guid}/tags"
+      end.execute!
+
+      json[:document_id]
+    end
+
+    #
+    #   Removes tags assigned to the document
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [String]
+    #
+    def tags_clear!(access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :DELETE
+        request[:path] = "/doc/{{client_id}}/files/#{file.guid}/tags"
+      end.execute!
+
+      json[:document_id]
+    end
+
+    #
+    # Returns document content
+    #
+    # @param [String] content_type Content type
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [String]
+    #
+    def content!(content_type, access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/doc/{{client_id}}/files/#{file.guid}/content/#{content_type}"
+      end.execute!
+
+      json[:content]
+    end
+
+    #
     # Returns array of URLs to images representing document pages thumbnails.
     #
     # @example
@@ -345,6 +594,36 @@ module GroupDocs
     end
 
     #
+    # Returns array of URLs to images representing document pages htmlRepresentations.
+    #
+    # @example
+    #   file = GroupDocs::Storage::Folder.list!.last
+    #   document = file.to_document
+    #   document.thumbnails! first_page: 0, page_count: 1, passwordSalt: ***
+    #
+    # @param [Hash] options
+    # @option options [Integer] :page_number Start page to return image for (starting with 0)
+    # @option options [Integer] :page_count Number of pages to return image for
+    # @option options [Integer] :passwordSalt
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<String>]
+    #
+    def representations!(options = {}, access = {})
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :POST
+        request[:path] = "/doc/{{client_id}}/files/#{file.guid}/htmlRepresentations"
+      end
+      api.add_params(options)
+      json = api.execute!
+
+      json[:pageHtml]
+    end
+
+
+    #
     # Returns access mode of document.
     #
     # @param [Hash] access Access credentials
@@ -356,7 +635,7 @@ module GroupDocs
       json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
-        request[:path] = "/doc/{{client_id}}/files/#{file.id}/accessinfo"
+        request[:path] = "/doc/{{client_id}}/files/#{file.guid}/accessinfo"
       end.execute!
 
       parse_access_mode(json[:access])
@@ -375,7 +654,7 @@ module GroupDocs
       api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
-        request[:path] = "/doc/{{client_id}}/files/#{file.id}/accessinfo"
+        request[:path] = "/doc/{{client_id}}/files/#{file.guid}/accessinfo"
       end
       api.add_params(:mode => ACCESS_MODES[mode])
       json = api.execute!
@@ -475,6 +754,29 @@ module GroupDocs
     end
 
     #
+    # Returns an array of users a document is shared with.
+    # @param [String] sharers_types
+    # @param [Hash] options
+    # @option options [String] :page_index
+    # @option options [String] :page_size
+    # @option options [String] :order_by
+    # @option options [Boolean] :order_ask
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<GroupDocs::User>]
+    #
+    def shared_documents!(sharers_types, options = {}, access = {})
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/doc/{{client_id}}/shares/#{sharers_types}"
+      end
+      api.add_params(options).execute!
+
+    end
+
+    #
     # Sets document sharers to given emails.
     #
     # If empty array or nil passed, clears sharers.
@@ -503,6 +805,44 @@ module GroupDocs
     end
 
     #
+    # Sets document password.
+    #
+    # @param [String] password New password for document
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<GroupDocs::User>]
+    #
+    def password_set!(password, access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/doc/{{client_id}}/files/#{file.guid}/password"
+        request[:request_body] = password
+      end.execute!
+
+    end
+
+    #
+    # Sets document user status.
+    #
+    # @param [String] status
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [String]
+    #
+    def user_status_set!(status, access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/doc/{{client_id}}/files/#{file.guid}/sharer"
+        request[:request_body] = status
+      end.execute!
+
+    end
+
+    #
     # Clears sharers list.
     #
     # @param [Hash] access Access credentials
@@ -516,6 +856,7 @@ module GroupDocs
         request[:method] = :DELETE
         request[:path] = "/doc/{{client_id}}/files/#{file.id}/sharers"
       end.execute![:shared_users]
+
     end
 
     #
@@ -570,7 +911,7 @@ module GroupDocs
     #
     def datasource!(datasource, options = {}, access = {})
       datasource.is_a?(GroupDocs::DataSource) or raise ArgumentError,
-        "Datasource should be GroupDocs::DataSource object, received: #{datasource.inspect}"
+                                                       "Datasource should be GroupDocs::DataSource object, received: #{datasource.inspect}"
 
       api = Api::Request.new do |request|
         request[:access] = access
@@ -582,6 +923,39 @@ module GroupDocs
 
       Job.new(:id => json[:job_id])
     end
+
+    #
+    # Creates new job to merge datasource fields into document.
+    #
+    # @param [GroupDocs::DataSource] datasource
+    # @param [Hash] options
+    # @option options [Boolean] :new_type New file format type
+    # @option options [Boolean] :email_results Set to true if converted document should be emailed
+    # @option options [Boolean] :assembly_name
+    # @param [Array] datasourceFields (:name [String], :value [String], :contentType [String], :type [String], :nested_fields [<Array> datasourceFields])
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [GroupDocs::Job]
+    #
+    # @raise [ArgumentError] if datasource is not GroupDocs::DataSource object
+    #
+    def datasource_fields!(datasource, datasourceFields, options = {}, access = {})
+      datasource.is_a?(GroupDocs::DataSource) or raise ArgumentError,
+                                                       "Datasource should be GroupDocs::DataSource object, received: #{datasource.inspect}"
+
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :POST
+        request[:path] = "/merge/{{client_id}}/files/#{file.guid}/datasources/"
+        request[:request_body] = datasourceFields
+      end
+      api.add_params(options)
+      json = api.execute!
+
+      Job.new(:id => json[:job_id])
+    end
+
 
     #
     # Returns an array of questionnaires.
@@ -615,7 +989,7 @@ module GroupDocs
     #
     def add_questionnaire!(questionnaire, access = {})
       questionnaire.is_a?(GroupDocs::Questionnaire) or raise ArgumentError,
-        "Questionnaire should be GroupDocs::Questionnaire object, received: #{questionnaire.inspect}"
+                                                             "Questionnaire should be GroupDocs::Questionnaire object, received: #{questionnaire.inspect}"
 
       Api::Request.new do |request|
         request[:access] = access
@@ -637,7 +1011,7 @@ module GroupDocs
     #
     def create_questionnaire!(questionnaire, access = {})
       questionnaire.is_a?(GroupDocs::Questionnaire) or raise ArgumentError,
-        "Questionnaire should be GroupDocs::Questionnaire object, received: #{questionnaire.inspect}"
+                                                             "Questionnaire should be GroupDocs::Questionnaire object, received: #{questionnaire.inspect}"
 
       json = Api::Request.new do |request|
         request[:access] = access
@@ -662,7 +1036,7 @@ module GroupDocs
     #
     def remove_questionnaire!(questionnaire, access = {})
       questionnaire.is_a?(GroupDocs::Questionnaire) or raise ArgumentError,
-        "Questionnaire should be GroupDocs::Questionnaire object, received: #{questionnaire.inspect}"
+                                                             "Questionnaire should be GroupDocs::Questionnaire object, received: #{questionnaire.inspect}"
 
       Api::Request.new do |request|
         request[:access] = access
@@ -727,7 +1101,7 @@ module GroupDocs
     #
     def compare!(document, access = {})
       document.is_a?(GroupDocs::Document) or raise ArgumentError,
-        "Document should be GroupDocs::Document object, received: #{document.inspect}"
+                                                   "Document should be GroupDocs::Document object, received: #{document.inspect}"
 
       api = Api::Request.new do |request|
         request[:access] = access
@@ -738,6 +1112,37 @@ module GroupDocs
       json = api.execute!
 
       Job.new(:id => json[:job_id])
+    end
+
+    #
+    # Schedules a job for comparing document with given.
+    #
+    # @param [Array] changes  Comparison changes to update (accept or reject)
+    # @option id [Float] :id
+    # @option type [String] :type
+    # @option action [String] :action
+    # @option Page [Array] :page
+    # @option box [Array] :box
+    # @option text [String] :text
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [GroupDocs::Change]
+    #
+    def update_changes!(changes, access = {})
+
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/comparison/{{client_id}}/comparison/changes"
+        request[:request_body] = changes
+      end
+      api.add_params(:resultFileId => file.guid)
+      json = api.execute!
+
+      json[:changes].map do |change|
+        Document::Change.new(change)
+      end
     end
 
     #
@@ -767,6 +1172,33 @@ module GroupDocs
       json[:changes].map do |change|
         Document::Change.new(change)
       end
+    end
+
+    #
+    # Download comparison result file.
+    #
+    # @param [Hash] options
+    # @option format [String] :format Comparison result file GUID
+    # @option resultFileId [String] :resultFileId Comparison result file GUID
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    #
+    def download!( path, name, options = {}, access = {})
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :DOWNLOAD
+        request[:path] = "/comparison/{{client_id}}/comparison/download"
+      end
+      api.add_params(options)
+      response = api.execute!
+
+      filepath = "#{path}/#{name}"
+      Object::File.open(filepath, 'wb') do |file|
+        file.write(response)
+      end
+
     end
 
     #
@@ -822,7 +1254,7 @@ module GroupDocs
     #
     def add_collaborator!(collaborator, access = {})
       collaborator.is_a?(GroupDocs::User) or raise ArgumentError,
-        "Collaborator should be GroupDocs::User object, received: #{collaborator.inspect}"
+                                                   "Collaborator should be GroupDocs::User object, received: #{collaborator.inspect}"
 
       Api::Request.new do |request|
         request[:access] = access
@@ -830,6 +1262,24 @@ module GroupDocs
         request[:path] = "/ant/{{client_id}}/files/#{file.guid}/collaborators"
         request[:request_body] = collaborator.to_hash
       end.execute!
+    end
+
+
+    #
+    #  Delete document reviewer
+    #
+    # @param [String] reviewerId Reviewer Id
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def remove_collaborators!(reviewerId, access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :DELETE
+        request[:path] = "/ant/{{client_id}}/files/#{file.guid}/collaborators/#{reviewerId}"
+      end.execute!
+
     end
 
     #
