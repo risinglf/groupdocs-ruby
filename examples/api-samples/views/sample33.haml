@@ -1,0 +1,63 @@
+%h3{:style => 'text-align:center;'}
+  %a{:href => '/'} GroupDocs Ruby SDK Samples
+  \- Sample33
+.samplecontent{:style => 'padding:10px;'}
+  %i This sample will show how to convert and to merge/combine several HTML documents into one PDF Document
+  %br/
+  %br/
+  %span.documentation
+    %a{:href => '/docs/sample33.html'} Builtin documentation for this sample
+  %br/
+  %br/
+  %p
+    You entered:
+  %p
+    UserId = #{(defined? userId) ? userId : ''}
+  %p
+    PrivateKey = #{(defined? privateKey) ? privateKey : ''}
+
+
+  %p
+
+    %font{:color => 'red'} #{(defined? err) ? err : ''}
+    #requestForm{:style => 'padding:20px; border:1px solid black;'}
+      %p Enter data for request and press "Make request" button
+      %form{:action => '/sample33', :enctype => 'multipart/form-data', :method => 'post'}
+        %label{:for => 'client_id'} GroupDocs ClientID
+        %br/
+        %input{:type=>'text', :name=>'client_id'}
+        %br/
+        %label{:for => 'private_key'} GroupDocs PrivateKey
+        %br/
+        %input{:type=>'text', :name=>'private_key'}
+        %br/
+        %label{:for => 'url_1'} 1. Web url the document in format 'Html'
+        %br/
+        %input{:type=>'text', :name=>'url_1', :size=>60}
+        %br/
+        %label{:for => 'url_2'} 2. Web url the document in format 'Html'
+        %br/
+        %input{:type=>'text', :name=>'url_2', :size=>60}
+        %br/
+        %label{:for => 'url_3'} 3. Web url the document in format 'Html'
+        %br/
+        %input{:type=>'text', :name=>'url_3', :size=>60}
+        %br/
+        %label{:for => 'url_4'} 4. Web url the document in format 'Html'
+        %br/
+        %input{:type=>'text', :name=>'url_4', :size=>60}
+        %br/
+        %label{:for => 'url_5'} 5. Web url the document in format 'Html'
+        %br/
+        %input{:type=>'text', :name=>'url_5', :size=>60}
+        %br/
+        %br/
+        %input{:type => 'submit', :value => 'Make Request'}/
+  %div{:style => 'padding:20px; border:1px solid black;'}
+    %p Results:
+    %br/
+    %p #{(defined? iframe) ? iframe : ''}
+  %br/
+
+= partial :_others_samples
+

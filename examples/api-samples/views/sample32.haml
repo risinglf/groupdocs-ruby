@@ -1,0 +1,110 @@
+%h3{:style => 'text-align:center;'}
+  %a{:href => '/'} GroupDocs Ruby SDK Samples
+  \- Sample32
+.samplecontent{:style => 'padding:10px;'}
+  %span.description
+    %i
+      This sample will show how to create signature form, publish it and configure notification via callback
+  %br/
+  %br/
+  /
+  %span.documentation
+    %a{:href => '/docs/sample32.html'} Builtin documentation for this sample
+
+  %br/
+  %br/
+  %p
+    You entered:
+  %p
+    ClientID = #{(defined? userId) ? userId : ''}
+  %p
+    PrivateKey = #{(defined? privateKey) ? privateKey : ''}
+  %p
+    Email = #{(defined? email) ? email : ''}
+  %p
+    %font{:color => 'red'} #{(defined? err) ? err : ''}
+  %br/
+  #requestForm{:style => 'padding:20px; border:1px solid black;'}
+    %p Enter data for request and press "Make request" button
+    %form{:action => '/sample32', :enctype => 'multipart/form-data', :method => 'post'}
+      %label{:for => 'client_id'} GroupDocs ClientID
+      %br/
+      %input{:type=>'text', :name=>'client_id'}
+      %br/
+      %label{:for => 'private_key'} GroupDocs PrivateKey
+      %br/
+      %input{:type=>'text', :name=>'private_key'}
+      %br/
+
+
+      %div.guid_radio
+        %input{:type=>'radio', :name=>'source', :value=>'form', :checked=>'checked'} Form GUID
+        %br/
+        %input{:type=>'radio', :name=>'source', :value=>'template'} Template GUID
+        %br/
+
+      %div.guid_field
+        %label{:for=>'form', :id=>'form'} Form GUID
+        %br/
+        %input{:type=>'text', :name=>'form'}
+
+      %div.guid_field{:style=>'display:none;'}
+        %label{:for=>'template'} Template GUID
+        %br/
+        %input{:type=>'text', :name=>'template'}
+
+      %label{:for=>'email', :id=>'email'} Email for notification
+      %br/
+      %input{:type=>'text', :name=>'email'}
+      %br/
+      %label{:for=>'callback'}
+        Callback URL
+        %span.optional (Optional)
+        %br/
+        %font{:color=>'grey'} (For test Callback you can use this URL: http://groupdocs-ruby-samples.herokuapp.com/sample32/callback)
+      %input{:type=>'text', :size=>'70', :value=>"#{(defined? callback) ? callback : ''}", :name=>'callback'}
+      %br/
+      %br/
+
+      %input{:type => 'submit', :value => 'Signature'}
+
+
+
+      %br/
+      %a{:href=>'/templates/merge_feid_doc.docx'} Download sample Docx file
+      %br/
+      %br/
+    %div{:style => 'padding:20px; border:1px solid black;'}
+      %p
+        Results:
+        #{(defined? iframe) ? iframe : ''}
+
+= partial :_others_samples
+
+%script{:src=>'//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'}
+:javascript
+  $(function($){
+
+    $('.guid_radio input').change(function(){
+      var elementIndex = $(this).parent().children('input').index($(this));
+      $('.guid_field').hide();
+      $('.guid_field').eq(elementIndex).show();
+    });
+  });
+
+  function check() {
+    $.get('/sample32/check', function(data) {
+      $('#results_status').fadeOut("slow");
+      $('#downloadframe').attr("src", "/sample32/downloads/" + data);
+    }, 'text');
+  }
+
+  $(function($){
+    callbackUrl = $("input[name=callback]").val();
+
+    if(callbackUrl !== "") {
+      $('#results_status').fadeIn("slow");
+      setTimeout(check, 5000)
+    }
+
+  });

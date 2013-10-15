@@ -413,12 +413,13 @@ module GroupDocs
     #
     # Sends envelope.
     #
-    # @param [String] webhook URL to be hooked after envelope is completed
+    # @param [Hash] webhook URL to be hooked after envelope is completed
+    # @option webhook [String] :callbackUrl
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
     #
-    def send!(webhook = nil, access = {})
+    def send!(webhook = {}, access = {})
       Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT

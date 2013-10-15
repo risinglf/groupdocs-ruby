@@ -216,9 +216,10 @@ module GroupDocs
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
-    # @param callbackUrl [String]:callbackUrl  Webhook Callback Url
+    # @param callbackUrl [Hash] Webhook Callback Url
+	# @option callbackUrl [String] :callbackUrl  
     #
-    def publish!(callbackUrl, access = {})
+    def publish!(callbackUrl = {}, access = {})
       Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
