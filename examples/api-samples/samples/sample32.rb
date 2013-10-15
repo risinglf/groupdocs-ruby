@@ -29,7 +29,7 @@ post '/sample32/callback' do
       contents = contents.split(' ')
       client_id = contents[0]
       private_key = contents[1]
-      subscriber_email = contens[2]
+      subscriber_email = contents[2]
     end
 
     # Create new Form
@@ -67,22 +67,8 @@ post '/sample32/callback' do
 end
 
 
-# GET request
-get '/sample32/check' do
 
-  # Check is there download directory
-  unless File.directory?("#{File.dirname(__FILE__)}/../public/downloads")
-    return 'Directory was not found.'
-  end
 
-  # Get file name from download directory
-  name = nil
-  Dir.entries("#{File.dirname(__FILE__)}/../public/downloads").each do |file|
-    name = file if file != '.' && file != '..'
-  end
-
-  name
-end
 
 
 
@@ -97,16 +83,6 @@ post '/sample32' do
   set :callback, params[:callback]
   set :source, params[:source]
 
-  # Set download path
-  downloads_path = "#{File.dirname(__FILE__)}/../public/downloads"
-
-  # Remove all files from download directory or create folder if it not there
-  if File.directory?(downloads_path)
-    Dir.foreach(downloads_path) { |f| fn = File.join(downloads_path, f); File.delete(fn) if f != '.' && f != '..' }
-  else
-    Dir::mkdir(downloads_path)
-  end
-
   begin
 
     # Check required variables
@@ -119,11 +95,11 @@ post '/sample32' do
     end
 
     # Write client and private key to the file for callback job
-    if settings.callback[0]
+    if settings.callback
       out_file = File.new("#{File.dirname(__FILE__)}/../public/user_info.txt", 'w')
       # white space is required
       out_file.write("#{settings.client_id} ")
-      out_file.write("#{settings.private_key}")
+      out_file.write("#{settings.private_key} ")
       out_file.write("#{settings.email}")
       out_file.close
     end

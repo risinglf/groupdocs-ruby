@@ -109,7 +109,7 @@
       contents = contents.split(<span class="string">' '</span>)
       client_id = contents[<span class="number">0</span>]
       private_key = contents[<span class="number">1</span>]
-      subscriber_email = contens[<span class="number">2</span>]
+      subscriber_email = contents[<span class="number">2</span>]
     <span class="keyword">end</span></pre></div></div>
             
         </li>
@@ -227,59 +227,6 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
-              <p>GET request</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>get <span class="string">'/sample32/check'</span> <span class="keyword">do</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-13">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-13">&#182;</a>
-              </div>
-              <p>Check is there download directory</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  <span class="keyword">unless</span> <span class="constant">File</span>.directory?(<span class="string">"<span class="subst">#{<span class="constant">File</span>.dirname(__FILE_<span class="number">_</span>)}</span>/../public/downloads"</span>)
-    <span class="keyword">return</span> <span class="string">'Directory was not found.'</span>
-  <span class="keyword">end</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-14">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-14">&#182;</a>
-              </div>
-              <p>Get file name from download directory</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  name = <span class="keyword">nil</span>
-  <span class="constant">Dir</span>.entries(<span class="string">"<span class="subst">#{<span class="constant">File</span>.dirname(__FILE_<span class="number">_</span>)}</span>/../public/downloads"</span>).each <span class="keyword">do</span> |file|
-    name = file <span class="keyword">if</span> file != <span class="string">'.'</span> &amp;&amp; file != <span class="string">'..'</span>
-  <span class="keyword">end</span>
-
-  name
-<span class="keyword">end</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-15">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-15">&#182;</a>
-              </div>
               <p>POST request</p>
 
             </div>
@@ -289,11 +236,11 @@
         </li>
         
         
-        <li id="section-16">
+        <li id="section-13">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-16">&#182;</a>
+                <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
               <p>set variables</p>
 
@@ -305,52 +252,18 @@
   set <span class="symbol">:form_guid</span>, params[<span class="symbol">:form</span>]
   set <span class="symbol">:email</span>, params[<span class="symbol">:email</span>]
   set <span class="symbol">:callback</span>, params[<span class="symbol">:callback</span>]
-  set <span class="symbol">:source</span>, params[<span class="symbol">:source</span>]</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-17">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-17">&#182;</a>
-              </div>
-              <p>Set download path</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  downloads_path = <span class="string">"<span class="subst">#{<span class="constant">File</span>.dirname(__FILE_<span class="number">_</span>)}</span>/../public/downloads"</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-18">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-18">&#182;</a>
-              </div>
-              <p>Remove all files from download directory or create folder if it not there</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  <span class="keyword">if</span> <span class="constant">File</span>.directory?(downloads_path)
-    <span class="constant">Dir</span>.foreach(downloads_path) { |f| fn = <span class="constant">File</span>.join(downloads_path, f); <span class="constant">File</span>.delete(fn) <span class="keyword">if</span> f != <span class="string">'.'</span> &amp;&amp; f != <span class="string">'..'</span> }
-  <span class="keyword">else</span>
-    <span class="constant">Dir::</span>mkdir(downloads_path)
-  <span class="keyword">end</span>
+  set <span class="symbol">:source</span>, params[<span class="symbol">:source</span>]
 
   <span class="keyword">begin</span></pre></div></div>
             
         </li>
         
         
-        <li id="section-19">
+        <li id="section-14">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-19">&#182;</a>
+                <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
               <p>Check required variables</p>
 
@@ -361,11 +274,11 @@
         </li>
         
         
-        <li id="section-20">
+        <li id="section-15">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-20">&#182;</a>
+                <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
               <p>Configure your access to API server.</p>
 
@@ -379,34 +292,34 @@
         </li>
         
         
-        <li id="section-21">
+        <li id="section-16">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-21">&#182;</a>
+                <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
               <p>Write client and private key to the file for callback job</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> settings.callback[<span class="number">0</span>]
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> settings.callback
       out_file = <span class="constant">File</span>.new(<span class="string">"<span class="subst">#{<span class="constant">File</span>.dirname(__FILE_<span class="number">_</span>)}</span>/../public/user_info.txt"</span>, <span class="string">'w'</span>)</pre></div></div>
             
         </li>
         
         
-        <li id="section-22">
+        <li id="section-17">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
+                <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
               <p>white space is required</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>      out_file.write(<span class="string">"<span class="subst">#{settings.client_id}</span> "</span>)
-      out_file.write(<span class="string">"<span class="subst">#{settings.private_key}</span>"</span>)
+      out_file.write(<span class="string">"<span class="subst">#{settings.private_key}</span> "</span>)
       out_file.write(<span class="string">"<span class="subst">#{settings.email}</span>"</span>)
       out_file.close
     <span class="keyword">end</span>
@@ -419,11 +332,11 @@
         </li>
         
         
-        <li id="section-23">
+        <li id="section-18">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-23">&#182;</a>
+                <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
               <p>Create new Form with guid</p>
 
@@ -434,11 +347,11 @@
         </li>
         
         
-        <li id="section-24">
+        <li id="section-19">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-24">&#182;</a>
+                <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
               <p>Publish the Form</p>
 
@@ -456,11 +369,11 @@
         </li>
         
         
-        <li id="section-25">
+        <li id="section-20">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-25">&#182;</a>
+                <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
               <p>Create new Form with template</p>
 
@@ -471,11 +384,11 @@
         </li>
         
         
-        <li id="section-26">
+        <li id="section-21">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-26">&#182;</a>
+                <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
               <p>Publish the Form</p>
 
@@ -493,11 +406,11 @@
         </li>
         
         
-        <li id="section-27">
+        <li id="section-22">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-27">&#182;</a>
+                <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
               <p>Set variables for template</p>
 
