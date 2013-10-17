@@ -97,7 +97,7 @@ module GroupDocs
     # Adds datasource.
     #
     # @example
-    #   field = GroupDocs::DataSource::Field.new(field: 'test', values: %w(test test))
+    #   field = GroupDocs::DataSource::Field.new(name: 'test', values: %w(test test))
     #   datasource = GroupDocs::DataSource.new
     #   datasource.add_field(field)
     #   datasource.add!
@@ -177,6 +177,71 @@ module GroupDocs
     # TODO: fix this in API - http://scotland.groupdocs.com/jira/browse/CORE-387
     rescue RestClient::BadRequest
       nil
+    end
+
+    #
+    # Add job document datasource.
+    #
+    # @example
+    # file = GroupDocs::Storage::File.new(guid => "(file guid)").to_document
+    # field = GroupDocs::DataSource::Field.new(:name => "test")
+    # datasource = GroupDocs::DataSource.new
+    # datasource.add_field(field).add!()
+    # job = GroupDocs::Job.create!()
+    # file_id = job.add_document!(file)
+    # datasource = add_datasourse!(job, file_id, datasource)
+    #
+    # @param [GroupDocs::DataSource] datasource
+    # @param [String] jobId Job identifier
+    # @param [String] fileId File identifier
+    # @param [String] datasourceId
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def add_datasource!(job, file_id, datasource, access = {})
+      datasource.is_a?(GroupDocs::DataSource) or raise ArgumentError,
+                                                       "Datasource should be GroupDocs::DataSource object, received: #{datasource.inspect}"
+
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/merge/{{client_id}}/jobs/#{job.id}/files/#{file_id}/datasources/#{datasource.id}"
+      end.execute!
+    end
+
+    #
+    # Add job document datasource fields.
+    #
+    #
+    # @example
+    # file = GroupDocs::Storage::File.new(guid => "(file guid)").to_document
+    # field = GroupDocs::DataSource::Field.new(:name => "test")
+    # datasource = GroupDocs::DataSource.new
+    # datasource.add_field(field)
+    # job = GroupDocs::Job.create!()
+    # file_id = job.add_document!(file)
+    # datasource = add_datasourse!(job, file_id, datasource)
+    #
+    #
+    #
+    # @param [String] jobId Job identifier
+    # @param [String] fileId File identifier
+    # @param [Array] datasourceFields
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def add_datasource_fields!(job, file_id, datasource, access = {})
+      datasource.is_a?(GroupDocs::DataSource) or raise ArgumentError,
+                                                       "Datasource should be GroupDocs::DataSource object, received: #{datasource.inspect}"
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/merge/{{client_id}}/jobs/#{job.id}/files/#{file_id}/datasources"
+        request[:request_body] = datasource.fields
+      end.execute!
+
     end
 
   end # DataSource

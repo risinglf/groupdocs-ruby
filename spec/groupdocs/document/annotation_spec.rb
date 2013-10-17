@@ -228,6 +228,42 @@ describe GroupDocs::Document::Annotation do
     end
   end
 
+  describe '#resize!' do
+    before(:each) do
+      mock_api_server('{ "status": "Ok", "result": {}}')
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.resize!(10, 10, :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '#text_info!' do
+    before(:each) do
+      mock_api_server('{ "status": "Ok", "result": {}}')
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.text_info!(fieldText, fontFamily, fontSize, :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '#text_color!' do
+    before(:each) do
+      mock_api_server('{ "status": "Ok", "result": {}}')
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.text_color!(font_color :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
   describe '#set_access!' do
     before(:each) do
       mock_api_server(load_json('annotation_access_set'))

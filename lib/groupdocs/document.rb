@@ -182,7 +182,7 @@ module GroupDocs
         metadata.views_count = json[:views_count]
         if json[:last_view]
           metadata.last_view = json[:last_view]
-          metadata.last_view.document = new(:file => Storage::File.new(json))
+
         end
       end
     end
@@ -301,7 +301,10 @@ module GroupDocs
     #
     #  Returns a stream of bytes representing a particular document page image.
     #
-    #
+    # @param [String] path Document path
+    # @param [String] name Name document (format - jpg)
+    # @example path = "#{File.dirname(__FILE__)}"
+    #          name = "test.jpg"
     # @param [Integer] page_number Document page number to get image for
     # @param [Integer] dimension Image dimension "<width>x<height>"(500x600)
     # @param [Hash] options
@@ -431,7 +434,7 @@ module GroupDocs
     # @example
     #   file = GroupDocs::Storage::Folder.list!.last
     #   document = file.to_document
-    #   document.page_html_urls! 1024, 768, first_page: 0, page_count: 1
+    #   document.page_html_urls!  first_page: 0, page_count: 1
     #
     # @param [Hash] options
     # @option options [Integer] :first_page Start page to return image for (starting with 0)
@@ -461,13 +464,11 @@ module GroupDocs
     # @option access [String] :private_key
     #
     def editlock!(access = {})
-      json = Api::Request.new do |request|
+      Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
         request[:path] = "/doc/{{client_id}}/files/#{file.guid}/editlock"
       end.execute!
-
-      json[:edit_url]
     end
 
     #
@@ -487,7 +488,6 @@ module GroupDocs
         request[:path] = "/doc/{{client_id}}/files/#{file.guid}/editlock"
       end
       api.add_params(options).execute!
-
     end
 
     #
@@ -504,7 +504,6 @@ module GroupDocs
         request[:method] = :GET
         request[:path] = "/doc/{{client_id}}/files/#{file.guid}/tags"
       end.execute!
-
     end
 
     #
@@ -516,13 +515,11 @@ module GroupDocs
     # @return [String]
     #
     def tags_set!(access = {})
-      json = Api::Request.new do |request|
+      Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
         request[:path] = "/doc/{{client_id}}/files/#{file.guid}/tags"
       end.execute!
-
-      json[:document_id]
     end
 
     #
@@ -534,13 +531,11 @@ module GroupDocs
     # @return [String]
     #
     def tags_clear!(access = {})
-      json = Api::Request.new do |request|
+      Api::Request.new do |request|
         request[:access] = access
         request[:method] = :DELETE
         request[:path] = "/doc/{{client_id}}/files/#{file.guid}/tags"
       end.execute!
-
-      json[:document_id]
     end
 
     #
@@ -706,7 +701,6 @@ module GroupDocs
         metadata.views_count = json[:views_count]
         if json[:last_view]
           metadata.last_view = json[:last_view]
-          metadata.last_view.document = self
         end
       end
     end
@@ -940,15 +934,15 @@ module GroupDocs
     #
     # @raise [ArgumentError] if datasource is not GroupDocs::DataSource object
     #
-    def datasource_fields!(datasource, datasourceFields, options = {}, access = {})
+    def datasource_fields!(datasource, options = {}, access = {})
       datasource.is_a?(GroupDocs::DataSource) or raise ArgumentError,
                                                        "Datasource should be GroupDocs::DataSource object, received: #{datasource.inspect}"
 
       api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :POST
-        request[:path] = "/merge/{{client_id}}/files/#{file.guid}/datasources/"
-        request[:request_body] = datasourceFields
+        request[:path] = "/merge/{{client_id}}/files/#{file.guid}/datasources"
+        request[:request_body] = datasource.fields
       end
       api.add_params(options)
       json = api.execute!
@@ -1185,7 +1179,7 @@ module GroupDocs
     # @option access [String] :private_key
     #
     #
-    def download!( path, name, options = {}, access = {})
+    def download!( path, options = {}, access = {})
       api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :DOWNLOAD
@@ -1194,7 +1188,7 @@ module GroupDocs
       api.add_params(options)
       response = api.execute!
 
-      filepath = "#{path}/#{name}"
+      filepath = "#{path}/#{file.name}"
       Object::File.open(filepath, 'wb') do |file|
         file.write(response)
       end

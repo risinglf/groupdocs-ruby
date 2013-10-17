@@ -128,46 +128,6 @@ module GroupDocs
       @pages << page
     end
 
-    #
-    # Add job document datasource.
-    #
-    # @param [GroupDocs::DataSource] datasource
-    # @param [String] jobId Job identifier
-    # @param [String] fileId File identifier
-    # @param [String] datasourceId
-    # @param [Hash] access Access credentials
-    # @option access [String] :client_id
-    # @option access [String] :private_key
-    #
-    def self.add_datasource!(jobId, datasource, access = {})
-      json = Api::Request.new do |request|
-        request[:access] = access
-        request[:method] = :PUT
-        request[:path] = "/merge/{{client_id}}/jobs/#{jobId}/files/#{file.guid}/datasources/#{datasource.id}"
-      end.execute!
-
-      json[:datasource_id]
-    end
-
-    #
-    # Add job document datasource fields.
-    #
-    # @param [String] jobId Job identifier
-    # @param [String] fileId File identifier
-    # @param [Array] datasourceFields
-    # @param [Hash] access Access credentials
-    # @option access [String] :client_id
-    # @option access [String] :private_key
-    #
-    def self.add_datasource_fields!(jobId, fileId, datasourceFields, access = {})
-      Api::Request.new do |request|
-        request[:access] = access
-        request[:method] = :PUT
-        request[:path] = "/merge/{{client_id}}/jobs/#{jobId}/files/#{fileId}/datasources/"
-        request[:request_body] = datasourceFields
-      end.execute!
-
-    end
 
     #
     # Creates questionnaire.

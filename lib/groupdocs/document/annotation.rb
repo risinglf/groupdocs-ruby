@@ -295,7 +295,7 @@ module GroupDocs
         request[:access] = access
         request[:method] = :PUT
         request[:path] = "/ant/{{client_id}}/annotations/#{guid}/size"
-        request[:request_body] = { :x => x, :y => y }
+        request[:request_body] = { :width => x, :height => y }
       end.execute!
 
       self.width = x

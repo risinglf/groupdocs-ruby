@@ -89,16 +89,17 @@ module GroupDocs
     #
     # Returns job by its identifier.
     #
-    # @param [String] options
+    # @param [Hash] options
     # @option statusIds [String] :statusIds (required)
-    # @option actions [String] :actions
+    # @option actions [Integer] :actions
     # @option excluded_actions [String] :excluded_actions
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
     # @return [GroupDocs::Job]
     #
-    def self.get_resources!(options = {}, access = {})
+    def self.get_resources!(options = {} , access = {})
+      options[:actions] = convert_actions_to_byte(options[:actions])
       api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET

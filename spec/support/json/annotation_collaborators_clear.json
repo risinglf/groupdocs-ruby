@@ -1,0 +1,22 @@
+{
+    "result": {
+        "documentGuid": "68e0fcd3ebec695b20a147984dc551c71486f6095c9659ad252fd61b713846b9",
+        "sessionGuid": "3330443814a69bfc",
+        "owner": {
+            "id": 3320,
+            "guid": "b912b34d1621a895",
+            "primary_email": "another19@aretaicturn.com",
+            "firstName": "another19",
+            "lastName": "another19",
+            "access_rights": null,
+            "color": 14724333,
+            "customEmailMessage": null
+        },
+        "collaborators": [
+
+        ]
+    },
+    "status": "Ok",
+    "error_message": null,
+    "composedOn": 1381925965056
+}

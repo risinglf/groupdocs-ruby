@@ -121,7 +121,7 @@ describe GroupDocs::Document do
     end
   end
 
-  describe ',metadata!' do
+  describe '.metadata!' do
     before(:each) do
       mock_api_server(load_json('document_metadata'))
     end
@@ -366,10 +366,6 @@ describe GroupDocs::Document do
       subject.metadata!.last_view.should be_a(GroupDocs::Document::View)
     end
 
-    it 'uses self document in last view object' do
-      subject.metadata!.last_view.document.should == subject
-    end
-
     it 'does not set last view if document has never been viewed' do
       mock_api_server('{ "status": "Ok", "result": { "last_view": null }}')
       subject.metadata!.last_view.should be_nil
@@ -602,6 +598,37 @@ describe GroupDocs::Document do
     end
   end
 
+  describe '#datasource_fields!' do
+    before(:each) do
+      mock_api_server(load_json('document_datasource'))
+    end
+
+    let(:datasource) do
+      GroupDocs::DataSource.new(:id => 1)
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.datasource_fields!(datasource, {}, :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'accepts options hash' do
+      lambda do
+        subject.datasource_fields!(datasource, :new_type => :pdf)
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'raises error if datasource is not GroupDocs::Datasource object' do
+      lambda { subject.datasource!('Datasource') }.should raise_error(ArgumentError)
+    end
+
+    it 'returns GroupDocs::Job object' do
+      job = subject.datasource!(datasource)
+      job.should be_a(GroupDocs::Job)
+    end
+  end
+
   describe '#annotations!' do
     before(:each) do
       mock_api_server(load_json('annotation_list'))
@@ -687,6 +714,24 @@ describe GroupDocs::Document do
     end
   end
 
+  describe '#update_changes!' do
+    before(:each) do
+      mock_api_server(load_json('comparison_changes'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.changes!(options, :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'accepts options credentials hash' do
+      lambda do
+        subject.changes!(:id => 1, :type => 'delete', :action => '', :page => {}, :box => {}, :text => '')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
 
   describe '#collaborators!' do
     before(:each) do
@@ -736,7 +781,7 @@ describe GroupDocs::Document do
 
   describe '#add_collaborator!' do
     before(:each) do
-      mock_api_server(load_json('annotation_collaborators_get'))
+      mock_api_server(load_json('annotation_collaborators_add'))
     end
 
     let!(:collaborator) { GroupDocs::User.new }
@@ -754,6 +799,18 @@ describe GroupDocs::Document do
 
     it 'raises error if collaborator is not an instance of GroupDocs::User' do
       lambda { subject.add_collaborator!('collaborator') }.should raise_error(ArgumentError)
+    end
+  end
+
+  describe '#remove_collaborators!' do
+    before(:each) do
+      mock_api_server(load_json('annotation_collaborators_clear'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.remove_collaborators!(reviewerId, :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
     end
   end
 
@@ -860,4 +917,198 @@ describe GroupDocs::Document do
       subject.respond_to?(:unknown).should be_false
     end
   end
+
+  describe '#password_set!' do
+    before(:each) do
+      mock_api_server(load_json('document_password_set'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.password_set(%w(password), :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '#user_status_set!' do
+    before(:each) do
+      mock_api_server(load_json('document_user_status_set'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.user_status_set(%w(status), :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '#shared_documents!' do
+    before(:each) do
+      mock_api_server(load_json('document_shared_documents_get'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.shared_documents( :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '#page_image!' do
+    before(:each) do
+      mock_api_server(File.read('spec/support/files/resume.pdf'))
+      subject.stub(:name => 'resume.pdf')
+    end
+
+    let(:path) { Dir.tmpdir }
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.shared_documents( :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '#page_fixed_html!' do
+    before(:each) do
+      mock_api_server(File.read('spec/support/files/resume.pdf'))
+      subject.stub(:name => 'resume.pdf')
+    end
+
+    let(:path) { Dir.tmpdir }
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.shared_documents( :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '#page_html!' do
+    before(:each) do
+      mock_api_server(File.read('spec/support/files/resume.pdf'))
+      subject.stub(:name => 'resume.pdf')
+    end
+
+    let(:path) { Dir.tmpdir }
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.shared_documents( :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '#editlock!' do
+    before(:each) do
+      mock_api_server(load_json('document_edit_lock_get'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.editlock!( :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe 'editlock_clear!' do
+    before(:each) do
+      mock_api_server(load_json('document_edit_lock_get'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.editlock_clear!( {}, :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'accepts options credentials hash' do
+      lambda do
+        subject.editlock_clear!(:lockId => 'client_id')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '#tags!' do
+    before(:each) do
+      mock_api_server(load_json('document_edit_lock_get'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.tags!( :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '#tags_clear!' do
+    before(:each) do
+      mock_api_server(load_json('document_editlock_remove'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.tags_clear!( :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '#tags_set!' do
+    before(:each) do
+      mock_api_server(load_json('document_edit_lock_get'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.tags_set!( :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '#content!' do
+    before(:each) do
+      mock_api_server('{ "status": "Ok", "result": {}}')
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.tags_set!(content_type, :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe 'page_html_urls!' do
+    before(:each) do
+      mock_api_server(load_json('document_html_urls'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.editlock_clear!( {}, :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+
+    it 'accepts options credentials hash' do
+      lambda do
+        subject.editlock_clear!(:first_page => 0, :page_count => 1)
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '#download!' do
+    before(:each) do
+      mock_api_server(File.read('spec/support/files/resume.pdf'))
+      subject.stub(:name => 'resume.pdf')
+    end
+
+    let(:path) { Dir.tmpdir }
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.shared_documents( :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+
 end

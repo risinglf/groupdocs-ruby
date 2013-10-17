@@ -394,19 +394,79 @@ describe GroupDocs::User do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.update_alien_password!(:client_id => 'client_id', :private_key => 'private_key')
+        subject.reset_alien_password!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
   end
 
   describe '#update_provider!' do
     before(:each) do
-      mock_api_server('{ "result": { "user_name": "s8dfts8" }, "status": "Ok" }')
+      mock_api_server(load_json('user_providers'))
     end
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.update_alien_password!(:client_id => 'client_id', :private_key => 'private_key')
+        subject.update_provider!(:client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '#add_provider!' do
+    before(:each) do
+      mock_api_server(load_json('user_providers'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.add_provider!(:client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '#user_roles!' do
+    before(:each) do
+      mock_api_server(load_json('user_roles'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.user_roles!(:client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '#set_user_roles!' do
+    before(:each) do
+      mock_api_server('{ "result": {}, "status": "Ok" }')
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.set_user_roles!(:client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '#get_account!' do
+    before(:each) do
+      mock_api_server('{ "result": {}, "status": "Ok" }')
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.get_account!(:client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '#remove_account!' do
+    before(:each) do
+      mock_api_server('{ "result": {}, "status": "Ok" }')
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.remove_account!(:client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
     end
   end
