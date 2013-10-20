@@ -307,15 +307,6 @@ describe GroupDocs::Questionnaire do
         subject.datasource!(datasource, :new_type => :pdf)
       end.should_not raise_error(ArgumentError)
     end
-
-    it 'raises error if datasource is not GroupDocs::Datasource object' do
-      lambda { subject.datasource!('Datasource') }.should raise_error(ArgumentError)
-    end
-
-    it 'returns GroupDocs::Job object' do
-      job = subject.datasource!(datasource)
-      job.should be_a(GroupDocs::Job)
-    end
   end
 
   describe '#add_datasource_fields!' do
@@ -337,15 +328,6 @@ describe GroupDocs::Questionnaire do
       lambda do
         subject.datasource!(datasource, :new_type => :pdf)
       end.should_not raise_error(ArgumentError)
-    end
-
-    it 'raises error if datasource is not GroupDocs::Datasource object' do
-      lambda { subject.datasource!('Datasource') }.should raise_error(ArgumentError)
-    end
-
-    it 'returns GroupDocs::Job object' do
-      job = subject.datasource!(datasource)
-      job.should be_a(GroupDocs::Job)
     end
   end
 end

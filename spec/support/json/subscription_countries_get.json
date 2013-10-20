@@ -1,0 +1,93 @@
+{
+    "result": {
+        "states": [
+            {
+                "Name": "Ukraine (general)"
+            },
+            {
+                "Name": "Cherkas'ka"
+            },
+            {
+                "Name": "Chernihivs'ka"
+            },
+            {
+                "Name": "Chernivets'ka"
+            },
+            {
+                "Name": "Dnipropetrovska"
+            },
+            {
+                "Name": "Donets'ka"
+            },
+            {
+                "Name": "Ivano-Frankivs'ka"
+            },
+            {
+                "Name": "Kharkivs'ka"
+            },
+            {
+                "Name": "Kherson"
+            },
+            {
+                "Name": "Khmel'nyts'ka"
+            },
+            {
+                "Name": "Kirovohrads'ka"
+            },
+            {
+                "Name": "Avtonomna Respublika Krym"
+            },
+            {
+                "Name": "Misto Kyyiv"
+            },
+            {
+                "Name": "Kiev"
+            },
+            {
+                "Name": "Luhans'ka"
+            },
+            {
+                "Name": "L'vivs'ka"
+            },
+            {
+                "Name": "Mykolayivs'ka"
+            },
+            {
+                "Name": "Odessa"
+            },
+            {
+                "Name": "Poltava"
+            },
+            {
+                "Name": "Rivnens'ka"
+            },
+            {
+                "Name": "Misto Sevastopol"
+            },
+            {
+                "Name": "Sumy"
+            },
+            {
+                "Name": "Ternopil's'ka"
+            },
+            {
+                "Name": "Vinnyts'ka"
+            },
+            {
+                "Name": "Volyns'ka"
+            },
+            {
+                "Name": "Zakarpats'ka"
+            },
+            {
+                "Name": "Zaporiz'ka"
+            },
+            {
+                "Name": "Zhytomyrs'ka"
+            }
+        ]
+    },
+    "status": "Ok",
+    "error_message": null,
+    "composedOn": 1382097333636
+}

@@ -1,0 +1,18 @@
+{
+    "result": {
+        "invoices": [
+            {
+                "Charged": 0,
+                "Paid": 0,
+                "Discount": 0,
+                "CurrencyCode": "USD",
+                "StatementDate": "2012-11-08T08:50:30.0000000Z",
+                "BillingStartDate": "2012-11-08T08:50:28.0000000Z",
+                "Status": "Trial"
+            }
+        ]
+    },
+    "status": "Ok",
+    "error_message": null,
+    "composedOn": 1382089288138
+}

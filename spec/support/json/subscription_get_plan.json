@@ -1,0 +1,48 @@
+{
+    "result": {
+        "subscription_plan": {
+            "users": 1,
+            "document_count": null,
+            "viewer": 0,
+            "signature": 0,
+            "assembly": 0,
+            "comparison": 0,
+            "conversion": null,
+            "sharing": null,
+            "api": null,
+            "branding": true,
+            "max_document_size": null,
+            "annotation": 0,
+            "storage_space": null,
+            "document_tokens": null,
+            "watermarking": false,
+            "storage_providers": false,
+            "private_storage": false,
+            "embeddings": 0
+        },
+        "usage": {
+            "users": 1,
+            "document_count": 37638,
+            "viewer": 0,
+            "signature": 0,
+            "assembly": 0,
+            "comparison": 0,
+            "conversion": 53,
+            "sharing": 499,
+            "api": 9987,
+            "branding": null,
+            "max_document_size": null,
+            "annotation": 0,
+            "storage_space": 1255236939,
+            "document_tokens": 1168,
+            "watermarking": null,
+            "storage_providers": false,
+            "private_storage": null,
+            "embeddings": 0
+        },
+        "last_reset_date": "2013-09-18T13:18:55.1030000Z"
+    },
+    "status": "Ok",
+    "error_message": null,
+    "composedOn": 1382099043807
+}

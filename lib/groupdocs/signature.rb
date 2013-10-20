@@ -51,7 +51,7 @@ module GroupDocs
       json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
-        request[:path] = "/signature/public/envelopes/#{envelope}/documents/#{document}/recipient/#{recipient}/field/#{field}"
+        request[:path] = "/signature/public/envelopes/#{envelope.guid}/documents/#{document.guid}/recipient/#{recipient.guid}/field/#{field.guid}"
         request[:request_body] = post_data
       end.execute!
 
@@ -69,13 +69,11 @@ module GroupDocs
     # @return [Array]
     #
     def sign_envelope!(envelope, recipient, access = {})
-      json = Api::Request.new do |request|
+      Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
-        request[:path] = "/signature/public/envelopes/#{envelope}/recipient/#{recipient}/sign"
+        request[:path] = "/signature/public/envelopes/#{envelope.guid}/recipient/#{recipient.id}/sign"
       end.execute!
-
-      new(json)
     end
 
     #
@@ -91,7 +89,7 @@ module GroupDocs
       json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
-        request[:path] = "/signature/public/envelopes/#{envelope}/recipient/"
+        request[:path] = "/signature/public/envelopes/#{envelope.guid}/recipient/"
       end.execute!
 
       json[:recipient]
@@ -102,8 +100,8 @@ module GroupDocs
     #
     # @param [String] envelope Envelope GUID
     # @param [Hash] options
-    # @option [String] document Document GUID
-    # @option [String] recipient Recipient GUID
+    # @option options [String] :document Document GUID
+    # @option options [String] :recipient Recipient GUID
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
@@ -113,7 +111,7 @@ module GroupDocs
       api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
-        request[:path] = "/signature/public/envelopes/#{envelope}/fields"
+        request[:path] = "/signature/public/envelopes/#{envelope.guid}/fields"
       end
       api.add_params(options)
       json = api.execute!
@@ -136,7 +134,7 @@ module GroupDocs
       Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
-        request[:path] = "/signature/public/envelopes/#{envelope}/fields/recipient/#{recipient}/field/#{field}"
+        request[:path] = "/signature/public/envelopes/#{envelope.guid}/fields/recipient/#{recipient.id}/field/#{field.id}"
       end.execute!
 
     end
@@ -155,7 +153,7 @@ module GroupDocs
       json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
-        request[:path] = "/signature/public/envelopes/#{envelope}/recipient/#{recipient}"
+        request[:path] = "/signature/public/envelopes/#{envelope.guid}/recipient/#{recipient.id}"
       end.execute!
 
       json[:envelope]
@@ -175,10 +173,8 @@ module GroupDocs
       json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
-        request[:path] = "/signature/public/envelopes/#{envelope}/recipient/#{recipient}/documents/get"
+        request[:path] = "/signature/public/envelopes/#{envelope.guid}/recipient/#{recipient.id}/documents/get"
       end.execute!
-
-      new(json)
     end
 
     #
@@ -194,7 +190,7 @@ module GroupDocs
       json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
-        request[:path] = "/signature/public/forms/#{form}/fill"
+        request[:path] = "/signature/public/forms/#{form.id}/fill"
       end.execute!
 
       json[:participant]
@@ -217,7 +213,7 @@ module GroupDocs
       api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
-        request[:path] = "/signature/public/forms/#{form}/documents/#{document}/participant/#{participant}/field/#{field}"
+        request[:path] = "/signature/public/forms/#{form.id}/documents/#{document.guid}/participant/#{participant.id}/field/#{field.id}"
       end
       api.add_params(:participantAuthSignature => authentication)
       json = api.execute!
@@ -264,7 +260,7 @@ module GroupDocs
       api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
-        request[:path] = "/signature/public/forms/#{form}/fields"
+        request[:path] = "/signature/public/forms/#{form.id}/fields"
       end
       api.add_params(options)
       json = api.execute!
@@ -282,14 +278,19 @@ module GroupDocs
     # @option access [String] :private_key
     # @return [Array]
     #
-    def get_signed_documents_form!(form, participant, access = {})
-      json = Api::Request.new do |request|
+    def get_signed_documents_form!(path, name, form, participant, access = {})
+      response = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
-        request[:path] = "/signature/public/forms/#{form}/participant/#{participant}/documents/get"
+        request[:path] = "/signature/public/forms/#{form.id}/participant/#{participant.id}/documents/get"
       end.execute!
 
-      new(json)
+      filepath = "#{path}/#{name}."
+      Object::File.open(filepath, 'wb') do |file|
+        file.write(response)
+      end
+
+      filepath
     end
 
     #
@@ -326,7 +327,7 @@ module GroupDocs
       json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :POST
-        request[:path] = "/signature/public/documents/#{document}/sign"
+        request[:path] = "/signature/public/documents/#{document.guid}/sign"
         request[:request_body] = settings
       end.execute!
 
@@ -336,22 +337,20 @@ module GroupDocs
     #
     #  Verify to document
     #
-    # @param [String] document Document GUID
+    # @param [String] path Path to document GUID
     # @param [Hash] settings Settings of the signing document
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
     # @return [Array]
     #
-    def self.verify!(access = {})
-      json = Api::Request.new do |request|
+    def self.verify!(path, access = {})
+      Api::Request.new do |request|
         request[:access] = access
         request[:method] = :POST
         request[:path] = "/signature/public/verify"
-        request[:request_body] = streem
+        request[:request_body] = path
       end.execute!
-
-      nev(json)
     end
 
     #
@@ -364,13 +363,11 @@ module GroupDocs
     # @return [Array]
     #
     def sign_document_status!(job, access = {})
-      json = Api::Request.new do |request|
+      Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
-        request[:path] = "/signature/public/documents/#{job}/status"
+        request[:path] = "/signature/public/documents/#{job.id}/status"
       end.execute!
-
-       new(json)
     end
 
 

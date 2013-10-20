@@ -475,16 +475,28 @@ module GroupDocs
     # @option access [String] :private_key
     # @raise [ArgumentError] if document is not GroupDocs::Document
     #
-    def get_envelope!(document, access = {})
+    def get_envelope!(path, document, access = {})
       document.is_a?(GroupDocs::Document) or raise ArgumentError,
                                                    "Document should be GroupDocs::Document object, received: #{document.inspect}"
 
-      Api::Request.new do |request|
+      response = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
-        request[:path] = "/signature/{{client_id}}/#{class_name.pluralize}/#{id}/document/#{document.file.guid}"
+        request[:path] = "/signature/{{client_id}}/envelopes/#{id}/document/#{document.file.guid}"
       end.execute!
 
+      filepath = "#{path}/#{name}."
+      if documents!.size == 1
+        filepath << 'pdf'
+      else
+        filepath << 'zip'
+      end
+
+      Object::File.open(filepath, 'wb') do |file|
+        file.write(response)
+      end
+
+      filepath
     end
 
     #

@@ -1,0 +1,21 @@
+{
+    "result": {
+        "billing_address": {
+            "address1": null,
+            "address2": null,
+            "city": null,
+            "company": null,
+            "country": null,
+            "email": null,
+            "fax": null,
+            "firstName": null,
+            "lastName": null,
+            "phone": null,
+            "state": null,
+            "zip": null
+        }
+    },
+    "status": "Ok",
+    "error_message": null,
+    "composedOn": 1382098743770
+}

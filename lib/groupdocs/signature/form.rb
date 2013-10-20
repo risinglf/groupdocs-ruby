@@ -411,9 +411,41 @@ module GroupDocs
       Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
-        request[:path] = "/signature/{{client_id}}/forms/#{form}/document/#{document.file.guid}/"
+        request[:path] = "/signature/{{client_id}}/forms/#{id}/document/#{document.file.guid}/"
         request[:request_body] = options
       end.execute!
+    end
+
+    #
+    # Downloads signed documents to given path.
+    # If there is only one file in envelope, it's saved as PDF.
+    # If there are two or more files in envelope, it's saved as ZIP.
+    #
+    # @param [String] path Directory to download file to
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [String] path to file
+    #
+    def signed_documents!(path, access = {})
+      response = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :DOWNLOAD
+        request[:path] = "/signature/{{client_id}}/forms/#{id}/documents/get"
+      end.execute!
+
+      filepath = "#{path}/#{name}."
+      if documents!.size == 1
+        filepath << 'pdf'
+      else
+        filepath << 'zip'
+      end
+
+      Object::File.open(filepath, 'wb') do |file|
+        file.write(response)
+      end
+
+      filepath
     end
 
   end # Signature::Form

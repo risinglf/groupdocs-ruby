@@ -471,4 +471,16 @@ describe GroupDocs::User do
     end
   end
 
+  describe '.download!' do
+    before(:each) do
+      mock_api_server('{ "result": {}, "status": "Ok" }')
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        subject.download!(:filename => 'test.txt', :render => 2)
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
 end

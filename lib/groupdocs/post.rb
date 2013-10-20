@@ -16,9 +16,7 @@ module GroupDocs
         request[:path] = '/post/file.rename'
       end
       api.add_params(options)
-      json = api.execute!
-
-      new(json)
+      api.execute!
     end
 
     # Delete by post.
@@ -34,9 +32,7 @@ module GroupDocs
         request[:path] = '/post/file.delete'
       end
       api.add_params(options)
-      json = api.execute!
-
-      new(json)
+      api.execute!
     end
 
     #  Delete from folder by post.
@@ -52,9 +48,7 @@ module GroupDocs
         request[:path] = '/post/file.delete.in'
       end
       api.add_params(options)
-      json = api.execute!
-
-      new(json)
+      api.execute!
     end
 
     #  Compress by post.
@@ -71,9 +65,7 @@ module GroupDocs
         request[:path] = '/post/file.compress'
       end
       api.add_params(options)
-      json = api.execute!
-
-      new(json)
+      api.execute!
     end
 
 

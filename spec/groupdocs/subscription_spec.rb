@@ -71,4 +71,123 @@ describe GroupDocs::Subscription do
       end
     end
   end
+
+  describe '.invoices!' do
+    before(:each) do
+      mock_api_server(load_json('subscription_plan_get'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        described_class.invoices!('plan', 'discount',:client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '.subscription!' do
+    before(:each) do
+      mock_api_server(load_json('subscription_get'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        described_class.subscription!(:client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '.set_subscription!' do
+    before(:each) do
+      mock_api_server(load_json('subscription_get'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        described_class.set_subscription!(plan, product_id, :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '.update_subscription!' do
+    before(:each) do
+      mock_api_server(load_json('subscription_get'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        described_class.update_subscription!(plan, product_id, :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '.get_countries!' do
+    before(:each) do
+      mock_api_server(load_json('subscription_countries_get'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        described_class.get_countries!(:client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '.get_states!' do
+    before(:each) do
+      mock_api_server(load_json('subscription_states_get'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        described_class.get_states!(name, :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '.set_billing!' do
+    before(:each) do
+      mock_api_server(load_json('subscription_billing_set'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        described_class.get_states!({}, :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+  describe '.get_invoices!' do
+    before(:each) do
+      mock_api_server(load_json('subscription_invoices_get'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        described_class.get_invoices!({}, :client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '.get_plans!' do
+    before(:each) do
+      mock_api_server(load_json('subscription_get_plan'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        described_class.get_plans!(:client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
+
+  describe '.get_wizard!' do
+    before(:each) do
+      mock_api_server(load_json('subscription_wizard_get'))
+    end
+
+    it 'accepts access credentials hash' do
+      lambda do
+        described_class.get_plans!(:client_id => 'client_id', :private_key => 'private_key')
+      end.should_not raise_error(ArgumentError)
+    end
+  end
 end

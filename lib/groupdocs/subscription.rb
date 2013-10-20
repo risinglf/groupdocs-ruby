@@ -77,7 +77,6 @@ module GroupDocs
         request[:method] = :GET
         request[:path] = '/system/{{client_id}}/subscription'
       end.execute!
-
     end
 
     #
@@ -90,14 +89,12 @@ module GroupDocs
     # @return [GroupDocs::Subscription]
     #
     def self.set_subscription!(plan, product_id, access = {})
-      json = Api::Request.new do |request|
+      Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
         request[:path] = "/system/{{client_id}}/subscriptions/#{product_id}"
         request[:request_body] = plan
       end.execute!
-
-      new(json)
     end
 
     #
@@ -110,14 +107,12 @@ module GroupDocs
     # @return [GroupDocs::Subscription]
     #
     def self.update_subscription!(plan, product_id, access = {})
-      json = Api::Request.new do |request|
+      Api::Request.new do |request|
         request[:access] = access
         request[:method] = :POST
         request[:path] = "/system/{{client_id}}/subscriptions/#{product_id}"
         request[:request_body] = plan
       end.execute!
-
-      new(json)
     end
 
     #
@@ -208,13 +203,11 @@ module GroupDocs
     # @option access [String] :private_key
     #
     def self.get_plans!(access = {})
-      json = Api::Request.new do |request|
+      Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
         request[:path] = "/system/{{client_id}}/usage"
       end
-
-      new(json)
     end
 
     #
