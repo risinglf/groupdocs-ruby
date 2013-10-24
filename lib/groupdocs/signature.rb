@@ -362,12 +362,14 @@ module GroupDocs
     # @option access [String] :private_key
     # @return [Array]
     #
-    def sign_document_status!(job, access = {})
-      Api::Request.new do |request|
+    def self.sign_document_status!(job, access = {})
+      json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
-        request[:path] = "/signature/public/documents/#{job.id}/status"
+        request[:path] = "/signature/public/documents/#{job}/status"
       end.execute!
+
+      Storage::File.new(:guid => json[:documents][0][:documentId])
     end
 
 

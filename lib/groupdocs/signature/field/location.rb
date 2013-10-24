@@ -29,6 +29,10 @@ module GroupDocs
     attr_accessor :fontItalic
     # @attr [Boolean] fontUnderline
     attr_accessor :fontUnderline
+    # @attr [Boolean] forceNewField
+    attr_accessor :forceNewField
+    # @attr [String] page
+    attr_accessor :page
 
     # Human-readable accessors
     alias_accessor :document_id,     :documentId
@@ -49,6 +53,8 @@ module GroupDocs
     alias_accessor :font_bold,       :fontBold
     alias_accessor :font_italic,     :fontItalic
     alias_accessor :font_underline,  :fontUnderline
+    alias_accessor :forceNewField,   :forceNewField
+    alias_accessor :page,            :page
 
   end # Signature::Field::Location
 end # GroupDocs

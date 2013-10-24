@@ -166,19 +166,22 @@ module GroupDocs
     #
     # @example
     #   document = GroupDocs::Storage::Folder.list!.first.to_document
-    #   annotation = GroupDocs::Document::Annotation.new(document: document)
+    #   annotation = GroupDocs::Document::Annotation.new(document: document)     #
     #   annotation.create!
     #
+    # @param [Hash] info Annotation info
+    # @option info [Array] :box
+    # @option info [Array] :annotationPosition
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
     #
-    def create!(access = {})
+    def create!(info, access = {})
       json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :POST
         request[:path] = "/ant/{{client_id}}/files/#{document.file.guid}/annotations"
-        request[:request_body] = to_hash
+        request[:request_body] = info
       end.execute!
 
       json.each do |field, value|
@@ -193,7 +196,7 @@ module GroupDocs
     # @option access [String] :client_id
     # @option access [String] :private_key
     #
-    def remove!(access = {})
+    def self.remove!(guid, access = {})
       Api::Request.new do |request|
         request[:access] = access
         request[:method] = :DELETE

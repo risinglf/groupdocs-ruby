@@ -106,16 +106,17 @@ module GroupDocs
       documents_to_sign = []
       documents.map(&:file).each do |file|
         document = { :name => file.name }
-        contents = File.read(file.local_path)
+        contents = File.open(file.local_path, 'rb').read
         contents = Base64.strict_encode64(contents)
         document.merge!(:data => "data:#{mime_type(file.local_path)};base64,#{contents}")
 
         documents_to_sign << document
+
       end
 
       signers = []
       signatures.each do |signature|
-        contents = File.read(signature.image_path)
+        contents = File.open(signature.image_path, 'rb').read
         contents = Base64.strict_encode64(contents)
         signer = { :name => signature.name, :data => "data:#{mime_type(signature.image_path)};base64,#{contents}" }
         signer.merge!(signature.position)
@@ -123,6 +124,7 @@ module GroupDocs
         signer.merge!(:placeSignatureOn => nil)
 
         signers << signer
+
       end
 
       json = Api::Request.new do |request|
@@ -131,14 +133,8 @@ module GroupDocs
         request[:path] = '/signature/{{client_id}}/sign'
         request[:request_body] = { :documents => documents_to_sign, :signers => signers }
       end.execute!
+      json[:jobId]
 
-      signed_documents = []
-      json[:documents].each_with_index do |document, i|
-        file = Storage::File.new(:guid => document[:documentId], :name => "#{documents[i].file.name}_signed.pdf")
-        signed_documents << Document.new(:file => file)
-      end
-
-      signed_documents
     end
 
     #
@@ -1093,7 +1089,7 @@ module GroupDocs
     #
     # @raise [ArgumentError] if document is not GroupDocs::Document object
     #
-    def compare!(document, access = {})
+    def compare!(document, callback, access = {})
       document.is_a?(GroupDocs::Document) or raise ArgumentError,
                                                    "Document should be GroupDocs::Document object, received: #{document.inspect}"
 
@@ -1102,7 +1098,7 @@ module GroupDocs
         request[:method] = :GET
         request[:path] = "/comparison/{{client_id}}/comparison/compare"
       end
-      api.add_params(:source => file.guid, :target => document.file.guid)
+      api.add_params(:source => file.guid, :target => document.file.guid, :callback => callback)
       json = api.execute!
 
       Job.new(:id => json[:job_id])

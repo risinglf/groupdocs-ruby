@@ -91,6 +91,7 @@ module GroupDocs
     # @attr [Array<GroupDocs::Signature::Field::Location>] locations
     attr_accessor :locations
 
+
     # Human-readable accessors
     alias_accessor :template_id,        :templateId
     alias_accessor :recipient_id,       :recipientId

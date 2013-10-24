@@ -48,6 +48,7 @@ module GroupDocs
           file = Storage::File.new(:guid => id, :name => document[:name])
           Document.new(document.merge(:file => file))
         end
+
       end
 
       #
