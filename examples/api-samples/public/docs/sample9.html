@@ -59,14 +59,18 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>set variables</p>
+              <p>Set variables</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>  set <span class="symbol">:file_id</span>, params[<span class="symbol">:fileId</span>]
   set <span class="symbol">:width</span>, params[<span class="symbol">:width</span>]
   set <span class="symbol">:height</span>, params[<span class="symbol">:height</span>]
-
+  set <span class="symbol">:source</span>, params[<span class="symbol">:source</span>]
+  set <span class="symbol">:client_id</span>, params[<span class="symbol">:client_id</span>]
+  set <span class="symbol">:private_key</span>, params[<span class="symbol">:private_key</span>]
+  set <span class="symbol">:check</span>, params[<span class="symbol">:check</span>]
+  set <span class="symbol">:url</span>, params[<span class="symbol">:url</span>]
   <span class="keyword">begin</span></pre></div></div>
             
         </li>
@@ -78,11 +82,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>check required variables</p>
+              <p>Check required variables</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    raise <span class="string">'Please enter all required parameters'</span> <span class="keyword">if</span> settings.guid.empty? <span class="keyword">or</span> settings.width.empty? <span class="keyword">or</span> settings.height.empty?</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    raise <span class="string">'Please enter all required parameters'</span> <span class="keyword">if</span> settings.client_id.empty? <span class="keyword">or</span> settings.private_key.empty? <span class="keyword">or</span> settings.width.empty? <span class="keyword">or</span> settings.height.empty?</pre></div></div>
             
         </li>
         
@@ -93,15 +97,14 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>get document by file GUID</p>
+              <p>Configure your access to API server.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    file = <span class="keyword">nil</span>
-    <span class="keyword">case</span> settings.source
-      <span class="keyword">when</span> <span class="string">'guid'</span>
-        file = <span class="constant">GroupDocs::Storage::File</span>.new({<span class="symbol">:guid</span> =&gt; settings.file_id})
-      <span class="keyword">when</span> <span class="string">'local'</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="constant">GroupDocs</span>.configure <span class="keyword">do</span> |groupdocs|
+      groupdocs.client_id = settings.client_id
+      groupdocs.private_key = settings.private_key
+    <span class="keyword">end</span></pre></div></div>
             
         </li>
         
@@ -112,11 +115,15 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>construct path</p>
+              <p>Get document by file GUID</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        filepath = <span class="string">"<span class="subst">#{<span class="constant">Dir</span>.tmpdir}</span>/<span class="subst">#{params[<span class="symbol">:file</span>][<span class="symbol">:filename</span>]}</span>"</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    file = <span class="keyword">nil</span>
+    <span class="keyword">case</span> settings.source
+    <span class="keyword">when</span> <span class="string">'guid'</span>
+      file = <span class="constant">GroupDocs::Storage::File</span>.new({<span class="symbol">:guid</span> =&gt; settings.file_id})
+    <span class="keyword">when</span> <span class="string">'local'</span></pre></div></div>
             
         </li>
         
@@ -127,11 +134,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>open file</p>
+              <p>Construct path</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="constant">File</span>.open(filepath, <span class="string">'wb'</span>) { |f| f.write(params[<span class="symbol">:file</span>][<span class="symbol">:tempfile</span>].read) }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      filepath = <span class="string">"<span class="subst">#{<span class="constant">Dir</span>.tmpdir}</span>/<span class="subst">#{params[<span class="symbol">:file</span>][<span class="symbol">:filename</span>]}</span>"</span></pre></div></div>
             
         </li>
         
@@ -142,16 +149,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <p>make a request to API using client_id and private_key</p>
+              <p>Open file</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        file = <span class="constant">GroupDocs::Storage::File</span>.upload!(filepath, {}, <span class="symbol">client_id:</span> settings.client_id, <span class="symbol">private_key:</span> settings.private_key)
-      <span class="keyword">when</span> <span class="string">'url'</span>
-        file = <span class="constant">GroupDocs::Storage::File</span>.upload_web!(settings.url, <span class="symbol">client_id:</span> settings.client_id, <span class="symbol">private_key:</span> settings.private_key)
-      <span class="keyword">else</span>
-        raise <span class="string">'Wrong GUID source.'</span>
-    <span class="keyword">end</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="constant">File</span>.open(filepath, <span class="string">'wb'</span>) { |f| f.write(params[<span class="symbol">:file</span>][<span class="symbol">:tempfile</span>].read) }</pre></div></div>
             
         </li>
         
@@ -162,19 +164,23 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
-              <p>construct result string</p>
+              <p>Make a request to API using client_id and private_key</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    v_url = <span class="string">"https://apps.groupdocs.com/document-viewer/embed/<span class="subst">#{file.guid}</span>?frameborder='0' width='<span class="subst">#{settings.width}</span>' height='<span class="subst">#{settings.height}</span>'"</span>
-
-    <span class="keyword">if</span> v_url
-      v_url = v_url
+            <div class="content"><div class='highlight'><pre>      file = <span class="constant">GroupDocs::Storage::File</span>.upload!(filepath, {})
+    <span class="keyword">when</span> <span class="string">'url'</span>
+      file = <span class="constant">GroupDocs::Storage::File</span>.upload_web!(settings.url)
+    <span class="keyword">else</span>
+      raise <span class="string">'Wrong GUID source.'</span>
     <span class="keyword">end</span>
-
-  <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e
-    err = e.message
-  <span class="keyword">end</span></pre></div></div>
+     url = <span class="keyword">nil</span>
+    <span class="keyword">case</span> settings.check
+    <span class="keyword">when</span> <span class="string">'viewer'</span>
+      url = <span class="string">"https://apps.groupdocs.com/document-viewer/embed/<span class="subst">#{file.guid}</span>?frameborder='0' width='<span class="subst">#{settings.width}</span>' height='<span class="subst">#{settings.height}</span>'"</span>
+    <span class="keyword">when</span> <span class="string">'annotation'</span>
+      url = <span class="string">"https://apps.groupdocs.com/document-annotation2/embed/<span class="subst">#{file.guid}</span>?frameborder='0' width='<span class="subst">#{settings.width}</span>' height='<span class="subst">#{settings.height}</span>'"</span>
+    <span class="keyword">end</span></pre></div></div>
             
         </li>
         
@@ -185,11 +191,30 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
-              <p>set variables for template</p>
+              <p>Construct result string</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  haml <span class="symbol">:sample9</span>, <span class="symbol">:locals</span> =&gt; {<span class="symbol">:guid</span> =&gt; settings.guid, <span class="symbol">:width</span> =&gt; settings.width, <span class="symbol">:height</span> =&gt; settings.height, <span class="symbol">:v_url</span> =&gt; v_url, <span class="symbol">:err</span> =&gt; err}
+            <div class="content"><div class='highlight'><pre>    url = <span class="constant">GroupDocs::Api::Request</span>.new(<span class="symbol">:path</span> =&gt; url).prepare_and_sign_url
+
+  <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e
+    err = e.message
+  <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Set variables for template</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  haml <span class="symbol">:sample9</span>, <span class="symbol">:locals</span> =&gt; {<span class="symbol">:guid</span> =&gt; file.guid, <span class="symbol">:width</span> =&gt; settings.width, <span class="symbol">:height</span> =&gt; settings.height, <span class="symbol">:v_url</span> =&gt; url, <span class="symbol">:err</span> =&gt; err}
 <span class="keyword">end</span></pre></div></div>
             
         </li>

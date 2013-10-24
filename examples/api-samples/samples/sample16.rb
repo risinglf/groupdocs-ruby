@@ -5,15 +5,18 @@ end
 
 # POST request
 post '/sample16' do
-  # set variables
+  # Set variables
   set :fileId, params[:fileId]
 
   begin
-    # check required variables
+    # Check required variables
     raise 'Please enter all required parameters' if settings.fileId.empty?
 
-    # construct result iframe
-    iframe = "<iframe src='https://apps.groupdocs.com/assembly2/questionnaire-assembly/#{settings.fileId}' frameborder='0' width='100%' height='600'></iframe>"
+    url = "https://apps.groupdocs.com/assembly2/questionnaire-assembly/#{settings.fileId}"
+    # Add the signature to the url request
+    iframe = GroupDocs::Api::Request.new(:path => url).prepare_and_sign_url
+    # Construct result iframe
+    iframe = "<iframe src='#{iframe}' frameborder='0' width='100%' height='600'></iframe>"
 
   rescue Exception => e
     err = e.message

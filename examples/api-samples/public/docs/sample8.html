@@ -66,7 +66,11 @@
             <div class="content"><div class='highlight'><pre>  set <span class="symbol">:client_id</span>, params[<span class="symbol">:client_id</span>]
   set <span class="symbol">:private_key</span>, params[<span class="symbol">:private_key</span>]
   set <span class="symbol">:guid</span>, params[<span class="symbol">:guid</span>]
-  set <span class="symbol">:page_number</span>, params[<span class="symbol">:page_number</span>]</pre></div></div>
+  set <span class="symbol">:page_number</span>, params[<span class="symbol">:page_number</span>]
+  set <span class="symbol">:source</span>, params[<span class="symbol">:source</span>]
+  set <span class="symbol">:file_id</span>, params[<span class="symbol">:fileId</span>]
+
+  <span class="keyword">begin</span></pre></div></div>
             
         </li>
         
@@ -76,23 +80,6 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
-              </div>
-              <p>  file = GroupDocs::Storage::Folder.list!.last
-  document = file.to_document
-  document.page_images! 1024, 768, first_page: 0, page_count: 1</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  <span class="keyword">begin</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-5">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <p>check required variables</p>
 
@@ -107,11 +94,11 @@
         </li>
         
         
-        <li id="section-6">
+        <li id="section-5">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
+                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <p>get document by file GUID</p>
 
@@ -125,11 +112,11 @@
         </li>
         
         
-        <li id="section-7">
+        <li id="section-6">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>construct path</p>
 
@@ -140,11 +127,11 @@
         </li>
         
         
-        <li id="section-8">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>open file</p>
 
@@ -155,11 +142,11 @@
         </li>
         
         
-        <li id="section-9">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>make a request to API using client_id and private_key</p>
 
@@ -178,26 +165,26 @@
         </li>
         
         
-        <li id="section-10">
+        <li id="section-9">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <p>get document page images</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    images = doc.page_images!(<span class="number">800</span>, <span class="number">400</span>, {<span class="symbol">:first_page</span> =&gt; <span class="number">0</span>, <span class="symbol">:page_count</span> =&gt; metadata.page_count}, {<span class="symbol">:client_id</span> =&gt; settings.client_id, <span class="symbol">:private_key</span> =&gt; settings.private_key})</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    images = doc.page_images!(<span class="number">800</span>, <span class="number">400</span>, {<span class="symbol">:first_page</span> =&gt; <span class="number">0</span>, <span class="symbol">:page_count</span> =&gt; metadata.views_count}, {<span class="symbol">:client_id</span> =&gt; settings.client_id, <span class="symbol">:private_key</span> =&gt; settings.private_key})</pre></div></div>
             
         </li>
         
         
-        <li id="section-11">
+        <li id="section-10">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
+                <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <p>result</p>
 
@@ -214,11 +201,11 @@
         </li>
         
         
-        <li id="section-12">
+        <li id="section-11">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-12">&#182;</a>
+                <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
               <p>set variables for template</p>
 

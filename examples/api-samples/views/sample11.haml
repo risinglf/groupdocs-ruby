@@ -28,6 +28,8 @@
     %font{:color => 'red'} #{(defined? err) ? err : ''}
   %br/
 
+
+
   #requestForm{:style => 'padding:20px; border:1px solid black;'}
     %form{:action => '/sample11', :method => 'post'}
       %input{:type => 'hidden', :name => 'annotationId', :value => (defined? annotationId) ? annotationId : ''}
@@ -79,6 +81,13 @@
             %span Annotation Position Y
             %input{:type=>'text', :name=>'annotationPosition_y', :placeholder => 'double'}
 
+        %div{:style => 'display:none', :id => 'range-position'}
+          %div
+            %span Range Position
+            %input{:type=>'text', :name=>'range-position', :placeholder => 'double'}
+          %div
+            %span Range Length
+            %input{:type=>'text', :name=>'range-length', :placeholder => 'double'}
         %div
           %span Text
           %input{:type=>'text', :name=>'text', :placeholder => 'text'}
@@ -86,22 +95,37 @@
 
       %input{:type => 'submit', :value => 'Make request'}/
 
+      %button{:name => 'delete-annotation', :id => 'delete', :value => "#{(defined? annotationId) ? annotationId : ''}", :style=>'display:none;'} Delete Annotation
+
+    %div{:style => 'padding:20px; border:1px solid black;'}
+      %p Results:
+      %p #{(defined? iframe) ? iframe : ''}
+      %span{:color=>'green', :style => 'font-size:4'}#{(defined? message) ? message : ''}
 = partial :_others_samples
 
+%script{:src=>'//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'}
 :javascript
   $(function() {
       $('select[name="annotation_type"]').change(function() {
           var obj = $(this);
 
           if (obj.val() == "text") {
-              $('#text-params, #annotation-position, #box-params').show();
+              $('#text-params, #annotation-position, #box-params, #range-position').show();
           }
           else if (obj.val() == "area") {
               $('#box-params').show();
-              $('#annotation-position').hide();
+              $('#annotation-position, #range-position').hide();
           }
           else if (obj.val() == "point") {
-              $('#annotation-position, #box-params').hide();
+              $('#annotation-position, #box-params, #range-position').hide();
           }
       });
+   if ($('input[name="annotationId"]').val() == '') {
+       $('button[name="delete-annotation"]').hide();
+   }
+   else {
+       $('button[name="delete-annotation"]').show();
+   };
+
   });
+

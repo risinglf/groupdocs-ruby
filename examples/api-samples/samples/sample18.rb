@@ -95,6 +95,12 @@ post '/sample18' do
     # check required variables
     raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty?
 
+    # Configure your access to API server.
+    GroupDocs.configure do |groupdocs|
+      groupdocs.client_id = settings.client_id
+      groupdocs.private_key = settings.private_key
+    end
+
     # Write client and private key to the file for callback job
     if settings.callback[0]
       out_file = File.new("#{File.dirname(__FILE__)}/../public/user_info.txt", 'w')
@@ -117,10 +123,10 @@ post '/sample18' do
         # open file
         File.open(file_path, 'wb') { |f| f.write(params[:file][:tempfile].read) }
         # make a request to API using client_id and private_key
-        file = GroupDocs::Storage::File.upload!(file_path, {}, {:client_id => settings.client_id, :private_key => settings.private_key})
+        file = GroupDocs::Storage::File.upload!(file_path, {})
       when 'url'
         # Upload file from defined url
-        file = GroupDocs::Storage::File.upload_web!(settings.url, {:client_id => settings.client_id, :private_key => settings.private_key})
+        file = GroupDocs::Storage::File.upload_web!(settings.url)
       else
         raise 'Wrong GUID source.'
     end
@@ -131,19 +137,23 @@ post '/sample18' do
     # Make document from file
     document = file.to_document
     # convert document
-    convert = document.convert!(settings.convert_type, {:callback => settings.callback}, {:client_id => settings.client_id, :private_key => settings.private_key})
+    convert = document.convert!(settings.convert_type, {:callback => settings.callback})
     # waite 10 seconds for while file converting
     sleep(10)
 
     # Get array of changes in document from job
-    original_document = convert.documents!({:client_id => settings.client_id, :private_key => settings.private_key})
+    original_document = convert.documents!()
 
     # Get converted document GUID
     guid = original_document[:inputs].first.outputs.first.guid
 
     # Set iframe with document GUID or raise an error
     if guid
-      iframe = "<iframe width='100%' height='600' frameborder='0' src='https://apps.groupdocs.com/document-viewer/embed/#{guid}'></iframe>"
+      url = "https://apps.groupdocs.com/document-viewer/embed/#{guid}"
+
+      # Add the signature to url request
+      iframe = GroupDocs::Api::Request.new(:path => url).prepare_and_sign_url
+      iframe = "<iframe width='100%' height='600' frameborder='0' src='#{iframe}'></iframe>"
     else
       raise 'File was not converted'
     end

@@ -59,7 +59,7 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>set variables</p>
+              <p>Set variables</p>
 
             </div>
             
@@ -76,11 +76,13 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>check required variables</p>
+              <p>Check required variables</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    raise <span class="string">'Please enter all required parameters'</span> <span class="keyword">if</span> settings.fileId.empty?</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    raise <span class="string">'Please enter all required parameters'</span> <span class="keyword">if</span> settings.fileId.empty?
+
+    url = <span class="string">"https://apps.groupdocs.com/assembly2/questionnaire-assembly/<span class="subst">#{settings.fileId}</span>"</span></pre></div></div>
             
         </li>
         
@@ -91,15 +93,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>construct result iframe</p>
+              <p>Add the signature to the url request</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    iframe = <span class="string">"&lt;iframe src='https://apps.groupdocs.com/assembly2/questionnaire-assembly/<span class="subst">#{settings.fileId}</span>' frameborder='0' width='100%' height='600'&gt;&lt;/iframe&gt;"</span>
-
-  <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e
-    err = e.message
-  <span class="keyword">end</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    iframe = <span class="constant">GroupDocs::Api::Request</span>.new(<span class="symbol">:path</span> =&gt; url).prepare_and_sign_url</pre></div></div>
             
         </li>
         
@@ -109,6 +107,25 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Construct result iframe</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    iframe = <span class="string">"&lt;iframe src='<span class="subst">#{iframe}</span>' frameborder='0' width='100%' height='600'&gt;&lt;/iframe&gt;"</span>
+
+  <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e
+    err = e.message
+  <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>set variables for template</p>
 
