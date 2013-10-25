@@ -46,7 +46,7 @@ post '/sample19/compere_callback' do
 end
 
 # GET request
-get '/sample18/check' do
+get '/sample19/check' do
 
   # Check is there download directory
   unless File.directory?("#{File.dirname(__FILE__)}/../public/downloads")
@@ -75,7 +75,7 @@ post '/sample19' do
   set :private_key, params[:private_key]
   set :sourceFileId, params[:sourceFileId]
   set :targetFileId, params[:targetFileId]
-  set :callbackUrl, params[:callbackUrl]
+  set :callback, params[:callback]
 
   # Set download path
   downloads_path = "#{File.dirname(__FILE__)}/../public/downloads"
@@ -99,7 +99,7 @@ post '/sample19' do
     end
 
     # Write client and private key to the file for callback job
-    if settings.callbackUrl
+    if settings.callback
       out_file = File.new("#{File.dirname(__FILE__)}/../public/user_info.txt", 'w')
       # white space is required
       out_file.write("#{settings.client_id} ")
@@ -123,13 +123,24 @@ post '/sample19' do
       end
     end
 
+
     unless source_document.instance_of? String and target_document.instance_of? String
 
-      info = source_document.to_document.compare!(target_document.to_document, settings.callbackUrl)
-      sleep(6)
+      info = source_document.to_document.compare!(target_document.to_document, settings.callback)
+
+      i = 0
+
+      while i<5 do
+        sleep(5)
+        job = GroupDocs::Job.get!(info.id)
+        break if job.status == :archived
+        i += 1
+      end
+
 
       # Get job by ID
       job = GroupDocs::Job.new(id: info.id)
+
       # Get all job documents
       documents = job.documents!()
       # Get compared file giud
@@ -147,5 +158,5 @@ post '/sample19' do
   end
 
   # Set variables for template
-  haml :sample19, :locals => {:userId => settings.client_id, :privateKey => settings.private_key, :sourceFileId => settings.sourceFileId, :targetFileId => settings.targetFileId, :callbackUrl => settings.callbackUrl, :iframe => iframe, :err => err}
+  haml :sample19, :locals => {:userId => settings.client_id, :privateKey => settings.private_key, :sourceFileId => settings.sourceFileId, :targetFileId => settings.targetFileId, :callback => settings.callback, :iframe => iframe, :err => err}
 end

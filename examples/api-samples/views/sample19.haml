@@ -20,7 +20,7 @@
   %p
     Target File ID = #{(defined? targetFileId) ? targetFileId : ''}
   %p
-    Callback Url = #{(defined? callbackUrl) ? callbackUrl : ''}
+    Callback Url = #{(defined? callback) ? callback : ''}
   %p
     %font{:color => 'red'} #{(defined? err) ? err : ''}
   %br/
@@ -57,6 +57,7 @@
     %div{:style => 'padding:20px; border:1px solid black;'}
       %p
         Result:
+        %iframe{:id=>'downloadframe', :style=>'display:none'}
         #{(defined? iframe) ? iframe : ''}
 
 = partial :_others_samples
@@ -71,9 +72,9 @@
   }
 
   $(function($){
-    callbackUrl = $("input[name=callback]").val();
+    callback = $("input[name=callback]").val();
 
-    if(callbackUrl !== "") {
+    if(callback !== "") {
       $('#results_status').fadeIn("slow");
       setTimeout(check, 5000)
     }

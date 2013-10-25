@@ -357,6 +357,24 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
+              <p>Configure your access to API server.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="constant">GroupDocs</span>.configure <span class="keyword">do</span> |groupdocs|
+      groupdocs.client_id = settings.client_id
+      groupdocs.private_key = settings.private_key
+    <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
               <p>Write client and private key to the file for callback job</p>
 
             </div>
@@ -367,11 +385,11 @@
         </li>
         
         
-        <li id="section-21">
+        <li id="section-22">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-21">&#182;</a>
+                <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
               <p>white space is required</p>
 
@@ -387,11 +405,11 @@
         </li>
         
         
-        <li id="section-22">
+        <li id="section-23">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
+                <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
               <p>Create instance of File</p>
 
@@ -402,11 +420,11 @@
         </li>
         
         
-        <li id="section-23">
+        <li id="section-24">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-23">&#182;</a>
+                <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
               <p>Raise exception if something went wrong</p>
 
@@ -417,11 +435,11 @@
         </li>
         
         
-        <li id="section-24">
+        <li id="section-25">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-24">&#182;</a>
+                <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
               <p>Make GroupDocs::Storage::Document instance</p>
 
@@ -432,11 +450,11 @@
         </li>
         
         
-        <li id="section-25">
+        <li id="section-26">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-25">&#182;</a>
+                <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
               <p>Create datasource with fields</p>
 
@@ -447,11 +465,11 @@
         </li>
         
         
-        <li id="section-26">
+        <li id="section-27">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-26">&#182;</a>
+                <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
               <p>Get arry of document&#39;s fields</p>
 
@@ -462,11 +480,11 @@
         </li>
         
         
-        <li id="section-27">
+        <li id="section-28">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-27">&#182;</a>
+                <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
               <p>Create Field instance and fill the fields</p>
 
@@ -477,33 +495,17 @@
         </li>
         
         
-        <li id="section-28">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-28">&#182;</a>
-              </div>
-              <p>Adds datasource.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    datasource.add!({<span class="symbol">:client_id</span> =&gt; settings.client_id, <span class="symbol">:private_key</span> =&gt; settings.private_key})</pre></div></div>
-            
-        </li>
-        
-        
         <li id="section-29">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
-              <p>Creates new job to merge datasource into document.</p>
+              <p>Adds datasource.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    job = document.datasource!(datasource, {<span class="symbol">:new_type</span> =&gt; <span class="string">"pdf"</span>}, {<span class="symbol">:client_id</span> =&gt; settings.client_id, <span class="symbol">:private_key</span> =&gt; settings.private_key})
-    sleep <span class="number">10</span> <span class="comment"># wait for merge and convert</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    datasource.add!()</pre></div></div>
             
         </li>
         
@@ -514,11 +516,12 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
-              <p>Returns an hash of input and output documents associated to job.</p>
+              <p>Creates new job to merge datasource into document.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    jobInfo = job.documents!({<span class="symbol">:client_id</span> =&gt; settings.client_id, <span class="symbol">:private_key</span> =&gt; settings.private_key})</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    job = document.datasource!(datasource, {<span class="symbol">:new_type</span> =&gt; <span class="string">"pdf"</span>})
+    sleep <span class="number">10</span> <span class="comment"># wait for merge and convert</span></pre></div></div>
             
         </li>
         
@@ -529,13 +532,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
-              <p>Create envelope using user id and entered by user name</p>
+              <p>Returns an hash of input and output documents associated to job.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    envelope = <span class="constant">GroupDocs::Signature::Envelope</span>.new
-    envelope.name = jobInfo[<span class="symbol">:inputs</span>][<span class="number">0</span>].outputs[<span class="number">0</span>].name
-    envelope.create!({}, {<span class="symbol">:client_id</span> =&gt; settings.client_id, <span class="symbol">:private_key</span> =&gt; settings.private_key})</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    jobInfo = job.documents!()</pre></div></div>
             
         </li>
         
@@ -546,11 +547,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
-              <p>Add uploaded document to envelope</p>
+              <p>Creates new document to envelope</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    envelope.add_document!(document, {}, {<span class="symbol">:client_id</span> =&gt; settings.client_id, <span class="symbol">:private_key</span> =&gt; settings.private_key})</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    document = jobInfo[<span class="symbol">:inputs</span>][<span class="number">0</span>].outputs[<span class="number">0</span>].to_document</pre></div></div>
             
         </li>
         
@@ -561,11 +562,13 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-33">&#182;</a>
               </div>
-              <p>Get role list for current user</p>
+              <p>Creates envelope using user id and entered by user name</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    roles = <span class="constant">GroupDocs::Signature::Role</span>.get!({}, {<span class="symbol">client_id:</span> settings.client_id, <span class="symbol">private_key:</span> settings.private_key})</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    envelope = <span class="constant">GroupDocs::Signature::Envelope</span>.new
+    envelope.name = jobInfo[<span class="symbol">:inputs</span>][<span class="number">0</span>].outputs[<span class="number">0</span>].name
+    envelope.create!({})</pre></div></div>
             
         </li>
         
@@ -576,15 +579,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-34">&#182;</a>
               </div>
-              <p>Create new recipient</p>
+              <p>Adds uploaded document to envelope</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    recipient = <span class="constant">GroupDocs::Signature::Recipient</span>.new
-    recipient.email = <span class="string">'test@test.com'</span>
-    recipient.first_name = <span class="string">'test'</span>
-    recipient.last_name = <span class="string">'test'</span>
-    recipient.role_id = roles.detect { |role| role.name == <span class="string">'Signer'</span> }.id</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    envelope.add_document!(document, {})</pre></div></div>
             
         </li>
         
@@ -595,11 +594,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-35">&#182;</a>
               </div>
-              <p>Add recipient to envelope</p>
+              <p>Get role list for current user</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    envelope.add_recipient!(recipient, {<span class="symbol">client_id:</span> settings.client_id, <span class="symbol">private_key:</span> settings.private_key})</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    roles = <span class="constant">GroupDocs::Signature::Role</span>.get!({})</pre></div></div>
             
         </li>
         
@@ -610,16 +609,15 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-36">&#182;</a>
               </div>
-              <p>Get field</p>
+              <p>Creates new recipient</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    fieldGet = <span class="constant">GroupDocs::Signature::Field</span>.get!({},{<span class="symbol">client_id:</span> settings.client_id, <span class="symbol">private_key:</span> settings.private_key}).detect { |f| f.type == <span class="symbol">:signature</span> }
-    fieldGet.location = { <span class="symbol">location_x:</span> <span class="number">0</span>.<span class="number">15</span>,
-                          <span class="symbol">location_y:</span> <span class="number">0</span>.<span class="number">73</span>,
-                          <span class="symbol">location_width:</span> <span class="number">150</span>,
-                          <span class="symbol">location_height:</span> <span class="number">50</span>,
-                          <span class="symbol">page:</span> <span class="number">1</span> }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    recipient = <span class="constant">GroupDocs::Signature::Recipient</span>.new
+    recipient.email = settings.email
+    recipient.first_name = settings.name
+    recipient.last_name = settings.last_name
+    recipient.role_id = roles.detect { |role| role.name == <span class="string">'Signer'</span> }.id</pre></div></div>
             
         </li>
         
@@ -630,11 +628,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-37">&#182;</a>
               </div>
-              <p>Get document</p>
+              <p>Adds recipient to envelope</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    documentGet = envelope.documents!({}, {<span class="symbol">client_id:</span> settings.client_id, <span class="symbol">private_key:</span> settings.private_key}).first</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    envelope.add_recipient!(recipient)</pre></div></div>
             
         </li>
         
@@ -645,11 +643,16 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-38">&#182;</a>
               </div>
-              <p>Get recipients</p>
+              <p>Get field</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    recipientGet = envelope.recipients!({},{<span class="symbol">client_id:</span> settings.client_id, <span class="symbol">private_key:</span> settings.private_key}).first</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    fieldGet = <span class="constant">GroupDocs::Signature::Field</span>.get!({}).detect { |f| f.type == <span class="symbol">:signature</span> }
+    fieldGet.location = { <span class="symbol">location_x:</span> <span class="number">0</span>.<span class="number">15</span>,
+                          <span class="symbol">location_y:</span> <span class="number">0</span>.<span class="number">73</span>,
+                          <span class="symbol">location_width:</span> <span class="number">150</span>,
+                          <span class="symbol">location_height:</span> <span class="number">50</span>,
+                          <span class="symbol">page:</span> <span class="number">1</span> }</pre></div></div>
             
         </li>
         
@@ -660,11 +663,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-39">&#182;</a>
               </div>
-              <p>Add field to envelope</p>
+              <p>Get document</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    addField = envelope.add_field!(fieldGet, documentGet, recipientGet, {}, {<span class="symbol">client_id:</span> settings.client_id, <span class="symbol">private_key:</span> settings.private_key})</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    documentGet = envelope.documents!({}).first</pre></div></div>
             
         </li>
         
@@ -675,11 +678,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-40">&#182;</a>
               </div>
-              <p>Send envelope</p>
+              <p>Get recipients</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    envelope.send!(settings.callback, {<span class="symbol">client_id:</span> settings.client_id, <span class="symbol">private_key:</span> settings.private_key})</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    recipientGet = envelope.recipients!({}).first</pre></div></div>
             
         </li>
         
@@ -690,16 +693,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-41">&#182;</a>
               </div>
-              <p>Make iframe</p>
+              <p>Add field to envelope</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    iframe = <span class="string">"&lt;iframe src='https://apps.groupdocs.com/signature/signembed/<span class="subst">#{envelope.id}</span>/<span class="subst">#{recipientGet.id}</span>' frameborder='0' width='720' height='600'&gt;&lt;/iframe&gt;"</span>
-
-
-  <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e
-    err = e.message
-  <span class="keyword">end</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    addField = envelope.add_field!(fieldGet, documentGet, recipientGet, {})</pre></div></div>
             
         </li>
         
@@ -709,6 +707,44 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-42">&#182;</a>
+              </div>
+              <p>Send envelope</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    envelope.send!({<span class="symbol">:callbackUrl</span> =&gt; settings.callback})
+
+    url = <span class="string">"https://apps.groupdocs.com/signature/signembed/<span class="subst">#{envelope.id}</span>/<span class="subst">#{recipientGet.id}</span>"</span>
+    iframe = <span class="constant">GroupDocs::Api::Request</span>.new(<span class="symbol">:path</span> =&gt; url).prepare_and_sign_url</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-43">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-43">&#182;</a>
+              </div>
+              <p>Make iframe</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    iframe = <span class="string">"&lt;iframe src='<span class="subst">#{iframe}</span>' frameborder='0' width='720' height='600'&gt;&lt;/iframe&gt;"</span>
+
+
+  <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e
+    err = e.message
+  <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-44">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-44">&#182;</a>
               </div>
               <p>set variables for template</p>
 

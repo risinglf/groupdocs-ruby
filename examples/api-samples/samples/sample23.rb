@@ -17,6 +17,12 @@ post '/sample23' do
     # check required variables
     raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty?
 
+    # Configure your access to API server.
+    GroupDocs.configure do |groupdocs|
+      groupdocs.client_id = settings.client_id
+      groupdocs.private_key = settings.private_key
+    end
+
     # get document by file GUID
     case settings.source
     when 'guid'
@@ -28,10 +34,10 @@ post '/sample23' do
         # Open file
         File.open(file_path, 'wb') { |f| f.write(params[:file][:tempfile].read) }
         # Make a request to API using client_id and private_key
-        file = GroupDocs::Storage::File.upload!(file_path, {}, {:client_id => settings.client_id, :private_key => settings.private_key})
+        file = GroupDocs::Storage::File.upload!(file_path, {})
     when 'url'
         # Upload file from defined url
-        file = GroupDocs::Storage::File.upload_web!(settings.url, {:client_id => settings.client_id, :private_key => settings.private_key})
+        file = GroupDocs::Storage::File.upload_web!(settings.url)
     else
         raise 'Wrong GUID source.'
     end
@@ -43,7 +49,7 @@ post '/sample23' do
     document = file.to_document
 
     #Create new page
-    page_image = document.page_images!(700, 700, {first_page: 0, page_count: 2}, {:client_id => settings.client_id, :private_key => settings.private_key})
+    page_image = document.page_images!(700, 700, {first_page: 0, page_count: 2})
     pp page_image
   rescue Exception => e
     err = e.message

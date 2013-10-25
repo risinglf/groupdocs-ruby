@@ -115,7 +115,10 @@ post '/sample32' do
       # Publish the Form
       form.publish!({:callbackUrl => settings.callback})
 
-      iframe = "https://apps.groupdocs.com/signature2/forms/signembed/ #{settings.form_guid}";
+      # Add the signature to url the request
+      url = "https://apps.groupdocs.com/signature2/forms/signembed/ #{settings.form_guid}"
+      iframe = GroupDocs::Api::Request.new(:path => url).prepare_and_sign_url
+      iframe = "<iframe width='100%' height='600' frameborder='0' src='#{iframe}'></iframe>"
     when 'template'
 
       form = GroupDocs::Signature::Form.new
@@ -129,7 +132,10 @@ post '/sample32' do
       # Publish the Form
       form.publish!({:callbackUrl => settings.callback})
 
-      iframe = "<iframe width='100%' height='600' frameborder='0' src='https://apps.groupdocs.com/signature2/forms/signembed/ #{signature}'></iframe>"
+      # Add the signature to url the request
+      url = "https://apps.groupdocs.com/signature2/forms/signembed/ #{signature}"
+      iframe = GroupDocs::Api::Request.new(:path => url).prepare_and_sign_url
+      iframe = "<iframe width='100%' height='600' frameborder='0' src='https://apps.groupdocs.com/signature2/forms/signembed/ #{iframe}'></iframe>"
     end
 
   rescue Exception => e

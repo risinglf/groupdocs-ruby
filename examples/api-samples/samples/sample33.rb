@@ -57,7 +57,10 @@ post '/sample33' do
 
     # Set iframe with document GUID or raise an error
     if document
-      iframe = "<iframe width='100%' height='600' frameborder='0' src='https://apps.groupdocs.com/document-viewer/embed/#{document[0].guid}'></iframe>"
+
+      url = "https://apps.groupdocs.com/document-viewer/embed/#{document[0].guid}"
+      iframe = GroupDocs::Api::Request.new(:path => url).prepare_and_sign_url
+      iframe = "<iframe width='100%' height='600' frameborder='0' src='#{iframe}'></iframe>"
     else
       raise 'File was not converted'
     end

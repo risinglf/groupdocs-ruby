@@ -187,7 +187,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>get <span class="string">'/sample18/check'</span> <span class="keyword">do</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>get <span class="string">'/sample19/check'</span> <span class="keyword">do</span></pre></div></div>
             
         </li>
         
@@ -290,7 +290,7 @@
   set <span class="symbol">:private_key</span>, params[<span class="symbol">:private_key</span>]
   set <span class="symbol">:sourceFileId</span>, params[<span class="symbol">:sourceFileId</span>]
   set <span class="symbol">:targetFileId</span>, params[<span class="symbol">:targetFileId</span>]
-  set <span class="symbol">:callbackUrl</span>, params[<span class="symbol">:callbackUrl</span>]</pre></div></div>
+  set <span class="symbol">:callback</span>, params[<span class="symbol">:callback</span>]</pre></div></div>
             
         </li>
         
@@ -374,7 +374,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> settings.callbackUrl
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> settings.callback
       out_file = <span class="constant">File</span>.new(<span class="string">"<span class="subst">#{<span class="constant">File</span>.dirname(__FILE_<span class="number">_</span>)}</span>/../public/user_info.txt"</span>, <span class="string">'w'</span>)</pre></div></div>
             
         </li>
@@ -435,10 +435,19 @@
       <span class="keyword">end</span>
     <span class="keyword">end</span>
 
+
     <span class="keyword">unless</span> source_document.instance_of? <span class="constant">String</span> <span class="keyword">and</span> target_document.instance_of? <span class="constant">String</span>
 
-      info = source_document.to_document.compare!(target_document.to_document, settings.callbackUrl)
-      sleep(<span class="number">6</span>)</pre></div></div>
+      info = source_document.to_document.compare!(target_document.to_document, settings.callback)
+
+      i = <span class="number">0</span>
+
+      <span class="keyword">while</span> i&lt;<span class="number">5</span> <span class="keyword">do</span>
+        sleep(<span class="number">5</span>)
+        job = <span class="constant">GroupDocs::Job</span>.get!(info.id)
+        <span class="keyword">break</span> <span class="keyword">if</span> job.status == <span class="symbol">:archived</span>
+        i += <span class="number">1</span>
+      <span class="keyword">end</span></pre></div></div>
             
         </li>
         
@@ -535,7 +544,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  haml <span class="symbol">:sample19</span>, <span class="symbol">:locals</span> =&gt; {<span class="symbol">:userId</span> =&gt; settings.client_id, <span class="symbol">:privateKey</span> =&gt; settings.private_key, <span class="symbol">:sourceFileId</span> =&gt; settings.sourceFileId, <span class="symbol">:targetFileId</span> =&gt; settings.targetFileId, <span class="symbol">:callbackUrl</span> =&gt; settings.callbackUrl, <span class="symbol">:iframe</span> =&gt; iframe, <span class="symbol">:err</span> =&gt; err}
+            <div class="content"><div class='highlight'><pre>  haml <span class="symbol">:sample19</span>, <span class="symbol">:locals</span> =&gt; {<span class="symbol">:userId</span> =&gt; settings.client_id, <span class="symbol">:privateKey</span> =&gt; settings.private_key, <span class="symbol">:sourceFileId</span> =&gt; settings.sourceFileId, <span class="symbol">:targetFileId</span> =&gt; settings.targetFileId, <span class="symbol">:callback</span> =&gt; settings.callback, <span class="symbol">:iframe</span> =&gt; iframe, <span class="symbol">:err</span> =&gt; err}
 <span class="keyword">end</span></pre></div></div>
             
         </li>

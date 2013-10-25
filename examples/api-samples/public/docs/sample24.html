@@ -78,7 +78,7 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>check required variables</p>
+              <p>Check required variables</p>
 
             </div>
             
@@ -93,7 +93,7 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>upload web file</p>
+              <p>Upload web file</p>
 
             </div>
             
@@ -108,16 +108,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>construct result messages</p>
+              <p>Construct result messages</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    message = <span class="string">"&lt;p&gt;File was uploaded to GroupDocs. Here you can see your &lt;strong&gt; file in the GroupDocs Embedded Viewer.&lt;/p&gt;"</span>
-    iframe = <span class="string">"&lt;iframe src='https://apps.groupdocs.com/document-viewer/Embed/<span class="subst">#{file.guid}</span>' frameborder='0' width='720' height='600'&gt;&lt;/iframe&gt;"</span>
-
-  <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e
-    err = e.message
-  <span class="keyword">end</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    message = <span class="string">"&lt;p&gt;File was uploaded to GroupDocs. Here you can see your &lt;strong&gt; file in the GroupDocs Embedded Viewer.&lt;/p&gt;"</span></pre></div></div>
             
         </li>
         
@@ -128,7 +123,42 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>set variables for template</p>
+              <p>Add the signature to url te request</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    url = <span class="string">"https://apps.groupdocs.com/document-viewer/Embed/<span class="subst">#{file.guid}</span>"</span>
+    iframe = <span class="constant">GroupDocs::Api::Request</span>.new(<span class="symbol">:path</span> =&gt; url).prepare_and_sign_url</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Construct result iframe</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    iframe = <span class="string">"&lt;iframe src='<span class="subst">#{iframe}</span>' frameborder='0' width='720' height='600'&gt;&lt;/iframe&gt;"</span>
+
+  <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e
+    err = e.message
+  <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Set variables for template</p>
 
             </div>
             

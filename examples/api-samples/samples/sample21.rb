@@ -79,9 +79,19 @@ post '/sample21' do
   set :lastName, params[:lastName]
   set :file, params[:file]
   set :callback, params[:callback]
-  begin
 
-    # check required variables
+  # Set download path
+  downloads_path = "#{File.dirname(__FILE__)}/../public/downloads"
+
+  # Remove all files from download directory or create folder if it not there
+  if File.directory?(downloads_path)
+    Dir.foreach(downloads_path) { |f| fn = File.join(downloads_path, f); File.delete(fn) if f != '.' && f != '..' }
+  else
+    Dir::mkdir(downloads_path)
+  end
+
+  begin
+    # Check required variables
     raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty? or settings.email.empty? or settings.name.empty? or settings.lastName.empty? or settings.file.nil?
 
     # Configure your access to API server.
@@ -91,7 +101,7 @@ post '/sample21' do
     end
 
     # Write client and private key to the file for callback job
-    if settings.callback
+    if settings.callback[0]
       out_file = File.new("#{File.dirname(__FILE__)}/../public/user_info.txt", 'w')
       # white space is required
       out_file.write("#{settings.client_id} ")
@@ -99,6 +109,7 @@ post '/sample21' do
       out_file.close
     end
 
+    file = nil
     # construct path
     filepath = "#{Dir.tmpdir}/#{params[:file][:filename]}"
     # open file
@@ -143,9 +154,9 @@ post '/sample21' do
     # Add field to envelope
     envelope.add_field!(field, document[0], recipient, {})
 
-
+    callback = {:callbackUrl => settings.callback}
     # Send envelop
-    envelope.send!(settings.callback)
+    envelope.send!(callback)
 
     # Add the signature to url request
     url = "https://apps.groupdocs.com/signature/signembed/#{envelope.id}/#{recipient.id}"

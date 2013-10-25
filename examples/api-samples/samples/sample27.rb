@@ -5,7 +5,7 @@ end
 
 # POST request
 post '/sample27' do
-  # set variables
+  # Set variables
   set :client_id, params[:client_id]
   set :private_key, params[:private_key]
   set :file_id, params[:fileId]
@@ -30,7 +30,13 @@ post '/sample27' do
     # Check required variables
     raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty?
 
-    # get document by file GUID
+    # Configure your access to API server.
+    GroupDocs.configure do |groupdocs|
+      groupdocs.client_id = settings.client_id
+      groupdocs.private_key = settings.private_key
+    end
+
+    # Get document by file GUID
     case settings.source
     when 'guid'
         # Create instance of File
@@ -41,10 +47,10 @@ post '/sample27' do
         # Open file
         File.open(file_path, 'wb') { |f| f.write(params[:file][:tempfile].read) }
         # Make a request to API using client_id and private_key
-        file = GroupDocs::Storage::File.upload!(file_path, {}, {:client_id => settings.client_id, :private_key => settings.private_key})
+        file = GroupDocs::Storage::File.upload!(file_path, {})
     when 'url'
         # Upload file from defined url
-        file = GroupDocs::Storage::File.upload_web!(settings.url, {:client_id => settings.client_id, :private_key => settings.private_key})
+        file = GroupDocs::Storage::File.upload_web!(settings.url)
     else
         raise 'Wrong GUID source.'
     end
@@ -66,17 +72,17 @@ post '/sample27' do
 
 
     # Adds datasource.
-    datasource.add!({:client_id => settings.client_id, :private_key => settings.private_key})
+    datasource.add!()
 
     # Creates new job to merge datasource into document.
-    job = document.datasource!(datasource, {:new_type => settings.type}, {:client_id => settings.client_id, :private_key => settings.private_key})
+    job = document.datasource!(datasource, {:new_type => settings.type})
     sleep 10 # wait for merge and convert
 
     # Returns an hash of input and output documents associated to job.
     document = job.documents!({:client_id => settings.client_id, :private_key => settings.private_key})
 
     # Download file
-    document[:inputs][0].outputs[0].download!(downloads_path, {:client_id => settings.client_id, :private_key => settings.private_key})
+    document[:inputs][0].outputs[0].download!(downloads_path)
 
     # Set converted document GUID
     guid = document[:inputs][0].outputs[0].guid
@@ -84,9 +90,13 @@ post '/sample27' do
     # Set converted document Name
     file_name = document[:inputs][0].outputs[0].name
 
+    # Add the signature to url the request
+    url = "https://apps.groupdocs.com/document-viewer/embed/#{guid}"
+    iframe = GroupDocs::Api::Request.new(:path => url).prepare_and_sign_url
+
     # Set iframe with document GUID or raise an error
     if guid
-      iframe = "<iframe width='100%' height='600' frameborder='0' src='https://apps.groupdocs.com/document-viewer/embed/#{guid}'></iframe>"
+      iframe = "<iframe width='100%' height='600' frameborder='0' src='#{iframe}'></iframe>"
     else
       raise 'File was not converted'
     end
@@ -95,6 +105,6 @@ post '/sample27' do
     err = e.message
   end
 
-  # set variables for template
+  # Set variables for template
   haml :sample27, :locals => {:userId => settings.client_id, :privateKey => settings.private_key, :sex => settings.sex,  :age => settings.age, :sunrise => settings.sunrise, :name => settings.name, :type => settings.type, :iframe => iframe, :file_name => file_name,  :err => err}
 end

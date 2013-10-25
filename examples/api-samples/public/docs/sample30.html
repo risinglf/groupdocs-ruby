@@ -65,7 +65,7 @@
             
             <div class="content"><div class='highlight'><pre>  set <span class="symbol">:client_id</span>, params[<span class="symbol">:client_id</span>]
   set <span class="symbol">:private_key</span>, params[<span class="symbol">:private_key</span>]
-  set <span class="symbol">:file_id</span>, params[<span class="symbol">:fileId</span>]
+  set <span class="symbol">:name</span>, params[<span class="symbol">:name</span>]
 
   <span class="keyword">begin</span></pre></div></div>
             
@@ -82,7 +82,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    raise <span class="string">'Please enter all required parameters'</span> <span class="keyword">if</span> settings.client_id.empty? <span class="keyword">or</span> settings.private_key.empty? <span class="keyword">or</span> settings.file_id.empty?</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    raise <span class="string">'Please enter all required parameters'</span> <span class="keyword">if</span> settings.client_id.empty? <span class="keyword">or</span> settings.private_key.empty? <span class="keyword">or</span> settings.name.empty?</pre></div></div>
             
         </li>
         
@@ -93,11 +93,12 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>make a request to API using client_id and private_key</p>
+              <p>get List files from GroupDocs Storage</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    file = <span class="constant">GroupDocs::Storage::File</span>.new({<span class="symbol">:guid</span> =&gt; settings.file_id})</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    file = <span class="constant">GroupDocs::Storage::Folder</span>.list!(<span class="string">""</span>, {}, {<span class="symbol">:client_id</span> =&gt; settings.client_id, <span class="symbol">:private_key</span> =&gt; settings.private_key})
+    file_name = <span class="string">''</span></pre></div></div>
             
         </li>
         
@@ -108,17 +109,15 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>delete file from GroupDocs Storage</p>
+              <p>choose the desired file</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    result = file.delete!({<span class="symbol">:client_id</span> =&gt; settings.client_id, <span class="symbol">:private_key</span> =&gt; settings.private_key})
-
-    message = <span class="string">'File was deleted from GroupDocs Storage'</span>
-
-  <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e
-    err = e.message
-  <span class="keyword">end</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    file.map <span class="keyword">do</span> |element|
+      <span class="keyword">if</span> element.name == settings.name
+          file_name = element
+      <span class="keyword">end</span>
+    <span class="keyword">end</span></pre></div></div>
             
         </li>
         
@@ -129,11 +128,32 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
+              <p>delete file from GroupDocs Storage</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    file_name.delete!({<span class="symbol">:client_id</span> =&gt; settings.client_id, <span class="symbol">:private_key</span> =&gt; settings.private_key})
+
+    message = <span class="string">'File was deleted from GroupDocs Storage'</span>
+
+  <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e
+    err = e.message
+  <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
               <p>set variables for template</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  haml <span class="symbol">:sample30</span>, <span class="symbol">:locals</span> =&gt; {<span class="symbol">:userId</span> =&gt; settings.client_id, <span class="symbol">:privateKey</span> =&gt; settings.private_key, <span class="symbol">:message</span> =&gt; message, <span class="symbol">:fileId</span> =&gt; settings.file_id, <span class="symbol">:err</span> =&gt; err}
+            <div class="content"><div class='highlight'><pre>  haml <span class="symbol">:sample30</span>, <span class="symbol">:locals</span> =&gt; {<span class="symbol">:userId</span> =&gt; settings.client_id, <span class="symbol">:privateKey</span> =&gt; settings.private_key, <span class="symbol">:message</span> =&gt; message, <span class="symbol">:name</span> =&gt; settings.name, <span class="symbol">:err</span> =&gt; err}
 <span class="keyword">end</span></pre></div></div>
             
         </li>

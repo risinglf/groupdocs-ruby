@@ -58,12 +58,16 @@
         %br/
         %font{:color=>'grey'} (For test Callback you can use this URL: http://groupdocs-ruby-samples.herokuapp.com/sample21/signature_callback)
       %input{:type=>'text', :size=>'70', :value=>"#{(defined? callback) ? callback : ''}", :name=>'callback'}
-      %input{:type => 'submit', :value => 'Make request'}/
+      %br/
+      %br/
+      %input{:type => 'submit', :value => 'Make request'}
+      %span{:id=>'results_status', :style=>'color:red;display:none;'} (Please wait for ajax response)
       %br/
     %div{:style => 'padding:20px; border:1px solid black;'}
       %p
         Results:
         %br/
+        %iframe{:id=>'downloadframe', :style=>'display:none'}
         #{(defined? iframe) ? iframe : ''}
 
 = partial :_others_samples

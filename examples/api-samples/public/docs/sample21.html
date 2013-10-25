@@ -292,8 +292,7 @@
   set <span class="symbol">:name</span>, params[<span class="symbol">:name</span>]
   set <span class="symbol">:lastName</span>, params[<span class="symbol">:lastName</span>]
   set <span class="symbol">:file</span>, params[<span class="symbol">:file</span>]
-  set <span class="symbol">:callback</span>, params[<span class="symbol">:callback</span>]
-  <span class="keyword">begin</span></pre></div></div>
+  set <span class="symbol">:callback</span>, params[<span class="symbol">:callback</span>]</pre></div></div>
             
         </li>
         
@@ -304,11 +303,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
-              <p>check required variables</p>
+              <p>Set download path</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    raise <span class="string">'Please enter all required parameters'</span> <span class="keyword">if</span> settings.client_id.empty? <span class="keyword">or</span> settings.private_key.empty? <span class="keyword">or</span> settings.email.empty? <span class="keyword">or</span> settings.name.empty? <span class="keyword">or</span> settings.lastName.empty? <span class="keyword">or</span> settings.file.<span class="keyword">nil</span>?</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  downloads_path = <span class="string">"<span class="subst">#{<span class="constant">File</span>.dirname(__FILE_<span class="number">_</span>)}</span>/../public/downloads"</span></pre></div></div>
             
         </li>
         
@@ -318,6 +317,42 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Remove all files from download directory or create folder if it not there</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">if</span> <span class="constant">File</span>.directory?(downloads_path)
+    <span class="constant">Dir</span>.foreach(downloads_path) { |f| fn = <span class="constant">File</span>.join(downloads_path, f); <span class="constant">File</span>.delete(fn) <span class="keyword">if</span> f != <span class="string">'.'</span> &amp;&amp; f != <span class="string">'..'</span> }
+  <span class="keyword">else</span>
+    <span class="constant">Dir::</span>mkdir(downloads_path)
+  <span class="keyword">end</span>
+
+  <span class="keyword">begin</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>Check required variables</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    raise <span class="string">'Please enter all required parameters'</span> <span class="keyword">if</span> settings.client_id.empty? <span class="keyword">or</span> settings.private_key.empty? <span class="keyword">or</span> settings.email.empty? <span class="keyword">or</span> settings.name.empty? <span class="keyword">or</span> settings.lastName.empty? <span class="keyword">or</span> settings.file.<span class="keyword">nil</span>?</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
               <p>Configure your access to API server.</p>
 
@@ -331,51 +366,18 @@
         </li>
         
         
-        <li id="section-19">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-19">&#182;</a>
-              </div>
-              <p>Write client and private key to the file for callback job</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> settings.callback
-      out_file = <span class="constant">File</span>.new(<span class="string">"<span class="subst">#{<span class="constant">File</span>.dirname(__FILE_<span class="number">_</span>)}</span>/../public/user_info.txt"</span>, <span class="string">'w'</span>)</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-20">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-20">&#182;</a>
-              </div>
-              <p>white space is required</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      out_file.write(<span class="string">"<span class="subst">#{settings.client_id}</span> "</span>)
-      out_file.write(<span class="string">"<span class="subst">#{settings.private_key}</span>"</span>)
-      out_file.close
-    <span class="keyword">end</span></pre></div></div>
-            
-        </li>
-        
-        
         <li id="section-21">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
-              <p>construct path</p>
+              <p>Write client and private key to the file for callback job</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    filepath = <span class="string">"<span class="subst">#{<span class="constant">Dir</span>.tmpdir}</span>/<span class="subst">#{params[<span class="symbol">:file</span>][<span class="symbol">:filename</span>]}</span>"</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> settings.callback[<span class="number">0</span>]
+      out_file = <span class="constant">File</span>.new(<span class="string">"<span class="subst">#{<span class="constant">File</span>.dirname(__FILE_<span class="number">_</span>)}</span>/../public/user_info.txt"</span>, <span class="string">'w'</span>)</pre></div></div>
             
         </li>
         
@@ -386,11 +388,16 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
-              <p>open file</p>
+              <p>white space is required</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="constant">File</span>.open(filepath, <span class="string">'wb'</span>) { |f| f.write(params[<span class="symbol">:file</span>][<span class="symbol">:tempfile</span>].read) }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      out_file.write(<span class="string">"<span class="subst">#{settings.client_id}</span> "</span>)
+      out_file.write(<span class="string">"<span class="subst">#{settings.private_key}</span>"</span>)
+      out_file.close
+    <span class="keyword">end</span>
+
+    file = <span class="keyword">nil</span></pre></div></div>
             
         </li>
         
@@ -401,11 +408,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
-              <p>upload file</p>
+              <p>construct path</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    file = <span class="constant">GroupDocs::Storage::File</span>.upload!(filepath, {})</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    filepath = <span class="string">"<span class="subst">#{<span class="constant">Dir</span>.tmpdir}</span>/<span class="subst">#{params[<span class="symbol">:file</span>][<span class="symbol">:filename</span>]}</span>"</span></pre></div></div>
             
         </li>
         
@@ -415,6 +422,36 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>open file</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="constant">File</span>.open(filepath, <span class="string">'wb'</span>) { |f| f.write(params[<span class="symbol">:file</span>][<span class="symbol">:tempfile</span>].read) }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>upload file</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    file = <span class="constant">GroupDocs::Storage::File</span>.upload!(filepath, {})</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
               <p>create envelope using user id and entered by user name</p>
 
@@ -428,11 +465,11 @@
         </li>
         
         
-        <li id="section-25">
+        <li id="section-27">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-25">&#182;</a>
+                <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
               <p>Add uploaded document to envelope</p>
 
@@ -443,11 +480,11 @@
         </li>
         
         
-        <li id="section-26">
+        <li id="section-28">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-26">&#182;</a>
+                <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
               <p>Get role list for current user</p>
 
@@ -458,11 +495,11 @@
         </li>
         
         
-        <li id="section-27">
+        <li id="section-29">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-27">&#182;</a>
+                <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
               <p>Create new recipient</p>
 
@@ -477,11 +514,11 @@
         </li>
         
         
-        <li id="section-28">
+        <li id="section-30">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-28">&#182;</a>
+                <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
               <p>Add recipient to envelope</p>
 
@@ -492,11 +529,11 @@
         </li>
         
         
-        <li id="section-29">
+        <li id="section-31">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-29">&#182;</a>
+                <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
               <p>Get recipient id</p>
 
@@ -507,11 +544,11 @@
         </li>
         
         
-        <li id="section-30">
+        <li id="section-32">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-30">&#182;</a>
+                <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
               <p>Get document id</p>
 
@@ -522,11 +559,11 @@
         </li>
         
         
-        <li id="section-31">
+        <li id="section-33">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-31">&#182;</a>
+                <a class="pilcrow" href="#section-33">&#182;</a>
               </div>
               <p>Get field and add the location to field</p>
 
@@ -539,41 +576,43 @@
         </li>
         
         
-        <li id="section-32">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-32">&#182;</a>
-              </div>
-              <p>Add field to envelope</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    envelope.add_field!(field, document[<span class="number">0</span>], recipient, {})</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-33">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-33">&#182;</a>
-              </div>
-              <p>Send envelop</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    envelope.send!(settings.callback)</pre></div></div>
-            
-        </li>
-        
-        
         <li id="section-34">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              <p>Add field to envelope</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    envelope.add_field!(field, document[<span class="number">0</span>], recipient, {})
+
+    callback = {<span class="symbol">:callbackUrl</span> =&gt; settings.callback}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-35">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-35">&#182;</a>
+              </div>
+              <p>Send envelop</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    envelope.send!(callback)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-36">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-36">&#182;</a>
               </div>
               <p>Add the signature to url request</p>
 
@@ -585,11 +624,11 @@
         </li>
         
         
-        <li id="section-35">
+        <li id="section-37">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-35">&#182;</a>
+                <a class="pilcrow" href="#section-37">&#182;</a>
               </div>
               <p>Make iframe</p>
 
@@ -604,11 +643,11 @@
         </li>
         
         
-        <li id="section-36">
+        <li id="section-38">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-36">&#182;</a>
+                <a class="pilcrow" href="#section-38">&#182;</a>
               </div>
               <p>Set variables for template</p>
 
