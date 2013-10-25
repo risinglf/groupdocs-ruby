@@ -424,10 +424,7 @@ module GroupDocs
         request[:access] = access
         request[:method] = :PUT
         request[:path] = "/signature/{{client_id}}/envelopes/#{id}/send"
-        if webhook
-          request[:request_body] = webhook
-          request[:plain] = true
-        end
+        request[:request_body] = webhook
       end.execute!
     end
 
