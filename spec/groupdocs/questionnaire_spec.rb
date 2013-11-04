@@ -215,16 +215,8 @@ describe GroupDocs::Questionnaire do
 
     it 'accepts access credentials hash' do
       lambda do
-        subject.collectors!(:client_id => 'client_id', :private_key => 'private_key')
+        subject.collectors!({}, :client_id => 'client_id', :private_key => 'private_key')
       end.should_not raise_error(ArgumentError)
-    end
-
-    it 'returns an array of GroupDocs::Questionnaire::Collector objects' do
-      collectors = subject.collectors!
-      collectors.should be_an(Array)
-      collectors.each do |collector|
-        collector.should be_a(GroupDocs::Questionnaire::Collector)
-      end
     end
   end
 

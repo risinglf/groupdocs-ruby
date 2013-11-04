@@ -333,6 +333,24 @@ module GroupDocs
 
       json[:jobId]
     end
+	
+	 #
+    #  Get document fields
+    #
+    # @param [String] document Document GUID
+    # @param [Hash] settings Settings of the signing document
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]    "/signature/public/documents/{documentGuid}/fields"  PublicGetDocumentFields
+    #
+    def self.get_document_fields!(document, access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/signature/public/documents/#{document}/fields"
+      end.execute!
+    ends
 
     #
     #  Verify to document

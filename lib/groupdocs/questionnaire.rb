@@ -15,6 +15,8 @@ module GroupDocs
     # @option options [Symbol] :status Filter questionnaires by status
     # @option options [Integer] :page_number Page to start with
     # @option options [Integer] :page_size How many items to list
+    # @option options [String] :orderBy Order by column (optional)
+    # @option options [Bool] :isAscending Order by ascending or descending (optional)
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
@@ -223,20 +225,26 @@ module GroupDocs
       end
     end
 
-    #
+   #
     # Returns an array of questionnaire collectors.
     #
+    #
+    # @param [Hash] options Options
+    # @option options [String] :orderBy Order by column (required)
+    # @option options [Boolean] :isAsc Order by ascending or descending (required)
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
     # @return [Array<GroupDocs::Questionnaire::Collector>]
     #
-    def collectors!(access = {})
-      json = Api::Request.new do |request|
+    def collectors!(options = {}, access = {})
+      api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
         request[:path] = "/merge/{{client_id}}/questionnaires/#{guid}/collectors"
-      end.execute!
+      end
+        api = add_params(options)
+        json = api.execute!
 
       json[:collectors].map do |collector|
         collector.merge!(:questionnaire => self)
@@ -308,6 +316,34 @@ module GroupDocs
       json[:fields].map do |field|
         Document::Field.new(field)
       end
+    end
+	
+	#
+    # Copy file to given path.
+    #
+    # @param [String] path (required)
+    # @param [String] mode Mode (optional)
+    # @param [Hash] options
+    # @option options [String] name
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array] Templates
+    #
+    def copy_to_templates!(path, mode, options = {}, access = {})
+      options[:name] ||= name
+      path = prepare_path("#{path}/#{options[:name]}")
+
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:headers] = { :'Groupdocs-Copy' => id }
+        request[:path] = "/merge/{{client_id}}/files/#{path}"
+      end
+      api = add_params(:mode => mode)
+      json = api.execute!
+
+      json[:templates]
     end
 
   end # Questionnaire

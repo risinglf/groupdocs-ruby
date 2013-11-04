@@ -525,6 +525,25 @@ module GroupDocs
         request[:path] = "/signature/{{client_id}}/envelopes/#{id}/retry"
       end.execute!
     end
+	
+	#
+    # Update envelope.
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def update_envelope!(template, access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :POST
+        request[:path] = "/signature/{{client_id}}/envelopes/#{id}/templates/#{template}"
+      end.execute!
+
+      json[:envelope]
+
+    end
 
   end # Signature::Envelope
 end # GroupDocs
