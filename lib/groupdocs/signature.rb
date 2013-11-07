@@ -342,7 +342,7 @@ module GroupDocs
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
-    # @return [Array]    "/signature/public/documents/{documentGuid}/fields"  PublicGetDocumentFields
+    # @return [Array]
     #
     def self.get_document_fields!(document, access = {})
       Api::Request.new do |request|
@@ -350,7 +350,7 @@ module GroupDocs
         request[:method] = :GET
         request[:path] = "/signature/public/documents/#{document}/fields"
       end.execute!
-    ends
+    end
 
     #
     #  Verify to document
