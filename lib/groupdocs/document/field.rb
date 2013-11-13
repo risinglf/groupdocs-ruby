@@ -9,6 +9,10 @@ module GroupDocs
     attr_accessor :type
     # @attr [GroupDocs::Document::Rectangle] rect
     attr_accessor :rect
+    # @attr [String] maxlength
+    attr_accessor :maxlength
+    # @attr [Boolean] mandatory
+    attr_accessor :mandatory
 
     #
     # Coverts passed hash to GroupDocs::Document::Rectangle object.
