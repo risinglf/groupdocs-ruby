@@ -79,12 +79,13 @@ post '/sample35' do
     end
 
 
+
   rescue Exception => e
     err = e.message
   end
 
   # set variables for template
-  haml :sample35, :locals => {:userId => settings.client_id, :privateKey => settings.private_key, :fileId => document.file.guid, :base_path => settings.path, :html => html,  :err => err}
+  haml :sample35, :locals => {:userId => settings.client_id, :privateKey => settings.private_key, :base_path => settings.path, :fileId => document.file.guid, :html => html,  :err => err}
 end
 
 get '/sample35/check' do
@@ -149,12 +150,12 @@ post '/sample35/check' do
     #file_name = document[:inputs][0].outputs[0].name
 
     # Set iframe with document GUID or raise an error
-    if settings.path == 'http://stage-api-groupdocs.dynabic.com'
-      iframe = "<iframe width='100%' height='600' frameborder='0' src='#{settings.path}/document-viewer/#{settings.file_id}'></iframe>"
+    if settings.path == 'https://stage-api-groupdocs.dynabic.com'
+      iframe = "<iframe width='100%' height='600' frameborder='0' src='http://stage-apps-groupdocs.dynabic.com/document-viewer/#{settings.file_id}'></iframe>"
     end
 
       if settings.path == 'https://dev-api-groupdocs.dynabic.com'
-        iframe = "<iframe width='100%' height='600' frameborder='0' src='#{settings.path}/document-viewer/#{settings.file_id}'></iframe>"
+        iframe = "<iframe width='100%' height='600' frameborder='0' src='http://dev-apps-groupdocs.dynabic.comdocument-viewer/#{settings.file_id}'></iframe>"
       end
 
 
