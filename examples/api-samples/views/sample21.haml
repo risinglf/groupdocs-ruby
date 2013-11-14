@@ -52,11 +52,39 @@
       %input{:name => 'file', :type => 'file'}/
       %br/
       %br/
-      %input{:type => 'submit', :value => 'Make request'}/
+      %label{:for=>'callback'}
+        Callback URL
+        %span.optional (Optional)
+        %br/
+        %font{:color=>'grey'} (For test Callback you can use this URL: http://groupdocs-ruby-samples.herokuapp.com/sample21/signature_callback)
+      %input{:type=>'text', :size=>'70', :value=>"#{(defined? callback) ? callback : ''}", :name=>'callback'}
+      %br/
+      %br/
+      %input{:type => 'submit', :value => 'Make request'}
+      %span{:id=>'results_status', :style=>'color:red;display:none;'} (Please wait for ajax response)
+      %br/
     %div{:style => 'padding:20px; border:1px solid black;'}
       %p
         Results:
         %br/
+        %iframe{:id=>'downloadframe', :style=>'display:none'}
         #{(defined? iframe) ? iframe : ''}
 
 = partial :_others_samples
+%script{:src=>'//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'}
+:javascript
+  function check() {
+    $.get('/sample21/check', function(data) {
+      $('#results_status').fadeOut("slow");
+      $('#downloadframe').attr("src", "/sample21/downloads/" + data);
+    }, 'text');
+  }
+
+  $(function($){
+    callbackUrl = $("input[name=callback]").val();
+
+    if(callbackUrl !== "") {
+      $('#results_status').fadeIn("slow");
+      setTimeout(check, 5000)
+    }
+  });

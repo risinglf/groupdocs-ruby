@@ -29,7 +29,7 @@ post '/sample32/callback' do
       contents = contents.split(' ')
       client_id = contents[0]
       private_key = contents[1]
-      subscriber_email = contens[2]
+      subscriber_email = contents[2]
     end
 
     # Create new Form
@@ -67,22 +67,8 @@ post '/sample32/callback' do
 end
 
 
-# GET request
-get '/sample32/check' do
 
-  # Check is there download directory
-  unless File.directory?("#{File.dirname(__FILE__)}/../public/downloads")
-    return 'Directory was not found.'
-  end
 
-  # Get file name from download directory
-  name = nil
-  Dir.entries("#{File.dirname(__FILE__)}/../public/downloads").each do |file|
-    name = file if file != '.' && file != '..'
-  end
-
-  name
-end
 
 
 
@@ -97,16 +83,6 @@ post '/sample32' do
   set :callback, params[:callback]
   set :source, params[:source]
 
-  # Set download path
-  downloads_path = "#{File.dirname(__FILE__)}/../public/downloads"
-
-  # Remove all files from download directory or create folder if it not there
-  if File.directory?(downloads_path)
-    Dir.foreach(downloads_path) { |f| fn = File.join(downloads_path, f); File.delete(fn) if f != '.' && f != '..' }
-  else
-    Dir::mkdir(downloads_path)
-  end
-
   begin
 
     # Check required variables
@@ -119,16 +95,17 @@ post '/sample32' do
     end
 
     # Write client and private key to the file for callback job
-    if settings.callback[0]
+    if settings.callback
       out_file = File.new("#{File.dirname(__FILE__)}/../public/user_info.txt", 'w')
       # white space is required
       out_file.write("#{settings.client_id} ")
-      out_file.write("#{settings.private_key}")
+      out_file.write("#{settings.private_key} ")
       out_file.write("#{settings.email}")
       out_file.close
     end
 
     iframe = ''
+
 
     case settings.source
     when 'form'
@@ -138,7 +115,10 @@ post '/sample32' do
       # Publish the Form
       form.publish!({:callbackUrl => settings.callback})
 
-      iframe = "https://apps.groupdocs.com/signature2/forms/signembed/ #{settings.form_guid}";
+      # Add the signature to url the request
+      url = "https://apps.groupdocs.com/signature2/forms/signembed/ #{settings.form_guid}"
+      iframe = GroupDocs::Api::Request.new(:path => url).prepare_and_sign_url
+      iframe = "<iframe width='100%' height='600' frameborder='0' src='#{iframe}'></iframe>"
     when 'template'
 
       form = GroupDocs::Signature::Form.new
@@ -152,7 +132,10 @@ post '/sample32' do
       # Publish the Form
       form.publish!({:callbackUrl => settings.callback})
 
-      iframe = "<iframe width='100%' height='600' frameborder='0' src='https://apps.groupdocs.com/signature2/forms/signembed/ #{signature}'></iframe>"
+      # Add the signature to url the request
+      url = "https://apps.groupdocs.com/signature2/forms/signembed/ #{signature}"
+      iframe = GroupDocs::Api::Request.new(:path => url).prepare_and_sign_url
+      iframe = "<iframe width='100%' height='600' frameborder='0' src='https://apps.groupdocs.com/signature2/forms/signembed/ #{iframe}'></iframe>"
     end
 
   rescue Exception => e

@@ -65,7 +65,8 @@
             
             <div class="content"><div class='highlight'><pre>  set <span class="symbol">:client_id</span>, params[<span class="symbol">:client_id</span>]
   set <span class="symbol">:private_key</span>, params[<span class="symbol">:private_key</span>]
-
+  set <span class="symbol">:source</span>, params[<span class="symbol">:source</span>]
+  set <span class="symbol">:url</span>, params[<span class="symbol">:url</span>]
   <span class="keyword">begin</span></pre></div></div>
             
         </li>
@@ -92,11 +93,14 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>construct path</p>
+              <p>Configure your access to API server.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    filepath = <span class="string">"<span class="subst">#{<span class="constant">Dir</span>.tmpdir}</span>/<span class="subst">#{params[<span class="symbol">:file</span>][<span class="symbol">:filename</span>]}</span>"</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="constant">GroupDocs</span>.configure <span class="keyword">do</span> |groupdocs|
+      groupdocs.client_id = settings.client_id
+      groupdocs.private_key = settings.private_key
+    <span class="keyword">end</span></pre></div></div>
             
         </li>
         
@@ -107,11 +111,13 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>open file</p>
+              <p>Get document by file GUID</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="constant">File</span>.open(filepath, <span class="string">'wb'</span>) { |f| f.write(params[<span class="symbol">:file</span>][<span class="symbol">:tempfile</span>].read) }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">case</span> settings.source
+
+    <span class="keyword">when</span> <span class="string">'file'</span></pre></div></div>
             
         </li>
         
@@ -122,11 +128,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>make a request to API using client_id and private_key</p>
+              <p>construct path</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    file = <span class="constant">GroupDocs::Storage::File</span>.upload!(filepath, {}, <span class="symbol">client_id:</span> settings.client_id, <span class="symbol">private_key:</span> settings.private_key)</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      filepath = <span class="string">"<span class="subst">#{<span class="constant">Dir</span>.tmpdir}</span>/<span class="subst">#{params[<span class="symbol">:file</span>][<span class="symbol">:filename</span>]}</span>"</span></pre></div></div>
             
         </li>
         
@@ -137,16 +143,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <p>result massages</p>
+              <p>open file</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    massage = <span class="string">"&lt;p&gt;File was uploaded to GroupDocs. Here you can see your &lt;strong&gt;<span class="subst">#{params[<span class="symbol">:file</span>][<span class="symbol">:filename</span>]}</span>&lt;/strong&gt; file in the GroupDocs Embedded Viewer.&lt;/p&gt;"</span>
-    iframe = <span class="string">"&lt;iframe src='https://apps.groupdocs.com/document-viewer/Embed/<span class="subst">#{file.guid}</span>' frameborder='0' width='720' height='600'&gt;&lt;/iframe&gt;"</span>
-
-  <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e
-    err = e.message
-  <span class="keyword">end</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="constant">File</span>.open(filepath, <span class="string">'wb'</span>) { |f| f.write(params[<span class="symbol">:file</span>][<span class="symbol">:tempfile</span>].read) }</pre></div></div>
             
         </li>
         
@@ -157,11 +158,81 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
+              <p>make a request to API using client_id and private_key</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      file = <span class="constant">GroupDocs::Storage::File</span>.upload!(filepath, {})
+
+    <span class="keyword">when</span> <span class="string">'url'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Upload file from defined url</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      file = <span class="constant">GroupDocs::Storage::File</span>.upload_web!(settings.url)
+    <span class="keyword">else</span> raise <span class="string">'Wrong GUID source.'</span>
+    <span class="keyword">end</span>
+
+    url = <span class="string">"https://apps.groupdocs.com/document-viewer/embed/<span class="subst">#{file.guid}</span>"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Add the signature in url</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    url = <span class="constant">GroupDocs::Api::Request</span>.new(<span class="symbol">:path</span> =&gt; url).prepare_and_sign_url</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Set iframe with document GUID</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    iframe = <span class="string">"&lt;iframe src='<span class="subst">#{url}</span>' frameborder='0' width='720' height='600'&gt;&lt;/iframe&gt;"</span>
+
+  <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e
+    err = e.message
+  <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
               <p>set variables for template</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  haml <span class="symbol">:sample3</span>, <span class="symbol">:locals</span> =&gt; {<span class="symbol">:userId</span> =&gt; settings.client_id, <span class="symbol">:privateKey</span> =&gt; settings.private_key, <span class="symbol">:iframe</span> =&gt; iframe, <span class="symbol">:massage</span> =&gt; massage, <span class="symbol">:err</span> =&gt; err}
+            <div class="content"><div class='highlight'><pre>  haml <span class="symbol">:sample3</span>, <span class="symbol">:locals</span> =&gt; {<span class="symbol">:userId</span> =&gt; settings.client_id, <span class="symbol">:privateKey</span> =&gt; settings.private_key, <span class="symbol">:iframe</span> =&gt; iframe, <span class="symbol">:err</span> =&gt; err}
 <span class="keyword">end</span></pre></div></div>
             
         </li>

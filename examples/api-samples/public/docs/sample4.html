@@ -59,14 +59,13 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>set variables</p>
+              <p>Set variables</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>  set <span class="symbol">:client_id</span>, params[<span class="symbol">:client_id</span>]
   set <span class="symbol">:private_key</span>, params[<span class="symbol">:private_key</span>]
   set <span class="symbol">:file_id</span>, params[<span class="symbol">:file_id</span>]
-  set <span class="symbol">:source</span>, params[<span class="symbol">:source</span>]
   set <span class="symbol">:url</span>, params[<span class="symbol">:url</span>]
 
   <span class="keyword">begin</span></pre></div></div>
@@ -80,7 +79,7 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>check required variables</p>
+              <p>Check required variables</p>
 
             </div>
             
@@ -95,15 +94,14 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>get file GUID</p>
+              <p>Configure your access to API server.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    file = <span class="keyword">nil</span>
-    <span class="keyword">case</span> settings.source
-      <span class="keyword">when</span> <span class="string">'guid'</span>
-        file = <span class="constant">GroupDocs::Storage::File</span>.new({<span class="symbol">:guid</span> =&gt; settings.file_id})
-      <span class="keyword">when</span> <span class="string">'local'</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="constant">GroupDocs</span>.configure <span class="keyword">do</span> |groupdocs|
+      groupdocs.client_id = settings.client_id
+      groupdocs.private_key = settings.private_key
+    <span class="keyword">end</span></pre></div></div>
             
         </li>
         
@@ -114,11 +112,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>construct path</p>
+              <p>Get file GUID</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        filepath = <span class="string">"<span class="subst">#{<span class="constant">Dir</span>.tmpdir}</span>/<span class="subst">#{params[<span class="symbol">:file</span>][<span class="symbol">:filename</span>]}</span>"</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    file = <span class="constant">GroupDocs::Storage::File</span>.new({<span class="symbol">:guid</span> =&gt; settings.file_id}).to_document</pre></div></div>
             
         </li>
         
@@ -129,11 +127,12 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>open file</p>
+              <p>Obtaining all Metadata for file</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="constant">File</span>.open(filepath, <span class="string">'wb'</span>) { |f| f.write(params[<span class="symbol">:file</span>][<span class="symbol">:tempfile</span>].read) }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    document = file.metadata!
+    file = document.last_view.document.file</pre></div></div>
             
         </li>
         
@@ -144,34 +143,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <p>make a request to API using client_id and private_key</p>
+              <p>Download file</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        file = <span class="constant">GroupDocs::Storage::File</span>.upload!(filepath, {}, <span class="symbol">client_id:</span> settings.client_id, <span class="symbol">private_key:</span> settings.private_key)
-      <span class="keyword">when</span> <span class="string">'url'</span>
-        file = <span class="constant">GroupDocs::Storage::File</span>.upload_web!(settings.url, <span class="symbol">client_id:</span> settings.client_id, <span class="symbol">private_key:</span> settings.private_key)
-      <span class="keyword">else</span>
-        raise <span class="string">'Wrong GUID source.'</span>
-    <span class="keyword">end</span>
-
-    pp file
-    pp file.name</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-9">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
-              </div>
-              <p>download file</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    dowloaded_file = file.download!(<span class="string">"<span class="subst">#{<span class="constant">File</span>.dirname(__FILE_<span class="number">_</span>)}</span>/../public/downloads"</span>, {<span class="symbol">:client_id</span> =&gt; settings.client_id, <span class="symbol">:private_key</span> =&gt; settings.private_key})
+            <div class="content"><div class='highlight'><pre>    dowloaded_file = file.download!(<span class="string">"<span class="subst">#{<span class="constant">File</span>.dirname(__FILE_<span class="number">_</span>)}</span>/../public/downloads"</span>)
     <span class="keyword">unless</span> dowloaded_file.empty?
       massage = <span class="string">"&lt;font color='green'&gt;File was downloaded to the &lt;font color='blue'&gt;<span class="subst">#{dowloaded_file}</span>&lt;/font&gt; folder&lt;/font&gt; &lt;br /&gt;"</span>
     <span class="keyword">end</span>
@@ -183,13 +159,13 @@
         </li>
         
         
-        <li id="section-10">
+        <li id="section-9">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
-              <p>set variables for template</p>
+              <p>Set variables for template</p>
 
             </div>
             

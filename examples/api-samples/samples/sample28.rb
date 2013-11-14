@@ -14,8 +14,14 @@ post '/sample28' do
     # check required variables
     raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty? or settings.file_id.empty?
 
+    # Configure your access to API server.
+    GroupDocs.configure do |groupdocs|
+      groupdocs.client_id = settings.client_id
+      groupdocs.private_key = settings.private_key
+    end
+
     # make a request to API using client_id and private_key
-    files_list = GroupDocs::Storage::Folder.list!('/', {}, {:client_id => settings.client_id, :private_key => settings.private_key})
+    files_list = GroupDocs::Storage::Folder.list!('/', {})
     document = ''
 
     # get document by file ID

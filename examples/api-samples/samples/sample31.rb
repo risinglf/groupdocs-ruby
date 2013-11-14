@@ -98,6 +98,13 @@ post '/sample31' do
     # check required variables
     raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty?
 
+    # Configure your access to API server.
+    GroupDocs.configure do |groupdocs|
+      groupdocs.client_id = settings.client_id
+      groupdocs.private_key = settings.private_key
+    end
+
+
     # Write client and private key to the file for callback job
     if settings.callback[0]
       out_file = File.new("#{File.dirname(__FILE__)}/../public/user_info.txt", 'w')
@@ -127,15 +134,15 @@ post '/sample31' do
     datasource.fields = enteredData.map { |key, value| GroupDocs::DataSource::Field.new(name: key, type: :text, values: Array.new() << value) }
 
     # Adds datasource.
-    datasource.add!({:client_id => settings.client_id, :private_key => settings.private_key})
+    datasource.add!()
 
 
     # Creates new job to merge datasource into document.
-    job = document.datasource!(datasource, {:new_type => "pdf"}, {:client_id => settings.client_id, :private_key => settings.private_key})
+    job = document.datasource!(datasource, {:new_type => "pdf"})
     sleep 10 # wait for merge and convert
 
     # Returns an hash of input and output documents associated to job.
-    jobInfo = job.documents!({:client_id => settings.client_id, :private_key => settings.private_key})
+    jobInfo = job.documents!()
 
     # Creates new document to envelope
     document = jobInfo[:inputs][0].outputs[0].to_document
@@ -143,26 +150,26 @@ post '/sample31' do
     # Creates envelope using user id and entered by user name
     envelope = GroupDocs::Signature::Envelope.new
     envelope.name = jobInfo[:inputs][0].outputs[0].name
-    envelope.create!({}, {:client_id => settings.client_id, :private_key => settings.private_key})
+    envelope.create!({})
 
     # Adds uploaded document to envelope
-    envelope.add_document!(document, {}, {:client_id => settings.client_id, :private_key => settings.private_key})
+    envelope.add_document!(document, {})
 
     # Get role list for current user
-    roles = GroupDocs::Signature::Role.get!({}, {client_id: settings.client_id, private_key: settings.private_key})
+    roles = GroupDocs::Signature::Role.get!({})
 
     # Creates new recipient
     recipient = GroupDocs::Signature::Recipient.new
-    recipient.email = 'test@test.com'
-    recipient.first_name = 'test'
-    recipient.last_name = 'test'
+    recipient.email = settings.email
+    recipient.first_name = settings.name
+    recipient.last_name = settings.last_name
     recipient.role_id = roles.detect { |role| role.name == 'Signer' }.id
 
     # Adds recipient to envelope
-    envelope.add_recipient!(recipient, {client_id: settings.client_id, private_key: settings.private_key})
+    envelope.add_recipient!(recipient)
 
     #Get field
-    fieldGet = GroupDocs::Signature::Field.get!({},{client_id: settings.client_id, private_key: settings.private_key}).detect { |f| f.type == :signature }
+    fieldGet = GroupDocs::Signature::Field.get!({}).detect { |f| f.type == :signature }
     fieldGet.location = { location_x: 0.15,
                           location_y: 0.73,
                           location_width: 150,
@@ -170,20 +177,22 @@ post '/sample31' do
                           page: 1 }
 
     #Get document
-    documentGet = envelope.documents!({}, {client_id: settings.client_id, private_key: settings.private_key}).first
+    documentGet = envelope.documents!({}).first
 
     #Get recipients
-    recipientGet = envelope.recipients!({},{client_id: settings.client_id, private_key: settings.private_key}).first
+    recipientGet = envelope.recipients!({}).first
 
     # Add field to envelope
-    addField = envelope.add_field!(fieldGet, documentGet, recipientGet, {}, {client_id: settings.client_id, private_key: settings.private_key})
-
+    addField = envelope.add_field!(fieldGet, documentGet, recipientGet, {})
 
     # Send envelope
-    envelope.send!(settings.callback, {client_id: settings.client_id, private_key: settings.private_key})
+    envelope.send!({:callbackUrl => settings.callback})
+
+    url = "https://apps.groupdocs.com/signature/signembed/#{envelope.id}/#{recipientGet.id}"
+    iframe = GroupDocs::Api::Request.new(:path => url).prepare_and_sign_url
 
     # Make iframe
-    iframe = "<iframe src='https://apps.groupdocs.com/signature/signembed/#{envelope.id}/#{recipientGet.id}' frameborder='0' width='720' height='600'></iframe>"
+    iframe = "<iframe src='#{iframe}' frameborder='0' width='720' height='600'></iframe>"
 
 
   rescue Exception => e

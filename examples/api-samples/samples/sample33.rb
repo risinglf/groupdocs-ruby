@@ -30,7 +30,7 @@ post '/sample33' do
     options = {:actions => [:convert, :combine], :out_formats => ['pdf'], :status => -1, :name => 'sample'}
 
     # Create Job with provided options with Draft status (Sheduled job)
-    job = GroupDocs::Job.create!(options, {:client_id => client_id, :private_key => private_key})
+    job = GroupDocs::Job.create!(options)
 
     # Upload documents to GroupDocs Storage by url and add the documents to previously created Job
     url.each do |url|
@@ -39,16 +39,28 @@ post '/sample33' do
     end
 
     # Update the Job with new status. :status => '0' mean Active status of the job (Start the job)
-    job.update!({:status => '0'})
-    sleep(5)
+    id = job.update!({:status => '0'})
+    
+	i = 1
+    
+    while i<5 do
+      sleep(5)
+      job = GroupDocs::Job.get!(id[:job_id])
+      break if job.status == :archived
+      i  = i + 1
+    end
+
     # Get the document into Pdf format
     file = job.documents!()
-    sleep(7)
+
     document = file[:outputs]
 
     # Set iframe with document GUID or raise an error
     if document
-      iframe = "<iframe width='100%' height='600' frameborder='0' src='https://apps.groupdocs.com/document-viewer/embed/#{document[0].guid}'></iframe>"
+
+      url = "https://apps.groupdocs.com/document-viewer/embed/#{document[0].guid}"
+      iframe = GroupDocs::Api::Request.new(:path => url).prepare_and_sign_url
+      iframe = "<iframe width='100%' height='600' frameborder='0' src='#{iframe}'></iframe>"
     else
       raise 'File was not converted'
     end

@@ -96,6 +96,24 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
+              <p>Configure your access to API server.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="constant">GroupDocs</span>.configure <span class="keyword">do</span> |groupdocs|
+      groupdocs.client_id = settings.client_id
+      groupdocs.private_key = settings.private_key
+    <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
               <p>get document by file GUID</p>
 
             </div>
@@ -106,11 +124,11 @@
         </li>
         
         
-        <li id="section-6">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>Create instance of File</p>
 
@@ -122,11 +140,11 @@
         </li>
         
         
-        <li id="section-7">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>Construct path</p>
 
@@ -137,11 +155,11 @@
         </li>
         
         
-        <li id="section-8">
+        <li id="section-9">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <p>Open file</p>
 
@@ -152,36 +170,18 @@
         </li>
         
         
-        <li id="section-9">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
-              </div>
-              <p>Make a request to API using client_id and private_key</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        file = <span class="constant">GroupDocs::Storage::File</span>.upload!(file_path, {}, {<span class="symbol">:client_id</span> =&gt; settings.client_id, <span class="symbol">:private_key</span> =&gt; settings.private_key})
-    <span class="keyword">when</span> <span class="string">'url'</span></pre></div></div>
-            
-        </li>
-        
-        
         <li id="section-10">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
-              <p>Upload file from defined url</p>
+              <p>Make a request to API using client_id and private_key</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        file = <span class="constant">GroupDocs::Storage::File</span>.upload_web!(settings.url, {<span class="symbol">:client_id</span> =&gt; settings.client_id, <span class="symbol">:private_key</span> =&gt; settings.private_key})
-    <span class="keyword">else</span>
-        raise <span class="string">'Wrong GUID source.'</span>
-    <span class="keyword">end</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>        file = <span class="constant">GroupDocs::Storage::File</span>.upload!(file_path, {})
+    <span class="keyword">when</span> <span class="string">'url'</span></pre></div></div>
             
         </li>
         
@@ -192,11 +192,14 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
-              <p>Raise exception if something went wrong</p>
+              <p>Upload file from defined url</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    raise <span class="string">'No such file'</span> <span class="keyword">unless</span> file.is_a?(<span class="constant">GroupDocs::Storage::File</span>)</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        file = <span class="constant">GroupDocs::Storage::File</span>.upload_web!(settings.url)
+    <span class="keyword">else</span>
+        raise <span class="string">'Wrong GUID source.'</span>
+    <span class="keyword">end</span></pre></div></div>
             
         </li>
         
@@ -207,11 +210,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
-              <p>Make GroupDocs::Storage::Document instance</p>
+              <p>Raise exception if something went wrong</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    document = file.to_document</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    raise <span class="string">'No such file'</span> <span class="keyword">unless</span> file.is_a?(<span class="constant">GroupDocs::Storage::File</span>)</pre></div></div>
             
         </li>
         
@@ -222,15 +225,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
-              <p>Create new page</p>
+              <p>Make GroupDocs::Storage::Document instance</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    page_image = document.page_images!(<span class="number">700</span>, <span class="number">700</span>, {<span class="symbol">first_page:</span> <span class="number">0</span>, <span class="symbol">page_count:</span> <span class="number">2</span>}, {<span class="symbol">:client_id</span> =&gt; settings.client_id, <span class="symbol">:private_key</span> =&gt; settings.private_key})
-    pp page_image
-  <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e
-    err = e.message
-  <span class="keyword">end</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    document = file.to_document</pre></div></div>
             
         </li>
         
@@ -240,6 +239,25 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>Create new page</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    page_image = document.page_images!(<span class="number">700</span>, <span class="number">700</span>, {<span class="symbol">first_page:</span> <span class="number">0</span>, <span class="symbol">page_count:</span> <span class="number">2</span>})
+    pp page_image
+  <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e
+    err = e.message
+  <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
               <p>set variables for template</p>
 

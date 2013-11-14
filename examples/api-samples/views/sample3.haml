@@ -29,11 +29,26 @@
       %br/
       %input{:type=>'text', :name=>'private_key'}
       %br/
-      %label{:for => 'file'} File
-      %br/
-      %input{:name => 'file', :type => 'file'}/
-      %br/
-      %br/
+
+      %div.guid_radio
+        %input{:type=>'radio', :name=>'source', :value=>'file', :checked=>'checked'}Upload local file
+        %br/
+        %input{:type=>'radio', :name=>'source', :value=>'url'} Upload file from URL
+        %br/
+        %br/
+
+      %div.guid_field
+        %label{:for=>'file'} Upload local file
+        %br/
+        %input{:type=>'file', :name=>'file'}
+        %br/
+        %br/
+      %div.guid_field{:style=>'display:none;'}
+        %label{:for=>'url', :id=>'url'} Upload file from URL
+        %br/
+        %input{:type=>'text',:size=>'75', :name=>'url'}
+        %br/
+        %br/
       %input{:type => 'submit', :value => 'Upload'}/
     %div{:style => 'padding:20px; border:1px solid black;'}
       %p 
@@ -42,3 +57,12 @@
         #{(defined? iframe) ? iframe : ''}
             
 = partial :_others_samples
+:javascript
+  $(function($){
+
+    $('.guid_radio input').change(function(){
+      var elementIndex = $(this).parent().children('input').index($(this));
+      $('.guid_field').hide();
+      $('.guid_field').eq(elementIndex).show();
+    });
+  });

@@ -67,7 +67,7 @@
   set <span class="symbol">:private_key</span>, params[<span class="symbol">:private_key</span>]
   set <span class="symbol">:file_id</span>, params[<span class="symbol">:fileId</span>]
   set <span class="symbol">:annotation_type</span>, params[<span class="symbol">:annotation_type</span>]
-
+  set <span class="symbol">:annotation_id</span>, params[<span class="symbol">:annotationId</span>]
   <span class="keyword">begin</span></pre></div></div>
             
         </li>
@@ -94,11 +94,19 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>annotation types</p>
+              <p>Configure your access to API server.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    types = {<span class="symbol">:text</span> =&gt; <span class="number">0</span>, <span class="symbol">:area</span> =&gt; <span class="number">1</span>, <span class="symbol">:point</span> =&gt; <span class="number">2</span>}</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="constant">GroupDocs</span>.configure <span class="keyword">do</span> |groupdocs|
+      groupdocs.client_id = settings.client_id
+      groupdocs.private_key = settings.private_key
+    <span class="keyword">end</span>
+
+    <span class="keyword">if</span> settings.annotation_id != <span class="string">''</span>
+      annotation = <span class="constant">GroupDocs::Document::Annotation</span>.remove!(settings.annotation_id)
+      message = <span class="string">"You delete the annotation id = <span class="subst">#{annotation[<span class="symbol">:guid</span>]}</span> "</span>
+    <span class="keyword">else</span></pre></div></div>
             
         </li>
         
@@ -109,11 +117,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>required parameters</p>
+              <p>Annotation types</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    all_params = all_params = [<span class="string">'annotation_type'</span>, <span class="string">'box_x'</span>, <span class="string">'box_y'</span>, <span class="string">'text'</span>]</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    types = {<span class="symbol">:text</span> =&gt; <span class="number">0</span>, <span class="symbol">:area</span> =&gt; <span class="number">1</span>, <span class="symbol">:point</span> =&gt; <span class="number">2</span>}</pre></div></div>
             
         </li>
         
@@ -124,15 +132,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>added required parameters depends on  annotation type [&#39;text&#39; or &#39;area&#39;]</p>
+              <p>Required parameters</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> settings.annotation_type == <span class="string">'text'</span>
-      all_params = all_params | [<span class="string">'box_width'</span>, <span class="string">'box_height'</span>, <span class="string">'annotationPosition_x'</span>, <span class="string">'annotationPosition_y'</span>]
-    <span class="keyword">elsif</span> settings.annotation_type == <span class="string">'area'</span>
-      all_params = all_params | [<span class="string">'box_width'</span>, <span class="string">'box_height'</span>]
-    <span class="keyword">end</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    all_params = all_params = [<span class="string">'annotation_type'</span>, <span class="string">'box_x'</span>, <span class="string">'box_y'</span>, <span class="string">'text'</span>]</pre></div></div>
             
         </li>
         
@@ -143,12 +147,14 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <p>checking required parameters</p>
+              <p>Added required parameters depends on  annotation type [&#39;text&#39; or &#39;area&#39;]</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    all_params.each <span class="keyword">do</span> |param|
-      raise <span class="string">'Please enter all required parameters'</span> <span class="keyword">if</span> params[param].empty?
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> settings.annotation_type == <span class="string">'text'</span>
+      all_params = all_params | [<span class="string">'box_width'</span>, <span class="string">'box_height'</span>, <span class="string">'annotationPosition_x'</span>, <span class="string">'annotationPosition_y'</span>, <span class="string">'range-position'</span>, <span class="string">'range-length'</span>]
+    <span class="keyword">elsif</span> settings.annotation_type == <span class="string">'area'</span>
+      all_params = all_params | [<span class="string">'box_width'</span>, <span class="string">'box_height'</span>]
     <span class="keyword">end</span></pre></div></div>
             
         </li>
@@ -160,12 +166,13 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
-              <p>make a request to API using client_id and private_key</p>
+              <p>Checking required parameters</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    files_list = <span class="constant">GroupDocs::Storage::Folder</span>.list!(<span class="string">'/'</span>, {}, {<span class="symbol">:client_id</span> =&gt; settings.client_id, <span class="symbol">:private_key</span> =&gt; settings.private_key})
-    document = <span class="string">''</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    all_params.each <span class="keyword">do</span> |param|
+      raise <span class="string">'Please enter all required parameters'</span> <span class="keyword">if</span> params[param].empty?
+    <span class="keyword">end</span></pre></div></div>
             
         </li>
         
@@ -176,7 +183,24 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
-              <p>get document by file ID</p>
+              <p>Make a request to API using client_id and private_key</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    files_list = <span class="constant">GroupDocs::Storage::Folder</span>.list!(<span class="string">'/'</span>, {})
+
+    document = <span class="string">''</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Get document by file ID</p>
 
             </div>
             
@@ -191,36 +215,20 @@
         </li>
         
         
-        <li id="section-11">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
-              </div>
-              <p>start create new annotation</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      annotation = <span class="constant">GroupDocs::Document::Annotation</span>.new(<span class="symbol">document:</span> document.to_document)
-      annotation.type = types[settings.annotation_type]</pre></div></div>
-            
-        </li>
-        
-        
         <li id="section-12">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
-              <p>construct requestBody depends on annotation type
-text annotation</p>
+              <p>Start create new annotation</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="keyword">if</span> settings.annotation_type == <span class="string">'text'</span>
-        annotation.box = {<span class="symbol">x:</span> params[<span class="string">'box_x'</span>], <span class="symbol">y:</span> params[<span class="string">'box_y'</span>], <span class="symbol">width:</span> params[<span class="string">'box_width'</span>], <span class="symbol">height:</span> params[<span class="string">'box_height'</span>]}
-        annotation.annotationPosition = {<span class="symbol">x:</span> params[<span class="string">'annotationPosition_x'</span>], <span class="symbol">y:</span> params[<span class="string">'annotationPosition_y'</span>]}</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      annotation = <span class="constant">GroupDocs::Document::Annotation</span>.new(<span class="symbol">document:</span> document.to_document)
+
+      annotation.type = types[settings.annotation_type]
+      info = <span class="keyword">nil</span></pre></div></div>
             
         </li>
         
@@ -231,13 +239,16 @@ text annotation</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
-              <p>area annotation</p>
+              <p>Construct requestBody depends on annotation type
+Text annotation</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="keyword">elsif</span> settings.annotation_type == <span class="string">'area'</span>
-        annotation.box = {<span class="symbol">x:</span> params[<span class="string">'box_x'</span>], <span class="symbol">y:</span> params[<span class="string">'box_y'</span>], <span class="symbol">width:</span> params[<span class="string">'box_width'</span>], <span class="symbol">height:</span> params[<span class="string">'box_height'</span>]}
-        annotation.annotationPosition = {<span class="symbol">x:</span> <span class="number">0</span>, <span class="symbol">y:</span> <span class="number">0</span>}</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="keyword">if</span> settings.annotation_type == <span class="string">'text'</span>
+        annotation_box = {<span class="symbol">x:</span> params[<span class="string">'box_x'</span>], <span class="symbol">y:</span> params[<span class="string">'box_y'</span>], <span class="symbol">width:</span> params[<span class="string">'box_width'</span>], <span class="symbol">height:</span> params[<span class="string">'box_height'</span>]}
+        annotation_annotationPosition = {<span class="symbol">x:</span> params[<span class="string">'annotationPosition_x'</span>], <span class="symbol">y:</span> params[<span class="string">'annotationPosition_y'</span>]}
+        range = {<span class="symbol">position:</span> params[<span class="string">'range-position'</span>], <span class="symbol">length:</span> params[<span class="string">'range-length'</span>]}
+        info = {<span class="symbol">:box</span> =&gt; annotation_box, <span class="symbol">:annotationPosition</span> =&gt; annotation_annotationPosition, <span class="symbol">:range</span> =&gt; range}</pre></div></div>
             
         </li>
         
@@ -248,14 +259,14 @@ text annotation</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
-              <p>point annotation</p>
+              <p>Area annotation</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="keyword">elsif</span> settings.annotation_type == <span class="string">'point'</span>
-        annotation.box = {<span class="symbol">x:</span> params[<span class="string">'box_x'</span>], <span class="symbol">y:</span> params[<span class="string">'box_y'</span>], <span class="symbol">width:</span> <span class="number">0</span>, <span class="symbol">height:</span> <span class="number">0</span>}
-        annotation.annotationPosition = {<span class="symbol">x:</span> <span class="number">0</span>, <span class="symbol">y:</span> <span class="number">0</span>}
-      <span class="keyword">end</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="keyword">elsif</span> settings.annotation_type == <span class="string">'area'</span>
+        annotation_box = {<span class="symbol">x:</span> params[<span class="string">'box_x'</span>], <span class="symbol">y:</span> params[<span class="string">'box_y'</span>], <span class="symbol">width:</span> params[<span class="string">'box_width'</span>], <span class="symbol">height:</span> params[<span class="string">'box_height'</span>]}
+        annotation_annotationPosition = {<span class="symbol">x:</span> <span class="number">0</span>, <span class="symbol">y:</span> <span class="number">0</span>}
+        info = {<span class="symbol">:box</span> =&gt; annotation_box, <span class="symbol">:annotationPosition</span> =&gt; annotation_annotationPosition}</pre></div></div>
             
         </li>
         
@@ -266,11 +277,15 @@ text annotation</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
-              <p>call create method</p>
+              <p>Point annotation</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      annotation.create!({<span class="symbol">:client_id</span> =&gt; settings.client_id, <span class="symbol">:private_key</span> =&gt; settings.private_key})</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="keyword">elsif</span> settings.annotation_type == <span class="string">'point'</span>
+        annotation_box = {<span class="symbol">x:</span> params[<span class="string">'box_x'</span>], <span class="symbol">y:</span> params[<span class="string">'box_y'</span>], <span class="symbol">width:</span> <span class="number">0</span>, <span class="symbol">height:</span> <span class="number">0</span>}
+        annotation_annotationPosition = {<span class="symbol">x:</span> <span class="number">0</span>, <span class="symbol">y:</span> <span class="number">0</span>}
+        info = {<span class="symbol">:box</span> =&gt; annotation_box, <span class="symbol">:annotationPosition</span> =&gt; annotation_annotationPosition}
+      <span class="keyword">end</span></pre></div></div>
             
         </li>
         
@@ -281,19 +296,11 @@ text annotation</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
-              <p>add annotation reply</p>
+              <p>Call create method</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      reply = <span class="constant">GroupDocs::Document::Annotation::Reply</span>.new(<span class="symbol">annotation:</span> annotation)
-      reply.text = params[<span class="string">'text'</span>]
-      reply.create!({<span class="symbol">:client_id</span> =&gt; settings.client_id, <span class="symbol">:private_key</span> =&gt; settings.private_key})
-
-    <span class="keyword">end</span>
-
-  <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e
-    err = e.message
-  <span class="keyword">end</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>        annotation.create!(info)</pre></div></div>
             
         </li>
         
@@ -304,11 +311,76 @@ text annotation</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
+              <p>Add annotation reply</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        reply = <span class="constant">GroupDocs::Document::Annotation::Reply</span>.new(<span class="symbol">annotation:</span> annotation)
+        reply.text = params[<span class="string">'text'</span>]
+        reply.create!
+        annotation_id = annotation.guid
+
+        url = <span class="string">"http://apps.groupdocs.com/document-annotation2/embed/<span class="subst">#{annotation.document.file.guid}</span>?frameborder='0' width='720' height='600'"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Add the signature in url</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        url = <span class="constant">GroupDocs::Api::Request</span>.new(<span class="symbol">:path</span> =&gt; url).prepare_and_sign_url</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>Set iframe with document GUID</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        iframe = <span class="string">"&lt;iframe src='<span class="subst">#{url}</span>' frameborder='0' width='720' height='600'&gt;&lt;/iframe&gt;"</span>
+      <span class="keyword">end</span>
+
+    <span class="keyword">end</span>
+
+  <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e
+    err = e.message
+  <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
               <p>set variables for template</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  haml <span class="symbol">:sample11</span>, <span class="symbol">:locals</span> =&gt; {<span class="symbol">:userId</span> =&gt; settings.client_id, <span class="symbol">:privateKey</span> =&gt; settings.private_key, <span class="symbol">:fileId</span> =&gt; settings.file_id, <span class="symbol">:annotationType</span> =&gt; settings.annotation_type, <span class="symbol">:annotationId</span> =&gt; (<span class="keyword">defined</span>? annotation.id) ? annotation.id <span class="symbol">:</span> <span class="keyword">nil</span>, <span class="symbol">:annotationText</span> =&gt; params[<span class="string">'text'</span>], <span class="symbol">:err</span> =&gt; err}
+            <div class="content"><div class='highlight'><pre>  haml <span class="symbol">:sample11</span>, <span class="symbol">:locals</span> =&gt; {<span class="symbol">:userId</span> =&gt; settings.client_id,
+                              <span class="symbol">:privateKey</span> =&gt; settings.private_key,
+                              <span class="symbol">:fileId</span> =&gt; settings.file_id,
+                              <span class="symbol">:annotationType</span> =&gt; settings.annotation_type,
+                              <span class="symbol">:annotationId</span> =&gt; annotation_id,
+                              <span class="symbol">:annotationText</span> =&gt; params[<span class="string">'text'</span>],
+                              <span class="symbol">:err</span> =&gt; err,
+                              <span class="symbol">:iframe</span> =&gt; iframe,
+                              <span class="symbol">:message</span> =&gt; message}
 <span class="keyword">end</span></pre></div></div>
             
         </li>

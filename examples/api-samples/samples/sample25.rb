@@ -26,8 +26,13 @@ post '/sample25' do
     # Check required variables
     raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty?
 
+    # Configure your access to API server.
+    GroupDocs.configure do |groupdocs|
+      groupdocs.client_id = settings.client_id
+      groupdocs.private_key = settings.private_key
+    end
 
-    # get document by file GUID
+    # Get document by file GUID
     case settings.source
     when 'guid'
         # Create instance of File
@@ -38,10 +43,10 @@ post '/sample25' do
         # Open file
         File.open(file_path, 'wb') { |f| f.write(params[:file][:tempfile].read) }
         # Make a request to API using client_id and private_key
-        file = GroupDocs::Storage::File.upload!(file_path, {}, {:client_id => settings.client_id, :private_key => settings.private_key})
+        file = GroupDocs::Storage::File.upload!(file_path, {})
     when 'url'
         # Upload file from defined url
-        file = GroupDocs::Storage::File.upload_web!(settings.url, {:client_id => settings.client_id, :private_key => settings.private_key})
+        file = GroupDocs::Storage::File.upload_web!(settings.url)
     else
         raise 'Wrong GUID source.'
     end
@@ -56,33 +61,37 @@ post '/sample25' do
     datasource = GroupDocs::DataSource.new
 
     # Get arry of document's fields
-    fields = document.fields!({:client_id => settings.client_id, :private_key => settings.private_key})
+    fields = document.fields!()
 
     # Create Field instance and fill the fields
     datasource.fields = fields.map { |field| GroupDocs::DataSource::Field.new(name: field.name, type: :text, values: %w(value1 value2)) }
 
     # Adds datasource.
-    datasource.add!({:client_id => settings.client_id, :private_key => settings.private_key})
+    datasource.add!()
 
 
     # Creates new job to merge datasource into document.
-    job = document.datasource!(datasource, {:new_type => 'pdf'}, {:client_id => settings.client_id, :private_key => settings.private_key})
+    job = document.datasource!(datasource, {:new_type => 'pdf'})
     sleep 10 # wait for merge and convert
 
     # Returns an hash of input and output documents associated to job.
-    document = job.documents!({:client_id => settings.client_id, :private_key => settings.private_key})
+    document = job.documents!()
 
     # Download file
-    document[:inputs][0].outputs[0].download!("#{File.dirname(__FILE__)}/../public/downloads", {:client_id => settings.client_id, :private_key => settings.private_key})
+    document[:inputs][0].outputs[0].download!("#{File.dirname(__FILE__)}/../public/downloads")
 
     # Set converted document GUID
     guid = document[:inputs][0].outputs[0].guid
     # Set converted document Name
     file_name = document[:inputs][0].outputs[0].name
 
+    # Add the signature to url the request
+    url = "https://apps.groupdocs.com/document-viewer/embed/#{guid}"
+    iframe = GroupDocs::Api::Request.new(:path => url).prepare_and_sign_url
+
     # Set iframe with document GUID or raise an error
     if guid
-      iframe = "<iframe width='100%' height='600' frameborder='0' src='https://apps.groupdocs.com/document-viewer/embed/#{guid}'></iframe>"
+      iframe = "<iframe width='100%' height='600' frameborder='0' src='#{iframe}'></iframe>"
     else
       raise 'File was not converted'
     end
