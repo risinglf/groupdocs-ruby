@@ -59,7 +59,7 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>set variables</p>
+              <p>Set variables</p>
 
             </div>
             
@@ -87,9 +87,7 @@
             
             <div class="content"><div class='highlight'><pre>    raise <span class="string">'Please enter all required parameters'</span> <span class="keyword">if</span> settings.client_id.empty? <span class="keyword">or</span> settings.private_key.empty?
 
-    <span class="constant">GroupDocs</span>.configure <span class="keyword">do</span> |groupdocs|
-      groupdocs.client_id = settings.client_id
-      groupdocs.private_key = settings.private_key</pre></div></div>
+    <span class="keyword">if</span> settings.path.empty? <span class="keyword">then</span> settings.path == <span class="string">'https://api.groupdocs.com'</span> <span class="keyword">end</span></pre></div></div>
             
         </li>
         
@@ -99,6 +97,23 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Configure your access to API server.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="constant">GroupDocs</span>.configure <span class="keyword">do</span> |groupdocs|
+      groupdocs.client_id = settings.client_id
+      groupdocs.private_key = settings.private_key</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>optionally specify API server and version</p>
 
@@ -111,34 +126,18 @@
         </li>
         
         
-        <li id="section-6">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
-              </div>
-              <p>get document by file GUID</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">case</span> settings.source
-      <span class="keyword">when</span> <span class="string">'guid'</span></pre></div></div>
-            
-        </li>
-        
-        
         <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>Create instance of File</p>
+              <p>Get document by file GUID</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        file = <span class="constant">GroupDocs::Storage::File</span>.new({<span class="symbol">:guid</span> =&gt; settings.file_id})
-      <span class="keyword">when</span> <span class="string">'local'</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">case</span> settings.source
+    <span class="keyword">when</span> <span class="string">'guid'</span></pre></div></div>
             
         </li>
         
@@ -149,11 +148,12 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <p>Construct path</p>
+              <p>Create instance of File</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        file_path = <span class="string">"<span class="subst">#{<span class="constant">Dir</span>.tmpdir}</span>/<span class="subst">#{params[<span class="symbol">:file</span>][<span class="symbol">:filename</span>]}</span>"</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>      file = <span class="constant">GroupDocs::Storage::File</span>.new({<span class="symbol">:guid</span> =&gt; settings.file_id})
+    <span class="keyword">when</span> <span class="string">'local'</span></pre></div></div>
             
         </li>
         
@@ -164,11 +164,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
-              <p>Open file</p>
+              <p>Construct path</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="constant">File</span>.open(file_path, <span class="string">'wb'</span>) { |f| f.write(params[<span class="symbol">:file</span>][<span class="symbol">:tempfile</span>].read) }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      file_path = <span class="string">"<span class="subst">#{<span class="constant">Dir</span>.tmpdir}</span>/<span class="subst">#{params[<span class="symbol">:file</span>][<span class="symbol">:filename</span>]}</span>"</span></pre></div></div>
             
         </li>
         
@@ -179,12 +179,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
-              <p>Make a request to API using client_id and private_key</p>
+              <p>Open file</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        file = <span class="constant">GroupDocs::Storage::File</span>.upload!(file_path, {})
-      <span class="keyword">when</span> <span class="string">'url'</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="constant">File</span>.open(file_path, <span class="string">'wb'</span>) { |f| f.write(params[<span class="symbol">:file</span>][<span class="symbol">:tempfile</span>].read) }</pre></div></div>
             
         </li>
         
@@ -195,14 +194,12 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
-              <p>Upload file from defined url</p>
+              <p>Make a request to API using client_id and private_key</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        file = <span class="constant">GroupDocs::Storage::File</span>.upload_web!(settings.url)
-      <span class="keyword">else</span>
-        raise <span class="string">'Wrong GUID source.'</span>
-    <span class="keyword">end</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>      file = <span class="constant">GroupDocs::Storage::File</span>.upload!(file_path, {})
+    <span class="keyword">when</span> <span class="string">'url'</span></pre></div></div>
             
         </li>
         
@@ -213,11 +210,14 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
-              <p>Raise exception if something went wrong</p>
+              <p>Upload file from defined url</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    raise <span class="string">'No such file'</span> <span class="keyword">unless</span> file.is_a?(<span class="constant">GroupDocs::Storage::File</span>)</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      file = <span class="constant">GroupDocs::Storage::File</span>.upload_web!(settings.url)
+    <span class="keyword">else</span>
+      raise <span class="string">'Wrong GUID source.'</span>
+    <span class="keyword">end</span></pre></div></div>
             
         </li>
         
@@ -228,11 +228,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
-              <p>Make GroupDocs::Storage::Document instance</p>
+              <p>Raise exception if something went wrong</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    document = file.to_document</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    raise <span class="string">'No such file'</span> <span class="keyword">unless</span> file.is_a?(<span class="constant">GroupDocs::Storage::File</span>)</pre></div></div>
             
         </li>
         
@@ -243,11 +243,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
-              <p>Get array of document&#39;s fields</p>
+              <p>Make GroupDocs::Storage::Document instance</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    fields = document.fields!()</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    document = file.to_document</pre></div></div>
             
         </li>
         
@@ -258,33 +258,13 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
-              
+              <p>Get array of document&#39;s fields</p>
+
             </div>
             
-            <div class="content"><div class='highlight'><pre>    html = <span class="string">''</span>
-    fields.map <span class="keyword">do</span> |e|
-      <span class="keyword">if</span> e.type == <span class="string">'Text'</span>
-        signature = <span class="string">"&lt;label for=<span class="subst">#{e.name}</span>&gt;<span class="subst">#{e.name}</span> <span class="subst">#{e.mandatory == <span class="keyword">false</span> ? <span class="string">'&lt;span class="optional"&gt;(Optional)&lt;/span&gt;'</span> <span class="symbol">:</span> <span class="string">'&lt;span class="optional"&gt;(Required)&lt;/span&gt;'</span>}</span>&lt;/label&gt;&lt;br/&gt;&lt;input type='text' name='<span class="subst">#{e.name}</span>' id=''&gt;&lt;/input&gt;&lt;br/&gt;"</span>
-        html &lt;&lt; signature
-      <span class="keyword">end</span>
+            <div class="content"><div class='highlight'><pre>    fields = document.fields!()
 
-      <span class="keyword">if</span> e.type == <span class="string">'Radio'</span>
-        radio = <span class="string">"&lt;label for=<span class="subst">#{e.name}</span>&gt;<span class="subst">#{e.name}</span> <span class="subst">#{e.mandatory == <span class="keyword">false</span> ? <span class="string">'&lt;span class="optional"&gt;(Optional)&lt;/span&gt;'</span> <span class="symbol">:</span> <span class="string">'&lt;span class="optional"&gt;(Required)&lt;/span&gt;'</span>}</span>&lt;/label&gt;&lt;br/&gt;&lt;input type='radio' name='<span class="subst">#{e.type}</span>' id=''&gt;&lt;/input&gt;&lt;br/&gt;"</span>
-        html &lt;&lt; radio
-      <span class="keyword">end</span>
-
-      <span class="keyword">if</span> e.type == <span class="string">'CheckBox'</span>
-        checkbox = <span class="string">"&lt;label for=<span class="subst">#{e.name}</span>&gt;<span class="subst">#{e.name}</span> <span class="subst">#{e.mandatory == <span class="keyword">false</span> ? <span class="string">'&lt;span class="optional"&gt;(Optional)&lt;/span&gt;'</span> <span class="symbol">:</span> <span class="string">'&lt;span class="optional"&gt;(Required)&lt;/span&gt;'</span>}</span>&lt;/label&gt;&lt;br/&gt;&lt;input type='checkbox' name='<span class="subst">#{e.type}</span>' id=''&gt;&lt;/input&gt;&lt;br/&gt;"</span>
-        html &lt;&lt; checkbox
-      <span class="keyword">end</span>
-
-    <span class="keyword">end</span>
-
-
-
-  <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e
-    err = e.message
-  <span class="keyword">end</span></pre></div></div>
+    i=<span class="number">0</span></pre></div></div>
             
         </li>
         
@@ -295,29 +275,35 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
-              <p>set variables for template</p>
+              <p>Create the fields for form</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  haml <span class="symbol">:sample35</span>, <span class="symbol">:locals</span> =&gt; {<span class="symbol">:userId</span> =&gt; settings.client_id, <span class="symbol">:privateKey</span> =&gt; settings.private_key, <span class="symbol">:base_path</span> =&gt; settings.path, <span class="symbol">:fileId</span> =&gt; document.file.guid, <span class="symbol">:html</span> =&gt; html,  <span class="symbol">:err</span> =&gt; err}
-<span class="keyword">end</span>
+            <div class="content"><div class='highlight'><pre>    html = <span class="string">''</span>
+    fields.map <span class="keyword">do</span> |e|
 
-get <span class="string">'/sample35/check'</span> <span class="keyword">do</span>
-  haml <span class="symbol">:sample35</span>
-<span class="keyword">end</span>
+      <span class="keyword">if</span> e.type == <span class="string">'Text'</span>
+        signature = <span class="string">"&lt;br/&gt;&lt;label for='<span class="subst">#{e.name}</span>'&gt;<span class="subst">#{e.name}</span> <span class="subst">#{e.mandatory == <span class="keyword">false</span> ? <span class="string">'&lt;span class="optional"&gt;(Optional)&lt;/span&gt;'</span> <span class="symbol">:</span> <span class="string">'&lt;span class="optional"&gt;(Required)&lt;/span&gt;'</span>}</span>&lt;/label&gt;&lt;br/&gt;&lt;input type='text' name='<span class="subst">#{e.name}</span>' &gt;&lt;/input&gt;&lt;br/&gt;&lt;br/&gt;"</span>
+        html &lt;&lt; signature
+      <span class="keyword">end</span>
+
+      <span class="keyword">if</span> e.type == <span class="string">'Radio'</span>
+        radio = <span class="string">"&lt;br/&gt;&lt;label for='<span class="subst">#{e.name}</span>'&gt;<span class="subst">#{e.name}</span> <span class="subst">#{e.mandatory == <span class="keyword">false</span> ? <span class="string">'&lt;span class="optional"&gt;(Optional)&lt;/span&gt;'</span> <span class="symbol">:</span> <span class="string">'&lt;span class="optional"&gt;(Required)&lt;/span&gt;'</span>}</span>&lt;/label&gt;&lt;br/&gt;&lt;input type='radio' name='<span class="subst">#{e.name}</span>' value='<span class="subst">#{i}</span>' &gt;&lt;/input&gt;&lt;br/&gt;&lt;br/&gt;"</span>
+        html &lt;&lt; radio
+        i+= <span class="number">1</span>
+      <span class="keyword">end</span>
+
+      <span class="keyword">if</span> e.type == <span class="string">'CheckBox'</span>
+        checkbox = <span class="string">"&lt;br/&gt;&lt;label for='<span class="subst">#{e.name}</span>'&gt;<span class="subst">#{e.name}</span> <span class="subst">#{e.mandatory == <span class="keyword">false</span> ? <span class="string">'&lt;span class="optional"&gt;(Optional)&lt;/span&gt;'</span> <span class="symbol">:</span> <span class="string">'&lt;span class="optional"&gt;(Required)&lt;/span&gt;'</span>}</span>&lt;/label&gt;&lt;br/&gt;&lt;input type='checkbox' name='<span class="subst">#{e.name}</span>' &gt;&lt;/input&gt;&lt;br/&gt;&lt;br/&gt;"</span>
+        html &lt;&lt; checkbox
+      <span class="keyword">end</span>
+
+    <span class="keyword">end</span>
 
 
-post <span class="string">'/sample35/check'</span> <span class="keyword">do</span>
-  set <span class="symbol">:client_id</span>, params[<span class="symbol">:client_id</span>]
-  set <span class="symbol">:private_key</span>, params[<span class="symbol">:private_key</span>]
-  set <span class="symbol">:path</span>, params[<span class="symbol">:base_path</span>]
-  set <span class="symbol">:file_id</span>, params[<span class="symbol">:fileId</span>]
-
-  <span class="keyword">begin</span>
-
-    <span class="constant">GroupDocs</span>.configure <span class="keyword">do</span> |groupdocs|
-      groupdocs.client_id = settings.client_id
-      groupdocs.private_key = settings.private_key</pre></div></div>
+  <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e
+    err = e.message
+  <span class="keyword">end</span></pre></div></div>
             
         </li>
         
@@ -327,6 +313,92 @@ post <span class="string">'/sample35/check'</span> <span class="keyword">do</spa
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Set variables for template</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  haml <span class="symbol">:sample35</span>, <span class="symbol">:locals</span> =&gt; {<span class="symbol">:userId</span> =&gt; settings.client_id, <span class="symbol">:privateKey</span> =&gt; settings.private_key, <span class="symbol">:base_path</span> =&gt; settings.path, <span class="symbol">:fileId</span> =&gt; document.file.guid, <span class="symbol">:html</span> =&gt; html, <span class="symbol">:err</span> =&gt; err}
+<span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>GET request</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>get <span class="string">'/sample35/check'</span> <span class="keyword">do</span>
+  haml <span class="symbol">:sample35</span>
+<span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>POST request</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>post <span class="string">'/sample35/check'</span> <span class="keyword">do</span>
+  set <span class="symbol">:client_id</span>, params[<span class="symbol">:client_id</span>]
+  set <span class="symbol">:private_key</span>, params[<span class="symbol">:private_key</span>]
+  set <span class="symbol">:path</span>, params[<span class="symbol">:base_path</span>]
+  set <span class="symbol">:file_id</span>, params[<span class="symbol">:fileId</span>]
+
+  <span class="keyword">begin</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Check required variables</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> settings.path.empty? <span class="keyword">then</span> settings.path == <span class="string">'https://api.groupdocs.com'</span> <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>Get document by file GUID</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="constant">GroupDocs</span>.configure <span class="keyword">do</span> |groupdocs|
+      groupdocs.client_id = settings.client_id
+      groupdocs.private_key = settings.private_key</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
               <p>optionally specify API server and version</p>
 
@@ -339,88 +411,14 @@ post <span class="string">'/sample35/check'</span> <span class="keyword">do</spa
         </li>
         
         
-        <li id="section-18">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-18">&#182;</a>
-              </div>
-              <p>TODO:
-Merge template PDF FIle with the data provided via dinamically created HTML form.</p>
-
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-19">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-19">&#182;</a>
-              </div>
-              <p>Create instance of File
-document = GroupDocs::Storage::File.new({:guid =&gt; settings.file_id}).to_document
-Create datasource with fields
-datasource = GroupDocs::DataSource.new</p>
-
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-20">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-20">&#182;</a>
-              </div>
-              <p>Get arry of document&#39;s fields
-fields = document.fields!()</p>
-
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-21">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-21">&#182;</a>
-              </div>
-              <p>Create Field instance and fill the fields
-datasource.fields = fields.map do |field|
-if field.name == &#39;Text1&#39;
-field =  GroupDocs::DataSource::Field.new(name: field.name, type: :text, values: [params[:Text1]])</p>
-
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-22">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
-              </div>
-              <p>end
-end</p>
-
-            </div>
-            
-        </li>
-        
-        
         <li id="section-23">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
-              <p>Adds datasource.
-datasource.add!()</p>
+              <p>TODO:
+Merge template PDF FIle with the data provided via dinamically created HTML form.</p>
 
             </div>
             
@@ -433,11 +431,11 @@ datasource.add!()</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
-              <p>Creates new job to merge datasource into document.
-job = document.datasource!(datasource, {:new_type =&gt; &#39;pdf&#39;})
-sleep 10 # wait for merge and convert</p>
+              <p>Create instance of File</p>
 
             </div>
+            
+            <div class="content"><div class='highlight'><pre>    document = <span class="constant">GroupDocs::Storage::File</span>.new({<span class="symbol">:guid</span> =&gt; settings.file_id}).to_document</pre></div></div>
             
         </li>
         
@@ -448,10 +446,11 @@ sleep 10 # wait for merge and convert</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
-              <p>Returns an hash of input and output documents associated to job.
-document = job.documents!()</p>
+              <p>Create datasource with fields</p>
 
             </div>
+            
+            <div class="content"><div class='highlight'><pre>    datasource = <span class="constant">GroupDocs::DataSource</span>.new</pre></div></div>
             
         </li>
         
@@ -462,10 +461,11 @@ document = job.documents!()</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
-              <p>Download file
-document[:inputs][0].outputs[0].download!(&quot;#{File.dirname(<strong>FILE</strong>)}/../public/downloads&quot;)</p>
+              <p>Get array of document&#39;s fields</p>
 
             </div>
+            
+            <div class="content"><div class='highlight'><pre>    fields = document.fields!()</pre></div></div>
             
         </li>
         
@@ -476,12 +476,13 @@ document[:inputs][0].outputs[0].download!(&quot;#{File.dirname(<strong>FILE</str
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
-              <p>Set converted document GUID
-guid = document[:inputs][0].outputs[0].guid
-Set converted document Name
-file_name = document[:inputs][0].outputs[0].name</p>
+              <p>Get unique fields</p>
 
             </div>
+            
+            <div class="content"><div class='highlight'><pre>    fields = fields.uniq{ |f| f.name }
+
+    datasource.fields = []</pre></div></div>
             
         </li>
         
@@ -492,26 +493,134 @@ file_name = document[:inputs][0].outputs[0].name</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
-              <p>Set iframe with document GUID or raise an error</p>
+              <p>Create Field instance and fill the fields</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> settings.path == <span class="string">'https://stage-api-groupdocs.dynabic.com'</span>
-      iframe = <span class="string">"&lt;iframe width='100%' height='600' frameborder='0' src='http://stage-apps-groupdocs.dynabic.com/document-viewer/<span class="subst">#{settings.file_id}</span>'&gt;&lt;/iframe&gt;"</span>
-    <span class="keyword">end</span>
-
-      <span class="keyword">if</span> settings.path == <span class="string">'https://dev-api-groupdocs.dynabic.com'</span>
-        iframe = <span class="string">"&lt;iframe width='100%' height='600' frameborder='0' src='http://dev-apps-groupdocs.dynabic.comdocument-viewer/<span class="subst">#{settings.file_id}</span>'&gt;&lt;/iframe&gt;"</span>
+            <div class="content"><div class='highlight'><pre>    fields.each <span class="keyword">do</span> |field|
+      <span class="keyword">if</span> field.type == <span class="string">'Text'</span>
+        datasource.fields &lt;&lt; <span class="constant">GroupDocs::DataSource::Field</span>.new(<span class="symbol">name:</span> field.name, <span class="symbol">type:</span> <span class="symbol">:text</span>, <span class="symbol">values:</span> [params[field.name.to_sym]])
       <span class="keyword">end</span>
 
+      <span class="keyword">if</span> field.type == <span class="string">"Radio"</span> &amp;&amp; params[field.name.to_sym]
+        datasource.fields &lt;&lt; <span class="constant">GroupDocs::DataSource::Field</span>.new(<span class="symbol">name:</span> field.name, <span class="symbol">type:</span> <span class="string">'integer'</span>, <span class="symbol">values:</span> [params[field.name.to_sym]])
 
+      <span class="keyword">end</span>
+
+      <span class="keyword">if</span> field.type == <span class="string">"CheckBox"</span> &amp;&amp; params[field.name.to_sym] == <span class="string">'on'</span>
+        datasource.fields &lt;&lt; <span class="constant">GroupDocs::DataSource::Field</span>.new(<span class="symbol">name:</span> field.name, <span class="symbol">type:</span> <span class="string">'boolean'</span>, <span class="symbol">values:</span> [<span class="keyword">true</span>])
+      <span class="keyword">end</span>
+
+    <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>Adds datasource.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    datasource.add!()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <p>Creates new job to merge datasource into document.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    job = document.datasource!(datasource, {<span class="symbol">:new_type</span> =&gt; <span class="string">'pdf'</span>})
+    sleep <span class="number">10</span> <span class="comment"># wait for merge and convert</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <p>Returns an hash of input and output documents associated to job.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    document = job.documents!()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <p>Download file</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    document[<span class="symbol">:inputs</span>][<span class="number">0</span>].outputs[<span class="number">0</span>].download!(<span class="string">"<span class="subst">#{<span class="constant">File</span>.dirname(__FILE_<span class="number">_</span>)}</span>/../public/downloads"</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <p>Set converted document GUID</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    guid = document[<span class="symbol">:inputs</span>][<span class="number">0</span>].outputs[<span class="number">0</span>].guid</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              <p>Set converted document Name</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    file_name = document[<span class="symbol">:inputs</span>][<span class="number">0</span>].outputs[<span class="number">0</span>].name
+
+    <span class="keyword">case</span> settings.path
+
+    <span class="keyword">when</span> <span class="string">'https://stage-api-groupdocs.dynabic.com'</span>
+      iframe = <span class="string">"&lt;iframe width='100%' height='600' frameborder='0' src='http://stage-apps-groupdocs.dynabic.com/document-viewer/<span class="subst">#{guid}</span>'&gt;&lt;/iframe&gt;"</span>
+    <span class="keyword">when</span> <span class="string">'https://dev-api-groupdocs.dynabic.com'</span>
+      iframe = <span class="string">"&lt;iframe width='100%' height='600' frameborder='0' src='http://dev-apps-groupdocs.dynabic.com/document-viewer/<span class="subst">#{guid}</span>'&gt;&lt;/iframe&gt;"</span>
+    <span class="keyword">else</span>
+      iframe = <span class="string">"&lt;iframe width='100%' height='600' frameborder='0' src='https://apps.groupdocs.com/document-viewer/<span class="subst">#{guid}</span>'&gt;&lt;/iframe&gt;"</span>
+
+    <span class="keyword">end</span>
 
 
   <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e
     err = e.message
   <span class="keyword">end</span>
 
-  haml <span class="symbol">:sample35</span>, <span class="symbol">:locals</span> =&gt; {<span class="symbol">:userId</span> =&gt; settings.client_id, <span class="symbol">:privateKey</span> =&gt; settings.private_key, <span class="symbol">:iframe</span> =&gt; iframe,  <span class="symbol">:err</span> =&gt; err}
+  haml <span class="symbol">:sample35</span>, <span class="symbol">:locals</span> =&gt; {<span class="symbol">:userId</span> =&gt; settings.client_id, <span class="symbol">:privateKey</span> =&gt; settings.private_key, <span class="symbol">:iframe</span> =&gt; iframe, <span class="symbol">:err</span> =&gt; err}
 <span class="keyword">end</span></pre></div></div>
             
         </li>
