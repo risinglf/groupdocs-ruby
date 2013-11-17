@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>sample15.rb</title>
+  <title>sample04.rb</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="docco.css" />
@@ -15,7 +15,7 @@
         
           <li id="title">
               <div class="annotation">
-                  <h1>sample15.rb</h1>
+                  <h1>sample04.rb</h1>
               </div>
           </li>
         
@@ -31,8 +31,8 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>get <span class="string">'/sample15'</span> <span class="keyword">do</span>
-  haml <span class="symbol">:sample15</span>
+            <div class="content"><div class='highlight'><pre>get <span class="string">'/sample04'</span> <span class="keyword">do</span>
+  haml <span class="symbol">:sample04</span>
 <span class="keyword">end</span></pre></div></div>
             
         </li>
@@ -48,7 +48,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>post <span class="string">'/sample15'</span> <span class="keyword">do</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>post <span class="string">'/sample04'</span> <span class="keyword">do</span></pre></div></div>
             
         </li>
         
@@ -65,6 +65,8 @@
             
             <div class="content"><div class='highlight'><pre>  set <span class="symbol">:client_id</span>, params[<span class="symbol">:client_id</span>]
   set <span class="symbol">:private_key</span>, params[<span class="symbol">:private_key</span>]
+  set <span class="symbol">:file_id</span>, params[<span class="symbol">:file_id</span>]
+  set <span class="symbol">:url</span>, params[<span class="symbol">:url</span>]
   set <span class="symbol">:base_path</span>, params[<span class="symbol">:base_path</span>]
 
   <span class="keyword">begin</span></pre></div></div>
@@ -82,7 +84,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    raise <span class="string">'Please enter all required parameters'</span> <span class="keyword">if</span> settings.client_id.empty? <span class="keyword">or</span> settings.private_key.empty?
+            <div class="content"><div class='highlight'><pre>    raise <span class="string">'Please enter all required parameters'</span> <span class="keyword">if</span> settings.client_id.empty? <span class="keyword">or</span> settings.private_key.empty? <span class="keyword">or</span> settings.file_id.empty?
 
     <span class="keyword">if</span> settings.base_path.empty? <span class="keyword">then</span> settings.base_path = <span class="string">'https://api.groupdocs.com'</span> <span class="keyword">end</span></pre></div></div>
             
@@ -128,16 +130,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>Check the number of document&#39;s views. Make a request to API using client_id and private_key</p>
+              <p>Get file GUID</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    views = <span class="constant">GroupDocs::Document</span>.views!({})
-    total = views.count()
-
-  <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e
-    err = e.message
-  <span class="keyword">end</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    file = <span class="constant">GroupDocs::Storage::File</span>.new({<span class="symbol">:guid</span> =&gt; settings.file_id}).to_document</pre></div></div>
             
         </li>
         
@@ -148,11 +145,49 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
+              <p>Obtaining all Metadata for file</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    document = file.metadata!
+    file = document.last_view.document.file</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Download file</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    dowloaded_file = file.download!(<span class="string">"<span class="subst">#{<span class="constant">File</span>.dirname(__FILE_<span class="number">_</span>)}</span>/../public/downloads"</span>)
+    <span class="keyword">unless</span> dowloaded_file.empty?
+      massage = <span class="string">"&lt;font color='green'&gt;File was downloaded to the &lt;font color='blue'&gt;<span class="subst">#{dowloaded_file}</span>&lt;/font&gt; folder&lt;/font&gt; &lt;br /&gt;"</span>
+    <span class="keyword">end</span>
+
+  <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e
+    err = e.message
+  <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
               <p>Set variables for template</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  haml <span class="symbol">:sample15</span>, <span class="symbol">:locals</span> =&gt; {<span class="symbol">:userId</span> =&gt; settings.client_id, <span class="symbol">:privateKey</span> =&gt; settings.private_key, <span class="symbol">:total</span> =&gt; total, <span class="symbol">:err</span> =&gt; err}
+            <div class="content"><div class='highlight'><pre>  haml <span class="symbol">:sample04</span>, <span class="symbol">:locals</span> =&gt; {<span class="symbol">:client_id</span> =&gt; settings.client_id, <span class="symbol">:private_key</span> =&gt; settings.private_key, <span class="symbol">:file_id</span> =&gt; settings.file_id, <span class="symbol">:massage</span> =&gt; massage, <span class="symbol">:err</span> =&gt; err}
 <span class="keyword">end</span></pre></div></div>
             
         </li>

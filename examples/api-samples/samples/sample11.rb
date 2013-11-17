@@ -5,20 +5,27 @@ end
 
 # POST request
 post '/sample11' do
-  # set variables
+  # Set variables
   set :client_id, params[:client_id]
   set :private_key, params[:private_key]
   set :file_id, params[:fileId]
   set :annotation_type, params[:annotation_type]
   set :annotation_id, params[:annotationId]
+  set :base_path, params[:base_path]
+
   begin
 
-    # check required variables
+    # Check required variables
     raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty? or settings.file_id.empty? or settings.annotation_type.empty?
-    # Configure your access to API server.
+
+    if settings.base_path.empty? then settings.base_path = 'https://api.groupdocs.com' end
+
+    # Configure your access to API server
     GroupDocs.configure do |groupdocs|
       groupdocs.client_id = settings.client_id
       groupdocs.private_key = settings.private_key
+      # Optionally specify API server and version
+      groupdocs.api_server = settings.base_path # default is 'https://api.groupdocs.com'
     end
 
     if settings.annotation_id != ''
@@ -90,13 +97,22 @@ post '/sample11' do
         reply.create!
         annotation_id = annotation.guid
 
-        url = "http://apps.groupdocs.com/document-annotation2/embed/#{annotation.document.file.guid}?frameborder='0' width='720' height='600'"
+      case settings.base_path
+
+        when 'https://stage-api-groupdocs.dynabic.com'
+          url = "http://stage-apps-groupdocs.dynabic.com/document-annotation2/embed/#{annotation.document.file.guid}"
+        when 'https://dev-api-groupdocs.dynabic.com'
+          url = "http://dev-apps-groupdocs.dynabic.com/document-annotation2/embed/#{annotation.document.file.guid}"
+        else
+          url = "http://apps.groupdocs.com/document-annotation2/embed/#{annotation.document.file.guid}"
+      end
 
         #Add the signature in url
         url = GroupDocs::Api::Request.new(:path => url).prepare_and_sign_url
         # Set iframe with document GUID
         iframe = "<iframe src='#{url}' frameborder='0' width='720' height='600'></iframe>"
-      end
+
+    end
 
     end
 
@@ -105,8 +121,8 @@ post '/sample11' do
   end
 
   # set variables for template
-  haml :sample11, :locals => {:userId => settings.client_id,
-                              :privateKey => settings.private_key,
+  haml :sample11, :locals => {:client_id => settings.client_id,
+                              :private_key => settings.private_key,
                               :fileId => settings.file_id,
                               :annotationType => settings.annotation_type,
                               :annotationId => annotation_id,

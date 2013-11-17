@@ -1,22 +1,22 @@
 # GET request
-get '/sample10' do
-  haml :sample10
+get '/sample08' do
+  haml :sample08
 end
 
 # POST request
-post '/sample10' do
+post '/sample08' do
   # Set variables
   set :client_id, params[:client_id]
   set :private_key, params[:private_key]
-  set :guid, params[:fileId]
-  set :email, params[:email]
+  set :guid, params[:guid]
+  set :page_number, params[:page_number]
   set :source, params[:source]
+  set :file_id, params[:fileId]
   set :base_path, params[:base_path]
 
   begin
     # Check required variables
-    raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty? or settings.guid.empty? or settings.email.empty?
-
+    raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty?
 
     if settings.base_path.empty? then settings.base_path = 'https://api.groupdocs.com' end
 
@@ -28,12 +28,14 @@ post '/sample10' do
       groupdocs.api_server = settings.base_path # default is 'https://api.groupdocs.com'
     end
 
-    # Get document by file GUID
     file = nil
+    doc = nil
+    metadata = nil
+
+    # Get document by file GUID
     case settings.source
       when 'guid'
-        file = GroupDocs::Storage::File.new({:guid => settings.guid}).to_document.metadata!()
-        file = file.last_view.document.file
+        file = GroupDocs::Storage::File.new({:guid => settings.file_id})
       when 'local'
         # Construct path
         filepath = "#{Dir.tmpdir}/#{params[:file][:filename]}"
@@ -47,17 +49,21 @@ post '/sample10' do
         raise 'Wrong GUID source.'
     end
 
-    # Share document. Make a request to API using client_id and private_key
-    shared = file.to_document.sharers_set!(settings.email.split(' '))
+    doc = file.to_document
+    metadata = doc.metadata!()
+
+    # Get document page images
+    images = doc.page_images!(800, 400, {:first_page => 0, :page_count => metadata.views_count})
 
     # Result
-    if shared
-      shared_emails = settings.email
+    unless images.empty?
+      image = images[Integer(settings.page_number)]
     end
+
   rescue Exception => e
     err = e.message
   end
 
   # Set variables for template
-  haml :sample10, :locals => {:client_id => settings.client_id, :private_key => settings.private_key, :guid => settings.guid, :email => settings.email, :shared => shared_emails, :err => err}
+  haml :sample08, :locals => {:client_id => settings.client_id, :private_key => settings.private_key, :guid => settings.guid, :page_number => settings.page_number, :image => image, :err => err}
 end

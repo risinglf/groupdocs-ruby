@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>sample9.rb</title>
+  <title>sample09.rb</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="docco.css" />
@@ -15,7 +15,7 @@
         
           <li id="title">
               <div class="annotation">
-                  <h1>sample9.rb</h1>
+                  <h1>sample09.rb</h1>
               </div>
           </li>
         
@@ -31,8 +31,8 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>get <span class="string">'/sample9'</span> <span class="keyword">do</span>
-  haml <span class="symbol">:sample9</span>
+            <div class="content"><div class='highlight'><pre>get <span class="string">'/sample09'</span> <span class="keyword">do</span>
+  haml <span class="symbol">:sample09</span>
 <span class="keyword">end</span></pre></div></div>
             
         </li>
@@ -48,7 +48,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>post <span class="string">'/sample9'</span> <span class="keyword">do</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>post <span class="string">'/sample09'</span> <span class="keyword">do</span></pre></div></div>
             
         </li>
         
@@ -71,6 +71,8 @@
   set <span class="symbol">:private_key</span>, params[<span class="symbol">:private_key</span>]
   set <span class="symbol">:check</span>, params[<span class="symbol">:check</span>]
   set <span class="symbol">:url</span>, params[<span class="symbol">:url</span>]
+  set <span class="symbol">:base_path</span>, params[<span class="symbol">:base_path</span>]
+
   <span class="keyword">begin</span></pre></div></div>
             
         </li>
@@ -86,7 +88,9 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    raise <span class="string">'Please enter all required parameters'</span> <span class="keyword">if</span> settings.client_id.empty? <span class="keyword">or</span> settings.private_key.empty? <span class="keyword">or</span> settings.width.empty? <span class="keyword">or</span> settings.height.empty?</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    raise <span class="string">'Please enter all required parameters'</span> <span class="keyword">if</span> settings.client_id.empty? <span class="keyword">or</span> settings.private_key.empty? <span class="keyword">or</span> settings.width.empty? <span class="keyword">or</span> settings.height.empty?
+
+    <span class="keyword">if</span> settings.base_path.empty? <span class="keyword">then</span> settings.base_path = <span class="string">'https://api.groupdocs.com'</span> <span class="keyword">end</span></pre></div></div>
             
         </li>
         
@@ -97,14 +101,13 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>Configure your access to API server.</p>
+              <p>Configure your access to API server</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>    <span class="constant">GroupDocs</span>.configure <span class="keyword">do</span> |groupdocs|
       groupdocs.client_id = settings.client_id
-      groupdocs.private_key = settings.private_key
-    <span class="keyword">end</span></pre></div></div>
+      groupdocs.private_key = settings.private_key</pre></div></div>
             
         </li>
         
@@ -114,6 +117,22 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Optionally specify API server and version</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      groupdocs.api_server = settings.base_path <span class="comment"># default is 'https://api.groupdocs.com'</span>
+    <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>Get document by file GUID</p>
 
@@ -128,11 +147,11 @@
         </li>
         
         
-        <li id="section-7">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>Construct path</p>
 
@@ -143,11 +162,11 @@
         </li>
         
         
-        <li id="section-8">
+        <li id="section-9">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <p>Open file</p>
 
@@ -158,11 +177,11 @@
         </li>
         
         
-        <li id="section-9">
+        <li id="section-10">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
+                <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <p>Make a request to API using client_id and private_key</p>
 
@@ -175,21 +194,37 @@
       raise <span class="string">'Wrong GUID source.'</span>
     <span class="keyword">end</span>
      url = <span class="keyword">nil</span>
+
     <span class="keyword">case</span> settings.check
     <span class="keyword">when</span> <span class="string">'viewer'</span>
-      url = <span class="string">"https://apps.groupdocs.com/document-viewer/embed/<span class="subst">#{file.guid}</span>?frameborder='0' width='<span class="subst">#{settings.width}</span>' height='<span class="subst">#{settings.height}</span>'"</span>
+      <span class="keyword">case</span> settings.base_path
+      <span class="keyword">when</span> <span class="string">'https://stage-api-groupdocs.dynabic.com'</span>
+      url = <span class="string">"http://stage-apps-groupdocs.dynabic.com/document-viewer/embed/<span class="subst">#{file.guid}</span>?frameborder='0' width='<span class="subst">#{settings.width}</span>' height='<span class="subst">#{settings.height}</span>'"</span>
+      <span class="keyword">when</span> <span class="string">'https://dev-api-groupdocs.dynabic.com'</span>
+        url = <span class="string">"http://dev-apps-groupdocs.dynabic.com/document-viewer/embed/<span class="subst">#{file.guid}</span>?frameborder='0' width='<span class="subst">#{settings.width}</span>' height='<span class="subst">#{settings.height}</span>'"</span>
+      <span class="keyword">else</span>
+        url = <span class="string">"https://apps.groupdocs.com/document-viewer/embed/<span class="subst">#{file.guid}</span>?frameborder='0' width='<span class="subst">#{settings.width}</span>' height='<span class="subst">#{settings.height}</span>'"</span>
+      <span class="keyword">end</span>
+
     <span class="keyword">when</span> <span class="string">'annotation'</span>
-      url = <span class="string">"https://apps.groupdocs.com/document-annotation2/embed/<span class="subst">#{file.guid}</span>?frameborder='0' width='<span class="subst">#{settings.width}</span>' height='<span class="subst">#{settings.height}</span>'"</span>
+      <span class="keyword">case</span> settings.base_path
+      <span class="keyword">when</span> <span class="string">'https://stage-api-groupdocs.dynabic.com'</span>
+        url = <span class="string">"http://stage-apps-groupdocs.dynabic.com/document-annotation2/embed/<span class="subst">#{file.guid}</span>?frameborder='0' width='<span class="subst">#{settings.width}</span>' height='<span class="subst">#{settings.height}</span>'"</span>
+      <span class="keyword">when</span> <span class="string">'https://dev-api-groupdocs.dynabic.com'</span>
+        url = <span class="string">"http://dev-apps-groupdocs.dynabic.com/document-annotation2/embed/<span class="subst">#{file.guid}</span>?frameborder='0' width='<span class="subst">#{settings.width}</span>' height='<span class="subst">#{settings.height}</span>'"</span>
+      <span class="keyword">else</span>
+        url = <span class="string">"https://apps.groupdocs.com/document-annotation2/embed/<span class="subst">#{file.guid}</span>?frameborder='0' width='<span class="subst">#{settings.width}</span>' height='<span class="subst">#{settings.height}</span>'"</span>
+      <span class="keyword">end</span>
     <span class="keyword">end</span></pre></div></div>
             
         </li>
         
         
-        <li id="section-10">
+        <li id="section-11">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
+                <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
               <p>Construct result string</p>
 
@@ -204,17 +239,17 @@
         </li>
         
         
-        <li id="section-11">
+        <li id="section-12">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
+                <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
               <p>Set variables for template</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  haml <span class="symbol">:sample9</span>, <span class="symbol">:locals</span> =&gt; {<span class="symbol">:guid</span> =&gt; file.guid, <span class="symbol">:width</span> =&gt; settings.width, <span class="symbol">:height</span> =&gt; settings.height, <span class="symbol">:v_url</span> =&gt; url, <span class="symbol">:err</span> =&gt; err}
+            <div class="content"><div class='highlight'><pre>  haml <span class="symbol">:sample09</span>, <span class="symbol">:locals</span> =&gt; {<span class="symbol">:guid</span> =&gt; file.guid, <span class="symbol">:width</span> =&gt; settings.width, <span class="symbol">:height</span> =&gt; settings.height, <span class="symbol">:v_url</span> =&gt; url, <span class="symbol">:err</span> =&gt; err}
 <span class="keyword">end</span></pre></div></div>
             
         </li>

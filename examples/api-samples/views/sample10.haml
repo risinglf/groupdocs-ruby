@@ -60,6 +60,11 @@
       %br/
       %input{:type => 'text', :name => 'email',  :value => "#{(defined? email) ? email : ''}"}
       %br/
+      %label{:for => 'base_path'} Base Path
+      %span{:class => 'optional'} (Optional)
+      %br/
+      %input{:type=>'text', :name=>'base_path'}
+      %br/
       %input{:type => 'submit', :value => 'Make Request'}/
     %div{:style => 'padding:20px; border:1px solid black;'}
       %p

@@ -1,24 +1,24 @@
 %h3{:style => 'text-align:center;'}
   %a{:href => '/'} GroupDocs Ruby SDK Samples
-  \- Sample6
+  \- Sample06
 .samplecontent{:style => 'padding:10px;'}
   %i This sample will show how to add provided signature to provided document using Ruby SDK. Signed file will be uploaded to GroupDocs account and its GUID will be returned and embed into webpage with GroupDocs Ebedded Viewer.
   %br/
   %br/
   %span.documentation
-    %a{:href => '/docs/sample6.html'} Builtin documentation for this sample
+    %a{:href => '/docs/sample06.html'} Builtin documentation for this sample
   %br/
   %br/
   %p
     You entered:
   %p
-    UserId = #{(defined? userId) ? userId : ''}
+    UserId = #{(defined? client_id) ? client_id : ''}
   %p
-    PrivateKey = #{(defined? privateKey) ? privateKey : ''}
+    PrivateKey = #{(defined? private_key) ? private_key : ''}
   %p
     %font{:color => 'red'} #{(defined? err) ? err : ''}
   #files_form
-    %form{:action => '/sample6', :enctype => 'multipart/form-data', :method => 'post'}
+    %form{:action => '/sample06', :enctype => 'multipart/form-data', :method => 'post'}
       %br/
       %label{:for => 'client_id'} GroupDocs ClientID
       %br/
@@ -36,6 +36,11 @@
       %br/
       %input#fi_signature{:type => 'file',:id => 'signature', :name => 'signature'}/
       %br/
+      %label{:for => 'base_path'} Base Path
+      %span{:class => 'optional'} (Optional)
+      %br/
+      %input{:type=>'text', :name=>'base_path'}
+      %br/
       %br/
       %input{:type => 'submit', :value => 'Upload and sign the document'}/
       %br/
@@ -43,7 +48,6 @@
   %div{:style => 'padding:20px; border:1px solid black;'}
     %p
       Results:
-      %span#results_status{:style => 'color:red;display:none;'} (Please wait for ajax response)
     #{(defined? iframe) ? iframe : ''}
     
 = partial :_others_samples

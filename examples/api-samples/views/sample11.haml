@@ -13,9 +13,9 @@
   %p
     You entered:
   %p
-    UserId = #{(defined? userId) ? userId : ''}
+    UserId = #{(defined? client_id) ? client_id : ''}
   %p
-    PrivateKey = #{(defined? privateKey) ? privateKey : ''}
+    PrivateKey = #{(defined? private_key) ? private_key : ''}
   %p
     FileId = #{(defined? fileId) ? fileId : ''}
   %p
@@ -46,6 +46,11 @@
       %label{:for => 'file_id'} GroupDocs FileID
       %br/
       %input{:type=>'text', :name=>'fileId', :value => (defined? fileId) ? fileId : ''}
+      %br/
+      %label{:for => 'base_path'} Base Path
+      %span{:class => 'optional'} (Optional)
+      %br/
+      %input{:type=>'text', :name=>'base_path'}
       %br/
       Annotation Type
       %br/
@@ -91,7 +96,7 @@
         %div
           %span Text
           %input{:type=>'text', :name=>'text', :placeholder => 'text'}
-
+        %br/
 
       %input{:type => 'submit', :value => 'Make request'}/
 

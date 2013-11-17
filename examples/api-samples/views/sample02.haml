@@ -1,25 +1,25 @@
 %h3{:style => 'text-align:center;'}
   %a{:href => '/'} GroupDocs Ruby SDK Samples
-  \- Sample2
+  \- Sample02
 .samplecontent{:style => 'padding:10px;'}
   %i This sample will show how to use StorageApi to list all user files from GroupDocs account using Ruby SDK
   %br/
   %br/
   %span.documentation
-    %a{:href => '/docs/sample2.html'} Builtin documentation for this sample
+    %a{:href => '/docs/sample02.html'} Builtin documentation for this sample
   %br/
   %br/
   %p
     You entered:
   %p
-    UserId = #{(defined? userId) ? userId : ''}
+    UserId = #{(defined? user_id) ? userId : ''}
   %p
-    PrivateKey = #{(defined? privateKey) ? privateKey : ''}
+    PrivateKey = #{(defined? private_key) ? privateKey : ''}
   %p
     %font{:color => 'red'} #{(defined? err) ? err : ''}
   #requestForm{:style => 'padding:20px; border:1px solid black;'}
     %p Enter data for request and press "Make request" button
-    %form{:action => '/sample2', :enctype => 'multipart/form-data', :method => 'post'}
+    %form{:action => '/sample02', :enctype => 'multipart/form-data', :method => 'post'}
       %label{:for => 'client_id'} GroupDocs ClientID
       %br/
       %input{:type=>'text', :name=>'client_id'}
@@ -27,6 +27,11 @@
       %label{:for => 'private_key'} GroupDocs PrivateKey
       %br/
       %input{:type=>'text', :name=>'private_key'}
+      %br/
+      %label{:for => 'base_path'} Base Path
+      %span{:class => 'optional'} (Optional)
+      %br/
+      %input{:type=>'text', :name=>'base_path'}
       %br/
       %input{:type => 'submit', :value => 'Make Request'}/
     %div{:style => 'padding:20px; border:1px solid black;'}

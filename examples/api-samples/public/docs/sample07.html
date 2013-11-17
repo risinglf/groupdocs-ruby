@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>sample4.rb</title>
+  <title>sample07.rb</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="docco.css" />
@@ -15,7 +15,7 @@
         
           <li id="title">
               <div class="annotation">
-                  <h1>sample4.rb</h1>
+                  <h1>sample07.rb</h1>
               </div>
           </li>
         
@@ -31,8 +31,8 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>get <span class="string">'/sample4'</span> <span class="keyword">do</span>
-  haml <span class="symbol">:sample4</span>
+            <div class="content"><div class='highlight'><pre>get <span class="string">'/sample07'</span> <span class="keyword">do</span>
+  haml <span class="symbol">:sample07</span>
 <span class="keyword">end</span></pre></div></div>
             
         </li>
@@ -48,7 +48,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>post <span class="string">'/sample4'</span> <span class="keyword">do</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>post <span class="string">'/sample07'</span> <span class="keyword">do</span></pre></div></div>
             
         </li>
         
@@ -65,8 +65,7 @@
             
             <div class="content"><div class='highlight'><pre>  set <span class="symbol">:client_id</span>, params[<span class="symbol">:client_id</span>]
   set <span class="symbol">:private_key</span>, params[<span class="symbol">:private_key</span>]
-  set <span class="symbol">:file_id</span>, params[<span class="symbol">:file_id</span>]
-  set <span class="symbol">:url</span>, params[<span class="symbol">:url</span>]
+  set <span class="symbol">:base_path</span>, params[<span class="symbol">:base_path</span>]
 
   <span class="keyword">begin</span></pre></div></div>
             
@@ -83,7 +82,9 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    raise <span class="string">'Please enter all required parameters'</span> <span class="keyword">if</span> settings.client_id.empty? <span class="keyword">or</span> settings.private_key.empty?</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    raise <span class="string">'Please enter all required parameters'</span> <span class="keyword">if</span> settings.client_id.empty? <span class="keyword">or</span> settings.private_key.empty?
+
+    <span class="keyword">if</span> settings.base_path.empty? <span class="keyword">then</span> settings.base_path = <span class="string">'https://api.groupdocs.com'</span> <span class="keyword">end</span></pre></div></div>
             
         </li>
         
@@ -94,14 +95,13 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>Configure your access to API server.</p>
+              <p>Configure your access to API server</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>    <span class="constant">GroupDocs</span>.configure <span class="keyword">do</span> |groupdocs|
       groupdocs.client_id = settings.client_id
-      groupdocs.private_key = settings.private_key
-    <span class="keyword">end</span></pre></div></div>
+      groupdocs.private_key = settings.private_key</pre></div></div>
             
         </li>
         
@@ -112,11 +112,12 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>Get file GUID</p>
+              <p>Optionally specify API server and version</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    file = <span class="constant">GroupDocs::Storage::File</span>.new({<span class="symbol">:guid</span> =&gt; settings.file_id}).to_document</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      groupdocs.api_server = settings.base_path <span class="comment"># default is 'https://api.groupdocs.com'</span>
+    <span class="keyword">end</span></pre></div></div>
             
         </li>
         
@@ -127,12 +128,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>Obtaining all Metadata for file</p>
+              <p>Make a request to API using client_id and private_key</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    document = file.metadata!
-    file = document.last_view.document.file</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    files_list = <span class="constant">GroupDocs::Storage::Folder</span>.list!(<span class="string">'/'</span>, {<span class="symbol">:extended</span> =&gt; <span class="keyword">true</span>}, {<span class="symbol">:client_id</span> =&gt; settings.client_id, <span class="symbol">:private_key</span> =&gt; settings.private_key})</pre></div></div>
             
         </li>
         
@@ -143,13 +143,23 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <p>Download file</p>
+              <p>Construct result string</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    dowloaded_file = file.download!(<span class="string">"<span class="subst">#{<span class="constant">File</span>.dirname(__FILE_<span class="number">_</span>)}</span>/../public/downloads"</span>)
-    <span class="keyword">unless</span> dowloaded_file.empty?
-      massage = <span class="string">"&lt;font color='green'&gt;File was downloaded to the &lt;font color='blue'&gt;<span class="subst">#{dowloaded_file}</span>&lt;/font&gt; folder&lt;/font&gt; &lt;br /&gt;"</span>
+            <div class="content"><div class='highlight'><pre>    thumbnails = <span class="string">''</span>
+    files_list.each <span class="keyword">do</span> |element|
+      <span class="keyword">if</span> element.<span class="keyword">class</span>.name.split(<span class="string">'::'</span>).last == <span class="string">'Folder'</span>
+        <span class="keyword">next</span>
+      <span class="keyword">end</span>
+      <span class="keyword">if</span> element.thumbnail
+        name = element.name
+        thumbnails += <span class="string">"&lt;p&gt;&lt;img src='data:image/png;base64,<span class="subst">#{element.thumbnail}</span>', width='40px', height='40px'&gt; <span class="subst">#{name}</span>&lt;/p&gt;"</span>
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="keyword">unless</span> thumbnails.empty?
+      set <span class="symbol">:thumbnails</span>, thumbnails
     <span class="keyword">end</span>
 
   <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e
@@ -169,7 +179,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  haml <span class="symbol">:sample4</span>, <span class="symbol">:locals</span> =&gt; {<span class="symbol">:userId</span> =&gt; settings.client_id, <span class="symbol">:privateKey</span> =&gt; settings.private_key, <span class="symbol">:file_id</span> =&gt; settings.file_id, <span class="symbol">:massage</span> =&gt; massage, <span class="symbol">:err</span> =&gt; err}
+            <div class="content"><div class='highlight'><pre>  haml <span class="symbol">:sample07</span>, <span class="symbol">:locals</span> =&gt; {<span class="symbol">:client_id</span> =&gt; settings.client_id, <span class="symbol">:private_key</span> =&gt; settings.private_key, <span class="symbol">:thumbnailList</span> =&gt; thumbnails, <span class="symbol">:err</span> =&gt; err}
 <span class="keyword">end</span></pre></div></div>
             
         </li>

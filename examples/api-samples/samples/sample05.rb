@@ -1,10 +1,10 @@
 # GET request
-get '/sample5' do
-  haml :sample5
+get '/sample05' do
+  haml :sample05
 end
 
 # POST request
-post '/sample5' do
+post '/sample05' do
   # set variables
   set :client_id, params[:client_id]
   set :private_key, params[:private_key]
@@ -14,16 +14,21 @@ post '/sample5' do
   set :move, params[:move]
   set :dest_path, params[:dest_path]
   set :source, params[:source]
+  set :base_path, params[:base_path]
 
   begin
 
     # check required variables
     raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty?
 
-    # Configure your access to API server.
+    if settings.base_path.empty? then settings.base_path = 'https://api.groupdocs.com' end
+
+    # Configure your access to API server
     GroupDocs.configure do |groupdocs|
       groupdocs.client_id = settings.client_id
       groupdocs.private_key = settings.private_key
+      # Optionally specify API server and version
+      groupdocs.api_server = settings.base_path # default is 'https://api.groupdocs.com'
     end
 
     file = nil
@@ -67,5 +72,5 @@ post '/sample5' do
   end
 
   # set variables for template
-  haml :sample5, :locals => {:userId => settings.client_id, :privateKey => settings.private_key, :file_id => settings.file_id, :dest_path => settings.dest_path, :massage => massage, :err => err}
+  haml :sample05, :locals => {:client_id => settings.client_id, :private_key => settings.private_key, :file_id => settings.file_id, :dest_path => settings.dest_path, :massage => massage, :err => err}
 end

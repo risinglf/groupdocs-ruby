@@ -1,20 +1,20 @@
 %h3{:style => 'text-align:center;'}
   %a{:href => '/'} GroupDocs Ruby SDK Samples
-  \- Sample8
+  \- Sample08
 .samplecontent{:style => 'padding:10px;'}
   %i This sample will show how to return a URL representing a single page of particular Document in the GroupDocs account using Ruby SDK
   %br/
   %br/
   %span.documentation
-    %a{:href => '/docs/sample8.html'} Builtin documentation for this sample
+    %a{:href => '/docs/sample08.html'} Builtin documentation for this sample
   %br/
   %br/
   %p
     You entered:
   %p
-    UserId = #{(defined? userId) ? userId : ''}
+    UserId = #{(defined? client_id) ? client_id : ''}
   %p
-    PrivateKey = #{(defined? privateKey) ? privateKey : ''}
+    PrivateKey = #{(defined? private_key) ? private_key : ''}
   %p
     File Id = #{(defined? guid) ? guid : ''}
   %p
@@ -23,7 +23,7 @@
     %font{:color => 'red'} #{(defined? err) ? err : ''}
     #requestForm{:style => 'padding:20px; border:1px solid black;'}
       %p Enter data for request and press "Make request" button
-      %form{:action => '/sample8', :enctype => 'multipart/form-data', :method => 'post'}
+      %form{:action => '/sample08', :enctype => 'multipart/form-data', :method => 'post'}
         %label{:for => 'client_id'} GroupDocs ClientID
         %br/
         %input{:type=>'text', :name=>'client_id'}
@@ -61,6 +61,11 @@
         %br/
         %input{:type=>'text', :name=>'page_number'}
         %br/
+        %label{:for => 'base_path'} Base Path
+        %span{:class => 'optional'} (Optional)
+        %br/
+        %input{:type=>'text', :name=>'base_path'}
+        %br/
         %input{:type => 'submit', :value => 'Make Request'}/
   %div{:style => 'padding:20px; border:1px solid black;'}
     %p Results:
@@ -71,7 +76,7 @@
       %tr
         %td Page URL
         %td #{(defined? image) ? image : ''}
-    %font{:color => 'green'} The page you requested:
+    %font{:color => 'green'} #{ if image.nil? then 'You entered incorrect page number'else 'The page you requested:' end }
     %br/
     %img{:src => "#{(defined? image) ? image : ''}"}
   %br/
