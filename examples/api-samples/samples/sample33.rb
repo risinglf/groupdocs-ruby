@@ -11,20 +11,25 @@ post '/sample33' do
   set :url_1, params[:url_1]
   set :url_2, params[:url_2]
   set :url_3, params[:url_3]
-  set :url_4, params[:url_4]
-  set :url_5, params[:url_5]
+  set :base_path, params[:base_path]
 
   begin
     # Check required variables
-    raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty? or settings.url_1.empty? or settings.url_2.empty? or settings.url_3.empty? or settings.url_4.empty? or settings.url_5.empty?
+    raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty? or settings.url_1.empty? or settings.url_2.empty? or settings.url_3.empty?
 
+    if settings.base_path.empty? then settings.base_path = 'https://api.groupdocs.com' end
+
+    # Configure your access to API server
     GroupDocs.configure do |groupdocs|
       groupdocs.client_id = settings.client_id
       groupdocs.private_key = settings.private_key
+      # Optionally specify API server and version
+      groupdocs.api_server = settings.base_path # default is 'https://api.groupdocs.com'
     end
 
+
     # Create Array from variables
-    url = [settings.url_1, settings.url_2, settings.url_3, settings.url_4, settings.url_5 ]
+    url = [settings.url_1, settings.url_2, settings.url_3 ]
 
     # Create Hash with the options for job. :status=> -1 means the Draft status of the job
     options = {:actions => [:convert, :combine], :out_formats => ['pdf'], :status => -1, :name => 'sample'}
@@ -58,7 +63,18 @@ post '/sample33' do
     # Set iframe with document GUID or raise an error
     if document
 
-      url = "https://apps.groupdocs.com/document-viewer/embed/#{document[0].guid}"
+      #Get url from request
+      case settings.base_path
+
+        when 'https://stage-api-groupdocs.dynabic.com'
+          url = "http://stage-apps-groupdocs.dynabic.com/document-viewer/embed/#{document[0].guid}"
+        when 'https://dev-api-groupdocs.dynabic.com'
+          url = "http://dev-apps-groupdocs.dynabic.com/document-viewer/embed/#{document[0].guid}"
+        else
+          url = "https://apps.groupdocs.com/document-viewer/embed/#{document[0].guid}"
+      end
+
+      # Add the signature in url
       iframe = GroupDocs::Api::Request.new(:path => url).prepare_and_sign_url
       iframe = "<iframe width='100%' height='600' frameborder='0' src='#{iframe}'></iframe>"
     else

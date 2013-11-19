@@ -290,7 +290,8 @@
   set <span class="symbol">:private_key</span>, params[<span class="symbol">:private_key</span>]
   set <span class="symbol">:sourceFileId</span>, params[<span class="symbol">:sourceFileId</span>]
   set <span class="symbol">:targetFileId</span>, params[<span class="symbol">:targetFileId</span>]
-  set <span class="symbol">:callback</span>, params[<span class="symbol">:callback</span>]</pre></div></div>
+  set <span class="symbol">:callback</span>, params[<span class="symbol">:callback</span>]
+  set <span class="symbol">:base_path</span>, params[<span class="symbol">:base_path</span>]</pre></div></div>
             
         </li>
         
@@ -341,7 +342,9 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    raise <span class="string">'Please enter all required parameters'</span> <span class="keyword">if</span> settings.client_id.empty? <span class="keyword">or</span> settings.private_key.empty? <span class="keyword">or</span> settings.sourceFileId.empty? <span class="keyword">or</span> settings.targetFileId.empty?</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    raise <span class="string">'Please enter all required parameters'</span> <span class="keyword">if</span> settings.client_id.empty? <span class="keyword">or</span> settings.private_key.empty? <span class="keyword">or</span> settings.sourceFileId.empty? <span class="keyword">or</span> settings.targetFileId.empty?
+
+    <span class="keyword">if</span> settings.base_path.empty? <span class="keyword">then</span> settings.base_path = <span class="string">'https://api.groupdocs.com'</span> <span class="keyword">end</span></pre></div></div>
             
         </li>
         
@@ -352,14 +355,13 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
-              <p>Configure your access to API server.</p>
+              <p>Configure your access to API server</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>    <span class="constant">GroupDocs</span>.configure <span class="keyword">do</span> |groupdocs|
       groupdocs.client_id = settings.client_id
-      groupdocs.private_key = settings.private_key
-    <span class="keyword">end</span></pre></div></div>
+      groupdocs.private_key = settings.private_key</pre></div></div>
             
         </li>
         
@@ -369,6 +371,22 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>Optionally specify API server and version</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      groupdocs.api_server = settings.base_path <span class="comment"># default is 'https://api.groupdocs.com'</span>
+    <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
               <p>Write client and private key to the file for callback job</p>
 
@@ -380,11 +398,11 @@
         </li>
         
         
-        <li id="section-22">
+        <li id="section-23">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
+                <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
               <p>white space is required</p>
 
@@ -398,11 +416,11 @@
         </li>
         
         
-        <li id="section-23">
+        <li id="section-24">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-23">&#182;</a>
+                <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
               <p>Make a request to API using client_id and private_key</p>
 
@@ -416,11 +434,11 @@
         </li>
         
         
-        <li id="section-24">
+        <li id="section-25">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-24">&#182;</a>
+                <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
               <p>Get source and target documents by file ID</p>
 
@@ -452,11 +470,11 @@
         </li>
         
         
-        <li id="section-25">
+        <li id="section-26">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-25">&#182;</a>
+                <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
               <p>Get job by ID</p>
 
@@ -467,11 +485,11 @@
         </li>
         
         
-        <li id="section-26">
+        <li id="section-27">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-26">&#182;</a>
+                <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
               <p>Get all job documents</p>
 
@@ -482,27 +500,49 @@
         </li>
         
         
-        <li id="section-27">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-27">&#182;</a>
-              </div>
-              <p>Get compared file giud</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      guid = documents[<span class="symbol">:outputs</span>].first.file.guid
-      url = <span class="string">"https://apps.groupdocs.com/document-viewer/embed/<span class="subst">#{guid}</span>"</span></pre></div></div>
-            
-        </li>
-        
-        
         <li id="section-28">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>Get compared file giud</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      guid = documents[<span class="symbol">:outputs</span>].first.file.guid</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>Get url from request</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="keyword">case</span> settings.base_path
+
+        <span class="keyword">when</span> <span class="string">'https://stage-api-groupdocs.dynabic.com'</span>
+          url = <span class="string">"http://stage-apps-groupdocs.dynabic.com/document-viewer/embed/<span class="subst">#{guid}</span>"</span>
+        <span class="keyword">when</span> <span class="string">'https://dev-api-groupdocs.dynabic.com'</span>
+          url = <span class="string">"http://dev-apps-groupdocs.dynabic.com/document-viewer/embed/<span class="subst">#{guid}</span>"</span>
+        <span class="keyword">else</span>
+          url = <span class="string">"https://apps.groupdocs.com/document-viewer/embed/<span class="subst">#{guid}</span>"</span>
+      <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
               <p>Add the signature to url request</p>
 
@@ -513,11 +553,11 @@
         </li>
         
         
-        <li id="section-29">
+        <li id="section-31">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-29">&#182;</a>
+                <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
               <p>Construct result iframe</p>
 
@@ -534,11 +574,11 @@
         </li>
         
         
-        <li id="section-30">
+        <li id="section-32">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-30">&#182;</a>
+                <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
               <p>Set variables for template</p>
 

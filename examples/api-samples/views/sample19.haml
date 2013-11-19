@@ -49,7 +49,12 @@
         %br/
         %font{:color=>'grey'} (For test Callback you can use this URL: http://groupdocs-ruby-samples.herokuapp.com/sample19/compere_callback)
       %input{:type=>'text', :size=>'70', :value=>"#{(defined? callback) ? callback : ''}", :name=>'callback'}
-
+      %br/
+      %label{:for => 'base_path'} Base Path
+      %span{:class => 'optional'} (Optional)
+      %br/
+      %input{:type=>'text', :name=>'base_path'}
+      %br/
       %br/
       %input{:type => 'submit', :value => 'Make request'}/
       %span{:id=>'results_status', :style=>'color:red;display:none;'} (Please wait for ajax response)

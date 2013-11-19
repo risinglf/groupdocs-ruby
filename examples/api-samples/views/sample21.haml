@@ -47,10 +47,29 @@
       %br/
       %input{:type=>'text', :name=>'lastName'}
       %br/
-      %label{:for => 'file'} File
-      %br/
-      %input{:name => 'file', :type => 'file'}/
-      %br/
+      %div.guid_radio
+        %input{:type=>'radio', :name=>'source', :value=>'guid', :checked=>'checked'} File ID (GUID)
+        %br/
+        %input{:type=>'radio', :name=>'source', :value=>'local'}Upload local file
+        %br/
+        %input{:type=>'radio', :name=>'source', :value=>'url'} Upload file from URL
+        %br/
+
+      %div.guid_field
+        %label{:for=>'fileId', :id=>'guid'} File ID (GUID)
+        %br/
+        %input{:type=>'text', :name=>'fileId'}
+
+      %div.guid_field{:style=>'display:none;'}
+        %label{:for=>'file'} Upload local file
+        %br/
+        %input{:type=>'file', :name=>'file'}
+
+      %div.guid_field{:style=>'display:none;'}
+        %label{:for=>'url', :id=>'url'} Upload file from URL
+        %br/
+        %input{:type=>'text', :name=>'url'}
+
       %br/
       %label{:for=>'callback'}
         Callback URL
@@ -58,6 +77,11 @@
         %br/
         %font{:color=>'grey'} (For test Callback you can use this URL: http://groupdocs-ruby-samples.herokuapp.com/sample21/signature_callback)
       %input{:type=>'text', :size=>'70', :value=>"#{(defined? callback) ? callback : ''}", :name=>'callback'}
+      %br/
+      %label{:for => 'base_path'} Base Path
+      %span{:class => 'optional'} (Optional)
+      %br/
+      %input{:type=>'text', :name=>'base_path'}
       %br/
       %br/
       %input{:type => 'submit', :value => 'Make request'}
@@ -87,4 +111,9 @@
       $('#results_status').fadeIn("slow");
       setTimeout(check, 5000)
     }
+     $('.guid_radio input').change(function(){
+          var elementIndex = $(this).parent().children('input').index($(this));
+          $('.guid_field').hide();
+          $('.guid_field').eq(elementIndex).show();
+        });
   });

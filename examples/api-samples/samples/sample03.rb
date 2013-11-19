@@ -46,7 +46,7 @@ post '/sample03' do
     else raise 'Wrong GUID source.'
     end
 
-     #Get url from request
+    #Get url from request
     case settings.base_path
 
     when 'https://stage-api-groupdocs.dynabic.com'

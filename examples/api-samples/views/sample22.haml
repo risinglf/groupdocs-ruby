@@ -37,9 +37,29 @@
       %br/
       %input{:type=>'text', :name=>'private_key'}
       %br/
-      %label{:for => 'file_id'} GroupDocs FileID
-      %br/
-      %input{:type=>'text', :name=>'fileId'}
+      %div.guid_radio
+        %input{:type=>'radio', :name=>'source', :value=>'guid', :checked=>'checked'} File ID (GUID)
+        %br/
+        %input{:type=>'radio', :name=>'source', :value=>'local'}Upload local file
+        %br/
+        %input{:type=>'radio', :name=>'source', :value=>'url'} Upload file from URL
+        %br/
+
+      %div.guid_field
+        %label{:for=>'fileId', :id=>'guid'} File ID (GUID)
+        %br/
+        %input{:type=>'text', :name=>'fileId'}
+
+      %div.guid_field{:style=>'display:none;'}
+        %label{:for=>'file'} Upload local file
+        %br/
+        %input{:type=>'file', :name=>'file'}
+
+      %div.guid_field{:style=>'display:none;'}
+        %label{:for=>'url', :id=>'url'} Upload file from URL
+        %br/
+        %input{:type=>'text', :name=>'url'}
+
       %br/
       %label{:for => 'email'} E-mail
       %br/
@@ -53,6 +73,11 @@
       %br/
       %input{:type=>'text', :name=>'last_name'}
       %br/
+      %label{:for => 'base_path'} Base Path
+      %span{:class => 'optional'} (Optional)
+      %br/
+      %input{:type=>'text', :name=>'base_path'}
+      %br/
       %input{:type => 'submit', :value => 'Make request'}/
     %div{:style => 'padding:20px; border:1px solid black;'}
       %p
@@ -61,3 +86,15 @@
         #{(defined? iframe) ? iframe : ''}
 
 = partial :_others_samples
+
+%script{:src=>'//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'}
+:javascript
+
+  $(function($){
+
+    $('.guid_radio input').change(function(){
+      var elementIndex = $(this).parent().children('input').index($(this));
+      $('.guid_field').hide();
+      $('.guid_field').eq(elementIndex).show();
+    });
+  });

@@ -15,6 +15,7 @@ post '/sample27' do
   set :sunrise, params[:sunrise]
   set :name, params[:name]
   set :type, params[:type]
+  set :base_path, params[:base_path]
 
   # Set download path
   downloads_path = "#{File.dirname(__FILE__)}/../public/downloads"
@@ -30,10 +31,14 @@ post '/sample27' do
     # Check required variables
     raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty?
 
-    # Configure your access to API server.
+    if settings.base_path.empty? then settings.base_path = 'https://api.groupdocs.com' end
+
+    # Configure your access to API server
     GroupDocs.configure do |groupdocs|
       groupdocs.client_id = settings.client_id
       groupdocs.private_key = settings.private_key
+      # Optionally specify API server and version
+      groupdocs.api_server = settings.base_path # default is 'https://api.groupdocs.com'
     end
 
     # Get document by file GUID
@@ -79,7 +84,7 @@ post '/sample27' do
     sleep 10 # wait for merge and convert
 
     # Returns an hash of input and output documents associated to job.
-    document = job.documents!({:client_id => settings.client_id, :private_key => settings.private_key})
+    document = job.documents!()
 
     # Download file
     document[:inputs][0].outputs[0].download!(downloads_path)
@@ -90,8 +95,19 @@ post '/sample27' do
     # Set converted document Name
     file_name = document[:inputs][0].outputs[0].name
 
+    #Get url from request
+    case settings.base_path
+
+      when 'https://stage-api-groupdocs.dynabic.com'
+        url = "http://stage-apps-groupdocs.dynabic.com/document-viewer/embed/#{guid}"
+      when 'https://dev-api-groupdocs.dynabic.com'
+        url = "http://dev-apps-groupdocs.dynabic.com/document-viewer/embed/#{guid}"
+      else
+        url = "https://apps.groupdocs.com/document-viewer/embed/#{guid}"
+    end
+
     # Add the signature to url the request
-    url = "https://apps.groupdocs.com/document-viewer/embed/#{guid}"
+
     iframe = GroupDocs::Api::Request.new(:path => url).prepare_and_sign_url
 
     # Set iframe with document GUID or raise an error

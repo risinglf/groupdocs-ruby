@@ -80,6 +80,7 @@ post '/sample18' do
   set :url, params[:url]
   set :convert_type, params[:convert_type]
   set :callback, params[:callback]
+  set :base_path, params[:base_path]
 
   # Set download path
   downloads_path = "#{File.dirname(__FILE__)}/../public/downloads"
@@ -95,10 +96,16 @@ post '/sample18' do
     # check required variables
     raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty?
 
-    # Configure your access to API server.
+    if settings.base_path.empty? then
+      settings.base_path = 'https://api.groupdocs.com'
+    end
+
+    # Configure your access to API server
     GroupDocs.configure do |groupdocs|
       groupdocs.client_id = settings.client_id
       groupdocs.private_key = settings.private_key
+      # Optionally specify API server and version
+      groupdocs.api_server = settings.base_path # default is 'https://api.groupdocs.com'
     end
 
     # Write client and private key to the file for callback job
@@ -147,9 +154,20 @@ post '/sample18' do
     # Get converted document GUID
     guid = original_document[:inputs].first.outputs.first.guid
 
+    #Get url from request
+    case settings.base_path
+
+      when 'https://stage-api-groupdocs.dynabic.com'
+        url = "http://stage-apps-groupdocs.dynabic.com/document-viewer/embed/#{guid}"
+      when 'https://dev-api-groupdocs.dynabic.com'
+        url = "http://dev-apps-groupdocs.dynabic.com/document-viewer/embed/#{guid}"
+      else
+        url = "https://apps.groupdocs.com/document-viewer/embed/#{guid}"
+    end
+
+
     # Set iframe with document GUID or raise an error
     if guid
-      url = "https://apps.groupdocs.com/document-viewer/embed/#{guid}"
 
       # Add the signature to url request
       iframe = GroupDocs::Api::Request.new(:path => url).prepare_and_sign_url

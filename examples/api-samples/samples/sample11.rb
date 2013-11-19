@@ -29,11 +29,17 @@ post '/sample11' do
     end
 
     if settings.annotation_id != ''
-      annotation = GroupDocs::Document::Annotation.remove!(settings.annotation_id)
-      message = "You delete the annotation id = #{annotation[:guid]} "
+
+      file = GroupDocs::Storage::File.new({:guid => settings.file_id}).to_document
+      annotation = file.annotations!()
+
+      # Remove annotation from document
+      remove = annotation.last.remove!()
+      message = "You delete the annotation id = #{remove[:guid]} "
     else
     # Annotation types
-    types = {:text => 0, :area => 1, :point => 2}
+    types = {:text => "0", :area => "1", :point => "2"}
+
 
     # Required parameters
     all_params = all_params = ['annotation_type', 'box_x', 'box_y', 'text']
@@ -67,44 +73,43 @@ post '/sample11' do
       # Start create new annotation
       annotation = GroupDocs::Document::Annotation.new(document: document.to_document)
 
-      annotation.type = types[settings.annotation_type]
+
       info = nil
       # Construct requestBody depends on annotation type
       # Text annotation
       if settings.annotation_type == 'text'
-        annotation_box = {x: params['box_x'], y: params['box_y'], width: params['box_width'], height: params['box_height']}
-        annotation_annotationPosition = {x: params['annotationPosition_x'], y: params['annotationPosition_y']}
+        annotation.box = GroupDocs::Document::Rectangle.new ({x: params['box_x'], y: params['box_y'], width: params['box_width'], height: params['box_height']})
+        annotation.annotationPosition = {x: params['annotationPosition_x'], y: params['annotationPosition_y']}
         range = {position: params['range-position'], length: params['range-length']}
-        info = {:box => annotation_box, :annotationPosition => annotation_annotationPosition, :range => range}
+        info = {:box => annotation_box, :annotationPosition => annotation_annotationPosition, :range => range, :type => types[settings.annotation_type.to_sym], :replies => [{:text => params['text']}]}
         # Area annotation
       elsif settings.annotation_type == 'area'
         annotation_box = {x: params['box_x'], y: params['box_y'], width: params['box_width'], height: params['box_height']}
         annotation_annotationPosition = {x: 0, y: 0}
-        info = {:box => annotation_box, :annotationPosition => annotation_annotationPosition}
+        info = {:box => annotation_box, :annotationPosition => annotation_annotationPosition, :type => types[settings.annotation_type.to_sym], :replies => [{:text => params['text']}]}
         # Point annotation
       elsif settings.annotation_type == 'point'
         annotation_box = {x: params['box_x'], y: params['box_y'], width: 0, height: 0}
         annotation_annotationPosition = {x: 0, y: 0}
-        info = {:box => annotation_box, :annotationPosition => annotation_annotationPosition}
+
+        info = {:box => annotation_box, :annotationPosition => annotation_annotationPosition, :type => types[settings.annotation_type.to_sym], :replies => [{:text => params['text']}] }
       end
 
 
-        # Call create method
-        annotation.create!(info)
-        # Add annotation reply
-        reply = GroupDocs::Document::Annotation::Reply.new(annotation: annotation)
-        reply.text = params['text']
-        reply.create!
-        annotation_id = annotation.guid
+      # Call create method
+      annotation.create!(info)
+      id = annotation.document.file.id
+      # Get document guid
+      guid = annotation.document.file.guid
 
       case settings.base_path
 
         when 'https://stage-api-groupdocs.dynabic.com'
-          url = "http://stage-apps-groupdocs.dynabic.com/document-annotation2/embed/#{annotation.document.file.guid}"
+          url = "http://stage-apps-groupdocs.dynabic.com/document-annotation2/embed/#{guid}"
         when 'https://dev-api-groupdocs.dynabic.com'
-          url = "http://dev-apps-groupdocs.dynabic.com/document-annotation2/embed/#{annotation.document.file.guid}"
+          url = "http://dev-apps-groupdocs.dynabic.com/document-annotation2/embed/#{guid}"
         else
-          url = "http://apps.groupdocs.com/document-annotation2/embed/#{annotation.document.file.guid}"
+          url = "http://apps.groupdocs.com/document-annotation2/embed/#{guid}"
       end
 
         #Add the signature in url
@@ -125,7 +130,7 @@ post '/sample11' do
                               :private_key => settings.private_key,
                               :fileId => settings.file_id,
                               :annotationType => settings.annotation_type,
-                              :annotationId => annotation_id,
+                              :annotationId => id,
                               :annotationText => params['text'],
                               :err => err,
                               :iframe => iframe,

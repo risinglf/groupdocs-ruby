@@ -568,41 +568,11 @@ Merge template PDF FIle with the data provided via dinamically created HTML form
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
-              <p>Download file</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    document[<span class="symbol">:inputs</span>][<span class="number">0</span>].outputs[<span class="number">0</span>].download!(<span class="string">"<span class="subst">#{<span class="constant">File</span>.dirname(__FILE_<span class="number">_</span>)}</span>/../public/downloads"</span>)</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-33">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-33">&#182;</a>
-              </div>
               <p>Set converted document GUID</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    guid = document[<span class="symbol">:inputs</span>][<span class="number">0</span>].outputs[<span class="number">0</span>].guid</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-34">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-34">&#182;</a>
-              </div>
-              <p>Set converted document Name</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    file_name = document[<span class="symbol">:inputs</span>][<span class="number">0</span>].outputs[<span class="number">0</span>].name
+            <div class="content"><div class='highlight'><pre>    guid = document[<span class="symbol">:inputs</span>][<span class="number">0</span>].outputs[<span class="number">0</span>].guid
 
     <span class="keyword">case</span> settings.path
 

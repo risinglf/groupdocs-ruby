@@ -66,9 +66,14 @@
         %font{:color=>'grey'} (For test Callback you can use this URL: http://groupdocs-ruby-samples.herokuapp.com/sample32/callback)
       %input{:type=>'text', :size=>'70', :value=>"#{(defined? callback) ? callback : ''}", :name=>'callback'}
       %br/
+      %label{:for => 'base_path'} Base Path
+      %span{:class => 'optional'} (Optional)
+      %br/
+      %input{:type=>'text', :name=>'base_path'}
+      %br/
       %br/
 
-      %input{:type => 'submit', :value => 'Signature'}
+      %input{:type => 'submit', :value => 'Publish form'}
 
 
 

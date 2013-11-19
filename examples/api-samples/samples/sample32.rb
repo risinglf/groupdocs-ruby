@@ -82,16 +82,21 @@ post '/sample32' do
   set :email, params[:email]
   set :callback, params[:callback]
   set :source, params[:source]
+  set :base_path, params[:base_path]
 
   begin
 
     # Check required variables
     raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty?
 
-    # Configure your access to API server.
+    if settings.base_path.empty? then settings.base_path = 'https://api.groupdocs.com' end
+
+    # Configure your access to API server
     GroupDocs.configure do |groupdocs|
       groupdocs.client_id = settings.client_id
       groupdocs.private_key = settings.private_key
+      # Optionally specify API server and version
+      groupdocs.api_server = settings.base_path # default is 'https://api.groupdocs.com'
     end
 
     # Write client and private key to the file for callback job
@@ -104,39 +109,48 @@ post '/sample32' do
       out_file.close
     end
 
-    iframe = ''
-
+    guid = nil
+    url = nil
 
     case settings.source
     when 'form'
+      id = settings.form_guid
       # Create new Form with guid
-      form = GroupDocs::Signature::Form.new({:guid => settings.form_guid})
+      form = GroupDocs::Signature::Form.get!(id)
 
       # Publish the Form
       form.publish!({:callbackUrl => settings.callback})
+      raise form.to_yaml
+      guid = settings.form_guid
 
-      # Add the signature to url the request
-      url = "https://apps.groupdocs.com/signature2/forms/signembed/ #{settings.form_guid}"
-      iframe = GroupDocs::Api::Request.new(:path => url).prepare_and_sign_url
-      iframe = "<iframe width='100%' height='600' frameborder='0' src='#{iframe}'></iframe>"
     when 'template'
 
       form = GroupDocs::Signature::Form.new
       form.name = 'test'
       form.notifyOwnerOnSign = true
 
-
-      # Create new Form with template
-      signature = form.create!({ :templateId => settings.template_guid})
+     # Create new Form with template
+     guid = form.create!({ :templateId => settings.template_guid})
 
       # Publish the Form
       form.publish!({:callbackUrl => settings.callback})
 
-      # Add the signature to url the request
-      url = "https://apps.groupdocs.com/signature2/forms/signembed/ #{signature}"
-      iframe = GroupDocs::Api::Request.new(:path => url).prepare_and_sign_url
-      iframe = "<iframe width='100%' height='600' frameborder='0' src='https://apps.groupdocs.com/signature2/forms/signembed/ #{iframe}'></iframe>"
     end
+
+    #Get url from request
+    case settings.base_path
+
+      when 'https://stage-api-groupdocs.dynabic.com'
+        url = "http://stage-apps-groupdocs.dynabic.com/signature2/forms/signembed/ #{guid}"
+      when 'https://dev-api-groupdocs.dynabic.com'
+        url = "http://dev-apps-groupdocs.dynabic.com/signature2/forms/signembed/ #{guid}"
+      else
+        url = "https://apps.groupdocs.com/signature2/forms/signembed/ #{guid}"
+    end
+
+    # Add the signature to url the request
+    iframe = GroupDocs::Api::Request.new(:path => url).prepare_and_sign_url
+    iframe = "<iframe width='100%' height='600' frameborder='0' src='#{iframe}'></iframe>"
 
   rescue Exception => e
     err = e.message

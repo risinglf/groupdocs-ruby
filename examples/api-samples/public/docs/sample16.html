@@ -64,6 +64,7 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>  set <span class="symbol">:fileId</span>, params[<span class="symbol">:fileId</span>]
+  set <span class="symbol">:base_path</span>, params[<span class="symbol">:base_path</span>]
 
   <span class="keyword">begin</span></pre></div></div>
             
@@ -82,7 +83,7 @@
             
             <div class="content"><div class='highlight'><pre>    raise <span class="string">'Please enter all required parameters'</span> <span class="keyword">if</span> settings.fileId.empty?
 
-    url = <span class="string">"https://apps.groupdocs.com/assembly2/questionnaire-assembly/<span class="subst">#{settings.fileId}</span>"</span></pre></div></div>
+    <span class="keyword">if</span> settings.base_path.empty? <span class="keyword">then</span> settings.base_path = <span class="string">'https://api.groupdocs.com'</span> <span class="keyword">end</span></pre></div></div>
             
         </li>
         
@@ -93,11 +94,13 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>Add the signature to the url request</p>
+              <p>Configure your access to API server</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    iframe = <span class="constant">GroupDocs::Api::Request</span>.new(<span class="symbol">:path</span> =&gt; url).prepare_and_sign_url</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="constant">GroupDocs</span>.configure <span class="keyword">do</span> |groupdocs|
+      groupdocs.client_id = settings.client_id
+      groupdocs.private_key = settings.private_key</pre></div></div>
             
         </li>
         
@@ -107,6 +110,60 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Optionally specify API server and version</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      groupdocs.api_server = settings.base_path <span class="comment"># default is 'https://api.groupdocs.com'</span>
+    <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Get url from request</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">case</span> settings.base_path
+
+      <span class="keyword">when</span> <span class="string">'https://stage-api-groupdocs.dynabic.com'</span>
+        url = <span class="string">"http://stage-apps-groupdocs.dynabic.com/assembly2/questionnaire-assembly/<span class="subst">#{settings.fileId}</span>"</span>
+      <span class="keyword">when</span> <span class="string">'https://dev-api-groupdocs.dynabic.com'</span>
+        url = <span class="string">"http://dev-apps-groupdocs.dynabic.com/assembly2/questionnaire-assembly/<span class="subst">#{settings.fileId}</span>"</span>
+      <span class="keyword">else</span>
+        url = <span class="string">"https://apps.groupdocs.com/assembly2/questionnaire-assembly/<span class="subst">#{settings.fileId}</span>"</span>
+    <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Add the signature to the url request</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    iframe = <span class="constant">GroupDocs::Api::Request</span>.new(<span class="symbol">:path</span> =&gt; url).prepare_and_sign_url</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <p>Construct result iframe</p>
 
@@ -121,11 +178,11 @@
         </li>
         
         
-        <li id="section-7">
+        <li id="section-10">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <p>set variables for template</p>
 

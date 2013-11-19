@@ -47,7 +47,12 @@
         %br/
         %label{:for => 'password'} Password
         %br/
-        %input{:type=>'text', :name=>'password'}
+        %input{:type=>'password', :name=>'password'}
+        %br/
+        %label{:for => 'base_path'} Base Path
+        %span{:class => 'optional'} (Optional)
+        %br/
+        %input{:type=>'text', :name=>'base_path'}
         %br/
         %input{:type => 'submit', :value => 'Make Request'}
 

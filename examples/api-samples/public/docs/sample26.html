@@ -51,7 +51,7 @@
             <div class="content"><div class='highlight'><pre>post <span class="string">'/sample26'</span> <span class="keyword">do</span>
   set <span class="symbol">:email</span>, params[<span class="symbol">:email</span>]
   set <span class="symbol">:password</span>, params[<span class="symbol">:password</span>]
-
+  set <span class="symbol">:base_path</span>, params[<span class="symbol">:base_path</span>]
 
   <span class="keyword">begin</span></pre></div></div>
             
@@ -64,11 +64,13 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>check required variables</p>
+              <p>Check required variables</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    raise <span class="string">'Please enter all required parameters'</span> <span class="keyword">if</span> settings.email.empty? <span class="keyword">or</span> settings.password.empty?</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    raise <span class="string">'Please enter all required parameters'</span> <span class="keyword">if</span> settings.email.empty? <span class="keyword">or</span> settings.password.empty?
+
+    <span class="keyword">if</span> settings.base_path.empty? <span class="keyword">then</span> settings.base_path = <span class="string">'https://api.groupdocs.com'</span> <span class="keyword">end</span></pre></div></div>
             
         </li>
         
@@ -79,7 +81,38 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>make a request to API using email and password</p>
+              <p>Configure your access to API server</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="constant">GroupDocs</span>.configure <span class="keyword">do</span> |groupdocs|</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Optionally specify API server and version</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      groupdocs.api_server = settings.base_path <span class="comment"># default is 'https://api.groupdocs.com'</span>
+    <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Make a request to API using email and password</p>
 
             </div>
             
@@ -92,13 +125,13 @@
         </li>
         
         
-        <li id="section-5">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>set variables for template</p>
+              <p>Set variables for template</p>
 
             </div>
             
