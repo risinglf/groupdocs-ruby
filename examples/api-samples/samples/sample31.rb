@@ -73,17 +73,17 @@ end
 # POST request
 post '/sample31' do
   # set variables
-  set :client_id, params[:client_id]
-  set :private_key, params[:private_key]
-  set :template_guid, params[:template_guid]
+  set :client_id, params[:clientId]
+  set :private_key, params[:privateKey]
+  set :template_guid, params[:templateGuid]
   set :name, params[:name]
   set :country, params[:country]
   set :city, params[:city]
   set :street, params[:street]
   set :email, params[:email]
   set :callback, params[:callback]
-  set :last_name, params[:last_name]
-  set :base_path, params[:base_path]
+  set :last_name, params[:lastName]
+  set :base_path, params[:basePath]
 
   # Set download path
   downloads_path = "#{File.dirname(__FILE__)}/../public/downloads"

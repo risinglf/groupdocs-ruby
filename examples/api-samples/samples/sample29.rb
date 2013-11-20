@@ -7,7 +7,7 @@ post '/sample29' do
 
   # set variables
   set :client_id, params[:clientId]
-  set :base_path, params[:basePath]
+  set :base_path, params[:serverType]
   set :url, params[:url]
 
   url = settings.url

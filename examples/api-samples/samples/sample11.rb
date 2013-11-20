@@ -6,12 +6,12 @@ end
 # POST request
 post '/sample11' do
   # Set variables
-  set :client_id, params[:client_id]
-  set :private_key, params[:private_key]
+  set :client_id, params[:clientId]
+  set :private_key, params[:privateKey]
   set :file_id, params[:fileId]
-  set :annotation_type, params[:annotation_type]
+  set :annotation_type, params[:annotationType]
   set :annotation_id, params[:annotationId]
-  set :base_path, params[:base_path]
+  set :base_path, params[:basePath]
 
   begin
 
@@ -126,8 +126,8 @@ post '/sample11' do
   end
 
   # set variables for template
-  haml :sample11, :locals => {:client_id => settings.client_id,
-                              :private_key => settings.private_key,
+  haml :sample11, :locals => {:clientId => settings.client_id,
+                              :privateKey => settings.private_key,
                               :fileId => settings.file_id,
                               :annotationType => settings.annotation_type,
                               :annotationId => id,

@@ -24,13 +24,13 @@
   #requestForm{:style => 'padding:20px; border:1px solid black;'}
     %p Enter data for request and press "Make request" button
     %form{:action => '/sample23', :enctype => 'multipart/form-data', :method => 'post'}
-      %label{:for => 'client_id'} GroupDocs ClientID
+      %label{:for => 'clientId'} GroupDocs ClientID
       %br/
-      %input{:type=>'text', :name=>'client_id'}
+      %input{:type=>'text', :name=>'clientId'}
       %br/
-      %label{:for => 'private_key'} GroupDocs PrivateKey
+      %label{:for => 'privateKey'} GroupDocs PrivateKey
       %br/
-      %input{:type=>'text', :name=>'private_key'}
+      %input{:type=>'text', :name=>'privateKey'}
       %br/
 
 
@@ -58,10 +58,10 @@
         %input{:type=>'text', :name=>'url'}
 
       %br/
-      %label{:for => 'base_path'} Base Path
+      %label{:for => 'basePath'} Base Path
       %span{:class => 'optional'} (Optional)
       %br/
-      %input{:type=>'text', :name=>'base_path'}
+      %input{:type=>'text', :name=>'basePath'}
       %br/
       %br/
 

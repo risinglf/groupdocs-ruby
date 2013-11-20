@@ -6,13 +6,13 @@ end
 # POST request
 post '/sample08' do
   # Set variables
-  set :client_id, params[:client_id]
-  set :private_key, params[:private_key]
+  set :client_id, params[:clientId]
+  set :private_key, params[:privateKey]
   set :guid, params[:guid]
-  set :page_number, params[:page_number]
+  set :page_number, params[:pageNumber]
   set :source, params[:source]
   set :file_id, params[:fileId]
-  set :base_path, params[:base_path]
+  set :base_path, params[:basePath]
 
   begin
     # Check required variables
@@ -65,5 +65,5 @@ post '/sample08' do
   end
 
   # Set variables for template
-  haml :sample08, :locals => {:client_id => settings.client_id, :private_key => settings.private_key, :guid => settings.guid, :page_number => settings.page_number, :image => image, :err => err}
+  haml :sample08, :locals => {:clientId => settings.client_id, :privateKey => settings.private_key, :guid => settings.guid, :pageNumber => settings.page_number, :image => image, :err => err}
 end

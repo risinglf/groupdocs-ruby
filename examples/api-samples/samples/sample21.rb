@@ -72,14 +72,14 @@ end
 # POST request
 post '/sample21' do
   # set variables
-  set :client_id, params[:client_id]
-  set :private_key, params[:private_key]
+  set :client_id, params[:clientId]
+  set :private_key, params[:privateKey]
   set :email, params[:email]
   set :name, params[:name]
   set :lastName, params[:lastName]
   set :fileId, params[:fileId]
   set :callback, params[:callback]
-  set :base_path, params[:base_path]
+  set :base_path, params[:basePath]
   set :url, params[:url]
   set :source, params[:source]
 

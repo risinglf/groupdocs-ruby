@@ -24,13 +24,13 @@
   #requestForm{:style => 'padding:20px; border:1px solid black;'}
     %p Enter data for request and press "Make request" button
     %form{:action => '/sample09', :enctype => 'multipart/form-data', :method => 'post'}
-      %label{:for => 'client_id'} GroupDocs ClientID
+      %label{:for => 'clientId'} GroupDocs ClientID
       %br/
-      %input{:type=>'text', :name=>'client_id'}
+      %input{:type=>'text', :name=>'clientId'}
       %br/
-      %label{:for => 'private_key'} GroupDocs PrivateKey
+      %label{:for => 'privateKey'} GroupDocs PrivateKey
       %br/
-      %input{:type=>'text', :name=>'private_key'}
+      %input{:type=>'text', :name=>'privateKey'}
       %br/
       %div.guid_radio
         %input{:type=>'radio', :name=>'source', :value=>'guid', :checked=>'checked'} File ID (GUID)
@@ -66,10 +66,10 @@
       %br/
       %input{:type=>'text', :name=>'height'}
       %br/
-      %label{:for => 'base_path'} Base Path
+      %label{:for => 'basePath'} Base Path
       %span{:class => 'optional'} (Optional)
       %br/
-      %input{:type=>'text', :name=>'base_path'}
+      %input{:type=>'text', :name=>'basePath'}
       %br/
       %input{:type => 'submit', :value => 'Make Request'}/
   %div{:style => 'padding:20px; border:1px solid black;'}

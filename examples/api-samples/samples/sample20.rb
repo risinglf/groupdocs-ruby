@@ -6,10 +6,10 @@ end
 # POST request
 post '/sample20' do
   # set variables
-  set :client_id, params[:client_id]
-  set :private_key, params[:private_key]
+  set :client_id, params[:clientId]
+  set :private_key, params[:privateKey]
   set :resultFileId, params[:resultFileId]
-  set :base_path, params[:base_path]
+  set :base_path, params[:basePath]
 
   begin
 

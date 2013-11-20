@@ -7,7 +7,7 @@ end
 post '/sample26' do
   set :email, params[:email]
   set :password, params[:password]
-  set :base_path, params[:base_path]
+  set :base_path, params[:basePath]
 
   begin
     # Check required variables

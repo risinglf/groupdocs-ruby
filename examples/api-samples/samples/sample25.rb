@@ -6,12 +6,12 @@ end
 # POST request
 post '/sample25' do
   # set variables
-  set :client_id, params[:client_id]
-  set :private_key, params[:private_key]
+  set :client_id, params[:clientId]
+  set :private_key, params[:privateKey]
   set :source, params[:source]
   set :file_id, params[:fileId]
   set :url, params[:url]
-  set :base_path, params[:base_path]
+  set :base_path, params[:basePath]
 
   # Set download path
   downloads_path = "#{File.dirname(__FILE__)}/../public/downloads"
@@ -117,5 +117,5 @@ post '/sample25' do
   end
 
   # set variables for template
-  haml :sample25, :locals => {:userId => settings.client_id, :privateKey => settings.private_key, :iframe => iframe, :file_name => file_name,  :err => err}
+  haml :sample25, :locals => {:userId => settings.client_id, :privateKey => settings.private_key, :iframe => iframe, :fileName => file_name,  :err => err}
 end

@@ -10,11 +10,11 @@ post '/sample09' do
   set :width, params[:width]
   set :height, params[:height]
   set :source, params[:source]
-  set :client_id, params[:client_id]
-  set :private_key, params[:private_key]
+  set :client_id, params[:clientId]
+  set :private_key, params[:privateKey]
   set :check, params[:check]
   set :url, params[:url]
-  set :base_path, params[:base_path]
+  set :base_path, params[:basePath]
 
   begin
     # Check required variables

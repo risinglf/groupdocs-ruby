@@ -6,15 +6,15 @@ end
 # POST request
 post '/sample05' do
   # set variables
-  set :client_id, params[:client_id]
-  set :private_key, params[:private_key]
+  set :client_id, params[:clientId]
+  set :private_key, params[:privateKey]
   set :file_id, params[:fileId]
   set :url, params[:url]
   set :copy, params[:copy]
   set :move, params[:move]
-  set :dest_path, params[:dest_path]
+  set :dest_path, params[:destPath]
   set :source, params[:source]
-  set :base_path, params[:base_path]
+  set :base_path, params[:basePath]
 
   begin
 
@@ -72,5 +72,5 @@ post '/sample05' do
   end
 
   # set variables for template
-  haml :sample05, :locals => {:client_id => settings.client_id, :private_key => settings.private_key, :file_id => settings.file_id, :dest_path => settings.dest_path, :massage => massage, :err => err}
+  haml :sample05, :locals => {:clientId => settings.client_id, :privateKey => settings.private_key, :fileId => settings.file_id, :destPath => settings.dest_path, :massage => massage, :err => err}
 end

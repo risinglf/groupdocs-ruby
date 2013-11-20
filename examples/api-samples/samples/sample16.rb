@@ -7,7 +7,7 @@ end
 post '/sample16' do
   # Set variables
   set :fileId, params[:fileId]
-  set :base_path, params[:base_path]
+  set :base_path, params[:basePath]
 
   begin
     # Check required variables

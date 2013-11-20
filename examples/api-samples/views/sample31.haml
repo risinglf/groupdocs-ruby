@@ -35,17 +35,17 @@
   #requestForm{:style => 'padding:20px; border:1px solid black;'}
     %p Enter data for request and press "Make request" button
     %form{:action => '/sample31', :enctype => 'multipart/form-data', :method => 'post'}
-      %label{:for => 'client_id'} GroupDocs ClientID
+      %label{:for => 'clientId'} GroupDocs ClientID
       %br/
-      %input{:type=>'text', :name=>'client_id'}
+      %input{:type=>'text', :name=>'clientId'}
       %br/
-      %label{:for => 'private_key'} GroupDocs PrivateKey
+      %label{:for => 'privateKey'} GroupDocs PrivateKey
       %br/
-      %input{:type=>'text', :name=>'private_key'}
+      %input{:type=>'text', :name=>'privateKey'}
       %br/
-      %label{:for => 'template_guid'} Template file GUID
+      %label{:for => 'templateGuid'} Template file GUID
       %br/
-      %input{:type=>'text', :name=>'template_guid'}
+      %input{:type=>'text', :name=>'templateGuid'}
       %br/
       %br/
       %div{:style => 'background-color:#e5e5e5;border:3px double gray;width:700px;padding:20px;font-size:10pt;'}
@@ -57,8 +57,8 @@
         %input{:type=>'text', :name=>'name'}
         %br/
         %br/
-        %label{:for => 'last_name'} What is your last name?
-        %input{:type=>'text', :name=>'last_name'}
+        %label{:for => 'lastName'} What is your last name?
+        %input{:type=>'text', :name=>'lastName'}
         %br/
         %br/
         %label{:for => 'country'} What is your country?
@@ -81,10 +81,10 @@
       %input{:type=>'text', :size=>'70', :value=>"#{(defined? callback) ? callback : ''}", :name=>'callback'}
 
       %br/
-      %label{:for => 'base_path'} Base Path
+      %label{:for => 'basePath'} Base Path
       %span{:class => 'optional'} (Optional)
       %br/
-      %input{:type=>'text', :name=>'base_path'}
+      %input{:type=>'text', :name=>'basePath'}
       %br/
       %br/
 

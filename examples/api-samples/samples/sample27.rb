@@ -6,8 +6,8 @@ end
 # POST request
 post '/sample27' do
   # Set variables
-  set :client_id, params[:client_id]
-  set :private_key, params[:private_key]
+  set :client_id, params[:clientId]
+  set :private_key, params[:privateKey]
   set :file_id, params[:fileId]
   set :source, params[:source]
   set :sex, params[:sex]
@@ -15,7 +15,7 @@ post '/sample27' do
   set :sunrise, params[:sunrise]
   set :name, params[:name]
   set :type, params[:type]
-  set :base_path, params[:base_path]
+  set :base_path, params[:basePath]
 
   # Set download path
   downloads_path = "#{File.dirname(__FILE__)}/../public/downloads"

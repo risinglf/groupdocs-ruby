@@ -13,9 +13,9 @@
   %p
     You entered:
   %p
-    UserId = #{(defined? client_id) ? client_id : ''}
+    UserId = #{(defined? clientId) ? clientId : ''}
   %p
-    PrivateKey = #{(defined? private_key) ? private_key : ''}
+    PrivateKey = #{(defined? privatKey) ? privateKey : ''}
   %p
     FileId = #{(defined? fileId) ? fileId : ''}
   %p
@@ -35,26 +35,26 @@
       %input{:type => 'hidden', :name => 'annotationId', :value => (defined? annotationId) ? annotationId : ''}
       %p Enter data for request and press "Make request" button
 
-      %label{:for => 'client_id'} GroupDocs ClientID
+      %label{:for => 'clientId'} GroupDocs ClientID
       %br/
-      %input{:type=>'text', :name=>'client_id', :value => (defined? client_id) ? client_id: ''}
+      %input{:type=>'text', :name=>'clientId', :value => (defined? client_id) ? client_id: ''}
       %br/
-      %label{:for => 'private_key'} GroupDocs PrivateKey
+      %label{:for => 'privateKey'} GroupDocs PrivateKey
       %br/
-      %input{:type=>'text', :name=>'private_key', :value => (defined? private_key) ? private_key : ''}
+      %input{:type=>'text', :name=>'privateKey', :value => (defined? private_key) ? private_key : ''}
       %br/
-      %label{:for => 'file_id'} GroupDocs FileID
+      %label{:for => 'fileId'} GroupDocs FileID
       %br/
       %input{:type=>'text', :name=>'fileId', :value => (defined? fileId) ? fileId : ''}
       %br/
-      %label{:for => 'base_path'} Base Path
+      %label{:for => 'basePath'} Base Path
       %span{:class => 'optional'} (Optional)
       %br/
-      %input{:type=>'text', :name=>'base_path'}
+      %input{:type=>'text', :name=>'basePath'}
       %br/
       Annotation Type
       %br/
-      %select{:name => 'annotation_type', :id => 'annotation_type'}
+      %select{:name => 'annotationType', :id => 'annotation_type'}
         %option{:value => 'text'}Text
         %option{:value => 'area'}Area
         %option{:value => 'point', :selected => 'selected'}Point
@@ -111,7 +111,7 @@
 %script{:src=>'//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'}
 :javascript
   $(function() {
-      $('select[name="annotation_type"]').change(function() {
+      $('select[name="annotationType"]').change(function() {
           var obj = $(this);
 
           if (obj.val() == "text") {

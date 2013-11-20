@@ -12,21 +12,21 @@
   %p
     You entered:
   %p
-    UserId = #{(defined? client_id) ? client_id : ''}
+    UserId = #{(defined? clientId) ? clientId : ''}
   %p
-    PrivateKey = #{(defined? private_key) ? private_key : ''}
+    PrivateKey = #{(defined? privateKey) ? privateKey : ''}
   %p
     %font{:color => 'red'} #{(defined? err) ? err : ''}
   #files_form
     %form{:action => '/sample06', :enctype => 'multipart/form-data', :method => 'post'}
       %br/
-      %label{:for => 'client_id'} GroupDocs ClientID
+      %label{:for => 'clientId'} GroupDocs ClientID
       %br/
-      %input{:type=>'text', :id=>'client_id', :name => 'client_id'}
+      %input{:type=>'text', :id=>'client_id', :name => 'clientId'}
       %br/
-      %label{:for => 'private_key'} GroupDocs PrivateKey
+      %label{:for => 'privateKey'} GroupDocs PrivateKey
       %br/
-      %input{:type=>'text', :id=>'private_key', :name => 'private_key'}
+      %input{:type=>'text', :id=>'private_key', :name => 'privateKey'}
       %br/
       %label{:for => 'file_document'} Document to sign
       %br/
@@ -39,7 +39,7 @@
       %label{:for => 'base_path'} Base Path
       %span{:class => 'optional'} (Optional)
       %br/
-      %input{:type=>'text', :name=>'base_path'}
+      %input{:type=>'text', :name=>'basePath'}
       %br/
       %br/
       %input{:type => 'submit', :value => 'Upload and sign the document'}/
