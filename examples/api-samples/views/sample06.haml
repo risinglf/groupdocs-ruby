@@ -22,27 +22,27 @@
       %br/
       %label{:for => 'clientId'} GroupDocs ClientID
       %br/
-      %input{:type=>'text', :id=>'client_id', :name => 'clientId'}
+      %input{:type=>'text', :id=>'clientId', :name => 'clientId'}
       %br/
       %label{:for => 'privateKey'} GroupDocs PrivateKey
       %br/
-      %input{:type=>'text', :id=>'private_key', :name => 'privateKey'}
+      %input{:type=>'text', :id=>'privateKey', :name => 'privateKey'}
       %br/
-      %label{:for => 'file_document'} Document to sign
+      %label{:for => 'fiDocument'} Document to sign
       %br/
-      %input#fi_document{:type => 'file',:id => 'document', :name => 'document'}/
+      %input{:type => 'file', :id => 'fiDocument', :name => 'fiDocument'}/
       %br/
-      %label{:for => 'file_signature'} Signature
+      %label{:for => 'fiSignature'} Signature
       %br/
-      %input#fi_signature{:type => 'file',:id => 'signature', :name => 'signature'}/
+      %input{:type => 'file',:id => 'fiSignature', :name => 'fiSignature'}/
       %br/
-      %label{:for => 'base_path'} Base Path
+      %label{:for => 'basePath'} Base Path
       %span{:class => 'optional'} (Optional)
       %br/
       %input{:type=>'text', :name=>'basePath'}
       %br/
       %br/
-      %input{:type => 'submit', :value => 'Upload and sign the document'}/
+      %input{:type => 'submit', :value => 'Upload and sign the document', :id => "btnLoad"}/
       %br/
       %br/
   %div{:style => 'padding:20px; border:1px solid black;'}

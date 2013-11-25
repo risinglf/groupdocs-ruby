@@ -133,8 +133,8 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    file_one_path = <span class="string">"<span class="subst">#{<span class="constant">File</span>.dirname(__FILE_<span class="number">_</span>)}</span>/<span class="subst">#{params[<span class="symbol">:document</span>][<span class="symbol">:filename</span>]}</span>"</span>
-    <span class="constant">File</span>.open(file_one_path, <span class="string">'wb'</span>) { |f| f.write(params[<span class="symbol">:document</span>][<span class="symbol">:tempfile</span>].read) }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    file_one_path = <span class="string">"<span class="subst">#{<span class="constant">File</span>.dirname(__FILE_<span class="number">_</span>)}</span>/<span class="subst">#{params[<span class="symbol">:fiDocument</span>][<span class="symbol">:filename</span>]}</span>"</span>
+    <span class="constant">File</span>.open(file_one_path, <span class="string">'wb'</span>) { |f| f.write(params[<span class="symbol">:fiDocument</span>][<span class="symbol">:tempfile</span>].read) }</pre></div></div>
             
         </li>
         
@@ -149,7 +149,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    file_one = <span class="constant">GroupDocs::Storage::File</span>.new(<span class="symbol">name:</span> params[<span class="symbol">:document</span>][<span class="symbol">:filename</span>], <span class="symbol">local_path:</span> file_one_path)
+            <div class="content"><div class='highlight'><pre>    file_one = <span class="constant">GroupDocs::Storage::File</span>.new(<span class="symbol">name:</span> params[<span class="symbol">:fiDocument</span>][<span class="symbol">:filename</span>], <span class="symbol">local_path:</span> file_one_path)
     document_one = file_one.to_document</pre></div></div>
             
         </li>
@@ -165,8 +165,8 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    signature_one_path = <span class="string">"<span class="subst">#{<span class="constant">Dir</span>.tmpdir}</span>/<span class="subst">#{params[<span class="symbol">:signature</span>][<span class="symbol">:filename</span>]}</span>"</span>
-    <span class="constant">File</span>.open(signature_one_path, <span class="string">'wb'</span>) { |f| f.write(params[<span class="symbol">:signature</span>][<span class="symbol">:tempfile</span>].read) }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    signature_one_path = <span class="string">"<span class="subst">#{<span class="constant">Dir</span>.tmpdir}</span>/<span class="subst">#{params[<span class="symbol">:fiSignature</span>][<span class="symbol">:filename</span>]}</span>"</span>
+    <span class="constant">File</span>.open(signature_one_path, <span class="string">'wb'</span>) { |f| f.write(params[<span class="symbol">:fiSignature</span>][<span class="symbol">:tempfile</span>].read) }</pre></div></div>
             
         </li>
         
@@ -181,7 +181,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    signature_one = <span class="constant">GroupDocs::Signature</span>.new(<span class="symbol">name:</span> params[<span class="symbol">:signature</span>][<span class="symbol">:filename</span>], <span class="symbol">image_path:</span> signature_one_path)
+            <div class="content"><div class='highlight'><pre>    signature_one = <span class="constant">GroupDocs::Signature</span>.new(<span class="symbol">name:</span> params[<span class="symbol">:fiSignature</span>][<span class="symbol">:filename</span>], <span class="symbol">image_path:</span> signature_one_path)
     signature_one.position = {<span class="symbol">top:</span> <span class="number">0</span>.<span class="number">83319</span>, <span class="symbol">left:</span> <span class="number">0</span>.<span class="number">72171</span>, <span class="symbol">width:</span> <span class="number">100</span>, <span class="symbol">height:</span> <span class="number">40</span>}</pre></div></div>
             
         </li>

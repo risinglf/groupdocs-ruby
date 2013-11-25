@@ -26,7 +26,7 @@
     %form{:action => '/sample10', :enctype => 'multipart/form-data', :method => 'post'}
       %label{:for => 'clientId'} GroupDocs ClientID
       %br/
-      %input{:type => 'text', :name => 'clientId', :value => "#{(defined? client_id) ? client_id : ''}"}
+      %input{:type => 'text', :id => 'clientId', :name => 'clientId', :value => "#{(defined? client_id) ? client_id : ''}"}
       %br/
       %label{:for => 'privateKey'} GroupDocs private_key
       %br/
@@ -66,13 +66,13 @@
       %input{:type=>'text', :name=>'basePath'}
       %br/
       %input{:type => 'submit', :value => 'Make Request'}/
-    %div{:style => 'padding:20px; border:1px solid black;'}
-      %p
-        %h3
-          %font{:color => 'green'}
-            Document shared to user with e-mail
-            %h1 #{(defined? shared) ? shared : ''}
-          %br/
+  %div{:style => 'padding:20px; border:1px solid black;'}
+    %p
+      %h3
+        %span{:color => 'green'}
+          Document shared to user with e-mail
+          %h1 #{(defined? shared) ? shared : ''}
+        %br/
 
 = partial :_others_samples
 

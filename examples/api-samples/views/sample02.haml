@@ -34,14 +34,14 @@
       %input{:type=>'text', :name=>'basePath'}
       %br/
       %input{:type => 'submit', :value => 'Make Request'}/
-    %div{:style => 'padding:20px; border:1px solid black;'}
-      %p Results:
-      %table{:style => 'border:1px double black;'}
-        %tr
-          %th Field
-          %th Value
-        %tr
-          %td Files list
-          %td #{(defined? filelist) ? filelist : ''}
+  %div{:style => 'padding:20px; border:1px solid black;'}
+    %p Results:
+    %table{:style => 'border:1px double black;'}
+      %tr
+        %th Field
+        %th Value
+      %tr
+        %td Files list
+        %td #{(defined? filelist) ? filelist : ''}
 
 = partial :_others_samples

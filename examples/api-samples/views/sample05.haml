@@ -39,7 +39,7 @@
       %div.guid_field
         %label{:for=>'fileId', :id=>'guid'} File ID (GUID)
         %br/
-        %input{:type=>'text', :name=>'fileId'}
+        %input{:type=>'text', :name=>'srcPath', }
       
       %div.guid_field{:style=>'display:none;'}
         %label{:for=>'file'} Upload local file
@@ -63,9 +63,9 @@
       %br/
       %input{:name => 'copy', :type => 'submit', :value => 'Copy'}/
       %input{:name => 'move', :type => 'submit', :value => 'Move'}/
-    %h4
-      %font{:color => 'green'} #{(defined? massage) ? massage : ''}
-    %br/
+  %h4
+    %span{:style => 'color: green'} #{(defined? massage) ? massage : ''}
+  %br/
 
 = partial :_others_samples
 

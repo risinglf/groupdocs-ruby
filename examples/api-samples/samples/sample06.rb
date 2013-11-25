@@ -27,20 +27,20 @@ post '/sample06' do
 
 
     # Construct file path and open file
-    file_one_path = "#{File.dirname(__FILE__)}/#{params[:document][:filename]}"
-    File.open(file_one_path, 'wb') { |f| f.write(params[:document][:tempfile].read) }
+    file_one_path = "#{File.dirname(__FILE__)}/#{params[:fiDocument][:filename]}"
+    File.open(file_one_path, 'wb') { |f| f.write(params[:fiDocument][:tempfile].read) }
 
 
     # Create new file
-    file_one = GroupDocs::Storage::File.new(name: params[:document][:filename], local_path: file_one_path)
+    file_one = GroupDocs::Storage::File.new(name: params[:fiDocument][:filename], local_path: file_one_path)
     document_one = file_one.to_document
 
     # Construct signature path and open file
-    signature_one_path = "#{Dir.tmpdir}/#{params[:signature][:filename]}"
-    File.open(signature_one_path, 'wb') { |f| f.write(params[:signature][:tempfile].read) }
+    signature_one_path = "#{Dir.tmpdir}/#{params[:fiSignature][:filename]}"
+    File.open(signature_one_path, 'wb') { |f| f.write(params[:fiSignature][:tempfile].read) }
 
     # Add signature to file using API
-    signature_one = GroupDocs::Signature.new(name: params[:signature][:filename], image_path: signature_one_path)
+    signature_one = GroupDocs::Signature.new(name: params[:fiSignature][:filename], image_path: signature_one_path)
     signature_one.position = {top: 0.83319, left: 0.72171, width: 100, height: 40}
 
 

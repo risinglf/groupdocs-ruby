@@ -65,7 +65,7 @@
             
             <div class="content"><div class='highlight'><pre>  set <span class="symbol">:client_id</span>, params[<span class="symbol">:clientId</span>]
   set <span class="symbol">:private_key</span>, params[<span class="symbol">:privateKey</span>]
-  set <span class="symbol">:file_id</span>, params[<span class="symbol">:fileId</span>]
+  set <span class="symbol">:file_id</span>, params[<span class="symbol">:srcPath</span>]
   set <span class="symbol">:url</span>, params[<span class="symbol">:url</span>]
   set <span class="symbol">:copy</span>, params[<span class="symbol">:copy</span>]
   set <span class="symbol">:move</span>, params[<span class="symbol">:move</span>]
@@ -247,7 +247,7 @@ copy file using request to API</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> file
-      massage = <span class="string">"File was <span class="subst">#{button}</span>'ed to the <span class="subst">#{settings.dest_path}</span> folder"</span>
+      massage = <span class="string">"File was <span class="subst">#{button}</span>'ed to the &lt;font color=\"blue\"&gt;<span class="subst">#{settings.dest_path}</span>&lt;/font&gt; folder"</span>
     <span class="keyword">end</span>
 
   <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e

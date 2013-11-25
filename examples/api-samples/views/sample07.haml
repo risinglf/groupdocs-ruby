@@ -22,26 +22,26 @@
     %form{:action => '/sample07', :enctype => 'multipart/form-data', :method => 'post'}
       %label{:for => 'clientId'} GroupDocs ClientID
       %br/
-      %input{:type=>'text', :name=>'clientId'}
+      %input{:type=>'text', :name=>'clientId', :id=>'clientId'}
       %br/
       %label{:for => 'privateKey'} GroupDocs PrivateKey
       %br/
-      %input{:type=>'text', :name=>'privateKey'}
+      %input{:type=>'text', :name=>'privateKey', :id=>'privateKey'}
       %br/
-      %label{:for => 'base_path'} Base Path
+      %label{:for => 'basePath'} Base Path
       %span{:class => 'optional'} (Optional)
       %br/
-      %input{:type=>'text', :name=>'base_path'}
+      %input{:type=>'text', :name=>'basePath', :id=>'basePath'}
       %br/
       %input{:type => 'submit', :value => 'Make Request'}/
-    %div{:style => 'padding:20px; border:1px solid black;'}
-      %p Results:
-      %table{:style => 'border:1px double black;'}
-        %tr
-          %th Field
-          %th Value
-        %tr
-          %td #{(defined? thumbnailList) ? thumbnailList : ''} #{(defined? file_List) ? file_List : ''}
+  %div{:style => 'padding:20px; border:1px solid black;'}
+    %p Results:
+    %table{:style => 'border:1px double black;'}
+      %tr
+        %th Field
+        %th Value
+      %tr
+        %td #{(defined? thumbnailList) ? thumbnailList : ''} #{(defined? file_List) ? file_List : ''}
 %br/
 
 = partial :_others_samples

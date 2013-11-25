@@ -26,11 +26,11 @@
       %form{:action => '/sample08', :enctype => 'multipart/form-data', :method => 'post'}
         %label{:for => 'clientId'} GroupDocs ClientID
         %br/
-        %input{:type=>'text', :name=>'clientId'}
+        %input{:type=>'text', :id => 'clientId' , :name=>'clientId'}
         %br/
         %label{:for => 'privateKey'} GroupDocs PrivateKey
         %br/
-        %input{:type=>'text', :name=>'privateKey'}
+        %input{:type=>'text', :id => 'privateKey' , :name=>'privateKey'}
         %br/
         
         %div.guid_radio
@@ -64,7 +64,7 @@
         %label{:for => 'basePath'} Base Path
         %span{:class => 'optional'} (Optional)
         %br/
-        %input{:type=>'text', :name=>'basePath'}
+        %input{:type=>'text', :name=>'basePath', :id => "basePath"}
         %br/
         %input{:type => 'submit', :value => 'Make Request'}/
   %div{:style => 'padding:20px; border:1px solid black;'}
@@ -76,7 +76,7 @@
       %tr
         %td Page URL
         %td #{(defined? image) ? image : ''}
-    %font{:color => 'green'} #{ if image.nil? then 'You entered incorrect page number'else 'The page you requested:' end }
+    %font{:color => 'green'}#{(defined? image) ? if image.nil? then 'You entered incorrect page number' else 'The page you requested:' end : ''}
     %br/
     %img{:src => "#{(defined? image) ? image : ''}"}
   %br/

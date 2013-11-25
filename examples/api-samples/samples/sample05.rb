@@ -8,7 +8,7 @@ post '/sample05' do
   # set variables
   set :client_id, params[:clientId]
   set :private_key, params[:privateKey]
-  set :file_id, params[:fileId]
+  set :file_id, params[:srcPath]
   set :url, params[:url]
   set :copy, params[:copy]
   set :move, params[:move]
@@ -64,7 +64,7 @@ post '/sample05' do
 
     # result message
     if file
-      massage = "File was #{button}'ed to the #{settings.dest_path} folder"
+      massage = "File was #{button}'ed to the <font color=\"blue\">#{settings.dest_path}</font> folder"
     end
 
   rescue Exception => e
