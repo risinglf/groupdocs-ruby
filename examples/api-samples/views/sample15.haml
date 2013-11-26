@@ -35,10 +35,12 @@
       %input{:type=>'text', :name=>'basePath'}
       %br/
       %input{:type => 'submit', :value => 'Make request'}/
-    %div{:style => 'padding:20px; border:1px solid black;'}
-      %p
-        Result:
-        - if defined? total
-          #{total}
+  %div{:style => 'padding:20px; border:1px solid black;'}
+    %p
+      Result:
+    %p
+      Total document's views:
+      - if defined? total
+        %span{:style => "color: green"} #{total}
 
 = partial :_others_samples

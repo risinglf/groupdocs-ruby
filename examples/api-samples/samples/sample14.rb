@@ -8,7 +8,7 @@ post '/sample14' do
   # set variables
   set :client_id, params[:clientId]
   set :private_key, params[:privateKey]
-  set :folder, params[:folder]
+  set :folder, params[:path]
   set :base_path, params[:basePath]
 
   begin

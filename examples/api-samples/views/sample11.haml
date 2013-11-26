@@ -65,34 +65,34 @@
         %legend Parameters (all are required)
         %div
           %span Box X
-          %input{:type=>'text', :name=>'box_x', :placeholder => 'double'}
+          %input{:type=>'text', :name=>'boxX', :placeholder => 'double'}
         %div
           %span Box Y
-          %input{:type=>'text', :name=>'box_y', :placeholder => 'double'}
+          %input{:type=>'text', :name=>'boxY', :placeholder => 'double'}
 
         %div{:style => 'display:none', :id => 'box-params'}
           %div
             %span Box Width
-            %input{:type=>'text', :name=>'box_width', :placeholder => 'double'}
+            %input{:type=>'text', :name=>'boxWidth', :placeholder => 'double'}
           %div
             %span Box Height
-            %input{:type=>'text', :name=>'box_height', :placeholder => 'double'}
+            %input{:type=>'text', :name=>'boxHeight', :placeholder => 'double'}
 
         %div{:style => 'display:none', :id => 'annotation-position'}
           %div
             %span Annotation Position X
-            %input{:type=>'text', :name=>'annotationPosition_x', :placeholder => 'double'}
+            %input{:type=>'text', :name=>'annotationPositionX', :placeholder => 'double'}
           %div
             %span Annotation Position Y
-            %input{:type=>'text', :name=>'annotationPosition_y', :placeholder => 'double'}
+            %input{:type=>'text', :name=>'annotationPositionY', :placeholder => 'double'}
 
         %div{:style => 'display:none', :id => 'range-position'}
           %div
             %span Range Position
-            %input{:type=>'text', :name=>'range-position', :placeholder => 'double'}
+            %input{:type=>'text', :name=>'rangePosition', :placeholder => 'double'}
           %div
             %span Range Length
-            %input{:type=>'text', :name=>'range-length', :placeholder => 'double'}
+            %input{:type=>'text', :name=>'rangeLength', :placeholder => 'double'}
         %div
           %span Text
           %input{:type=>'text', :name=>'text', :placeholder => 'text'}
@@ -102,10 +102,10 @@
 
       %button{:name => 'delete-annotation', :id => 'delete', :value => "#{(defined? annotationId) ? annotationId : ''}", :style=>'display:none;'} Delete Annotation
 
-    %div{:style => 'padding:20px; border:1px solid black;'}
-      %p Results:
-      %p #{(defined? iframe) ? iframe : ''}
-      %span{:color=>'green', :style => 'font-size:4'}#{(defined? message) ? message : ''}
+  %div{:style => 'padding:20px; border:1px solid black;'}
+    %p Results:
+    %p #{(defined? iframe) ? iframe : ''}
+    %span{:color=>'green', :style => 'font-size:4'}#{(defined? message) ? message : ''}
 = partial :_others_samples
 
 %script{:src=>'//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'}

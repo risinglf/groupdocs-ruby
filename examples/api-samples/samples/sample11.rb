@@ -42,13 +42,13 @@ post '/sample11' do
 
 
     # Required parameters
-    all_params = all_params = ['annotation_type', 'box_x', 'box_y', 'text']
+    all_params = all_params = ['annotationType', 'boxX', 'boxY', 'text']
 
     # Added required parameters depends on  annotation type ['text' or 'area']
     if settings.annotation_type == 'text'
-      all_params = all_params | ['box_width', 'box_height', 'annotationPosition_x', 'annotationPosition_y', 'range-position', 'range-length']
+      all_params = all_params | ['boxWidth', 'boxHeight', 'annotationPositionX', 'annotationPositionY', 'rangePosition', 'rangeLength']
     elsif settings.annotation_type == 'area'
-      all_params = all_params | ['box_width', 'box_height']
+      all_params = all_params | ['boxWidth', 'boxHeight']
     end
 
     # Checking required parameters
@@ -78,18 +78,18 @@ post '/sample11' do
       # Construct requestBody depends on annotation type
       # Text annotation
       if settings.annotation_type == 'text'
-        annotation.box = GroupDocs::Document::Rectangle.new ({x: params['box_x'], y: params['box_y'], width: params['box_width'], height: params['box_height']})
-        annotation.annotationPosition = {x: params['annotationPosition_x'], y: params['annotationPosition_y']}
-        range = {position: params['range-position'], length: params['range-length']}
+        annotation.box = GroupDocs::Document::Rectangle.new ({x: params['boxX'], y: params['boxY'], width: params['boxWidth'], height: params['boxHeight']})
+        annotation.annotationPosition = {x: params['annotationPositionX'], y: params['annotationPositionY']}
+        range = {position: params['rangePosition'], length: params['rangeLength']}
         info = {:box => annotation_box, :annotationPosition => annotation_annotationPosition, :range => range, :type => types[settings.annotation_type.to_sym], :replies => [{:text => params['text']}]}
         # Area annotation
       elsif settings.annotation_type == 'area'
-        annotation_box = {x: params['box_x'], y: params['box_y'], width: params['box_width'], height: params['box_height']}
+        annotation_box = {x: params['boxX'], y: params['boxY'], width: params['boxWidth'], height: params['boxHeight']}
         annotation_annotationPosition = {x: 0, y: 0}
         info = {:box => annotation_box, :annotationPosition => annotation_annotationPosition, :type => types[settings.annotation_type.to_sym], :replies => [{:text => params['text']}]}
         # Point annotation
       elsif settings.annotation_type == 'point'
-        annotation_box = {x: params['box_x'], y: params['box_y'], width: 0, height: 0}
+        annotation_box = {x: params['boxX'], y: params['boxY'], width: 0, height: 0}
         annotation_annotationPosition = {x: 0, y: 0}
 
         info = {:box => annotation_box, :annotationPosition => annotation_annotationPosition, :type => types[settings.annotation_type.to_sym], :replies => [{:text => params['text']}] }

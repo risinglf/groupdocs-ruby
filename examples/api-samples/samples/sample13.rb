@@ -42,6 +42,7 @@ post '/sample13' do
       result = document.to_document.set_collaborators!(settings.email.split(' '), 1)
     end
 
+
   rescue Exception => e
     err = e.message
   end

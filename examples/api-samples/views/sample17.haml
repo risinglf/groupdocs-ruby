@@ -23,11 +23,11 @@
     %form{:action => '/sample17', :enctype => 'multipart/form-data', :method => 'post'}
       %label{:for => 'clientId'} GroupDocs ClientID
       %br/
-      %input{:type=>'text', :name=>'clientId'}
+      %input{:type=>'text', :name=>'clientId', :id => 'clientId' }
       %br/
       %label{:for => 'privateKey'} GroupDocs PrivateKey
       %br/
-      %input{:type=>'text', :name=>'privateKey'}
+      %input{:type=>'text', :name=>'privateKey', :id => 'privateKey'}
       %br/
       %label{:for => 'file'} File
       %br/
@@ -40,10 +40,10 @@
       %br/
       %br/
       %input{:type => 'submit', :value => 'Upload'}/
-    %div{:style => 'padding:20px; border:1px solid black;'}
-      %p
-        Results:
-        #{(defined? massage) ? massage : ''}
-        #{(defined? iframe) ? iframe : ''}
+  %div{:style => 'padding:20px; border:1px solid black;'}
+    %p
+      Results:
+    %span{:style => "color: green"} #{(defined? massage) ? massage : ''}
+    #{(defined? iframe) ? iframe : ''}
 
 = partial :_others_samples

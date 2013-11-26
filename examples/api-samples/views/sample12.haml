@@ -42,22 +42,22 @@
       %br/
       %br/
       %input{:type => 'submit', :value => 'Make request'}/
-    %div{:style => 'padding:20px; border:1px solid black;'}
-      %p
-        Results:
+  %div{:style => 'padding:20px; border:1px solid black;'}
+    %p
+      Results:
 
-        - if defined? annotations.first
-          - annotations.each do |annotation|
-            %div
-              Access: #{annotation.access}
-              %br/
-              Type:  #{annotation.type}
-              %br/
-              Replies:
-              %ul
-                - annotation.replies.each do |reply|
-                  %li
-                    #{reply.userName} : #{reply.text}
+      - if defined? annotations.first
+        - annotations.each do |annotation|
+          %div
+            Access: #{annotation.access}
+            %br/
+            Type:  #{annotation.type}
+            %br/
+            Replies:
+            %ul
+              - annotation.replies.each do |reply|
+                %li
+                  #{reply.userName} : #{reply.text}
 
 
 = partial :_others_samples

@@ -48,11 +48,12 @@
       %br/
       %br/
       %input{:type => 'submit', :value => 'Make request'}/
-    %div{:style => 'padding:20px; border:1px solid black;'}
-      %p
-        Result:
-
-        - if defined? result.first
-          #{result.first.primary_email}
+  %div{:style => 'padding:20px; border:1px solid black;'}
+    %p
+      Result:
+    %p
+      New collaborations:
+      - if defined? result.first
+        %span{:style => "color: green"}#{result.first.primary_email}
 
 = partial :_others_samples
