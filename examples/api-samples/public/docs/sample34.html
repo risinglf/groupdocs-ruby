@@ -65,7 +65,7 @@
             
             <div class="content"><div class='highlight'><pre>  set <span class="symbol">:client_id</span>, params[<span class="symbol">:clientId</span>]
   set <span class="symbol">:private_key</span>, params[<span class="symbol">:privateKey</span>]
-  set <span class="symbol">:path</span>, params[<span class="symbol">:path</span>]
+  set <span class="symbol">:path</span>, params[<span class="symbol">:folder</span>]
   set <span class="symbol">:base_path</span>, params[<span class="symbol">:basePath</span>]
 
   <span class="keyword">begin</span></pre></div></div>
@@ -135,7 +135,7 @@
             
             <div class="content"><div class='highlight'><pre>    folder = <span class="constant">GroupDocs::Storage::Folder</span>.create!(settings.path)
     <span class="keyword">if</span> folder.id
-       message = <span class="string">"You created new folder <span class="subst">#{folder.path}</span>"</span>
+       message = <span class="string">"&lt;span style=\"color:green\"&gt;Folder was created <span class="subst">#{folder.path}</span> &lt;/span&gt; "</span>
     <span class="keyword">end</span>
 
   <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e

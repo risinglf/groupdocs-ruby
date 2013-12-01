@@ -8,7 +8,7 @@ post '/sample34' do
   # Set variables
   set :client_id, params[:clientId]
   set :private_key, params[:privateKey]
-  set :path, params[:path]
+  set :path, params[:folder]
   set :base_path, params[:basePath]
 
   begin
@@ -28,7 +28,7 @@ post '/sample34' do
     # Create new Folder
     folder = GroupDocs::Storage::Folder.create!(settings.path)
     if folder.id
-       message = "You created new folder #{folder.path}"
+       message = "<span style=\"color:green\">Folder was created #{folder.path} </span> "
     end
 
   rescue Exception => e

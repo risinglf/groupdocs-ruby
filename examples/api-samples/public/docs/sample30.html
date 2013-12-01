@@ -65,7 +65,7 @@
             
             <div class="content"><div class='highlight'><pre>  set <span class="symbol">:client_id</span>, params[<span class="symbol">:clientId</span>]
   set <span class="symbol">:private_key</span>, params[<span class="symbol">:privateKey</span>]
-  set <span class="symbol">:name</span>, params[<span class="symbol">:name</span>]
+  set <span class="symbol">:name</span>, params[<span class="symbol">:fileName</span>]
   set <span class="symbol">:base_path</span>, params[<span class="symbol">:basePath</span>]
 
   <span class="keyword">begin</span></pre></div></div>
@@ -170,7 +170,7 @@
             
             <div class="content"><div class='highlight'><pre>    document.delete!()
 
-    message = <span class="string">'File was deleted from GroupDocs Storage'</span>
+    message = <span class="string">'Done, file deleted from your GroupDocs Storage'</span>
 
   <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e
     err = e.message

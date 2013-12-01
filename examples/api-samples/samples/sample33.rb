@@ -6,12 +6,12 @@ end
 # POST request
 post '/sample33' do
   # set variables
-  set :client_id, params[:client_id]
-  set :private_key, params[:private_key]
-  set :url_1, params[:url_1]
-  set :url_2, params[:url_2]
-  set :url_3, params[:url_3]
-  set :base_path, params[:base_path]
+  set :client_id, params[:clientId]
+  set :private_key, params[:privateKey]
+  set :url_1, params[:url1]
+  set :url_2, params[:url2]
+  set :url_3, params[:url3]
+  set :base_path, params[:basePath]
 
   begin
     # Check required variables

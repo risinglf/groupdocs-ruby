@@ -200,7 +200,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        file = <span class="constant">GroupDocs::Storage::File</span>.upload!(file_path, {})
+            <div class="content"><div class='highlight'><pre>        file = <span class="constant">GroupDocs::Storage::File</span>.upload!(file_path, {}).to_document
       <span class="keyword">when</span> <span class="string">'url'</span></pre></div></div>
             
         </li>
@@ -235,10 +235,12 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>    user = <span class="constant">GroupDocs::User</span>.new
+
     user.primary_email = settings.email
     user.nickname = settings.first_name
     user.first_name = settings.first_name
-    user.last_name = settings.last_name</pre></div></div>
+    user.last_name = settings.last_name
+    user.roles = [<span class="symbol">:id</span> =&gt; <span class="string">'3'</span>, <span class="symbol">:name</span> =&gt; <span class="string">'User'</span>]</pre></div></div>
             
         </li>
         
@@ -253,7 +255,9 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    new_user = <span class="constant">GroupDocs::User</span>.update_account!(user)</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    new_user = <span class="constant">GroupDocs::User</span>.update_account!(user)
+
+    raise user.to_yaml</pre></div></div>
             
         </li>
         

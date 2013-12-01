@@ -31,9 +31,9 @@
       %br/
       %input{:type=>'text', :name=>'privateKey'}
       %br/
-      %label{:for => 'name'} GroupDocs File Name
+      %label{:for => 'fileName'} GroupDocs File Name
       %br/
-      %input{:type=>'text', :name=>'name'}
+      %input{:type=>'text', :name=>'fileName'}
       %br/
       %label{:for => 'basePath'} Base Path
       %span{:class => 'optional'} (Optional)
@@ -42,10 +42,11 @@
       %br/
       %br/
       %input{:type => 'submit', :value => 'Delete'}/
-    %div{:style => 'padding:20px; border:1px solid black;'}
-      %p Results:
-      %br/
-      %font{:color => 'green'}#{(defined? message) ? message : ''}
-      %br/
+  %div{:style => 'padding:20px; border:1px solid black;'}
+    %p Results:
+    %br/
+    %p
+      %span{:style=>"color: red"}#{(defined? message) ? message : ''}
+    %br/
 
 = partial :_others_samples

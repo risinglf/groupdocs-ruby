@@ -75,14 +75,14 @@ end
 # POST request
 post '/sample32' do
   # set variables
-  set :client_id, params[:client_id]
-  set :private_key, params[:private_key]
-  set :template_guid, params[:template]
-  set :form_guid, params[:form]
+  set :client_id, params[:clientId]
+  set :private_key, params[:privateKey]
+  set :template_guid, params[:templateGuid]
+  set :form_guid, params[:formGuid]
   set :email, params[:email]
-  set :callback, params[:callback]
+  set :callback, params[:callbackUrl]
   set :source, params[:source]
-  set :base_path, params[:base_path]
+  set :base_path, params[:basePath]
 
   begin
 

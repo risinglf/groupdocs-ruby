@@ -129,14 +129,15 @@ post '/sample21' do
         # open file
         File.open(file_path, 'wb') { |f| f.write(params[:file][:tempfile].read) }
         # make a request to API using client_id and private_key
-        file = GroupDocs::Storage::File.upload!(file_path, {})
+        file = GroupDocs::Storage::File.upload!(file_path, {}).to_document
       when 'url'
         # Upload file from defined url
-        file = GroupDocs::Storage::File.upload_web!(settings.url)
+        file = GroupDocs::Storage::File.upload_web!(settings.url).to_document
       else
         raise 'Wrong GUID source.'
     end
 
+    name = file.name
     # create envelope using user id and entered by user name
     envelope = GroupDocs::Signature::Envelope.new
     envelope.name = file.name
@@ -193,11 +194,11 @@ post '/sample21' do
     iframe = GroupDocs::Api::Request.new(:path => url).prepare_and_sign_url
     # Make iframe
     iframe = "<iframe src='#{iframe}' frameborder='0' width='720' height='600'></iframe>"
-
+    message = "<p>File was uploaded to GroupDocs. Here you can see your <strong>#{name}</strong> file in the GroupDocs Embedded Viewer.</p>"
   rescue Exception => e
     err = e.message
   end
 
   # Set variables for template
-  haml :sample21, :locals => {:userId => settings.client_id, :privateKey => settings.private_key, :email => settings.email, :name => settings.name, :lastName => settings.lastName, :iframe => iframe, :err => err, :callback => settings.callback,}
+  haml :sample21, :locals => {:userId => settings.client_id, :privateKey => settings.private_key, :email => settings.email, :name => settings.name, :lastName => settings.lastName, :iframe => iframe, :massage => message, :err => err, :callback => settings.callback,}
 end

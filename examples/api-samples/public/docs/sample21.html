@@ -495,7 +495,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        file = <span class="constant">GroupDocs::Storage::File</span>.upload!(file_path, {})
+            <div class="content"><div class='highlight'><pre>        file = <span class="constant">GroupDocs::Storage::File</span>.upload!(file_path, {}).to_document
       <span class="keyword">when</span> <span class="string">'url'</span></pre></div></div>
             
         </li>
@@ -511,10 +511,12 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        file = <span class="constant">GroupDocs::Storage::File</span>.upload_web!(settings.url)
+            <div class="content"><div class='highlight'><pre>        file = <span class="constant">GroupDocs::Storage::File</span>.upload_web!(settings.url).to_document
       <span class="keyword">else</span>
         raise <span class="string">'Wrong GUID source.'</span>
-    <span class="keyword">end</span></pre></div></div>
+    <span class="keyword">end</span>
+
+    name = file.name</pre></div></div>
             
         </li>
         
@@ -715,7 +717,7 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>    iframe = <span class="string">"&lt;iframe src='<span class="subst">#{iframe}</span>' frameborder='0' width='720' height='600'&gt;&lt;/iframe&gt;"</span>
-
+    message = <span class="string">"&lt;p&gt;File was uploaded to GroupDocs. Here you can see your &lt;strong&gt;<span class="subst">#{name}</span>&lt;/strong&gt; file in the GroupDocs Embedded Viewer.&lt;/p&gt;"</span>
   <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e
     err = e.message
   <span class="keyword">end</span></pre></div></div>
@@ -733,7 +735,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  haml <span class="symbol">:sample21</span>, <span class="symbol">:locals</span> =&gt; {<span class="symbol">:userId</span> =&gt; settings.client_id, <span class="symbol">:privateKey</span> =&gt; settings.private_key, <span class="symbol">:email</span> =&gt; settings.email, <span class="symbol">:name</span> =&gt; settings.name, <span class="symbol">:lastName</span> =&gt; settings.lastName, <span class="symbol">:iframe</span> =&gt; iframe, <span class="symbol">:err</span> =&gt; err, <span class="symbol">:callback</span> =&gt; settings.callback,}
+            <div class="content"><div class='highlight'><pre>  haml <span class="symbol">:sample21</span>, <span class="symbol">:locals</span> =&gt; {<span class="symbol">:userId</span> =&gt; settings.client_id, <span class="symbol">:privateKey</span> =&gt; settings.private_key, <span class="symbol">:email</span> =&gt; settings.email, <span class="symbol">:name</span> =&gt; settings.name, <span class="symbol">:lastName</span> =&gt; settings.lastName, <span class="symbol">:iframe</span> =&gt; iframe, <span class="symbol">:massage</span> =&gt; message, <span class="symbol">:err</span> =&gt; err, <span class="symbol">:callback</span> =&gt; settings.callback,}
 <span class="keyword">end</span></pre></div></div>
             
         </li>

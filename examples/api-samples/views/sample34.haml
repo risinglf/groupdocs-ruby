@@ -32,7 +32,7 @@
         %br/
         %label{:for => 'path'} Folder name
         %br/
-        %input{:type=>'text', :name=>'path'}
+        %input{:type=>'text', :name=>'folder'}
         %br/
         %label{:for => 'basePath'} Base Path
         %span{:class => 'optional'} (Optional)
@@ -41,8 +41,8 @@
         %br/
         %br/
         %input{:type => 'submit', :value => 'Make Request'}
-  %br/
-  %p Results:
-  %div{:style => "color:green"} #{(defined? message) ? message : ''}
+    %br/
+    %p Results:
+    %div{:style => "color:green"} #{(defined? message) ? message : ''}
 
 = partial :_others_samples

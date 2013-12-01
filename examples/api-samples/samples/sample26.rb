@@ -5,7 +5,7 @@ end
 
 # POST request
 post '/sample26' do
-  set :email, params[:email]
+  set :email, params[:login]
   set :password, params[:password]
   set :base_path, params[:basePath]
 

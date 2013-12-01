@@ -117,7 +117,9 @@ post '/sample31' do
       out_file.write("#{settings.private_key}")
       out_file.close
     end
-
+    if settings.last_name.empty?
+      settings.last_name = 'test'
+    end
     file = nil
     # Create instance of File
     file = GroupDocs::Storage::File.new({:guid => settings.template_guid})
@@ -171,23 +173,8 @@ post '/sample31' do
 
     # Adds recipient to envelope
     envelope.add_recipient!(recipient)
-
-    #Get field
-    fieldGet = GroupDocs::Signature::Field.get!({}).detect { |f| f.type == :signature }
-    fieldGet.location = { location_x: 0.15,
-                          location_y: 0.73,
-                          location_width: 150,
-                          location_height: 50,
-                          page: 1 }
-
-    #Get document
-    documentGet = envelope.documents!({}).first
-
     #Get recipients
     recipientGet = envelope.recipients!({}).first
-
-    # Add field to envelope
-    addField = envelope.add_field!(fieldGet, documentGet, recipientGet, {})
 
     # Send envelope
     envelope.send!({:callbackUrl => settings.callback})
@@ -196,11 +183,11 @@ post '/sample31' do
     case settings.base_path
 
       when 'https://stage-api-groupdocs.dynabic.com'
-        url = "http://stage-apps-groupdocs.dynabic.com/signature/signembed/#{envelope.id}/#{recipientGet.id}"
+        url = "http://stage-apps-groupdocs.dynabic.com/signature2/signembed/#{envelope.id}/#{recipientGet.id}"
       when 'https://dev-api-groupdocs.dynabic.com'
-        url = "http://dev-apps-groupdocs.dynabic.com/signature/signembed/#{envelope.id}/#{recipientGet.id}"
+        url = "http://dev-apps-groupdocs.dynabic.com/signature2/signembed/#{envelope.id}/#{recipientGet.id}"
       else
-        url = "https://apps.groupdocs.com/signature/signembed/#{envelope.id}/#{recipientGet.id}"
+        url = "https://apps.groupdocs.com/signature2/signembed/#{envelope.id}/#{recipientGet.id}"
     end
 
     # Add the signature in url

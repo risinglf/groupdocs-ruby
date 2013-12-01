@@ -2,7 +2,7 @@
   %a{:href => '/'} GroupDocs Ruby SDK Samples
   \- Sample22
 .samplecontent{:style => 'padding:10px;'}
-  %i This sample will show how to View Document pages as images using Ruby SDK
+  %i This sample will show how create or update user and add him to collaborators using PHP SDK
   %br/
   %br/
   %span.documentation
@@ -37,6 +37,18 @@
       %br/
       %input{:type=>'text', :name=>'privateKey'}
       %br/
+      %label{:for => 'email'} E-mail
+      %br/
+      %input{:type=>'text', :name=>'email'}
+      %br/
+      %label{:for => 'firstName'} First name
+      %br/
+      %input{:type=>'text', :name=>'firstName'}
+      %br/
+      %label{:for => 'lastName'} Last name
+      %br/
+      %input{:type=>'text', :name=>'lastName'}
+      %br/
       %div.guid_radio
         %input{:type=>'radio', :name=>'source', :value=>'guid', :checked=>'checked'} File ID (GUID)
         %br/
@@ -60,18 +72,6 @@
         %br/
         %input{:type=>'text', :name=>'url'}
 
-      %br/
-      %label{:for => 'email'} E-mail
-      %br/
-      %input{:type=>'text', :name=>'email'}
-      %br/
-      %label{:for => 'firstName'} First name
-      %br/
-      %input{:type=>'text', :name=>'firstName'}
-      %br/
-      %label{:for => 'lastName'} Last name
-      %br/
-      %input{:type=>'text', :name=>'lastName'}
       %br/
       %label{:for => 'basePath'} Base Path
       %span{:class => 'optional'} (Optional)

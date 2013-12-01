@@ -42,7 +42,7 @@ post '/sample22' do
         # open file
         File.open(file_path, 'wb') { |f| f.write(params[:file][:tempfile].read) }
         # make a request to API using client_id and private_key
-        file = GroupDocs::Storage::File.upload!(file_path, {})
+        file = GroupDocs::Storage::File.upload!(file_path, {}).to_document
       when 'url'
         # Upload file from defined url
         file = GroupDocs::Storage::File.upload_web!(settings.url)
@@ -52,15 +52,17 @@ post '/sample22' do
 
     # Create new user
     user = GroupDocs::User.new
+
     user.primary_email = settings.email
     user.nickname = settings.first_name
     user.first_name = settings.first_name
     user.last_name = settings.last_name
+    user.roles = [:id => '3', :name => 'User']
 
     # Update account
     new_user = GroupDocs::User.update_account!(user)
 
-
+    raise user.to_yaml
     # Set new collaboration
     file.set_collaborators!([settings.email], 2)
 

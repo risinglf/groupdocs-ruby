@@ -8,7 +8,7 @@ post '/sample30' do
   # Set variables
   set :client_id, params[:clientId]
   set :private_key, params[:privateKey]
-  set :name, params[:name]
+  set :name, params[:fileName]
   set :base_path, params[:basePath]
 
   begin
@@ -40,7 +40,7 @@ post '/sample30' do
     # Delete file from GroupDocs Storage
     document.delete!()
 
-    message = 'File was deleted from GroupDocs Storage'
+    message = 'Done, file deleted from your GroupDocs Storage'
 
   rescue Exception => e
     err = e.message
