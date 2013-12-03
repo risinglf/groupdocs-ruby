@@ -73,6 +73,7 @@
   set <span class="symbol">:url</span>, params[<span class="symbol">:url</span>]
   set <span class="symbol">:source</span>, params[<span class="symbol">:source</span>]
 
+
   <span class="keyword">begin</span></pre></div></div>
             
         </li>
@@ -185,7 +186,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="constant">File</span>.open(file_path, <span class="string">'wb'</span>) { |f| f.write(params[<span class="symbol">:file</span>][<span class="symbol">:tempfile</span>].read) }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        file_path = <span class="constant">File</span>.open(file_path, <span class="string">'wb'</span>) { |f| f.write(params[<span class="symbol">:file</span>][<span class="symbol">:tempfile</span>].read) }</pre></div></div>
             
         </li>
         
@@ -200,7 +201,8 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        file = <span class="constant">GroupDocs::Storage::File</span>.upload!(file_path, {}).to_document
+            <div class="content"><div class='highlight'><pre>        file = <span class="constant">GroupDocs::Storage::File</span>.upload!(file_path).to_document
+
       <span class="keyword">when</span> <span class="string">'url'</span></pre></div></div>
             
         </li>
@@ -237,10 +239,11 @@
             <div class="content"><div class='highlight'><pre>    user = <span class="constant">GroupDocs::User</span>.new
 
     user.primary_email = settings.email
-    user.nickname = settings.first_name
+    user.nickname = settings.email
     user.first_name = settings.first_name
     user.last_name = settings.last_name
-    user.roles = [<span class="symbol">:id</span> =&gt; <span class="string">'3'</span>, <span class="symbol">:name</span> =&gt; <span class="string">'User'</span>]</pre></div></div>
+
+    user.roles = [{<span class="symbol">:id</span> =&gt; <span class="string">'3'</span>, <span class="symbol">:name</span> =&gt; <span class="string">'User'</span>}]</pre></div></div>
             
         </li>
         
@@ -255,9 +258,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    new_user = <span class="constant">GroupDocs::User</span>.update_account!(user)
-
-    raise user.to_yaml</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    new_user = <span class="constant">GroupDocs::User</span>.update_account!(user)</pre></div></div>
             
         </li>
         
@@ -324,7 +325,7 @@
       <span class="keyword">when</span> <span class="string">'https://dev-api-groupdocs.dynabic.com'</span>
         url = <span class="string">"http://dev-apps-groupdocs.dynabic.com/document-annotation2/embed/<span class="subst">#{file.file.guid}</span>?uid = <span class="subst">#{new_user.guid}</span>&amp;download=true"</span>
       <span class="keyword">else</span>
-        url = <span class="string">"https://apps.groupdocs.com/document-viewer/document-annotation2/embed/<span class="subst">#{file.file.guid}</span>?uid = <span class="subst">#{new_user.guid}</span>&amp;download=true"</span>
+        url = <span class="string">"https://apps.groupdocs.com/document-annotation2/embed/<span class="subst">#{file.file.guid}</span>?uid = <span class="subst">#{new_user.guid}</span>&amp;download=true"</span>
     <span class="keyword">end</span></pre></div></div>
             
         </li>

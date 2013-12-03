@@ -16,6 +16,7 @@ post '/sample22' do
   set :url, params[:url]
   set :source, params[:source]
 
+
   begin
 
     # Check required variables
@@ -40,9 +41,11 @@ post '/sample22' do
         # construct path
         file_path = "#{Dir.tmpdir}/#{params[:file][:filename]}"
         # open file
-        File.open(file_path, 'wb') { |f| f.write(params[:file][:tempfile].read) }
+        file_path = File.open(file_path, 'wb') { |f| f.write(params[:file][:tempfile].read) }
         # make a request to API using client_id and private_key
-        file = GroupDocs::Storage::File.upload!(file_path, {}).to_document
+
+        file = GroupDocs::Storage::File.upload!(file_path).to_document
+
       when 'url'
         # Upload file from defined url
         file = GroupDocs::Storage::File.upload_web!(settings.url)
@@ -54,15 +57,16 @@ post '/sample22' do
     user = GroupDocs::User.new
 
     user.primary_email = settings.email
-    user.nickname = settings.first_name
+    user.nickname = settings.email
     user.first_name = settings.first_name
     user.last_name = settings.last_name
-    user.roles = [:id => '3', :name => 'User']
 
+    user.roles = [{:id => '3', :name => 'User'}]
     # Update account
     new_user = GroupDocs::User.update_account!(user)
 
-    raise user.to_yaml
+
+
     # Set new collaboration
     file.set_collaborators!([settings.email], 2)
 
@@ -72,6 +76,7 @@ post '/sample22' do
     # Set document reviewers
     file.set_reviewers!(collaborations)
 
+
     #Get url from request
     case settings.base_path
 
@@ -80,7 +85,7 @@ post '/sample22' do
       when 'https://dev-api-groupdocs.dynabic.com'
         url = "http://dev-apps-groupdocs.dynabic.com/document-annotation2/embed/#{file.file.guid}?uid = #{new_user.guid}&download=true"
       else
-        url = "https://apps.groupdocs.com/document-viewer/document-annotation2/embed/#{file.file.guid}?uid = #{new_user.guid}&download=true"
+        url = "https://apps.groupdocs.com/document-annotation2/embed/#{file.file.guid}?uid = #{new_user.guid}&download=true"
     end
 
     # Add the signature to url the request
