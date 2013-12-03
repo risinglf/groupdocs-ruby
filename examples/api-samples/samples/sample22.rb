@@ -31,21 +31,19 @@ post '/sample22' do
       # Optionally specify API server and version
       groupdocs.api_server = settings.base_path # default is 'https://api.groupdocs.com'
     end
+    file = nil
 
     # get document by file GUID
     case settings.source
       when 'guid'
         # Create instance of File
-        file = GroupDocs::Storage::File.new({:guid => settings.fileId}).to_document
+        file = GroupDocs::Storage::File.new({:guid => settings.fileId})
       when 'local'
-        # construct path
-        file_path = "#{Dir.tmpdir}/#{params[:file][:filename]}"
-        # open file
-        file_path = File.open(file_path, 'wb') { |f| f.write(params[:file][:tempfile].read) }
-        # make a request to API using client_id and private_key
-
-        file = GroupDocs::Storage::File.upload!(file_path).to_document
-
+        filepath = "#{Dir.tmpdir}/#{params[:file][:filename]}"
+        # Open file
+        File.open(filepath, 'wb') { |f| f.write(params[:file][:tempfile].read) }
+        # Make a request to API using client_id and private_key
+        file = GroupDocs::Storage::File.upload!(filepath, {})
       when 'url'
         # Upload file from defined url
         file = GroupDocs::Storage::File.upload_web!(settings.url)
@@ -53,6 +51,8 @@ post '/sample22' do
         raise 'Wrong GUID source.'
     end
 
+
+    file = file.to_document
     # Create new user
     user = GroupDocs::User.new
 
