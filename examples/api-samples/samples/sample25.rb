@@ -6,11 +6,12 @@ end
 # POST request
 post '/sample25' do
   # set variables
-  set :client_id, params[:client_id]
-  set :private_key, params[:private_key]
+  set :client_id, params[:clientId]
+  set :private_key, params[:privateKey]
   set :source, params[:source]
   set :file_id, params[:fileId]
   set :url, params[:url]
+  set :base_path, params[:basePath]
 
   # Set download path
   downloads_path = "#{File.dirname(__FILE__)}/../public/downloads"
@@ -26,10 +27,14 @@ post '/sample25' do
     # Check required variables
     raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty?
 
-    # Configure your access to API server.
+    if settings.base_path.empty? then settings.base_path = 'https://api.groupdocs.com' end
+
+    # Configure your access to API server
     GroupDocs.configure do |groupdocs|
       groupdocs.client_id = settings.client_id
       groupdocs.private_key = settings.private_key
+      # Optionally specify API server and version
+      groupdocs.api_server = settings.base_path # default is 'https://api.groupdocs.com'
     end
 
     # Get document by file GUID
@@ -85,8 +90,19 @@ post '/sample25' do
     # Set converted document Name
     file_name = document[:inputs][0].outputs[0].name
 
+    #Get url from request
+    case settings.base_path
+
+      when 'https://stage-api-groupdocs.dynabic.com'
+        url = "http://stage-apps-groupdocs.dynabic.com/document-viewer/embed/#{guid}"
+      when 'https://dev-api-groupdocs.dynabic.com'
+        url = "http://dev-apps-groupdocs.dynabic.com/document-viewer/embed/#{guid}"
+      else
+        url = "https://apps.groupdocs.com/document-viewer/embed/#{guid}"
+    end
+
     # Add the signature to url the request
-    url = "https://apps.groupdocs.com/document-viewer/embed/#{guid}"
+
     iframe = GroupDocs::Api::Request.new(:path => url).prepare_and_sign_url
 
     # Set iframe with document GUID or raise an error
@@ -101,5 +117,5 @@ post '/sample25' do
   end
 
   # set variables for template
-  haml :sample25, :locals => {:userId => settings.client_id, :privateKey => settings.private_key, :iframe => iframe, :file_name => file_name,  :err => err}
+  haml :sample25, :locals => {:userId => settings.client_id, :privateKey => settings.private_key, :iframe => iframe, :fileName => file_name,  :err => err}
 end

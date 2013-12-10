@@ -63,13 +63,12 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  set <span class="symbol">:client_id</span>, params[<span class="symbol">:client_id</span>]
-  set <span class="symbol">:private_key</span>, params[<span class="symbol">:private_key</span>]
-  set <span class="symbol">:url_1</span>, params[<span class="symbol">:url_1</span>]
-  set <span class="symbol">:url_2</span>, params[<span class="symbol">:url_2</span>]
-  set <span class="symbol">:url_3</span>, params[<span class="symbol">:url_3</span>]
-  set <span class="symbol">:url_4</span>, params[<span class="symbol">:url_4</span>]
-  set <span class="symbol">:url_5</span>, params[<span class="symbol">:url_5</span>]
+            <div class="content"><div class='highlight'><pre>  set <span class="symbol">:client_id</span>, params[<span class="symbol">:clientId</span>]
+  set <span class="symbol">:private_key</span>, params[<span class="symbol">:privateKey</span>]
+  set <span class="symbol">:url_1</span>, params[<span class="symbol">:url1</span>]
+  set <span class="symbol">:url_2</span>, params[<span class="symbol">:url2</span>]
+  set <span class="symbol">:url_3</span>, params[<span class="symbol">:url3</span>]
+  set <span class="symbol">:base_path</span>, params[<span class="symbol">:basePath</span>]
 
   <span class="keyword">begin</span></pre></div></div>
             
@@ -86,12 +85,9 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    raise <span class="string">'Please enter all required parameters'</span> <span class="keyword">if</span> settings.client_id.empty? <span class="keyword">or</span> settings.private_key.empty? <span class="keyword">or</span> settings.url_1.empty? <span class="keyword">or</span> settings.url_2.empty? <span class="keyword">or</span> settings.url_3.empty? <span class="keyword">or</span> settings.url_4.empty? <span class="keyword">or</span> settings.url_5.empty?
+            <div class="content"><div class='highlight'><pre>    raise <span class="string">'Please enter all required parameters'</span> <span class="keyword">if</span> settings.client_id.empty? <span class="keyword">or</span> settings.private_key.empty? <span class="keyword">or</span> settings.url_1.empty? <span class="keyword">or</span> settings.url_2.empty? <span class="keyword">or</span> settings.url_3.empty?
 
-    <span class="constant">GroupDocs</span>.configure <span class="keyword">do</span> |groupdocs|
-      groupdocs.client_id = settings.client_id
-      groupdocs.private_key = settings.private_key
-    <span class="keyword">end</span></pre></div></div>
+    <span class="keyword">if</span> settings.base_path.empty? <span class="keyword">then</span> settings.base_path = <span class="string">'https://api.groupdocs.com'</span> <span class="keyword">end</span></pre></div></div>
             
         </li>
         
@@ -102,11 +98,13 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>Create Array from variables</p>
+              <p>Configure your access to API server</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    url = [settings.url_1, settings.url_2, settings.url_3, settings.url_4, settings.url_5 ]</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="constant">GroupDocs</span>.configure <span class="keyword">do</span> |groupdocs|
+      groupdocs.client_id = settings.client_id
+      groupdocs.private_key = settings.private_key</pre></div></div>
             
         </li>
         
@@ -117,11 +115,12 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>Create Hash with the options for job. :status=&gt; -1 means the Draft status of the job</p>
+              <p>Optionally specify API server and version</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    options = {<span class="symbol">:actions</span> =&gt; [<span class="symbol">:convert</span>, <span class="symbol">:combine</span>], <span class="symbol">:out_formats</span> =&gt; [<span class="string">'pdf'</span>], <span class="symbol">:status</span> =&gt; -<span class="number">1</span>, <span class="symbol">:name</span> =&gt; <span class="string">'sample'</span>}</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      groupdocs.api_server = settings.base_path <span class="comment"># default is 'https://api.groupdocs.com'</span>
+    <span class="keyword">end</span></pre></div></div>
             
         </li>
         
@@ -132,11 +131,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>Create Job with provided options with Draft status (Sheduled job)</p>
+              <p>Create Array from variables</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    job = <span class="constant">GroupDocs::Job</span>.create!(options)</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    url = [settings.url_1, settings.url_2, settings.url_3 ]</pre></div></div>
             
         </li>
         
@@ -146,6 +145,36 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Create Hash with the options for job. :status=&gt; -1 means the Draft status of the job</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    options = {<span class="symbol">:actions</span> =&gt; [<span class="symbol">:convert</span>, <span class="symbol">:combine</span>], <span class="symbol">:out_formats</span> =&gt; [<span class="string">'pdf'</span>], <span class="symbol">:status</span> =&gt; -<span class="number">1</span>, <span class="symbol">:name</span> =&gt; <span class="string">'sample'</span>}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Create Job with provided options with Draft status (Sheduled job)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    job = <span class="constant">GroupDocs::Job</span>.create!(options)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <p>Upload documents to GroupDocs Storage by url and add the documents to previously created Job</p>
 
@@ -159,11 +188,11 @@
         </li>
         
         
-        <li id="section-9">
+        <li id="section-11">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
+                <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
               <p>Update the Job with new status. :status =&gt; &#39;0&#39; mean Active status of the job (Start the job)</p>
 
@@ -183,11 +212,11 @@
         </li>
         
         
-        <li id="section-10">
+        <li id="section-12">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
+                <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
               <p>Get the document into Pdf format</p>
 
@@ -200,20 +229,55 @@
         </li>
         
         
-        <li id="section-11">
+        <li id="section-13">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
+                <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
               <p>Set iframe with document GUID or raise an error</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> document
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> document</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>Get url from request</p>
 
-      url = <span class="string">"https://apps.groupdocs.com/document-viewer/embed/<span class="subst">#{document[<span class="number">0</span>].guid}</span>"</span>
-      iframe = <span class="constant">GroupDocs::Api::Request</span>.new(<span class="symbol">:path</span> =&gt; url).prepare_and_sign_url
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="keyword">case</span> settings.base_path
+
+        <span class="keyword">when</span> <span class="string">'https://stage-api-groupdocs.dynabic.com'</span>
+          url = <span class="string">"http://stage-apps-groupdocs.dynabic.com/document-viewer/embed/<span class="subst">#{document[<span class="number">0</span>].guid}</span>"</span>
+        <span class="keyword">when</span> <span class="string">'https://dev-api-groupdocs.dynabic.com'</span>
+          url = <span class="string">"http://dev-apps-groupdocs.dynabic.com/document-viewer/embed/<span class="subst">#{document[<span class="number">0</span>].guid}</span>"</span>
+        <span class="keyword">else</span>
+          url = <span class="string">"https://apps.groupdocs.com/document-viewer/embed/<span class="subst">#{document[<span class="number">0</span>].guid}</span>"</span>
+      <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Add the signature in url</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      iframe = <span class="constant">GroupDocs::Api::Request</span>.new(<span class="symbol">:path</span> =&gt; url).prepare_and_sign_url
       iframe = <span class="string">"&lt;iframe width='100%' height='600' frameborder='0' src='<span class="subst">#{iframe}</span>'&gt;&lt;/iframe&gt;"</span>
     <span class="keyword">else</span>
       raise <span class="string">'File was not converted'</span>
@@ -225,11 +289,11 @@
         </li>
         
         
-        <li id="section-12">
+        <li id="section-16">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-12">&#182;</a>
+                <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
               <p>Set variables for template</p>
 

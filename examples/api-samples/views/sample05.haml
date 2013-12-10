@@ -1,36 +1,32 @@
 %h3{:style => 'text-align:center;'}
   %a{:href => '/'} GroupDocs Ruby SDK Samples
-  \- Sample9
+  \- Sample05
 .samplecontent{:style => 'padding:10px;'}
-  %i This sample will show how to generate an embedded Viewer URL for particular Document in the GroupDocs account using Ruby SDK
+  %i This sample will show how to Copy/Move particular file in your GroupDocs account using Ruby SDK
   %br/
   %br/
   %span.documentation
-    %a{:href => '/docs/sample9.html'} Builtin documentation for this sample
+    %a{:href => '/docs/sample05.html'} Builtin documentation for this sample
   %br/
   %br/
   %p
     You entered:
   %p
-    File GUID = #{(defined? guid) ? guid : ''}
+    UserId = #{(defined? clientId) ? clientId : ''}
   %p
-    Height = #{(defined? height) ? height : ''}
-  %p
-    Width = #{(defined? width) ? width : ''}
-  %p
-    Viewer URL = #{(defined? v_url) ? v_url : ''}
+    PrivateKey = #{(defined? privateKey) ? privateKey : ''}
   %p
     %font{:color => 'red'} #{(defined? err) ? err : ''}
   #requestForm{:style => 'padding:20px; border:1px solid black;'}
-    %p Enter data for request and press "Make request" button
-    %form{:action => '/sample9', :enctype => 'multipart/form-data', :method => 'post'}
-      %label{:for => 'client_id'} GroupDocs ClientID
+    %p Enter data for request and press "Copy" button
+    %form{:action => '/sample05', :enctype => 'multipart/form-data', :method => 'post'}
+      %label{:for => 'clientId'} GroupDocs ClientID
       %br/
-      %input{:type=>'text', :name=>'client_id'}
+      %input{:type=>'text', :name=>'clientId'}
       %br/
-      %label{:for => 'private_key'} GroupDocs PrivateKey
+      %label{:for => 'privateKey'} GroupDocs PrivateKey
       %br/
-      %input{:type=>'text', :name=>'private_key'}
+      %input{:type=>'text', :name=>'privateKey'}
       %br/
       %div.guid_radio
         %input{:type=>'radio', :name=>'source', :value=>'guid', :checked=>'checked'} File ID (GUID)
@@ -43,8 +39,8 @@
       %div.guid_field
         %label{:for=>'fileId', :id=>'guid'} File ID (GUID)
         %br/
-        %input{:type=>'text', :name=>'fileId'}
-        
+        %input{:type=>'text', :name=>'srcPath', }
+      
       %div.guid_field{:style=>'display:none;'}
         %label{:for=>'file'} Upload local file
         %br/
@@ -54,21 +50,21 @@
         %label{:for=>'url', :id=>'url'} Upload file from URL
         %br/
         %input{:type=>'text', :name=>'url'}
-
-      %input{:type=>'radio', :name=>'check', :value=>'viewer', :checked=>'checked'} Viewer
-      %input{:type=>'radio', :name=>'check', :value=>'annotation'} Annotation
+        
       %br/
-      %label{:for => 'private_key'} Width
+      %label{:for => 'destPath'} Destination folder name in which you want to copy/move file
       %br/
-      %input{:type=>'text', :name=>'width'}
+      %input{:type=>'text', :name=>'destPath'}
       %br/
-      %label{:for => 'private_key'} Height
+      %label{:for => 'basePath'} Base Path
+      %span{:class => 'optional'} (Optional)
       %br/
-      %input{:type=>'text', :name=>'height'}
+      %input{:type=>'text', :name=>'basePath'}
       %br/
-      %input{:type => 'submit', :value => 'Make Request'}/
-  %div{:style => 'padding:20px; border:1px solid black;'}
-    %iframe{:src => "#{(defined? v_url) ? v_url : ''}", :width=> "#{(defined? width) ? width : ''}", :height=>"#{(defined? height) ? height : ''}"}
+      %input{:name => 'copy', :type => 'submit', :value => 'Copy'}/
+      %input{:name => 'move', :type => 'submit', :value => 'Move'}/
+  %h4
+    %span{:style => 'color: green'} #{(defined? massage) ? massage : ''}
   %br/
 
 = partial :_others_samples

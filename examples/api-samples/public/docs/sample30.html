@@ -59,13 +59,14 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>set variables</p>
+              <p>Set variables</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  set <span class="symbol">:client_id</span>, params[<span class="symbol">:client_id</span>]
-  set <span class="symbol">:private_key</span>, params[<span class="symbol">:private_key</span>]
-  set <span class="symbol">:name</span>, params[<span class="symbol">:name</span>]
+            <div class="content"><div class='highlight'><pre>  set <span class="symbol">:client_id</span>, params[<span class="symbol">:clientId</span>]
+  set <span class="symbol">:private_key</span>, params[<span class="symbol">:privateKey</span>]
+  set <span class="symbol">:name</span>, params[<span class="symbol">:fileName</span>]
+  set <span class="symbol">:base_path</span>, params[<span class="symbol">:basePath</span>]
 
   <span class="keyword">begin</span></pre></div></div>
             
@@ -82,7 +83,9 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    raise <span class="string">'Please enter all required parameters'</span> <span class="keyword">if</span> settings.client_id.empty? <span class="keyword">or</span> settings.private_key.empty? <span class="keyword">or</span> settings.name.empty?</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    raise <span class="string">'Please enter all required parameters'</span> <span class="keyword">if</span> settings.client_id.empty? <span class="keyword">or</span> settings.private_key.empty? <span class="keyword">or</span> settings.name.empty?
+
+    <span class="keyword">if</span> settings.base_path.empty? <span class="keyword">then</span> settings.base_path = <span class="string">'https://api.groupdocs.com'</span> <span class="keyword">end</span></pre></div></div>
             
         </li>
         
@@ -93,12 +96,13 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>get List files from GroupDocs Storage</p>
+              <p>Configure your access to API server</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    file = <span class="constant">GroupDocs::Storage::Folder</span>.list!(<span class="string">""</span>, {}, {<span class="symbol">:client_id</span> =&gt; settings.client_id, <span class="symbol">:private_key</span> =&gt; settings.private_key})
-    file_name = <span class="string">''</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="constant">GroupDocs</span>.configure <span class="keyword">do</span> |groupdocs|
+      groupdocs.client_id = settings.client_id
+      groupdocs.private_key = settings.private_key</pre></div></div>
             
         </li>
         
@@ -109,14 +113,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>choose the desired file</p>
+              <p>Optionally specify API server and version</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    file.map <span class="keyword">do</span> |element|
-      <span class="keyword">if</span> element.name == settings.name
-          file_name = element
-      <span class="keyword">end</span>
+            <div class="content"><div class='highlight'><pre>      groupdocs.api_server = settings.base_path <span class="comment"># default is 'https://api.groupdocs.com'</span>
     <span class="keyword">end</span></pre></div></div>
             
         </li>
@@ -128,17 +129,12 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>delete file from GroupDocs Storage</p>
+              <p>Make a request to API using client_id and private_key</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    file_name.delete!({<span class="symbol">:client_id</span> =&gt; settings.client_id, <span class="symbol">:private_key</span> =&gt; settings.private_key})
-
-    message = <span class="string">'File was deleted from GroupDocs Storage'</span>
-
-  <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e
-    err = e.message
-  <span class="keyword">end</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    files_list = <span class="constant">GroupDocs::Storage::Folder</span>.list!(<span class="string">'/'</span>, {})
+    document = <span class="string">''</span></pre></div></div>
             
         </li>
         
@@ -149,7 +145,47 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <p>set variables for template</p>
+              <p>Get document by file ID</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    files_list.each <span class="keyword">do</span> |element|
+      <span class="keyword">if</span> element.respond_to?(<span class="string">'name'</span>) == <span class="keyword">true</span> <span class="keyword">and</span> element.name == settings.name
+        document = element
+      <span class="keyword">end</span>
+    <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Delete file from GroupDocs Storage</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    document.delete!()
+
+    message = <span class="string">'Done, file deleted from your GroupDocs Storage'</span>
+
+  <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e
+    err = e.message
+  <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Set variables for template</p>
 
             </div>
             

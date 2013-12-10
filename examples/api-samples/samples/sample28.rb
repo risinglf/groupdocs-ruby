@@ -6,18 +6,23 @@ end
 # POST request
 post '/sample28' do
   # set variables
-  set :client_id, params[:client_id]
-  set :private_key, params[:private_key]
+  set :client_id, params[:clientId]
+  set :private_key, params[:privateKey]
   set :file_id, params[:fileId]
+  set :base_path, params[:basePath]
 
   begin
     # check required variables
     raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty? or settings.file_id.empty?
 
-    # Configure your access to API server.
+    if settings.base_path.empty? then settings.base_path = 'https://api.groupdocs.com' end
+
+    # Configure your access to API server
     GroupDocs.configure do |groupdocs|
       groupdocs.client_id = settings.client_id
       groupdocs.private_key = settings.private_key
+      # Optionally specify API server and version
+      groupdocs.api_server = settings.base_path # default is 'https://api.groupdocs.com'
     end
 
     # make a request to API using client_id and private_key
@@ -34,11 +39,11 @@ post '/sample28' do
 
     unless document.instance_of? String
       # get list of annotations
-      annotations = document.to_document.annotations!(:client_id => settings.client_id, :private_key => settings.private_key)
+      annotations = document.to_document.annotations!()
 
       # delete all annotations from document
       annotations.each do |annotation|
-          annotation.remove!(:client_id => settings.client_id, :private_key => settings.private_key)
+          annotation.remove!()
       end
 
       message = 'Annotations was deleted from document'

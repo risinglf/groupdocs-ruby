@@ -29,33 +29,33 @@
   #requestForm{:style => 'padding:20px; border:1px solid black;'}
     %p Enter data for request and press "Make request" button
     %form{:action => '/sample32', :enctype => 'multipart/form-data', :method => 'post'}
-      %label{:for => 'client_id'} GroupDocs ClientID
+      %label{:for => 'clientId'} GroupDocs ClientID
       %br/
-      %input{:type=>'text', :name=>'client_id'}
+      %input{:type=>'text', :name=>'clientId'}
       %br/
-      %label{:for => 'private_key'} GroupDocs PrivateKey
+      %label{:for => 'privateKey'} GroupDocs PrivateKey
       %br/
-      %input{:type=>'text', :name=>'private_key'}
+      %input{:type=>'text', :name=>'privateKey'}
       %br/
 
 
       %div.guid_radio
-        %input{:type=>'radio', :name=>'source', :value=>'form', :checked=>'checked'} Form GUID
+        %input{:type=>'radio', :name=>'source', :value=>'form'} Form GUID
         %br/
-        %input{:type=>'radio', :name=>'source', :value=>'template'} Template GUID
+        %input{:type=>'radio', :name=>'source', :value=>'template', :checked=>'checked'} Template GUID
         %br/
-
-      %div.guid_field
-        %label{:for=>'form', :id=>'form'} Form GUID
-        %br/
-        %input{:type=>'text', :name=>'form'}
 
       %div.guid_field{:style=>'display:none;'}
+        %label{:for=>'form', :id=>'form'} Form GUID
+        %br/
+        %input{:type=>'text', :name=>'formGuid'}
+
+      %div.guid_field
         %label{:for=>'template'} Template GUID
         %br/
-        %input{:type=>'text', :name=>'template'}
+        %input{:type=>'text', :name=>'templateGuid'}
 
-      %label{:for=>'email', :id=>'email'} Email for notification
+      %label{:for=>'email'} Email for notification
       %br/
       %input{:type=>'text', :name=>'email'}
       %br/
@@ -64,22 +64,25 @@
         %span.optional (Optional)
         %br/
         %font{:color=>'grey'} (For test Callback you can use this URL: http://groupdocs-ruby-samples.herokuapp.com/sample32/callback)
-      %input{:type=>'text', :size=>'70', :value=>"#{(defined? callback) ? callback : ''}", :name=>'callback'}
+      %input{:type=>'text', :size=>'70', :value=>"#{(defined? callback) ? callback : ''}", :name=>'callbackUrl'}
+      %br/
+      %label{:for => 'basePath'} Base Path
+      %span{:class => 'optional'} (Optional)
+      %br/
+      %input{:type=>'text', :name=>'basePath', :id=>'basePath'}
       %br/
       %br/
 
-      %input{:type => 'submit', :value => 'Signature'}
-
-
+      %input{:type => 'submit', :value => 'Publish form'}
 
       %br/
       %a{:href=>'/templates/merge_feid_doc.docx'} Download sample Docx file
       %br/
       %br/
-    %div{:style => 'padding:20px; border:1px solid black;'}
-      %p
-        Results:
-        #{(defined? iframe) ? iframe : ''}
+  %div{:style => 'padding:20px; border:1px solid black;'}
+    %p
+      Results:
+      #{(defined? iframe) ? iframe : ''}
 
 = partial :_others_samples
 

@@ -246,13 +246,14 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  set <span class="symbol">:client_id</span>, params[<span class="symbol">:client_id</span>]
-  set <span class="symbol">:private_key</span>, params[<span class="symbol">:private_key</span>]
-  set <span class="symbol">:template_guid</span>, params[<span class="symbol">:template</span>]
-  set <span class="symbol">:form_guid</span>, params[<span class="symbol">:form</span>]
+            <div class="content"><div class='highlight'><pre>  set <span class="symbol">:client_id</span>, params[<span class="symbol">:clientId</span>]
+  set <span class="symbol">:private_key</span>, params[<span class="symbol">:privateKey</span>]
+  set <span class="symbol">:template_guid</span>, params[<span class="symbol">:templateGuid</span>]
+  set <span class="symbol">:form_guid</span>, params[<span class="symbol">:formGuid</span>]
   set <span class="symbol">:email</span>, params[<span class="symbol">:email</span>]
-  set <span class="symbol">:callback</span>, params[<span class="symbol">:callback</span>]
+  set <span class="symbol">:callback</span>, params[<span class="symbol">:callbackUrl</span>]
   set <span class="symbol">:source</span>, params[<span class="symbol">:source</span>]
+  set <span class="symbol">:base_path</span>, params[<span class="symbol">:basePath</span>]
 
   <span class="keyword">begin</span></pre></div></div>
             
@@ -269,7 +270,9 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    raise <span class="string">'Please enter all required parameters'</span> <span class="keyword">if</span> settings.client_id.empty? <span class="keyword">or</span> settings.private_key.empty?</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    raise <span class="string">'Please enter all required parameters'</span> <span class="keyword">if</span> settings.client_id.empty? <span class="keyword">or</span> settings.private_key.empty?
+
+    <span class="keyword">if</span> settings.base_path.empty? <span class="keyword">then</span> settings.base_path = <span class="string">'https://api.groupdocs.com'</span> <span class="keyword">end</span></pre></div></div>
             
         </li>
         
@@ -280,14 +283,13 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
-              <p>Configure your access to API server.</p>
+              <p>Configure your access to API server</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>    <span class="constant">GroupDocs</span>.configure <span class="keyword">do</span> |groupdocs|
       groupdocs.client_id = settings.client_id
-      groupdocs.private_key = settings.private_key
-    <span class="keyword">end</span></pre></div></div>
+      groupdocs.private_key = settings.private_key</pre></div></div>
             
         </li>
         
@@ -297,6 +299,22 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>Optionally specify API server and version</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      groupdocs.api_server = settings.base_path <span class="comment"># default is 'https://api.groupdocs.com'</span>
+    <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
               <p>Write client and private key to the file for callback job</p>
 
@@ -308,11 +326,11 @@
         </li>
         
         
-        <li id="section-17">
+        <li id="section-18">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-17">&#182;</a>
+                <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
               <p>white space is required</p>
 
@@ -324,26 +342,12 @@
       out_file.close
     <span class="keyword">end</span>
 
-    iframe = <span class="string">''</span>
-
+    guid = <span class="keyword">nil</span>
+    url = <span class="keyword">nil</span>
 
     <span class="keyword">case</span> settings.source
-    <span class="keyword">when</span> <span class="string">'form'</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-18">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-18">&#182;</a>
-              </div>
-              <p>Create new Form with guid</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      form = <span class="constant">GroupDocs::Signature::Form</span>.new({<span class="symbol">:guid</span> =&gt; settings.form_guid})</pre></div></div>
+    <span class="keyword">when</span> <span class="string">'form'</span>
+      id = settings.form_guid</pre></div></div>
             
         </li>
         
@@ -354,11 +358,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
-              <p>Publish the Form</p>
+              <p>Create new Form with guid</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      form.publish!({<span class="symbol">:callbackUrl</span> =&gt; settings.callback})</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      form = <span class="constant">GroupDocs::Signature::Form</span>.get!(id)</pre></div></div>
             
         </li>
         
@@ -369,13 +373,14 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
-              <p>Add the signature to url the request</p>
+              <p>Publish the Form</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      url = <span class="string">"https://apps.groupdocs.com/signature2/forms/signembed/ <span class="subst">#{settings.form_guid}</span>"</span>
-      iframe = <span class="constant">GroupDocs::Api::Request</span>.new(<span class="symbol">:path</span> =&gt; url).prepare_and_sign_url
-      iframe = <span class="string">"&lt;iframe width='100%' height='600' frameborder='0' src='<span class="subst">#{iframe}</span>'&gt;&lt;/iframe&gt;"</span>
+            <div class="content"><div class='highlight'><pre>      form.publish!({<span class="symbol">:callbackUrl</span> =&gt; settings.callback})
+      raise form.to_yaml
+      guid = settings.form_guid
+
     <span class="keyword">when</span> <span class="string">'template'</span>
 
       form = <span class="constant">GroupDocs::Signature::Form</span>.new
@@ -395,7 +400,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      signature = form.create!({ <span class="symbol">:templateId</span> =&gt; settings.template_guid})</pre></div></div>
+            <div class="content"><div class='highlight'><pre>     guid = form.create!({ <span class="symbol">:templateId</span> =&gt; settings.template_guid})</pre></div></div>
             
         </li>
         
@@ -410,7 +415,9 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      form.publish!({<span class="symbol">:callbackUrl</span> =&gt; settings.callback})</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      form.publish!({<span class="symbol">:callbackUrl</span> =&gt; settings.callback})
+
+    <span class="keyword">end</span></pre></div></div>
             
         </li>
         
@@ -421,18 +428,19 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
-              <p>Add the signature to url the request</p>
+              <p>Get url from request</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      url = <span class="string">"https://apps.groupdocs.com/signature2/forms/signembed/ <span class="subst">#{signature}</span>"</span>
-      iframe = <span class="constant">GroupDocs::Api::Request</span>.new(<span class="symbol">:path</span> =&gt; url).prepare_and_sign_url
-      iframe = <span class="string">"&lt;iframe width='100%' height='600' frameborder='0' src='https://apps.groupdocs.com/signature2/forms/signembed/ <span class="subst">#{iframe}</span>'&gt;&lt;/iframe&gt;"</span>
-    <span class="keyword">end</span>
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">case</span> settings.base_path
 
-  <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e
-    err = e.message
-  <span class="keyword">end</span></pre></div></div>
+      <span class="keyword">when</span> <span class="string">'https://stage-api-groupdocs.dynabic.com'</span>
+        url = <span class="string">"http://stage-apps-groupdocs.dynabic.com/signature2/forms/signembed/ <span class="subst">#{guid}</span>"</span>
+      <span class="keyword">when</span> <span class="string">'https://dev-api-groupdocs.dynabic.com'</span>
+        url = <span class="string">"http://dev-apps-groupdocs.dynabic.com/signature2/forms/signembed/ <span class="subst">#{guid}</span>"</span>
+      <span class="keyword">else</span>
+        url = <span class="string">"https://apps.groupdocs.com/signature2/forms/signembed/ <span class="subst">#{guid}</span>"</span>
+    <span class="keyword">end</span></pre></div></div>
             
         </li>
         
@@ -442,6 +450,26 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>Add the signature to url the request</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    iframe = <span class="constant">GroupDocs::Api::Request</span>.new(<span class="symbol">:path</span> =&gt; url).prepare_and_sign_url
+    iframe = <span class="string">"&lt;iframe width='100%' height='600' frameborder='0' src='<span class="subst">#{iframe}</span>'&gt;&lt;/iframe&gt;"</span>
+
+  <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e
+    err = e.message
+  <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
               <p>Set variables for template</p>
 

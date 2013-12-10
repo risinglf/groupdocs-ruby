@@ -25,13 +25,13 @@
     %p Enter data for request and press "Make request" button
 
     %form{:action => "#{(defined? userId) ? '/sample35/check' : '/sample35'}", :enctype => 'multipart/form-data', :method => 'post', :id=>'form'}
-      %label{:for => 'client_id'} GroupDocs ClientID
+      %label{:for => 'clientId'} GroupDocs ClientID
       %br/
-      %input{:type=>'text', :name=>'client_id', :id=>'client_id', :value=>"#{(defined? userId) ? userId : ''}"}
+      %input{:type=>'text', :name=>'clientId', :id=>'client_id', :value=>"#{(defined? userId) ? userId : ''}"}
       %br/
-      %label{:for => 'private_key'} GroupDocs PrivateKey
+      %label{:for => 'privateKey'} GroupDocs PrivateKey
       %br/
-      %input{:type=>'text', :name=>'private_key', :id=>'private_key', :value=>"#{(defined? privateKey) ? privateKey : ''}"}
+      %input{:type=>'text', :name=>'privateKey', :id=>'private_key', :value=>"#{(defined? privateKey) ? privateKey : ''}"}
       %br/
 
 
@@ -58,11 +58,11 @@
           %label{:for=>'url', :id=>'url'} Upload file from URL
           %br/
           %input{:type=>'text', :name=>'url', :id=>'url'}
-      %label{:for => 'base_path'} Base Path
+      %label{:for => 'basePath'} Base Path
       %br/
       %font{:color=>'grey'} (https://stage-api-groupdocs.dynabic.com)
       %br/
-      %input{:type=>'text', :name=>'base_path', :id=>'base_path', :value=>"#{(defined? base_path) ? base_path : ''}"}
+      %input{:type=>'text', :name=>'basePath', :id=>'base_path', :value=>"#{(defined? base_path) ? base_path : ''}"}
       %br/
       #{(defined? html) ? html : ''}
 

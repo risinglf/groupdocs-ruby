@@ -12,7 +12,7 @@
   %p
     You entered:
   %p
-    UserId = #{(defined? userId) ? userId : ''}
+    UserId = #{(defined? clientId) ? clientId : ''}
   %p
     PrivateKey = #{(defined? privateKey) ? privateKey : ''}
   %p
@@ -25,15 +25,15 @@
   #requestForm{:style => 'padding:20px; border:1px solid black;'}
     %p Enter data for request and press "Make request" button
     %form{:action => '/sample13', :method => 'post'}
-      %label{:for => 'client_id'} GroupDocs ClientID
+      %label{:for => 'clientId'} GroupDocs ClientID
       %br/
-      %input{:type=>'text', :name=>'client_id'}
+      %input{:type=>'text', :name=>'clientId'}
       %br/
-      %label{:for => 'private_key'} GroupDocs PrivateKey
+      %label{:for => 'privateKey'} GroupDocs PrivateKey
       %br/
-      %input{:type=>'text', :name=>'private_key'}
+      %input{:type=>'text', :name=>'privateKey'}
       %br/
-      %label{:for => 'file_id'} GroupDocs FileID
+      %label{:for => 'fileId'} GroupDocs FileID
       %br/
       %input{:type=>'text', :name=>'fileId'}
       %br/
@@ -41,13 +41,19 @@
       %br/
       %input{:type=>'text', :name=>'email'}
       %br/
+      %label{:for => 'basePath'} Base Path
+      %span{:class => 'optional'} (Optional)
+      %br/
+      %input{:type=>'text', :name=>'basePath'}
+      %br/
       %br/
       %input{:type => 'submit', :value => 'Make request'}/
-    %div{:style => 'padding:20px; border:1px solid black;'}
-      %p
-        Result:
-
-        - if defined? result.first
-          #{result.first.primary_email}
+  %div{:style => 'padding:20px; border:1px solid black;'}
+    %p
+      Result:
+    %p
+      New collaborations:
+      - if defined? result.first
+        %span{:style => "color: green"}#{result.first.primary_email}
 
 = partial :_others_samples

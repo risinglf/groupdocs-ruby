@@ -1,36 +1,36 @@
 %h3{:style => 'text-align:center;'}
   %a{:href => '/'} GroupDocs Ruby SDK Samples
-  \- Sample8
+  \- Sample08
 .samplecontent{:style => 'padding:10px;'}
   %i This sample will show how to return a URL representing a single page of particular Document in the GroupDocs account using Ruby SDK
   %br/
   %br/
   %span.documentation
-    %a{:href => '/docs/sample8.html'} Builtin documentation for this sample
+    %a{:href => '/docs/sample08.html'} Builtin documentation for this sample
   %br/
   %br/
   %p
     You entered:
   %p
-    UserId = #{(defined? userId) ? userId : ''}
+    UserId = #{(defined? clientId) ? clientId : ''}
   %p
     PrivateKey = #{(defined? privateKey) ? privateKey : ''}
   %p
     File Id = #{(defined? guid) ? guid : ''}
   %p
-    Page number = #{(defined? page_number) ? page_number : ''}
+    Page number = #{(defined? pageNumber) ? pageNumber : ''}
   %p
     %font{:color => 'red'} #{(defined? err) ? err : ''}
     #requestForm{:style => 'padding:20px; border:1px solid black;'}
       %p Enter data for request and press "Make request" button
-      %form{:action => '/sample8', :enctype => 'multipart/form-data', :method => 'post'}
-        %label{:for => 'client_id'} GroupDocs ClientID
+      %form{:action => '/sample08', :enctype => 'multipart/form-data', :method => 'post'}
+        %label{:for => 'clientId'} GroupDocs ClientID
         %br/
-        %input{:type=>'text', :name=>'client_id'}
+        %input{:type=>'text', :id => 'clientId' , :name=>'clientId'}
         %br/
-        %label{:for => 'private_key'} GroupDocs PrivateKey
+        %label{:for => 'privateKey'} GroupDocs PrivateKey
         %br/
-        %input{:type=>'text', :name=>'private_key'}
+        %input{:type=>'text', :id => 'privateKey' , :name=>'privateKey'}
         %br/
         
         %div.guid_radio
@@ -57,9 +57,14 @@
           %input{:type=>'text', :name=>'url'}
         
         %br/
-        %label{:for => 'private_key'} GroupDocs page number (starts from zero)
+        %label{:for => 'pageNumber'} GroupDocs page number (starts from zero)
         %br/
-        %input{:type=>'text', :name=>'page_number'}
+        %input{:type=>'text', :name=>'pageNumber'}
+        %br/
+        %label{:for => 'basePath'} Base Path
+        %span{:class => 'optional'} (Optional)
+        %br/
+        %input{:type=>'text', :name=>'basePath', :id => "basePath"}
         %br/
         %input{:type => 'submit', :value => 'Make Request'}/
   %div{:style => 'padding:20px; border:1px solid black;'}
@@ -71,7 +76,7 @@
       %tr
         %td Page URL
         %td #{(defined? image) ? image : ''}
-    %font{:color => 'green'} The page you requested:
+    %font{:color => 'green'}#{(defined? image) ? if image.nil? then 'You entered incorrect page number' else 'The page you requested:' end : ''}
     %br/
     %img{:src => "#{(defined? image) ? image : ''}"}
   %br/

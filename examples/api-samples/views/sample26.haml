@@ -41,13 +41,18 @@
     #requestForm{:style => 'padding:20px; border:1px solid black;'}
       %p Enter data for request and press "Make request" button
       %form{:action => '/sample26', :enctype => 'multipart/form-data', :method => 'post'}
-        %label{:for => 'email'} Login
+        %label{:for => 'login'} Login
         %br/
-        %input{:type=>'text', :name=>'email'}
+        %input{:type=>'text', :name=>'login'}
         %br/
         %label{:for => 'password'} Password
         %br/
-        %input{:type=>'text', :name=>'password'}
+        %input{:type=>'password', :name=>'password'}
+        %br/
+        %label{:for => 'basePath'} Base Path
+        %span{:class => 'optional'} (Optional)
+        %br/
+        %input{:type=>'text', :name=>'basePath'}
         %br/
         %input{:type => 'submit', :value => 'Make Request'}
 

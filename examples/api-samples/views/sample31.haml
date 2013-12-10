@@ -35,41 +35,43 @@
   #requestForm{:style => 'padding:20px; border:1px solid black;'}
     %p Enter data for request and press "Make request" button
     %form{:action => '/sample31', :enctype => 'multipart/form-data', :method => 'post'}
-      %label{:for => 'client_id'} GroupDocs ClientID
+      %label{:for => 'clientId'} GroupDocs ClientID
       %br/
-      %input{:type=>'text', :name=>'client_id'}
+      %input{:type=>'text', :name=>'clientId'}
       %br/
-      %label{:for => 'private_key'} GroupDocs PrivateKey
+      %label{:for => 'privateKey'} GroupDocs PrivateKey
       %br/
-      %input{:type=>'text', :name=>'private_key'}
+      %input{:type=>'text', :name=>'privateKey'}
       %br/
-      %label{:for => 'template_guid'} Template file GUID
+      %label{:for => 'templateGuid'} Template file GUID
       %br/
-      %input{:type=>'text', :name=>'template_guid'}
+      %input{:type=>'text', :name=>'templateGuid'}
       %br/
-      %label{:for => 'email'} Email
       %br/
-      %input{:type=>'text', :name=>'email'}
-      %br/
-      %label{:for => 'name'} Name
-      %br/
-      %input{:type=>'text', :name=>'name'}
-      %br/
-      %label{:for => 'last_name'} Last Name
-      %br/
-      %input{:type=>'text', :name=>'last_name'}
-      %br/
-      %label{:for => 'country'} Country
-      %br/
-      %input{:type=>'text', :name=>'country'}
-      %br/
-      %label{:for => 'city'} City
-      %br/
-      %input{:type=>'text', :name=>'city'}
-      %br/
-      %label{:for => 'street'} Street
-      %br/
-      %input{:type=>'text', :name=>'street'}
+      %div{:style => 'background-color:#e5e5e5;border:3px double gray;width:700px;padding:20px;font-size:10pt;'}
+        %label{:for => 'email'} What is your email?
+        %input{:type=>'text', :name=>'email'}
+        %br/
+        %br/
+        %label{:for => 'name'} What is your name?
+        %input{:type=>'text', :name=>'name'}
+        %br/
+        %br/
+        %label{:for => 'lastName'} What is your last name?
+        %input{:type=>'text', :name=>'lastName'}
+        %br/
+        %br/
+        %label{:for => 'country'} What is your country?
+        %input{:type=>'text', :name=>'country'}
+        %br/
+        %br/
+        %label{:for => 'city'} What is your city?
+        %input{:type=>'text', :name=>'city'}
+        %br/
+        %br/
+        %label{:for => 'street'} What is your street?
+        %input{:type=>'text', :name=>'street'}
+        %br/
       %br/
       %label{:for=>'callback'}
         Callback URL
@@ -79,6 +81,11 @@
       %input{:type=>'text', :size=>'70', :value=>"#{(defined? callback) ? callback : ''}", :name=>'callback'}
 
       %br/
+      %label{:for => 'basePath'} Base Path
+      %span{:class => 'optional'} (Optional)
+      %br/
+      %input{:type=>'text', :name=>'basePath'}
+      %br/
       %br/
 
       %input{:type => 'submit', :value => 'Make request'}
@@ -87,10 +94,10 @@
       %a{:href=>'/templates/merge_feid2_doc.docx'} Download sample Docx file
       %br/
       %br/
-    %div{:style => 'padding:20px; border:1px solid black;'}
-      %p Results:
-      %iframe{:id=>'downloadframe', :style=>'display:none'}
-      #{(defined? iframe) ? iframe : ''}
+  %div{:style => 'padding:20px; border:1px solid black;'}
+    %p Results:
+    %iframe{:id=>'downloadframe', :style=>'display:none'}
+    #{(defined? iframe) ? iframe : ''}
 
 = partial :_others_samples
 

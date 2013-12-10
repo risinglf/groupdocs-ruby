@@ -1,13 +1,13 @@
 %h3{:style => 'text-align:center;'}
   %a{:href => '/'}GroupDocs Ruby SDK Samples
-  \- Sample1
+  \- Sample01
   
 .samplecontent{:style => 'padding:10px;'}
   %i This sample will show how to use Signer object to be authorized at GroupDocs and how to get GroupDocs user infromation using Ruby SDK
   %br/
   %br/
   %span.documentation
-    %a{:href => '/docs/sample1.html'} Builtin documentation for this sample
+    %a{:href => '/docs/sample01.html'} Builtin documentation for this sample
   %br/
   %br/
   %p
@@ -40,14 +40,19 @@
     %br/
     #requestForm{:style => 'padding:20px; border:1px solid black;'}
       %p Enter data for request and press "Make request" button
-      %form{:action => '/sample1', :enctype => 'multipart/form-data', :method => 'post'}
-        %label{:for => 'client_id'} GroupDocs Client ID
+      %form{:action => '/sample01', :enctype => 'multipart/form-data', :method => 'post'}
+        %label{:for => 'clientId'} GroupDocs Client ID
         %br/
-        %input{:type=>'text', :name=>'client_id'}
+        %input{:type=>'text', :name=>'clientId'}
         %br/
-        %label{:for => 'private_key'} GroupDocs Private Key
+        %label{:for => 'privateKey'} GroupDocs Private Key
         %br/
-        %input{:type=>'text', :name=>'private_key'}
+        %input{:type=>'text', :name=>'privateKey'}
+        %br/
+        %label{:for => 'basePath'} Base Path
+        %span{:class => 'optional'} (Optional)
+        %br/
+        %input{:type=>'text', :name=>'basePath'}
         %br/
         %input{:type => 'submit', :value => 'Make Request'}
 

@@ -29,15 +29,15 @@
   #requestForm{:style => 'padding:20px; border:1px solid black;'}
     %p Enter data for request and press "Make request" button
     %form{:action => '/sample18', :enctype => 'multipart/form-data', :method => 'post'}
-      %label{:for => 'client_id'} GroupDocs ClientID
+      %label{:for => 'clientId'} GroupDocs ClientID
       %br/
-      %input{:type=>'text', :name=>'client_id'}
+      %input{:type=>'text', :name=>'clientId'}
       %br/
-      %label{:for => 'private_key'} GroupDocs PrivateKey
+      %label{:for => 'privateKey'} GroupDocs PrivateKey
       %br/
-      %input{:type=>'text', :name=>'private_key'}
+      %input{:type=>'text', :name=>'privateKey'}
       %br/
-      %label{:for => 'file_id'} GroupDocs FileID
+      %label{:for => 'fileId'} GroupDocs FileID
       %br/
 
 
@@ -67,8 +67,8 @@
 
 
       %br/
-      %label{:for=>'convert_type'} Result file type
-      %select{:name=>'convert_type', :id=>'convert_type'}
+      %label{:for=>'convertType'} Result file type
+      %select{:name=>'convertType', :id=>'convert_type'}
         %option{:value => 'doc'}Doc
         %option{:value => 'docx'}Docx
         %option{:value => 'pdf'}PDF
@@ -86,6 +86,12 @@
 
       %br/
       %br/
+      %label{:for => 'basePath'} Base Path
+      %span{:class => 'optional'} (Optional)
+      %br/
+      %input{:type=>'text', :name=>'basePath'}
+      %br/
+
 
       %input{:type => 'submit', :value => 'Make request'}
       %span{:id=>'results_status', :style=>'color:red;display:none;'} (Please wait for ajax response)

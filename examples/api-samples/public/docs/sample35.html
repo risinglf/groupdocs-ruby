@@ -63,12 +63,12 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  set <span class="symbol">:client_id</span>, params[<span class="symbol">:client_id</span>]
-  set <span class="symbol">:private_key</span>, params[<span class="symbol">:private_key</span>]
+            <div class="content"><div class='highlight'><pre>  set <span class="symbol">:client_id</span>, params[<span class="symbol">:clientId</span>]
+  set <span class="symbol">:private_key</span>, params[<span class="symbol">:privateKey</span>]
   set <span class="symbol">:source</span>, params[<span class="symbol">:source</span>]
   set <span class="symbol">:file_id</span>, params[<span class="symbol">:fileId</span>]
   set <span class="symbol">:url</span>, params[<span class="symbol">:url</span>]
-  set <span class="symbol">:path</span>, params[<span class="symbol">:base_path</span>]
+  set <span class="symbol">:path</span>, params[<span class="symbol">:basePath</span>]
 
   <span class="keyword">begin</span></pre></div></div>
             
@@ -352,9 +352,9 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>post <span class="string">'/sample35/check'</span> <span class="keyword">do</span>
-  set <span class="symbol">:client_id</span>, params[<span class="symbol">:client_id</span>]
-  set <span class="symbol">:private_key</span>, params[<span class="symbol">:private_key</span>]
-  set <span class="symbol">:path</span>, params[<span class="symbol">:base_path</span>]
+  set <span class="symbol">:client_id</span>, params[<span class="symbol">:clientId</span>]
+  set <span class="symbol">:private_key</span>, params[<span class="symbol">:privateKey</span>]
+  set <span class="symbol">:path</span>, params[<span class="symbol">:basePath</span>]
   set <span class="symbol">:file_id</span>, params[<span class="symbol">:fileId</span>]
 
   <span class="keyword">begin</span></pre></div></div>
@@ -568,41 +568,11 @@ Merge template PDF FIle with the data provided via dinamically created HTML form
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
-              <p>Download file</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    document[<span class="symbol">:inputs</span>][<span class="number">0</span>].outputs[<span class="number">0</span>].download!(<span class="string">"<span class="subst">#{<span class="constant">File</span>.dirname(__FILE_<span class="number">_</span>)}</span>/../public/downloads"</span>)</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-33">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-33">&#182;</a>
-              </div>
               <p>Set converted document GUID</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    guid = document[<span class="symbol">:inputs</span>][<span class="number">0</span>].outputs[<span class="number">0</span>].guid</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-34">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-34">&#182;</a>
-              </div>
-              <p>Set converted document Name</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    file_name = document[<span class="symbol">:inputs</span>][<span class="number">0</span>].outputs[<span class="number">0</span>].name
+            <div class="content"><div class='highlight'><pre>    guid = document[<span class="symbol">:inputs</span>][<span class="number">0</span>].outputs[<span class="number">0</span>].guid
 
     <span class="keyword">case</span> settings.path
 

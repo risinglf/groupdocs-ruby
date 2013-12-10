@@ -73,16 +73,17 @@ end
 # POST request
 post '/sample31' do
   # set variables
-  set :client_id, params[:client_id]
-  set :private_key, params[:private_key]
-  set :template_guid, params[:template_guid]
+  set :client_id, params[:clientId]
+  set :private_key, params[:privateKey]
+  set :template_guid, params[:templateGuid]
   set :name, params[:name]
   set :country, params[:country]
   set :city, params[:city]
   set :street, params[:street]
   set :email, params[:email]
   set :callback, params[:callback]
-  set :last_name, params[:last_name]
+  set :last_name, params[:lastName]
+  set :base_path, params[:basePath]
 
   # Set download path
   downloads_path = "#{File.dirname(__FILE__)}/../public/downloads"
@@ -98,12 +99,15 @@ post '/sample31' do
     # check required variables
     raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty?
 
-    # Configure your access to API server.
+    if settings.base_path.empty? then settings.base_path = 'https://api.groupdocs.com' end
+
+    # Configure your access to API server
     GroupDocs.configure do |groupdocs|
       groupdocs.client_id = settings.client_id
       groupdocs.private_key = settings.private_key
+      # Optionally specify API server and version
+      groupdocs.api_server = settings.base_path # default is 'https://api.groupdocs.com'
     end
-
 
     # Write client and private key to the file for callback job
     if settings.callback[0]
@@ -113,7 +117,9 @@ post '/sample31' do
       out_file.write("#{settings.private_key}")
       out_file.close
     end
-
+    if settings.last_name.empty?
+      settings.last_name = 'test'
+    end
     file = nil
     # Create instance of File
     file = GroupDocs::Storage::File.new({:guid => settings.template_guid})
@@ -167,28 +173,24 @@ post '/sample31' do
 
     # Adds recipient to envelope
     envelope.add_recipient!(recipient)
-
-    #Get field
-    fieldGet = GroupDocs::Signature::Field.get!({}).detect { |f| f.type == :signature }
-    fieldGet.location = { location_x: 0.15,
-                          location_y: 0.73,
-                          location_width: 150,
-                          location_height: 50,
-                          page: 1 }
-
-    #Get document
-    documentGet = envelope.documents!({}).first
-
     #Get recipients
     recipientGet = envelope.recipients!({}).first
-
-    # Add field to envelope
-    addField = envelope.add_field!(fieldGet, documentGet, recipientGet, {})
 
     # Send envelope
     envelope.send!({:callbackUrl => settings.callback})
 
-    url = "https://apps.groupdocs.com/signature/signembed/#{envelope.id}/#{recipientGet.id}"
+    #Get url from request
+    case settings.base_path
+
+      when 'https://stage-api-groupdocs.dynabic.com'
+        url = "http://stage-apps-groupdocs.dynabic.com/signature2/signembed/#{envelope.id}/#{recipientGet.id}"
+      when 'https://dev-api-groupdocs.dynabic.com'
+        url = "http://dev-apps-groupdocs.dynabic.com/signature2/signembed/#{envelope.id}/#{recipientGet.id}"
+      else
+        url = "https://apps.groupdocs.com/signature2/signembed/#{envelope.id}/#{recipientGet.id}"
+    end
+
+    # Add the signature in url
     iframe = GroupDocs::Api::Request.new(:path => url).prepare_and_sign_url
 
     # Make iframe

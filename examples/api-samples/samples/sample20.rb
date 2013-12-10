@@ -6,21 +6,32 @@ end
 # POST request
 post '/sample20' do
   # set variables
-  set :client_id, params[:client_id]
-  set :private_key, params[:private_key]
+  set :client_id, params[:clientId]
+  set :private_key, params[:privateKey]
   set :resultFileId, params[:resultFileId]
+  set :base_path, params[:basePath]
 
   begin
 
     # check required variables
     raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty? or settings.resultFileId.empty?
 
+    if settings.base_path.empty? then settings.base_path = 'https://api.groupdocs.com' end
+
+    # Configure your access to API server
+    GroupDocs.configure do |groupdocs|
+      groupdocs.client_id = settings.client_id
+      groupdocs.private_key = settings.private_key
+      # Optionally specify API server and version
+      groupdocs.api_server = settings.base_path # default is 'https://api.groupdocs.com'
+    end
+
     # construct new storage file
     file = GroupDocs::Storage::File.new(guid: settings.resultFileId)
     # construct new document
     document = GroupDocs::Document.new(file: file)
     # get compare changes
-    changes = document.changes!({:client_id => settings.client_id, :private_key => settings.private_key})
+    changes = document.changes!()
 
     result = ''
     result += "<table class='border'>"

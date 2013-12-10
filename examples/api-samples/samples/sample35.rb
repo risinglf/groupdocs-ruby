@@ -7,12 +7,12 @@ end
 # POST request
 post '/sample35' do
   # Set variables
-  set :client_id, params[:client_id]
-  set :private_key, params[:private_key]
+  set :client_id, params[:clientId]
+  set :private_key, params[:privateKey]
   set :source, params[:source]
   set :file_id, params[:fileId]
   set :url, params[:url]
-  set :path, params[:base_path]
+  set :path, params[:basePath]
 
   begin
     # Check required variables
@@ -97,9 +97,9 @@ end
 
 # POST request
 post '/sample35/check' do
-  set :client_id, params[:client_id]
-  set :private_key, params[:private_key]
-  set :path, params[:base_path]
+  set :client_id, params[:clientId]
+  set :private_key, params[:privateKey]
+  set :path, params[:basePath]
   set :file_id, params[:fileId]
 
   begin

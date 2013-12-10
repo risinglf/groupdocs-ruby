@@ -13,9 +13,9 @@
   %p
     You entered:
   %p
-    UserId = #{(defined? userId) ? userId : ''}
+    UserId = #{(defined? clientId) ? clientId : ''}
   %p
-    PrivateKey = #{(defined? privateKey) ? privateKey : ''}
+    PrivateKey = #{(defined? privatKey) ? privateKey : ''}
   %p
     FileId = #{(defined? fileId) ? fileId : ''}
   %p
@@ -35,21 +35,26 @@
       %input{:type => 'hidden', :name => 'annotationId', :value => (defined? annotationId) ? annotationId : ''}
       %p Enter data for request and press "Make request" button
 
-      %label{:for => 'client_id'} GroupDocs ClientID
+      %label{:for => 'clientId'} GroupDocs ClientID
       %br/
-      %input{:type=>'text', :name=>'client_id', :value => (defined? userId) ? userId : ''}
+      %input{:type=>'text', :name=>'clientId', :value => (defined? client_id) ? client_id: ''}
       %br/
-      %label{:for => 'private_key'} GroupDocs PrivateKey
+      %label{:for => 'privateKey'} GroupDocs PrivateKey
       %br/
-      %input{:type=>'text', :name=>'private_key', :value => (defined? privateKey) ? privateKey : ''}
+      %input{:type=>'text', :name=>'privateKey', :value => (defined? private_key) ? private_key : ''}
       %br/
-      %label{:for => 'file_id'} GroupDocs FileID
+      %label{:for => 'fileId'} GroupDocs FileID
       %br/
       %input{:type=>'text', :name=>'fileId', :value => (defined? fileId) ? fileId : ''}
       %br/
+      %label{:for => 'basePath'} Base Path
+      %span{:class => 'optional'} (Optional)
+      %br/
+      %input{:type=>'text', :name=>'basePath'}
+      %br/
       Annotation Type
       %br/
-      %select{:name => 'annotation_type', :id => 'annotation_type'}
+      %select{:name => 'annotationType', :id => 'annotation_type'}
         %option{:value => 'text'}Text
         %option{:value => 'area'}Area
         %option{:value => 'point', :selected => 'selected'}Point
@@ -60,53 +65,53 @@
         %legend Parameters (all are required)
         %div
           %span Box X
-          %input{:type=>'text', :name=>'box_x', :placeholder => 'double'}
+          %input{:type=>'text', :name=>'boxX', :placeholder => 'double'}
         %div
           %span Box Y
-          %input{:type=>'text', :name=>'box_y', :placeholder => 'double'}
+          %input{:type=>'text', :name=>'boxY', :placeholder => 'double'}
 
         %div{:style => 'display:none', :id => 'box-params'}
           %div
             %span Box Width
-            %input{:type=>'text', :name=>'box_width', :placeholder => 'double'}
+            %input{:type=>'text', :name=>'boxWidth', :placeholder => 'double'}
           %div
             %span Box Height
-            %input{:type=>'text', :name=>'box_height', :placeholder => 'double'}
+            %input{:type=>'text', :name=>'boxHeight', :placeholder => 'double'}
 
         %div{:style => 'display:none', :id => 'annotation-position'}
           %div
             %span Annotation Position X
-            %input{:type=>'text', :name=>'annotationPosition_x', :placeholder => 'double'}
+            %input{:type=>'text', :name=>'annotationPositionX', :placeholder => 'double'}
           %div
             %span Annotation Position Y
-            %input{:type=>'text', :name=>'annotationPosition_y', :placeholder => 'double'}
+            %input{:type=>'text', :name=>'annotationPositionY', :placeholder => 'double'}
 
         %div{:style => 'display:none', :id => 'range-position'}
           %div
             %span Range Position
-            %input{:type=>'text', :name=>'range-position', :placeholder => 'double'}
+            %input{:type=>'text', :name=>'rangePosition', :placeholder => 'double'}
           %div
             %span Range Length
-            %input{:type=>'text', :name=>'range-length', :placeholder => 'double'}
+            %input{:type=>'text', :name=>'rangeLength', :placeholder => 'double'}
         %div
           %span Text
           %input{:type=>'text', :name=>'text', :placeholder => 'text'}
-
+        %br/
 
       %input{:type => 'submit', :value => 'Make request'}/
 
       %button{:name => 'delete-annotation', :id => 'delete', :value => "#{(defined? annotationId) ? annotationId : ''}", :style=>'display:none;'} Delete Annotation
 
-    %div{:style => 'padding:20px; border:1px solid black;'}
-      %p Results:
-      %p #{(defined? iframe) ? iframe : ''}
-      %span{:color=>'green', :style => 'font-size:4'}#{(defined? message) ? message : ''}
+  %div{:style => 'padding:20px; border:1px solid black;'}
+    %p Results:
+    %p #{(defined? iframe) ? iframe : ''}
+    %span{:color=>'green', :style => 'font-size:4'}#{(defined? message) ? message : ''}
 = partial :_others_samples
 
 %script{:src=>'//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'}
 :javascript
   $(function() {
-      $('select[name="annotation_type"]').change(function() {
+      $('select[name="annotationType"]').change(function() {
           var obj = $(this);
 
           if (obj.val() == "text") {

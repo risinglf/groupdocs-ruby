@@ -63,9 +63,10 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  set <span class="symbol">:client_id</span>, params[<span class="symbol">:client_id</span>]
-  set <span class="symbol">:private_key</span>, params[<span class="symbol">:private_key</span>]
+            <div class="content"><div class='highlight'><pre>  set <span class="symbol">:client_id</span>, params[<span class="symbol">:clientId</span>]
+  set <span class="symbol">:private_key</span>, params[<span class="symbol">:privateKey</span>]
   set <span class="symbol">:folder</span>, params[<span class="symbol">:folder</span>]
+  set <span class="symbol">:base_path</span>, params[<span class="symbol">:basePath</span>]
 
   <span class="keyword">begin</span></pre></div></div>
             
@@ -82,7 +83,9 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    raise <span class="string">'Please enter all required parameters'</span> <span class="keyword">if</span> settings.client_id.empty? <span class="keyword">or</span> settings.private_key.empty? <span class="keyword">or</span> settings.folder.empty?</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    raise <span class="string">'Please enter all required parameters'</span> <span class="keyword">if</span> settings.client_id.empty? <span class="keyword">or</span> settings.private_key.empty? <span class="keyword">or</span> settings.folder.empty?
+
+    <span class="keyword">if</span> settings.base_path.empty? <span class="keyword">then</span> settings.base_path = <span class="string">'https://api.groupdocs.com'</span> <span class="keyword">end</span></pre></div></div>
             
         </li>
         
@@ -93,11 +96,13 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>make a request to API using client_id and private_key</p>
+              <p>Configure your access to API server</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    files_list = <span class="constant">GroupDocs::Storage::Folder</span>.list!(settings.folder, {}, {<span class="symbol">:client_id</span> =&gt; settings.client_id, <span class="symbol">:private_key</span> =&gt; settings.private_key})</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="constant">GroupDocs</span>.configure <span class="keyword">do</span> |groupdocs|
+      groupdocs.client_id = settings.client_id
+      groupdocs.private_key = settings.private_key</pre></div></div>
             
         </li>
         
@@ -108,15 +113,13 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>get list of shares for a folder</p>
+              <p>Optionally specify API server and version</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    shares = files_list.first.sharers!({<span class="symbol">:client_id</span> =&gt; settings.client_id, <span class="symbol">:private_key</span> =&gt; settings.private_key})
-
-  <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e
-    err = e.message
-  <span class="keyword">end</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>      groupdocs.api_server = settings.base_path <span class="comment"># default is 'https://api.groupdocs.com'</span>
+    <span class="keyword">end</span>
+    folder = <span class="keyword">nil</span></pre></div></div>
             
         </li>
         
@@ -126,6 +129,46 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>make a request to API using client_id and private_key</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    files_list = <span class="constant">GroupDocs::Storage::Folder</span>.list!()
+
+    files_list.map <span class="keyword">do</span> |e|
+      <span class="keyword">if</span> e.name == settings.folder
+        folder = e
+      <span class="keyword">end</span>
+    <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>get list of shares for a folder</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    shares = folder.sharers!()
+
+  <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e
+    err = e.message
+  <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <p>set variables for template</p>
 

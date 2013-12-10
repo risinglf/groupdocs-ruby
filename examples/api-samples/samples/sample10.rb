@@ -5,38 +5,52 @@ end
 
 # POST request
 post '/sample10' do
-  # set variables
-  set :client_id, params[:client_id]
-  set :private_key, params[:private_key]
+  # Set variables
+  set :client_id, params[:clientId]
+  set :private_key, params[:privateKey]
   set :guid, params[:fileId]
   set :email, params[:email]
+  set :source, params[:source]
+  set :base_path, params[:basePath]
 
   begin
-    # check required variables
+    # Check required variables
     raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty? or settings.guid.empty? or settings.email.empty?
 
-    # get document by file GUID
+
+    if settings.base_path.empty? then settings.base_path = 'https://api.groupdocs.com' end
+
+    # Configure your access to API server
+    GroupDocs.configure do |groupdocs|
+      groupdocs.client_id = settings.client_id
+      groupdocs.private_key = settings.private_key
+      # Optionally specify API server and version
+      groupdocs.api_server = settings.base_path # default is 'https://api.groupdocs.com'
+    end
+
+    # Get document by file GUID
     file = nil
     case settings.source
       when 'guid'
-        file = GroupDocs::Storage::File.new({:guid => settings.guid})
+        file = GroupDocs::Storage::File.new({:guid => settings.guid}).to_document.metadata!()
+        file = file.last_view.document.file
       when 'local'
-        # construct path
+        # Construct path
         filepath = "#{Dir.tmpdir}/#{params[:file][:filename]}"
-        # open file
+        # Open file
         File.open(filepath, 'wb') { |f| f.write(params[:file][:tempfile].read) }
-        # make a request to API using client_id and private_key
-        file = GroupDocs::Storage::File.upload!(filepath, {}, client_id: settings.client_id, private_key: settings.private_key)
+        # Make a request to API using client_id and private_key
+        file = GroupDocs::Storage::File.upload!(filepath, {})
       when 'url'
-        file = GroupDocs::Storage::File.upload_web!(settings.url, client_id: settings.client_id, private_key: settings.private_key)
+        file = GroupDocs::Storage::File.upload_web!(settings.url)
       else
         raise 'Wrong GUID source.'
     end
 
     # Share document. Make a request to API using client_id and private_key
-    shared = file.to_document.sharers_set!(settings.email.split(' '), {:client_id => settings.client_id, :private_key => settings.private_key})
+    shared = file.to_document.sharers_set!(settings.email.split(' '))
 
-    # result
+    # Result
     if shared
       shared_emails = settings.email
     end
@@ -44,6 +58,6 @@ post '/sample10' do
     err = e.message
   end
 
-  # set variables for template
-  haml :sample10, :locals => {:client_id => settings.client_id, :private_key => settings.private_key, :guid => settings.guid, :email => settings.email, :shared => shared_emails, :err => err}
+  # Set variables for template
+  haml :sample10, :locals => {:clientId => settings.client_id, :privateKey => settings.private_key, :guid => settings.guid, :email => settings.email, :shared => shared_emails, :err => err}
 end
