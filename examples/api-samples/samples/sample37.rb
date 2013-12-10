@@ -11,6 +11,8 @@ post '/sample37/signature_callback' do
   # Get callback request
   data = JSON.parse(request.body.read)
   begin
+  
+    File.open("#{File.dirname(__FILE__)}/../public/log.txt", "wb"){|file| file.write(data)}
     raise 'Empty params!' if data.empty?
     source_id = nil
     client_id = nil
@@ -64,9 +66,17 @@ get '/sample37/check' do
 
   # Get file name from download directory
   name = nil
-  Dir.entries("#{File.dirname(__FILE__)}/../public/downloads").each do |file|
-    name = file if file != '.' && file != '..'
-  end
+ 
+  i = 0
+  # Checking, if file exist
+    while i<5 do
+      sleep(5)  	  
+    Dir.entries("#{File.dirname(__FILE__)}/../public/downloads").each do |file|	
+      name = file if file != '.' && file != '..'	
+    end	  
+      break if name
+      i += 1
+    end
 
   name
 end
