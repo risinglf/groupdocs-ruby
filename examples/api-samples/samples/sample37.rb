@@ -1,54 +1,43 @@
-# GET request
+# Route to handle url "/sample37"
 get '/sample37' do
   haml :sample37
 end
 
-# POST request
+# Route to handle url "/sample37/signature_callback". It handles callback request from API server
 post '/sample37/signature_callback' do
-  # Set download path
-  downloads_path = "#{File.dirname(__FILE__)}/../public/downloads"
-
-  # Get callback request
-  data = JSON.parse(request.body.read)
-  begin
-  
-    File.open("#{File.dirname(__FILE__)}/../public/log.txt", "wb"){|file| file.write(data)}
+  # Get  json data from callback request
+  data = JSON.parse(request.body.read)  
+  begin 
+    
     raise 'Empty params!' if data.empty?
-    source_id = nil
-    client_id = nil
-    private_key = nil
-    event_type = nil
 
-    i = 0
+  # Set variables from json data
+	source_id = data['SourceId']    
+  event_type = data['EventType']
 
-    while i<5 do
-      sleep(5)
-      # Get value of SourceId
-      data.each do |key, value|
-        if key == 'SourceId'
-          source_id = value
-        end
-        if key == 'EventType'
-          event_type == value
-        end
-      end
-      break if event_type == 'JobCompleted'
-      i += 1
-    end
-
-    # Get private key and client_id from file user_info.txt
-    if File.exist?("#{File.dirname(__FILE__)}/../public/user_info.txt")
-      contents = File.read("#{File.dirname(__FILE__)}/../public/user_info.txt")
-      contents = contents.split(' ')
-      client_id = contents[0]
-      private_key = contents[1]
-    end
+  # Set variables
+  client_id = nil
+  private_key = nil
+	
+	return if event_type != 'JobCompleted'
+	
+	# Set download path
+	downloads_path = "#{File.dirname(__FILE__)}/../public/downloads"
+	
+	 # Get private key and client_id from file user_info.txt
+	if File.exist?("#{File.dirname(__FILE__)}/../public/user_info.txt")
+	  contents = File.read("#{File.dirname(__FILE__)}/../public/user_info.txt")
+	  contents = contents.split(' ')
+	  client_id = contents[0]
+	  private_key = contents[1]
+	end
 
     # Get Envelope instance
     envelope = GroupDocs::Signature::Envelope.get!(source_id, {:client_id => client_id, :private_key => private_key})
 
     # Get document by envelope
     envelope.signed_documents!(downloads_path, {:client_id => client_id, :private_key => private_key})
+   
 
   rescue Exception => e
     err = e.message
@@ -56,7 +45,7 @@ post '/sample37/signature_callback' do
 end
 
 
-# GET request
+# Route to handle url "/sample37/check"
 get '/sample37/check' do
 
   # Check is there download directory
@@ -68,8 +57,9 @@ get '/sample37/check' do
   name = nil
  
   i = 0
+
   # Checking, if file exist
-    while i<5 do
+    while i<10 do
       sleep(5)  	  
     Dir.entries("#{File.dirname(__FILE__)}/../public/downloads").each do |file|	
       name = file if file != '.' && file != '..'	
@@ -81,15 +71,15 @@ get '/sample37/check' do
   name
 end
 
-# GET request
+# Route to handle url "/sample37/downloads"
 get '/sample37/downloads/:filename' do |filename|
   # Send file with header to download it
   send_file "#{File.dirname(__FILE__)}/../public/downloads/#{filename}", :filename => filename, :type => 'Application/octet-stream'
 end
 
-# POST request
+# Route to handle url "/sample37". It creates new envelope
 post '/sample37' do
-  # set variables
+  # Set variables from form
   set :client_id, params[:clientId]
   set :private_key, params[:privateKey]
   set :email, params[:email]
