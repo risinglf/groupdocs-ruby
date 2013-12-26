@@ -64,8 +64,8 @@
       %br/
       %input{:type=>'text', :name=>'basePath', :id=>'base_path', :value=>"#{(defined? base_path) ? base_path : ''}"}
       %br/
-      #{(defined? html) ? html : ''}
-
+      #{(defined? html) ? "<div style='background-color:#e5e5e5;border:3px double gray;width:700px;padding:3px;font-size:10pt;>#{html}</div>" : '' }
+      %br/
       %input{:type => 'submit', :id => 'request', :value => 'Make request'}
 
       %br/

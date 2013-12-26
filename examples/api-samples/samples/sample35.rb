@@ -55,28 +55,34 @@ post '/sample35' do
     # Make GroupDocs::Storage::Document instance
     document = file.to_document
     # Get array of document's fields
-    fields = document.fields!()
-
-    i=0
+    fields = document.fields!
 
     # Create the fields for form
     html = ''
     fields.map do |e|
 
-      if e.type == 'Text'
-        signature = "<br/><label for='#{e.name}'>#{e.name} #{e.mandatory == false ? '<span class="optional">(Optional)</span>' : '<span class="optional">(Required)</span>'}</label><br/><input type='text' name='#{e.name}' ></input><br/><br/>"
+      case e.type
+      when 'Text'
+        signature = "<br/><label for='#{e.name}'>#{e.name} #{e.mandatory == false ? '<span class="optional">(Optional)</span>' : '<span class="optional">(Required)</span>'}</label><br/><input type='text' name='#{e.name}'></input><br/><br/>"
         html << signature
-      end
-
-      if e.type == 'Radio'
+      when 'RadioButton'
+        i = 0
+        html.scan(e.name).empty? ? '' : i += 1
         radio = "<br/><label for='#{e.name}'>#{e.name} #{e.mandatory == false ? '<span class="optional">(Optional)</span>' : '<span class="optional">(Required)</span>'}</label><br/><input type='radio' name='#{e.name}' value='#{i}' ></input><br/><br/>"
         html << radio
-        i+= 1
-      end
-
-      if e.type == 'CheckBox'
+      when 'Checkbox'
         checkbox = "<br/><label for='#{e.name}'>#{e.name} #{e.mandatory == false ? '<span class="optional">(Optional)</span>' : '<span class="optional">(Required)</span>'}</label><br/><input type='checkbox' name='#{e.name}' ></input><br/><br/>"
         html << checkbox
+      when 'Combobox'
+        combobox = "<br/><label for='#{e.name}'>#{e.name} #{e.mandatory == false ? '<span class="optional">(Optional)</span>' : '<span class="optional">(Required)</span>'}</label><br/><select name='#{e.name}'>"
+        e.acceptableValues.each { |e| combobox << "<option name='#{e}'>#{e}</option>"}
+        combobox << "</select><br/><br/>"
+        html << combobox
+      when 'Listbox'
+        listbox = "<br/><label for='#{e.name}'>#{e.name} #{e.mandatory == false ? '<span class="optional">(Optional)</span>' : '<span class="optional">(Required)</span>'}</label><br/><select multiple name='#{e.name}'>"
+        e.acceptableValues.each { |e| listbox << "<option name='#{e}'>#{e}</option>"}
+        listbox << "</select><br/><br/>"
+        html << listbox
       end
 
     end
@@ -117,7 +123,7 @@ post '/sample35/check' do
 
 
     #TODO:
-    #Merge template PDF FIle with the data provided via dinamically created HTML form.
+    #Merge template PDF FIle with the data provided via dynamically created HTML form.
 
     # Create instance of File
     document = GroupDocs::Storage::File.new({:guid => settings.file_id}).to_document
@@ -139,13 +145,35 @@ post '/sample35/check' do
         datasource.fields << GroupDocs::DataSource::Field.new(name: field.name, type: :text, values: [params[field.name.to_sym]])
       end
 
-      if field.type == "Radio" && params[field.name.to_sym]
+      if field.type == "RadioButton" && params[field.name.to_sym]
         datasource.fields << GroupDocs::DataSource::Field.new(name: field.name, type: 'integer', values: [params[field.name.to_sym]])
 
       end
 
-      if field.type == "CheckBox" && params[field.name.to_sym] == 'on'
+      if field.type == "Checkbox" && params[field.name.to_sym] == 'on'
         datasource.fields << GroupDocs::DataSource::Field.new(name: field.name, type: 'boolean', values: [true])
+      end
+
+      if field.type == "Combobox" && params[field.name.to_sym]
+          i = 0
+          value = nil
+          field.acceptableValues.each do |e|
+            e == params[field.name] ? value = i : ''
+            i += 1
+          end
+
+        datasource.fields << GroupDocs::DataSource::Field.new(name: field.name, type: 'integer', values: [value])
+      end
+
+      if field.type == "Listbox" && params[field.name.to_sym]
+          i = 0
+          value = nil
+          field.acceptableValues.each do |e|
+            e == params[field.name] ? value = i : ''
+            i += 1
+          end
+        datasource.fields << GroupDocs::DataSource::Field.new(name: field.name, type: 'integer', values: [value])
+
       end
 
     end
@@ -155,7 +183,15 @@ post '/sample35/check' do
 
     # Creates new job to merge datasource into document.
     job = document.datasource!(datasource, {:new_type => 'pdf'})
-    sleep 10 # wait for merge and convert
+
+    i = 0
+    # Checks status of Job.
+    while i<5 do
+      sleep(5)
+      job_status = GroupDocs::Job.get!(job.id)
+      break if job_status.status == :archived
+      i += 1
+    end
 
     # Returns an hash of input and output documents associated to job.
     document = job.documents!()
@@ -166,12 +202,11 @@ post '/sample35/check' do
     case settings.path
 
     when 'https://stage-api-groupdocs.dynabic.com'
-      iframe = "<iframe width='100%' height='600' frameborder='0' src='http://stage-apps-groupdocs.dynabic.com/document-viewer/#{guid}'></iframe>"
+      iframe = "<iframe width='100%' height='600' frameborder='0' src='http://stage-apps-groupdocs.dynabic.com/document-viewer/embed/#{guid}'></iframe>"
     when 'https://dev-api-groupdocs.dynabic.com'
-      iframe = "<iframe width='100%' height='600' frameborder='0' src='http://dev-apps-groupdocs.dynabic.com/document-viewer/#{guid}'></iframe>"
+      iframe = "<iframe width='100%' height='600' frameborder='0' src='http://dev-apps-groupdocs.dynabic.com/document-viewer/embed/#{guid}'></iframe>"
     else
-      iframe = "<iframe width='100%' height='600' frameborder='0' src='https://apps.groupdocs.com/document-viewer/#{guid}'></iframe>"
-
+      iframe = "<iframe width='100%' height='600' frameborder='0' src='https://apps.groupdocs.com/document-viewer/embed/#{guid}'></iframe>"
     end
 
 
