@@ -48,10 +48,11 @@ post '/sample36' do
     #Get file name
     file = path.split('/').last
 
+    message = "<span style=\"color:green\">Files from the envelope were downloaded to server's local folder. You can check them <a href=\"/downloads/#{file}\">here</a></span>"
   rescue Exception => e
     err = e.message
   end
 
   # set variables for template
-  haml :sample36, :locals => {:userId => settings.client_id, :privateKey => settings.private_key, :fileName => file, :err => err}
+  haml :sample36, :locals => {:userId => settings.client_id, :privateKey => settings.private_key, :envelopeGuid => settings.envelope, :message => message, :err => err}
 end
