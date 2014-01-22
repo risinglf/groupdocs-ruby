@@ -173,7 +173,7 @@ post '/sample37' do
     add = envelope.add_recipient!(recipient)
 
     # Get recipient id
-    recipient.id = add.id
+    recipient.id = add[:recipient][:id]
 
     # Get document id
     document = envelope.documents!
