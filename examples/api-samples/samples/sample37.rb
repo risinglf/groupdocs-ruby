@@ -1,17 +1,19 @@
-# Route to handle url "/sample37"
+# Route the handler url "/sample37"
 get '/sample37' do
   haml :sample37
 end
 
-# Route to handle url "/sample37/signature_callback". It handles callback request from API server
+# GET request
+
+# Route the handler url "/sample37/signature_callback". The block function for callback with server
 post '/sample37/signature_callback' do
-  # Get  json data from callback request
+  # Get data json from callback
   data = JSON.parse(request.body.read)  
   begin 
     
     raise 'Empty params!' if data.empty?
 
-  # Set variables from json data
+  # Set variables from data json
 	source_id = data['SourceId']    
   event_type = data['EventType']
 
@@ -45,7 +47,8 @@ post '/sample37/signature_callback' do
 end
 
 
-# Route to handle url "/sample37/check"
+# Route the handler url "/sample37/check"
+
 get '/sample37/check' do
 
   # Check is there download directory
@@ -71,13 +74,13 @@ get '/sample37/check' do
   name
 end
 
-# Route to handle url "/sample37/downloads"
+# Route the handler url "/sample37/downloads"
 get '/sample37/downloads/:filename' do |filename|
   # Send file with header to download it
   send_file "#{File.dirname(__FILE__)}/../public/downloads/#{filename}", :filename => filename, :type => 'Application/octet-stream'
 end
 
-# Route to handle url "/sample37". It creates new envelope
+# Route the handler url "/sample37". The function block creates new envelope
 post '/sample37' do
   # Set variables from form
   set :client_id, params[:clientId]
@@ -173,19 +176,31 @@ post '/sample37' do
     recipient.id = add[:recipient][:id]
 
     # Get document id
-    document = envelope.documents!({})
+    document = envelope.documents!
 
 
     # Get field and add the location to field
-    field = GroupDocs::Signature::Field.get!({}).detect { |f| f.type == :signature }
+    field = GroupDocs::Signature::Field.get!.detect { |f| f.type == :signature }
     field.location = {:location_x => 0.15, :location_y => 0.73, :location_w => 150, :location_h => 50, :page => 1}
     field.name = 'EMPLOYEE SIGNATURE'
 
     # Add field to envelope
-    envelope.add_field!(field, document[0], recipient, {})
+    envelope.add_field!(field, document[0], recipient)
+
+
 
     # Send envelop
     envelope.send!({:callbackUrl => settings.callback})
+
+    # Write client and private key to the file for callback job
+    if settings.callback
+      out_file = File.new("#{File.dirname(__FILE__)}/../public/user_info.txt", 'w')
+      # white space is required
+      out_file.write("#{settings.client_id} ")
+      out_file.write("#{settings.private_key}")
+      out_file.write("#{envelope.id}")
+      out_file.close
+    end
 
     #Get url from request
     case settings.base_path
@@ -210,3 +225,5 @@ post '/sample37' do
   # Set variables for template
   haml :sample37, :locals => {:userId => settings.client_id, :privateKey => settings.private_key, :email => settings.email, :name => settings.name, :lastName => settings.lastName, :iframe => iframe, :massage => message, :err => err, :callback => settings.callback,}
 end
+
+

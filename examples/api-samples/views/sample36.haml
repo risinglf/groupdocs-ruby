@@ -3,7 +3,7 @@
   \- Sample36
 
 .samplecontent{:style => 'padding:10px;'}
-  %i This sample will show how to download document after sign envelope using Ruby SDK
+  %i How to download signed documents when envelope was signed using Ruby SDK
   %br/
   %br/
   %span.documentation
@@ -17,12 +17,17 @@
   %p
     PrivateKey = #{(defined? privateKey) ? privateKey : ''}
   %p
+    Signed Envelope Guid = #{(defined? envelopeGuid) ? envelopeGuid : ''}
+  %p
+    %font{:color => 'red'} #{(defined? err) ? err : ''}
+  %p
     Results:
     %br/
     %br/
-    #{(defined? fileName) ? "Files from the envelope were downloaded to server's local folder. You can check them <a href='/downloads/#{fileName}'>here</a>" : ''}
+    %p
+      #{(defined? message) ? message : ''}
     %br/
-    %font{:color => 'red'} #{(defined? err) ? err : ''}
+
 
     #requestForm{:style => 'padding:20px; border:1px solid black;'}
       %p Enter data for request and press "Make request" button
@@ -35,7 +40,7 @@
         %br/
         %input{:type=>'text', :name=>'privateKey'}
         %br/
-        %label{:for => 'path'} Signed envelop guid
+        %label{:for => 'path'} Signed Envelop Guid
         %br/
         %input{:type=>'text', :name=>'envelopeGuid'}
         %br/

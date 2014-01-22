@@ -19,15 +19,18 @@ post '/sample35' do
     raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty?
 
     if settings.path.empty? then settings.path == 'https://api.groupdocs.com' end
+    # clean version if it contains
+    path = settings.path.gsub(/\/v2.0/, '')
 
     # Configure your access to API server.
     GroupDocs.configure do |groupdocs|
       groupdocs.client_id = settings.client_id
       groupdocs.private_key = settings.private_key
       # optionally specify API server and version
-      groupdocs.api_server = settings.path # default is 'https://api.groupdocs.com'   https://dev-api-groupdocs.dynabic.com/v2.0
-      groupdocs.api_version = '2.0' # default is '2.0'
+      groupdocs.api_server = path # default is 'https://api.groupdocs.com'   https://dev-api-groupdocs.dynabic.com/v2.0
+
     end
+
 
     # Get document by file GUID
     case settings.source
@@ -79,7 +82,7 @@ post '/sample35' do
         combobox << "</select><br/><br/>"
         html << combobox
       when 'Listbox'
-        listbox = "<br/><label for='#{e.name}'>#{e.name} #{e.mandatory == false ? '<span class="optional">(Optional)</span>' : '<span class="optional">(Required)</span>'}</label><br/><select multiple name='#{e.name}'>"
+        listbox = "<br/><label for='#{e.name}'>#{e.name} #{e.mandatory == false ? '<span class="optional">(Optional)</span>' : '<span class="optional">(Required)</span>'}</label><br/><select multiple name='#{e.name}[]'>"
         e.acceptableValues.each { |e| listbox << "<option name='#{e}'>#{e}</option>"}
         listbox << "</select><br/><br/>"
         html << listbox
@@ -109,15 +112,18 @@ post '/sample35/check' do
   set :file_id, params[:fileId]
 
   begin
-    # Check required variables
+
     if settings.path.empty? then settings.path == 'https://api.groupdocs.com' end
+
+    #clean version if it contains
+    path = settings.path.gsub(/\/v2.0/, '')
 
     # Get document by file GUID
     GroupDocs.configure do |groupdocs|
       groupdocs.client_id = settings.client_id
       groupdocs.private_key = settings.private_key
       # optionally specify API server and version
-      groupdocs.api_server = settings.path # default is 'https://api.groupdocs.com'
+      groupdocs.api_server = path # default is 'https://api.groupdocs.com'
       groupdocs.api_version = '2.0' # default is '2.0'
     end
 
@@ -199,7 +205,7 @@ post '/sample35/check' do
     # Set converted document GUID
     guid = document[:inputs][0].outputs[0].guid
 
-    case settings.path
+    case path
 
     when 'https://stage-api-groupdocs.dynabic.com'
       iframe = "<iframe width='100%' height='600' frameborder='0' src='http://stage-apps-groupdocs.dynabic.com/document-viewer/embed/#{guid}'></iframe>"
