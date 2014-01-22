@@ -45,7 +45,15 @@ post '/sample28' do
       annotations.each do |annotation|
           annotation.remove!()
       end
+      case settings.base_path
 
+        when 'https://stage-api-groupdocs.dynabic.com'
+          iframe = "<iframe width='100%' height='600' frameborder='0' src='http://stage-apps-groupdocs.dynabic.com/document-viewer/embed/#{settings.file_id}'></iframe>"
+        when 'https://dev-api-groupdocs.dynabic.com'
+          iframe = "<iframe width='100%' height='600' frameborder='0' src='http://dev-apps-groupdocs.dynabic.com/document-viewer/embed/#{settings.file_id}'></iframe>"
+        else
+          iframe = "<iframe width='100%' height='600' frameborder='0' src='https://apps.groupdocs.com/document-viewer/embed/#{settings.file_id}'></iframe>"
+      end
       message = 'Annotations was deleted from document'
     end
 
@@ -54,5 +62,5 @@ post '/sample28' do
   end
 
   # set variables for template
-  haml :sample28, :locals => {:userId => settings.client_id, :privateKey => settings.private_key, :messages => message,  :fileId => settings.file_id, :err => err}
+  haml :sample28, :locals => {:userId => settings.client_id, :privateKey => settings.private_key, :messages => message, :iframe => iframe, :fileId => settings.file_id, :err => err}
 end
