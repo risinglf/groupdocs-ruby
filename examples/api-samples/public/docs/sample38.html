@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>sample38.rb</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>sample38.rb</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p>GET request</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>get <span class="string">'/sample38'</span> <span class="keyword">do</span>
+  haml <span class="symbol">:sample38</span>
+<span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>POST request</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>post <span class="string">'/sample38'</span> <span class="keyword">do</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Set variables</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  set <span class="symbol">:client_id</span>, params[<span class="symbol">:clientId</span>]
+  set <span class="symbol">:private_key</span>, params[<span class="symbol">:privateKey</span>]
+  set <span class="symbol">:email</span>, params[<span class="symbol">:email</span>]
+  set <span class="symbol">:source</span>, params[<span class="symbol">:source</span>]
+  set <span class="symbol">:file_id</span>, params[<span class="symbol">:fileId</span>]
+  set <span class="symbol">:url</span>, params[<span class="symbol">:url</span>]
+  set <span class="symbol">:first_name</span>, params[<span class="symbol">:firstName</span>]
+  set <span class="symbol">:last_name</span>, params[<span class="symbol">:lastName</span>]
+  set <span class="symbol">:base_path</span>, params[<span class="symbol">:basePath</span>]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>raise params.to_yaml
+Set download path</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  downloads_path = <span class="string">"<span class="subst">#{<span class="constant">File</span>.dirname(__FILE_<span class="number">_</span>)}</span>/../public/downloads"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Remove all files from download directory or create folder if it not there</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">if</span> <span class="constant">File</span>.directory?(downloads_path)
+    <span class="constant">Dir</span>.foreach(downloads_path) { |f| fn = <span class="constant">File</span>.join(downloads_path, f); <span class="constant">File</span>.delete(fn) <span class="keyword">if</span> f != <span class="string">'.'</span> &amp;&amp; f != <span class="string">'..'</span> }
+  <span class="keyword">else</span>
+    <span class="constant">Dir::</span>mkdir(downloads_path)
+  <span class="keyword">end</span>
+
+
+  <span class="keyword">begin</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Check required variables
+raise &#39;Please enter all required parameters&#39; if settings.client_id.empty? or settings.private_key.empty? or settings.email.empty? or settings.first_name.empty? or settings.last_name?</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+    <span class="keyword">if</span> settings.base_path.empty? <span class="keyword">then</span> settings.base_path = <span class="string">'https://api.groupdocs.com'</span> <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Configure your access to API server</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="constant">GroupDocs</span>.configure <span class="keyword">do</span> |groupdocs|
+      groupdocs.client_id = settings.client_id
+      groupdocs.private_key = settings.private_key</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Optionally specify API server and version</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      groupdocs.api_server = settings.base_path <span class="comment"># default is 'https://api.groupdocs.com'</span>
+    <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Get document by file GUID</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">case</span> settings.source
+      <span class="keyword">when</span> <span class="string">'guid'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Create instance of File</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        file = <span class="constant">GroupDocs::Storage::File</span>.new({<span class="symbol">:guid</span> =&gt; settings.file_id})
+      <span class="keyword">when</span> <span class="string">'local'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Construct path</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        file_path = <span class="string">"<span class="subst">#{<span class="constant">Dir</span>.tmpdir}</span>/<span class="subst">#{params[<span class="symbol">:file</span>][<span class="symbol">:filename</span>]}</span>"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Open file</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="constant">File</span>.open(file_path, <span class="string">'wb'</span>) { |f| f.write(params[<span class="symbol">:file</span>][<span class="symbol">:tempfile</span>].read) }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Make a request to API using client_id and private_key</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        file = <span class="constant">GroupDocs::Storage::File</span>.upload!(file_path, {})
+      <span class="keyword">when</span> <span class="string">'url'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>Upload file from defined url</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        file = <span class="constant">GroupDocs::Storage::File</span>.upload_web!(settings.url)
+      <span class="keyword">else</span>
+        raise <span class="string">'Wrong GUID source.'</span>
+    <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Get all users from accaunt</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    user = <span class="constant">GroupDocs::User</span>.get!
+    userGuid = <span class="keyword">nil</span>
+    users = user.users!
+    users.map <span class="keyword">do</span> |user|
+      email = user.primary_email</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>Check whether there is a user with entered email</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="keyword">if</span> settings.email == email</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Get user GUID</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        userGuid = user.guid
+        <span class="keyword">break</span>
+      <span class="keyword">end</span>
+    <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Check is user with entered email was founded in GroupDocs account, if not user will be created</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> userGuid.<span class="keyword">nil</span>?
+      userNew = <span class="constant">GroupDocs::User</span>.new</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>Set email as entered email</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      userNew.primary_email = settings.email</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Set nick name as entered first name</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      userNew.nickname = settings.email</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>Set first name as entered first name</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      userNew.firstname = settings.first_name</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>Set last name as entered last name</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      userNew.lastname = settings.last_name</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>Set roles</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      userNew.roles = [{<span class="symbol">:id</span> =&gt; <span class="string">'3'</span>, <span class="symbol">:name</span> =&gt; <span class="string">'User'</span>}]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>Update account</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      new_user = <span class="constant">GroupDocs::User</span>.update_account!(userNew)
+
+      guid = new_user.guid</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>Create array with entered email for set_collaborators! method</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      emails = [settings.email]
+      document = file.to_document</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <p>Make request to Ant api for set new user as annotation collaborator</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      addCollaborator = document.set_collaborators!(emails)
+      getCollaborator = document.collaborators!
+      getCollaborator.each <span class="keyword">do</span> |reviewer|
+        reviewer.access_rights = <span class="string">%w(view)</span>
+      <span class="keyword">end</span>
+      setReviewers = document.set_reviewers! getCollaborator
+      <span class="keyword">if</span> setReviewers
+        <span class="keyword">case</span> settings.base_path
+          <span class="keyword">when</span> <span class="string">'https://stage-api-groupdocs.dynabic.com'</span>
+            iframe = <span class="string">"https://stage-api-groupdocs.dynabic.com/document-annotation2/embed/<span class="subst">#{file.guid}</span>?&amp;uid=<span class="subst">#{guid}</span>&amp;download=true"</span>
+          <span class="keyword">when</span> <span class="string">'https://dev-api-groupdocs.dynabic.com'</span>
+            iframe = <span class="string">"https://dev-apps.groupdocs.com//document-annotation2/embed/<span class="subst">#{file.guid}</span>?&amp;uid=<span class="subst">#{guid}</span>&amp;download=true"</span>
+          <span class="keyword">else</span>
+            iframe = <span class="string">"https://apps.groupdocs.com//document-annotation2/embed/<span class="subst">#{file.guid}</span>?&amp;uid=<span class="subst">#{guid}</span>&amp;download=true"</span>
+        <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>Construct result string</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        url = <span class="constant">GroupDocs::Api::Request</span>.new(<span class="symbol">:path</span> =&gt; iframe).prepare_and_sign_url
+        iframe = <span class="string">"&lt;iframe src='<span class="subst">#{url}</span>' width='800' height='1000'&gt;&lt;/iframe&gt;"</span>
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+  <span class="keyword">rescue</span> <span class="constant">Exception</span> =&gt; e
+    err = e.message
+  <span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>set variables for template</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  haml <span class="symbol">:sample38</span>, <span class="symbol">:locals</span> =&gt; {<span class="symbol">:userId</span> =&gt; settings.client_id, <span class="symbol">:fileId</span> =&gt; file.guid, <span class="symbol">:privateKey</span> =&gt; settings.private_key, <span class="symbol">:iframe</span> =&gt; iframe, <span class="symbol">:email</span> =&gt; settings.email, <span class="symbol">:firstName</span> =&gt; settings.first_name, <span class="symbol">:lastName</span> =&gt; settings.last_name, <span class="symbol">:err</span> =&gt; err}
+<span class="keyword">end</span></pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

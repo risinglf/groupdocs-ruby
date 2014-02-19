@@ -1,25 +1,61 @@
 # GET request
-get '/sample32' do
-  haml :sample32
+get '/sample40' do
+  haml :sample40
 end
 
 # POST request
-post '/sample32/callback' do
+post '/sample40/check_guid' do
+  begin
+    result = nil
+    i = 0
+    for i in 1..10
+      i +=1
+      # Check is downloads folder exist
+      if File.exist?("#{File.dirname(__FILE__)}/../public/callback_info.txt")
+        result = File.read("#{File.dirname(__FILE__)}/../public/callback_info.txt")
+        if result != '' then break  end
+      end
+      sleep(5)
+    end
+
+    # Check result
+    if result == 'Error'
+      result = "File was not found. Looks like something went wrong."
+    else
+      result
+    end
+
+  rescue Exception => e
+    err = e.message
+  end
+end
+
+
+# POST request
+post '/sample40/callback' do
 
   source_id = ''
   client_id = ''
   private_key = ''
-  subscriber_email = ''
 
   # Get callback request
   data = JSON.parse(request.body.read)
   begin
+    participant = nil
     raise 'Empty params!' if data.empty?
 
     # Get value of SourceId
     data.each do |key, value|
       if key == 'SourceId'
         source_id = value
+      end
+      if key == 'SerializedData'
+       data = JSON.parse(value)
+       data.each do |key, value|
+         if key == 'ParticipantGuid'
+           participant = value
+         end
+       end
       end
     end
 
@@ -29,37 +65,20 @@ post '/sample32/callback' do
       contents = contents.split(' ')
       client_id = contents[0]
       private_key = contents[1]
-      subscriber_email = contents[2]
     end
 
     # Create new Form
     form = GroupDocs::Signature::Form.new({:id => source_id})
+     # Create new Signature
+    signature = GroupDocs::Signature.new()
+    doc_info = signature.get_sign_form_participant!(form.id , participant, {:client_id => client_id, :private_key => private_key} )
 
-    # Get document by Form id
-    document = form.documents!({:client_id => client_id, :private_key => private_key})
+    guid = doc_info[:documentGuid]
 
-    # An adress recipient
-    to = subscriber_email
-
-    # The Body message
-    body = "
-          <html>
-            <head>
-              <title>Sign form notification</title>
-            </head>
-            <body>
-              <p>Document #{document.name} is signed</p>
-            </body>
-          </html>"
-
-
-    # A method send the mail
-    def send_mail(to, body)
-      #implement your send mail function with your SMTP server
-       return true
-    end
-
-    send_mail(to, body)  #send notification mail
+    out_file = File.new("#{File.dirname(__FILE__)}/../public/callback_info.txt", 'w')
+     # white space is required
+    out_file.write(guid)
+    out_file.close
 
   rescue Exception => e
     err = e.message
@@ -68,26 +87,19 @@ end
 
 
 
-
-
-
-
 # POST request
-post '/sample32' do
+post '/sample40' do
   # set variables
   set :client_id, params[:clientId]
   set :private_key, params[:privateKey]
-  set :template_guid, params[:templateGuid]
   set :form_guid, params[:formGuid]
-  set :email, params[:email]
   set :callback, params[:callbackUrl]
-  set :source, params[:source]
   set :base_path, params[:basePath]
 
   begin
 
     # Check required variables
-    raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty?
+    raise 'Please enter all required parameters' if settings.client_id.empty? or settings.private_key.empty? or settings.form_guid.empty?
 
     if settings.base_path.empty? then settings.base_path = 'https://api.groupdocs.com' end
 
@@ -105,44 +117,22 @@ post '/sample32' do
       # white space is required
       out_file.write("#{settings.client_id} ")
       out_file.write("#{settings.private_key} ")
-      out_file.write("#{settings.email}")
       out_file.close
     end
 
-    guid = nil
-    url = nil
+    guid = settings.form_guid
 
-    case settings.source
-    when 'form'
-      id = settings.form_guid
-      # Create new Form with guid
-      form = GroupDocs::Signature::Form.new
-      form.name = 'test'
-      form.notifyOwnerOnSign = true
+     # Create new Form with guid
+    form = GroupDocs::Signature::Form.new()
+    form.name = "Test Form"
+     # Get id with new Form
+    id = form.create!({:formId => guid})
+     # Get Form
+    form = GroupDocs::Signature::Form.get!(id)
+     # Publish the Form
+    form.publish!({:callbackUrl => settings.callback})
 
-      # Create new Form with template
-      id = form.create!({:formId => guid})
-      form = GroupDocs::Signature::Form.get!(id)
-
-      # Publish the Form
-      form.publish!({:callbackUrl => settings.callback})
-      guid = settings.form_guid
-
-    when 'template'
-
-      form = GroupDocs::Signature::Form.new
-      form.name = 'test'
-      form.notifyOwnerOnSign = true
-
-     # Create new Form with template
-     guid = form.create!({ :templateId => settings.template_guid})
-
-      # Publish the Form
-      form.publish!({:callbackUrl => settings.callback})
-
-    end
-
-    #Get url from request
+     # Get url from request
     case settings.base_path
 
       when 'https://stage-api-groupdocs.dynabic.com'
@@ -152,20 +142,23 @@ post '/sample32' do
       else
         url = "https://apps.groupdocs.com/signature2/forms/signembed/ #{guid}"
     end
+     # Delete file callback_info.txt
+    if File.exist?("#{File.dirname(__FILE__)}/../public/callback_info.txt")
+      File.delete("#{File.dirname(__FILE__)}/../public/callback_info.txt")
+    end
 
     # Add the signature to url the request
     iframe = GroupDocs::Api::Request.new(:path => url).prepare_and_sign_url
-    iframe = "<iframe width='100%' height='600' frameborder='0' src='#{iframe}'></iframe>"
+    iframe = "<iframe width='100%' id='downloadframe' height='600' src='#{iframe}'></iframe>"
 
   rescue Exception => e
     err = e.message
   end
 
   # Set variables for template
-  haml :sample32, :locals => {:userId => settings.client_id,
+  haml :sample40, :locals => {:userId => settings.client_id,
                               :privateKey => settings.private_key,
                               :callback => settings.callback,
-                              :email => settings.email,
                               :iframe => iframe,
                               :err => err}
 end

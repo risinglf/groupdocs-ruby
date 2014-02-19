@@ -82,7 +82,7 @@ post '/sample38' do
       # Set email as entered email
       userNew.primary_email = settings.email
       # Set nick name as entered first name
-      userNew.nickname = settings.first_name
+      userNew.nickname = settings.email
       # Set first name as entered first name
       userNew.firstname = settings.first_name
       # Set last name as entered last name
@@ -92,6 +92,7 @@ post '/sample38' do
 
       # Update account
       new_user = GroupDocs::User.update_account!(userNew)
+
       guid = new_user.guid
       # Create array with entered email for set_collaborators! method
       emails = [settings.email]
@@ -102,7 +103,7 @@ post '/sample38' do
       getCollaborator.each do |reviewer|
         reviewer.access_rights = %w(view)
       end
-      setReviewers = document.set_reviewers! reviewers
+      setReviewers = document.set_reviewers! getCollaborator
       if setReviewers
         case settings.base_path
           when 'https://stage-api-groupdocs.dynabic.com'
@@ -114,7 +115,7 @@ post '/sample38' do
         end
         # Construct result string
         url = GroupDocs::Api::Request.new(:path => iframe).prepare_and_sign_url
-
+        iframe = "<iframe src='#{url}' width='800' height='1000'></iframe>"
       end
     end
 
@@ -123,5 +124,5 @@ post '/sample38' do
   end
 
   # set variables for template
-  haml :sample38, :locals => {:userId => settings.client_id, :privateKey => settings.private_key, :url => url, :email => settings.email, :firstName => settings.first_name, :lastName => settings.last_name, :err => err}
+  haml :sample38, :locals => {:userId => settings.client_id, :fileId => file.guid, :privateKey => settings.private_key, :iframe => iframe, :email => settings.email, :firstName => settings.first_name, :lastName => settings.last_name, :err => err}
 end

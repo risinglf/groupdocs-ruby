@@ -96,7 +96,7 @@
         Results:
         #result
           %span{:style=>'color:green'} New collaborations: #{(defined? email) ? email : ''}
-          %iframe{:src=>"#{(defined? url) ? url : ''}", width = '800', height = '1000'}
+          #{(defined? iframe) ? iframe : ''}
 
 = partial :_others_samples
 %script{:src=>'//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'}
