@@ -1,0 +1,32 @@
+%head
+  %script {:src=>'http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'}
+  %script {:src=>'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js'}
+  :javascript
+    // Read a page's GET URL variables and return them as an associative array.
+    $(document).ready(function() {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for (var i = 0; i < hashes.length; i++)
+        {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+        if (vars['guid']) {
+           $("#result").append('<span class="description"><i>Document was signed successfully</i></span>')
+           $("#resultIframe").attr('src', "https://apps.groupdocs.com/document-viewer/embed/" + vars['guid']);
+        } else {
+            $("#result").append('<span style="color:red"><i>Document was not signed successfully</i></span>')
+        }
+    })
+
+%h3{:style => 'text-align:center;'}
+  %a{:href => ''} GroupDocs Redirect Sample
+  %div{:style => 'padding:20px; border:1px solid black;'}
+    %p
+      Results:
+      %br/
+    #{(defined? message) ? message : ''}
+    %iframe{:id=>'resultIframe', :src=>'', :width=> '800', :height => '1000'}
+
+= partial :_others_samples
