@@ -38,11 +38,14 @@ module GroupDocs
         end
 
         #
+        # Changed in release 1.5.8
+        #
         # Sends request to API server.
         #
         # @api private
         #
         def send_request
+
           self.response = case options[:method]
             when :get, :download
               resource[options[:path]].get(options[:headers])
@@ -51,7 +54,16 @@ module GroupDocs
             when :put
               resource[options[:path]].put(options[:request_body], options[:headers])
             when :delete
-              resource[options[:path]].delete(options[:headers])
+              if options[:request_body]
+              url = GroupDocs.api_server + options[:path]
+              RestClient::Request.execute(options.merge(
+                            :method => :delete,
+                            :url => url,
+                            :payload => options[:request_body],
+                            :headers => options[:headers]))
+              else
+                resource[options[:path]].delete(options[:headers])
+              end
             else
               raise UnsupportedMethodError, "Unsupported HTTP method: #{options[:method].inspect}"
           end

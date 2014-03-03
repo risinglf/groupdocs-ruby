@@ -10,6 +10,8 @@ module GroupDocs
     module FieldMethods
 
       #
+      # Changed in release 1.5.8
+      #
       # Returns an array of fields for document and recipient.
       #
       # @example Get fields from template
@@ -26,24 +28,29 @@ module GroupDocs
       #
       # @param [GroupDocs::Document] document
       # @param [GroupDocs::Signature::Recipient] recipient
+      # @param [String] field_guid Field GUID
+      # @param [Hash] options
+      # @option options [Boolean] :public Defaults to false
       # @param [Hash] access Access credentials
       # @option access [String] :client_id
       # @option access [String] :private_key
       # @raise [ArgumentError] if document is not GroupDocs::Document
       # @raise [ArgumentError] if recipient is not GroupDocs::Signature::Recipient
       #
-      def fields!(document, recipient, access = {})
+      def fields!(document, recipient, options = {}, access = {})
+
         document.is_a?(GroupDocs::Document) or raise ArgumentError,
           "Document should be GroupDocs::Document object, received: #{document.inspect}"
         recipient.is_a?(GroupDocs::Signature::Recipient) or raise ArgumentError,
           "Recipient should be GroupDocs::Signature::Recipient object, received: #{recipient.inspect}"
 
+        client_id = client_id(options[:public])
         api = Api::Request.new do |request|
           request[:access] = access
           request[:method] = :GET
-          request[:path] = "/signature/{{client_id}}/#{class_name.pluralize}/#{id}/fields"
+          request[:path] = "/signature/#{client_id}/#{class_name.pluralize}/#{id}/fields"
         end
-        api.add_params(:document => document.file.guid, :recipient => recipient.id)
+        api.add_params(:document => document.file.guid, :recipient => recipient.id, :field => options[:field] )
         json = api.execute!
 
         json[:fields].map do |field|
@@ -58,6 +65,7 @@ module GroupDocs
       #   template = GroupDocs::Signature::Template.get!("g94h5g84hj9g4gf23i40j")
       #   field = GroupDocs::Signature::Field.get!.detect { |f| f.type == :signature }
       #   field.location = { location_x: 0.1, location_y: 0.1, page: 1 }
+      #   field.name = "Signer"
       #   document = template.documents!.first
       #   recipient = template.recipients!.first
       #   template.add_field! field, document, recipient
@@ -65,6 +73,7 @@ module GroupDocs
       # @example Add field to envelope
       #   envelope = GroupDocs::Signature::Envelope.get!("g94h5g84hj9g4gf23i40j")
       #   field = GroupDocs::Signature::Field.get!.detect { |f| f.type == :signature }
+      #   field.name = "Signer"
       #   field.location = { location_x: 0.1, location_y: 0.1, page: 1 }
       #   document = envelope.documents!.first
       #   recipient = envelope.recipients!.first
@@ -194,7 +203,7 @@ module GroupDocs
         Api::Request.new do |request|
           request[:access] = access
           request[:method] = :POST
-          request[:path] = "/signature/{{client_id}}/#{class_name.pluralize}/#{id}/documents/#{document.file.guid}/field/#{field.id}",
+          request[:path] = "/signature/{{client_id}}/#{class_name.pluralize}/#{id}/documents/#{document.file.guid}/field/#{field.id}"
           request[:request_body] = { :currentRecipientId => assign_from.id, :newRecipientId => assign_to.id }
         end.execute!
       end
@@ -233,42 +242,8 @@ module GroupDocs
         end.execute!
       end
 
-      #
-      #  Rename signature template document
-      #
-      # @example Rename field from template
-      #   template = GroupDocs::Signature::Template.get!("g94h5g84hj9g4gf23i40j")
-      #   document = template.documents!.first
-      #   template.rename_field! (new_name, document)
-      #
-      # @example Rename field from envelope
-      #   envelope = GroupDocs::Signature::Envelope.get!("g94h5g84hj9g4gf23i40j")
-      #   document = envelope.documents!.first
-      #   envelope.rename_field! (new_name, document)
-      #
-      # @example Rename field from form
-      #   envelope = GroupDocs::Signature::Form.get!("g94h5g84hj9g4gf23i40j")
-      #   document = envelope.documents!.first
-      #   envelope.rename_field! (new_name, document)
-      #
-      # @param [GroupDocs::Signature::Field] field
-      # @param [Hash] access Access credentials
-      # @option access [String] :client_id
-      # @option access [String] :private_key
-      # @raise [ArgumentError] if field is not GroupDocs::Signature::Field
-      #
-      def rename_field!(new_name, document, access = {})
-        field.is_a?(GroupDocs::Signature::Field) or raise ArgumentError,
-                                                          "Field should be GroupDocs::Signature::Field object, received: #{field.inspect}"
 
-        api = Api::Request.new do |request|
-          request[:access] = access
-          request[:method] = :PUT
-          request[:path] = "/signature/{{client_id}}/#{class_name.pluralize}/#{id}/document/#{document.file.id}"
-        end
-         api.add_params(new_name).execute!
 
-      end
 
       #
       # Modifies field location.

@@ -40,7 +40,6 @@ module GroupDocs
         options[:path] ||= ''
         options[:name] ||= Object::File.basename(filepath)
         path = prepare_path("#{options[:path]}/#{options[:name]}")
-
         api = Api::Request.new do |request|
           request[:access] = access
           request[:method] = :POST
@@ -404,6 +403,24 @@ module GroupDocs
       #
       def to_document
         Document.new(:file => self)
+      end
+
+      #
+      #  Added in release 1.5.8
+      #
+      # Cancel file upload
+      #
+      # @param [String] path File path (name)
+      # @param [Hash] access Access credentials
+      # @option access [String] :client_id
+      # @option access [String] :private_key
+      #
+      def upload_cancel!(path, access = {})
+        Api::Request.new do |request|
+          request[:access] = access
+          request[:method] = :GET
+          request[:path] = "/storage/{{client_id}}/cancelUpload/#{id}/#{path}"
+        end.execute!
       end
 
     end # File

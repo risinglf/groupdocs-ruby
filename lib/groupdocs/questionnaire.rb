@@ -87,6 +87,23 @@ module GroupDocs
     # @attr [Array<String>] document_ids
     attr_accessor :document_ids
 
+    # added in release 1.5.8
+    #
+    # @attr [Array<String>] formats
+    attr_accessor :formats
+    # @attr [String] folder
+    attr_accessor :folder
+    # @attr [String] emails
+    attr_accessor :emails
+    # @attr [String] output_format
+    attr_accessor :output_format
+    # @attr [Boolean] open_on_completion
+    attr_accessor :open_on_completion
+    # @atrr [Integer] allowed_operations
+    attr_accessor :allowed_operations
+
+
+
     # Human-readable accessors
     alias_accessor :description, :descr
 
@@ -133,6 +150,19 @@ module GroupDocs
 
     #
     # Creates questionnaire.
+    #
+    #  @example
+    #
+    # questionnaire = GroupDocs::Questionnaire.new()
+    # pages = GroupDocs::Questionnaire::Page.new()
+    # questions = GroupDocs::Questionnaire::Question.new()
+    # answer = GroupDocs::Questionnaire::Question::Answer.new()
+    # questions.answers = [answer]
+    # conditions = GroupDocs::Questionnaire::Question::Conditions.new()
+    # questions.conditions = [conditions]
+    # pages.questions = [questions]
+    # questionnaire.pages = [pages]
+    # questionnaire.create!
     #
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
@@ -225,7 +255,10 @@ module GroupDocs
       end
     end
 
-   #
+    #
+    # Changed in release 1.5.8
+    #
+    #
     # Returns an array of questionnaire collectors.
     #
     #
@@ -243,7 +276,7 @@ module GroupDocs
         request[:method] = :GET
         request[:path] = "/merge/{{client_id}}/questionnaires/#{guid}/collectors"
       end
-        api = add_params(options)
+        api.add_params(options)
         json = api.execute!
 
       json[:collectors].map do |collector|
@@ -318,7 +351,9 @@ module GroupDocs
       end
     end
 	
-	#
+	  #
+    # Changed in release 1.5.8
+    #
     # Copy file to given path.
     #
     # @param [String] path (required)
@@ -340,11 +375,146 @@ module GroupDocs
         request[:headers] = { :'Groupdocs-Copy' => id }
         request[:path] = "/merge/{{client_id}}/files/#{path}"
       end
-      api = add_params(:mode => mode)
+      api.add_params(:mode => mode)
       json = api.execute!
 
       json[:templates]
     end
+
+
+    #
+    # Added in release 1.5.8
+    #
+    # Get associated document by questionnaire
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def get_document!(access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/merge/{{client_id}}/questionnaires/#{id}/document"
+      end.execute!
+    end
+
+    #
+    # Added in release 1.5.8
+    #
+    # Returns an array of questionnaires by name.
+    #
+    # @param [Hash] options Hash of options
+    # @option options [String] :name Questionnaire name
+    # @option options [Symbol] :status Filter questionnaires by status
+    # @option options [Integer] :page_number Page to start with
+    # @option options [Integer] :page_size How many items to list
+    # @option options [String] :orderBy Order by column (optional)
+    # @option options [Bool] :isAscending Order by ascending or descending (optional)
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array<GroupDocs::Questionnaire>]
+    #
+    def self.get_by_name!(options = {}, access = {})
+      if options[:status]
+        # TODO find better way to parse status
+        options[:status] = new.send(:parse_status, options[:status])
+      end
+
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = '/merge/{{client_id}}/questionnaires/filter'
+      end
+
+      api.add_params(options)
+      json = api.execute!
+
+      json[:questionnaires].map do |questionnaire|
+        new(questionnaire)
+      end
+    end
+
+    #
+    # Added in release 1.5.8
+    #
+    # Delete list of questionnaires by GUIDs.
+    #
+    # @param [Hash] access Access credentials
+    # @option guids [Array<String>] List of Questionnaires Guid
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def delete_list!(guids, access = {})
+     api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :DELETE
+        request[:path] = "/merge/{{client_id}}/questionnaires/list"
+        request[:request_body] = guids
+     end
+     
+     api.execute!
+    end
+
+    #
+    # Added in release 1.5.8
+    #
+    # Removes questionnaire collector.
+    #
+    # @param [Hash] access Access credentials
+    # @option collectors [Array<String>] List of Collectors Guid
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def delete_collectors_list!(collectors, access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :DELETE
+        request[:path] = "/merge/{{client_id}}/questionnaires/collectors/list"
+        request[:request_body] = collectors
+      end.execute!
+    end
+
+    #
+    # Added in release 1.5.8
+    #
+    # Removes questionnaire execution.
+    #
+    # @param [Hash] access Access credentials
+    # @option executions [Array<String>] List of Executions Guid
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def delete_executions_list!(executions, access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :DELETE
+        request[:path] = "/merge/{{client_id}}/questionnaires/executions/list"
+        request[:request_body] = executions
+      end.execute!
+    end
+
+    #
+    # Added in release 1.5.8
+    #
+    # Delete list of datasource fields.
+    #
+    # @param [Hash] access Access credentials
+    # @option datasource [Array<String>] List of Datasources Guid
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def delete_datasources_list!(datasources, access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :DELETE
+        request[:path] = "/merge/{{client_id}}datasources/list"
+        request[:request_body] = datasources
+      end.execute!
+    end
+
+
 
   end # Questionnaire
 end # GroupDocs

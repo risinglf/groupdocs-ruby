@@ -241,8 +241,9 @@ module GroupDocs
         request[:path] = "/merge/{{client_id}}/jobs/#{job.id}/files/#{file_id}/datasources"
         request[:request_body] = datasource.fields
       end.execute!
-
     end
+
+
 
   end # DataSource
 end # GroupDocs

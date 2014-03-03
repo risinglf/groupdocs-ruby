@@ -75,9 +75,11 @@ module GroupDocs
     # Modify recipient of template.
     #
     # @example
+    #   roles = GroupDocs::Signature::Role.get!
     #   template = GroupDocs::Signature::Template.get!("g94h5g84hj9g4gf23i40j")
     #   recipient = template.recipients!.first
     #   recipient.nickname = 'John Smith'
+    #   recipient.role_id = roles.detect { |role| role.name == "Signer" }.id
     #   template.modify_recipient! recipient
     #
     # @param [GroupDocs::Signature::Recipient] recipient
@@ -95,7 +97,7 @@ module GroupDocs
         request[:method] = :PUT
         request[:path] = "/signature/{{client_id}}/templates/#{id}/recipient/#{recipient.id}"
       end
-      api.add_params(:nickname => recipient.nickname, :role => recipient.role_id, :order => recipient.order)
+      api.add_params(:nickname => recipient.nickname, :role => recipient.role_id , :order => recipient.order)
       api.execute!
     end
 

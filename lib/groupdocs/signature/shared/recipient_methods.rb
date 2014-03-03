@@ -13,6 +13,14 @@ module GroupDocs
       #
       # Returns recipients array.
       #
+      #  roles = GroupDocs::Signature::Role.get!
+      #  template = GroupDocs::Signature::Template.get!("g94h5g84hj9g4gf23i40j")
+      #  recipient = GroupDocs::Signature::Recipient.new
+      #  recipient.nickname = 'John Smith'
+      #  recipient.role_id = roles.detect { |role| role.name == "Signer" }.id
+      #  template.add_recipient! recipient
+      #  template.recipients!
+      #
       # @param [Hash] options
       # @option options [Boolean] :public Defaults to false
       # @param [Hash] access Access credentials

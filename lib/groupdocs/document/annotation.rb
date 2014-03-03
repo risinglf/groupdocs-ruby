@@ -6,6 +6,8 @@ module GroupDocs
 
     include Api::Helpers::AccessMode
 
+    #AnnotationType = { Text: 0, Area: 1, Point: 2, TextStrikeout: 3, Polyline: 4, TextField: 5, Watermark: 6 }
+
     TYPES  = %w(Text Area Point TextStrikeout Polyline)
 
     # @attr [GroupDocs::Document] document
@@ -44,6 +46,13 @@ module GroupDocs
     #@attr [String]Font Color
     attr_accessor :fontColor
 
+    #added in release 1.5.8
+    #@attr [Int]pageNumber
+    attr_accessor :pageNumber
+    #@attr [Long] serverTime
+    attr_accessor :serverTime
+    #attr [Array]
+
     # Compatibility with response JSON
     alias_method :annotationGuid=, :guid=
 
@@ -54,8 +63,10 @@ module GroupDocs
     alias_accessor :reply_guid,          :replyGuid
     alias_accessor :created_on,          :createdOn
     alias_accessor :annotation_position, :annotationPosition
-    alias_accessor :position,            :annotationPosition
-
+   
+    #added in release 1.5.8
+    alias_accessor :page_number,         :pageNumber
+    alias_accessor :server_time,         :serverTime
 
     #
     # Creates new GroupDocs::Document::Annotation.
@@ -196,7 +207,7 @@ module GroupDocs
     # @option access [String] :client_id
     # @option access [String] :private_key
     #
-    def self.remove!(guid, access = {})
+    def remove!(access = {})
       Api::Request.new do |request|
         request[:access] = access
         request[:method] = :DELETE
@@ -241,27 +252,32 @@ module GroupDocs
     end
 
     #
+    # Changed in release 1.5.8
+    #
     # Moves annotation marker to given coordinates.
     #
-    # @param [Integer, Float] x
-    # @param [Integer, Float] y
+    # @param [GroupDocs::Annotation::Marker] marker Marker position
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
     #
-    def move_marker!(x, y, access = {})
+    def move_marker!(marker, access = {})
+      marker.is_a?(GroupDocs::Document::Annotation::MarkerPosition) or raise ArgumentError,
+        "Marker should be GroupDocs::Document::Annotation::MarkerPosition object, received: #{marker.inspect}"
       Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
         request[:path] = "/ant/{{client_id}}/annotations/#{guid}/markerPosition"
-        request[:request_body] = { :x => x, :y => y }
+        request[:request_body] = marker
       end.execute!
 
-      if box
-        box.x = x
-        box.y = y
+      if box && page_number
+        box.x = marker.position[:x]
+        box.y = marker.position[:y]
+        page_number = marker.page
       else
-        self.box = { :x => x, :y => y }
+        self.box = { :x => marker.position[:x], :y => marker.position[:y] }
+        self.page_number = marker.page
       end
     end
 
@@ -300,9 +316,8 @@ module GroupDocs
         request[:path] = "/ant/{{client_id}}/annotations/#{guid}/size"
         request[:request_body] = { :width => x, :height => y }
       end.execute!
+        self.box = { :width => x, :height => y }
 
-      self.width = x
-      self.height = y
     end
 
     #

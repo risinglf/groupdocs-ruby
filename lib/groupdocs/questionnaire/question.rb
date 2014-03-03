@@ -2,6 +2,7 @@ module GroupDocs
   class Questionnaire::Question < Api::Entity
 
     require 'groupdocs/questionnaire/question/answer'
+    require 'groupdocs/questionnaire/question/conditions'
 
     TYPES = %w(GenericText MultipleChoice)
 
@@ -18,8 +19,26 @@ module GroupDocs
     # @attr [Array<Hash>] answers
     attr_accessor :answers
 
+    #
+    # added in release 1.5.8
+    #
+    # @attr [Boolean] disabled
+    attr_accessor :disabled
+    # @attr [Integer] max_length
+    attr_accessor :max_length
+    # @attr [GroupDocs::Document::Rectangle] rect
+    attr_accessor :rect
+    # @attr [Array<String>] acceptableValues
+    attr_accessor :acceptableValues
+    # @attr [Array<GroupDocs::Questionnaire::Question::Conditions>] conditions
+    attr_accessor :conditions
+
+
     # Human-readable accessors
     alias_accessor :default_answer, :def_answer
+
+    # added in release 1.5.8
+    alias_accessor :acceptable_values, :acceptableValues
 
     #
     # Converts each answer to GroupDocs::Questionnaire::Question::Answer object.

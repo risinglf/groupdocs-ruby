@@ -178,7 +178,6 @@ module GroupDocs
         metadata.views_count = json[:views_count]
         if json[:last_view]
           metadata.last_view = json[:last_view]
-
         end
       end
     end
@@ -590,7 +589,7 @@ module GroupDocs
     # @example
     #   file = GroupDocs::Storage::Folder.list!.last
     #   document = file.to_document
-    #   document.thumbnails! first_page: 0, page_count: 1, passwordSalt: ***
+    #   document.representations! first_page: 0, page_count: 1, passwordSalt: ***
     #
     # @param [Hash] options
     # @option options [Integer] :page_number Start page to return image for (starting with 0)
@@ -645,7 +644,7 @@ module GroupDocs
       api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
-        request[:path] = "/doc/{{client_id}}/files/#{file.guid}/accessinfo"
+        request[:path] = "/doc/{{client_id}}/files/#{file.id}/accessinfo"
       end
       api.add_params(:mode => ACCESS_MODES[mode])
       json = api.execute!
@@ -1061,6 +1060,7 @@ module GroupDocs
     end
 
     #
+    # Changed in release 1.5.8
     # Returns document details.
     #
     # @param [Hash] access Access credentials
@@ -1072,13 +1072,14 @@ module GroupDocs
       api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
-        request[:path] = "/comparison/{{client_id}}/comparison/document"
+        request[:path] = "/comparison/{{client_id}}document"
       end
       api.add_params(:guid => file.guid)
       api.execute!
     end
 
     #
+    # Changed in release 1.5.8
     # Schedules a job for comparing document with given.
     #
     # @param [GroupDocs::Document] document
@@ -1096,7 +1097,7 @@ module GroupDocs
       api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
-        request[:path] = "/comparison/{{client_id}}/comparison/compare"
+        request[:path] = "/comparison/{{client_id}}/compare"
       end
       api.add_params(:source => file.guid, :target => document.file.guid, :callback => callback)
       json = api.execute!
@@ -1124,10 +1125,9 @@ module GroupDocs
       api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
-        request[:path] = "/comparison/{{client_id}}/comparison/changes"
+        request[:path] = "/comparison/public/#{file.guid}/changes"
         request[:request_body] = changes
       end
-      api.add_params(:resultFileId => file.guid)
       json = api.execute!
 
       json[:changes].map do |change|
@@ -1136,6 +1136,7 @@ module GroupDocs
     end
 
     #
+    # @Changed in realese 1.5.8
     # Returns an array of changes in document.
     #
     # @example
@@ -1154,9 +1155,8 @@ module GroupDocs
       api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
-        request[:path] = '/comparison/{{client_id}}/comparison/changes'
+        request[:path] = '/comparison/public/#{file.guid}/changes'
       end
-      api.add_params(:resultFileId => file.guid)
       json = api.execute!
 
       json[:changes].map do |change|
@@ -1165,11 +1165,19 @@ module GroupDocs
     end
 
     #
+    # Changed in realese 1.5.8
     # Download comparison result file.
     #
+    # @example
+    #  document_one = GroupDocs::Storage::Folder.list![0].to_document
+    #  document_two = GroupDocs::Storage::Folder.list![1].to_document
+    #  job = document_one.compare!(document_two)
+    #  sleep(5) # wait for server to finish comparing
+    #  result = job.documents![:outputs].first
+    #  result.download!("#{File.dirname(__FILE__)}", {:format => 'pdf'})
+    #
     # @param [Hash] options
-    # @option format [String] :format Comparison result file GUID
-    # @option resultFileId [String] :resultFileId Comparison result file GUID
+    # @option format [String] :format Comparison result file GUID    #
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
@@ -1179,12 +1187,17 @@ module GroupDocs
       api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :DOWNLOAD
-        request[:path] = "/comparison/{{client_id}}/comparison/download"
+        request[:path] = "/comparison/public/#{file.guid}/download"
       end
       api.add_params(options)
       response = api.execute!
 
-      filepath = "#{path}/#{file.name}"
+      if file.name.split('.').last != options[:format]
+        file_name = file.name.delete!(file.name.split('.').last) +  options[:format]
+      else
+        file_name = file.name
+      end
+      filepath = "#{path}/#{file_name}"
       Object::File.open(filepath, 'wb') do |file|
         file.write(response)
       end
@@ -1357,12 +1370,87 @@ module GroupDocs
     # Pass all unknown methods to file.
     #
 
+
     def method_missing(method, *args, &blk)
       file.respond_to?(method) ? file.send(method, *args, &blk) : super
     end
 
     def respond_to?(method)
       super or file.respond_to?(method)
+    end
+
+
+    #
+    # added in release 1.5.8
+    #
+    # Returns document hyperlinks
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def hyperlinks!(access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/doc/{{client_id}}/files/#{file.guid}/hyperlinks"
+      end.execute!
+
+      json[:links]
+    end
+
+    #
+    # Changed in release 1.5.8
+    #
+    #
+    # Public Sign document
+    #
+    # @param [String] document Document GUID
+    # @param [Hash] settings Settings of the signing document
+    # @param settings [String] waterMarkText
+    # @param settings [String] waterMarkImage
+    # @param settings [String] name (required)
+    # @param settings [Double] top (required)
+    # @param settings [Double] left (required)
+    # @param settings [Double] width (required)
+    # @param settings [Double] height (required)
+    # @param settings [String] placeSignatureOn (required)
+    # @param settings [String] data
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def public_sign_document!(options = {}, access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :POST
+        request[:path] = "/signature/public/documents/#{file.guid}/sign"
+        request[:request_body] = options
+      end.execute!
+
+      json[:jobId]
+    end
+
+    #
+    # Changed in release 1.5.8
+    #
+    #
+    # Get document fields
+    #
+    # @param [String] document Document GUID
+    # @param [Hash] settings Settings of the signing document
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def self.public_fields!(access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/signature/public/documents/#{file.guid}/fields"
+      end.execute!
     end
 
   end # Document
