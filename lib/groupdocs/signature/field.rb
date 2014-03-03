@@ -70,7 +70,7 @@ module GroupDocs
     attr_accessor :isSystem
     # @attr [Boolean] mandatory
     attr_accessor :mandatory
-    # @attr [Symbol] fieldType
+    # @attr [Integer] fieldType
     attr_accessor :fieldType
     # @attr [Array<String>] acceptableValues
     attr_accessor :acceptableValues
@@ -91,6 +91,19 @@ module GroupDocs
     # @attr [Array<GroupDocs::Signature::Field::Location>] locations
     attr_accessor :locations
 
+    # added in realise 1.5.8
+    # @attr [Integer] pageWidth
+    attr_accessor :pageWidth
+    # @attr [Integer] pageHeight
+    attr_accessor :pageHeight
+    # @attr [String] groupName
+    attr_accessor :groupName
+    # @attr [String] settings
+    attr_accessor :settings
+    # @attr [Integer] align
+    attr_accessor :align
+    # @attr [String] guidanceText
+    attr_accessor :guidanceText
 
     # Human-readable accessors
     alias_accessor :template_id,        :templateId
@@ -113,6 +126,12 @@ module GroupDocs
     alias_accessor :default_value,      :defaultValue
     alias_accessor :text_rows,          :textRows
     alias_accessor :text_columns,       :textColumns
+    # added in release 1.5.8
+    alias_accessor :page_width,         :pageWidth
+    alias_accessor :page_height,        :pageHeight
+    alias_accessor :group_name,         :groupName
+    alias_accessor :guidance_text,      :guidanceText
+
 
     #
     # Converts location to GroupDocs::Signature::Field::Location object.

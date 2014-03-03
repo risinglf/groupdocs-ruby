@@ -232,19 +232,24 @@ module GroupDocs
 
 
     #
+    # Changed in realise 1.5.8
+    #
     # Returns all subscription plans for family.
     #
+    # @param [Boolean] invalidate
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
     # @return [Array<GroupDocs::Subscription>]
     #
-    def self.list!(access = {})
-      json = Api::Request.new do |request|
+    def self.list!(invalidate, access = {})
+      api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
         request[:path] = '/system/{{client_id}}/plans/groupdocs'
-      end.execute!
+      end
+      api.add_params(invalidate: invalidate)
+      json = api.execute!
 
       json[:metrics].map do |plan|
         new(plan)

@@ -66,6 +66,7 @@ module GroupDocs
       #
       # @param [GroupDocs::Document] document
       # @param [Hash] options
+      # @option options [Boolean] :parseFields Try to parse fields in document
       # @option options [Integer] :order Display order of the document
       # @param [Hash] access Access credentials
       # @option access [String] :client_id
@@ -113,6 +114,43 @@ module GroupDocs
           request[:method] = :DELETE
           request[:path] = "/signature/{{client_id}}/#{class_name.pluralize}/#{id}/documents/#{document.file.guid}"
         end.execute!
+      end
+
+      #
+      #  Rename signature template document
+      #
+      # @example Rename document from template
+      #   template = GroupDocs::Signature::Template.get!("g94h5g84hj9g4gf23i40j")
+      #   document = template.documents!.first
+      #   template.rename_document! (new_name, document)
+      #
+      # @example Rename document from envelope
+      #   envelope = GroupDocs::Signature::Envelope.get!("g94h5g84hj9g4gf23i40j")
+      #   document = envelope.documents!.first
+      #   envelope.rename_document! (new_name, document)
+      #
+      # @example Rename document from form
+      #   form = GroupDocs::Signature::Form.get!("g94h5g84hj9g4gf23i40j")
+      #   document = envelope.documents!.first
+      #   form.rename_document! (new_name, document)
+      #
+      # @param [GroupDocs::Signature::Field] field
+      # @param [Hash] access Access credentials
+      # @option access [String] :client_id
+      # @option access [String] :private_key
+      # @raise [ArgumentError] if field is not GroupDocs::Signature::Field
+      #
+      def rename_document!(new_name, document, access = {})
+        document.is_a?(GroupDocs::Document) or raise ArgumentError,
+                                                          "Document should be GroupDocs::Document object, received: #{document.inspect}"
+
+        api = Api::Request.new do |request|
+          request[:access] = access
+          request[:method] = :PUT
+          request[:path] = "/signature/{{client_id}}/#{class_name.pluralize}/#{id}/document/#{document.file.guid}"
+        end
+        api.add_params(:newName => new_name)
+        api.execute!
       end
 
     end # DocumentMethods

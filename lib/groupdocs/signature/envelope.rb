@@ -110,6 +110,8 @@ module GroupDocs
     end
 
     #
+    # Changed in release 1.5.8
+    #
     # Adds recipient to envelope.
     #
     # @example
@@ -142,7 +144,9 @@ module GroupDocs
                      :lastname  => recipient.last_name,
                      :role      => recipient.role_id,
                      :order     => recipient.order)
-      api.execute!
+      json = api.execute!
+      Signature::Recipient.new(json[:recipient])
+
     end
 
     #
@@ -297,7 +301,7 @@ module GroupDocs
     # @option access [String] :private_key
     # @raise [ArgumentError] if recipient is not GroupDocs::Signature::Recipient
     #
-    def sign!(recipient, options = {}, ccess = {})
+    def sign!(recipient, options = {}, access = {})
       recipient.is_a?(GroupDocs::Signature::Recipient) or raise ArgumentError,
         "Recipient should be GroupDocs::Signature::Recipient object, received: #{recipient.inspect}"
 
@@ -362,7 +366,9 @@ module GroupDocs
     end
 
     #
-    # Downloads signed document to given path.
+    # Changed in release 1.5.8
+	#
+	# Downloads signed document to given path.
     #
     # @param [GroupDocs::Document] document Signed document
     # @param [String] path Directory to download file to
@@ -381,7 +387,7 @@ module GroupDocs
         request[:path] = "/signature/{{client_id}}/envelopes/#{id}/document/#{document.file.guid}"
       end.execute!
 
-      filepath = "#{path}/#{name}.pdf"
+      document.file.name ? filepath = "#{path}/#{document.file.name}" : filepath = "#{path}/#{name}.pdf"
 
       Object::File.open(filepath, 'wb') do |file|
         file.write(response)
@@ -483,6 +489,7 @@ module GroupDocs
       end.execute!
 
       filepath = "#{path}/#{name}."
+
       if documents!.size == 1
         filepath << 'pdf'
       else
@@ -544,6 +551,141 @@ module GroupDocs
       json[:envelope]
 
     end
+
+    #
+    # Modify signature envelope field location.
+    #
+    # @example Modify field location in envelope
+    #   envelope = GroupDocs::Signature::Envelope.get!("g94h5g84hj9g4gf23i40j")
+    #   document = envelope.documents!.first
+    #   recipient = envelope.recipients!.first
+    #   field = envelope.fields!(document, recipient).first
+    #   location = field.locations.first
+    #   envelope.modify_field_location! location, field, document, recipient
+    #
+    # @param [GroupDocs::Signature::Field::Location] location
+    # @param [GroupDocs::Signature::Field] field
+    # @param [GroupDocs::Document] document
+    # @param [GroupDocs::Signature::Recipient] recipient
+    # @param [Integer] order  Location order
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @raise [ArgumentError] if location is not GroupDocs::Signature::Field::Location
+    # @raise [ArgumentError] if field is not GroupDocs::Signature::Field
+    # @raise [ArgumentError] if document is not GroupDocs::Document
+    # @raise [ArgumentError] if recipient is not GroupDocs::Signature::Recipient
+    #
+    def modify_field_location!(location, field, document, recipient, order, access = {})
+      location.is_a?(GroupDocs::Signature::Field::Location) or raise ArgumentError,
+                                                                     "Location should be GroupDocs::Signature::Field::Location object, received: #{location.inspect}"
+      field.is_a?(GroupDocs::Signature::Field) or raise ArgumentError,
+                                                        "Field should be GroupDocs::Signature::Field object, received: #{field.inspect}"
+      document.is_a?(GroupDocs::Document) or raise ArgumentError,
+                                                   "Document should be GroupDocs::Document object, received: #{document.inspect}"
+      recipient.is_a?(GroupDocs::Signature::Recipient) or raise ArgumentError,
+                                                                "Recipient should be GroupDocs::Signature::Recipient object, received: #{recipient.inspect}"
+
+     api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/signature/{{client_id}}/envelopes/#{id}/documents/#{document.file.guid}/recipient/#{recipient.id}/fields/#{field.id}/locations/#{location.id}"
+      end
+      api.add_params(:order => order)
+      api.execute!
+    end
+
+    #
+    # Changed in release 1.5.8
+    #
+    # Get signature envelope.
+    #
+    # @param [GroupDocs::Signature::Recipient] recipient Recipient GUID
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def public_get!(recipient, access = {})
+      recipient.is_a?(GroupDocs::Signature::Recipient) or raise ArgumentError,
+                                                                "Recipient should be GroupDocs::Signature::Recipient object, received: #{recipient.inspect}"
+
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/signature/public/envelopes/#{id}/recipient/#{recipient.id}"
+      end.execute!
+
+      Signature::Envelope.new(json[:envelope])
+    end
+
+    #
+    # Changed in release 1.5.8
+    #
+    # Public downloads signed documents to given path.
+    #
+    # If there is only one file in envelope, it's saved as PDF.
+    # If there are two or more files in envelope, it's saved as ZIP.
+    #
+    # @param [String] path Directory to download file to
+    # @param [GroupDocs::Signature::Recipient] recipient Recipient GUID
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def public_signed_documents!(path, recipient, access = {})
+      recipient.is_a?(GroupDocs::Signature::Recipient) or raise ArgumentError,
+                                                                "Recipient should be GroupDocs::Signature::Recipient object, received: #{recipient.inspect}"
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :DOWNLOAD
+        request[:path] = "/signature/public/envelopes/#{id}/recipient/#{recipient.id}/documents/get"
+      end.execute!
+      filepath = "#{path}/#{name}."
+      if documents!.size == 1
+        filepath << 'pdf'
+      else
+        filepath << 'zip'
+      end
+
+      Object::File.open(filepath, 'wb') do |file|
+        file.write(json)
+      end
+
+      filepath
+    end
+
+
+    #
+    # Changed in release 1.5.8
+    #
+    #
+    # Get signed envelope field data.
+    #
+    # @param [GroupDocs::Signature::Recipient] recipient Recipient GUID
+    # @param [GroupDocs::Signature::Field] field Field GUID
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def date!(recipient, field, access = {})
+      field.is_a?(GroupDocs::Signature::Field) or raise ArgumentError,
+                                                        "Field should be GroupDocs::Signature::Field object, received: #{field.inspect}"
+      recipient.is_a?(GroupDocs::Signature::Recipient) or raise ArgumentError,
+                                                                "Recipient should be GroupDocs::Signature::Recipient object, received: #{recipient.inspect}"
+
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/signature/public/envelopes/#{id}/fields/recipient/#{recipient.id}/field/#{field.id}"
+      end.execute!
+
+    end
+
+
+
 
   end # Signature::Envelope
 end # GroupDocs

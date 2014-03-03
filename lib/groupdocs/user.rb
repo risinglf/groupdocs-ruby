@@ -49,6 +49,7 @@ module GroupDocs
         "User should be GroupDocs::User object, received: #{user.inspect}"
 
       data = user.to_hash
+
       json = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :PUT
@@ -375,11 +376,18 @@ module GroupDocs
     attr_accessor :color
     # @attr [String] customEmailMessage
     attr_accessor :customEmailMessage
+    # @attr [Array] roles
+    attr_accessor :roles
+
+    # added in release 1.5.8
+    # @attr [List] avatar
+    attr_accessor :avatar
 
     # Human-readable accessors
     alias_accessor :first_name,           :firstname
     alias_accessor :last_name,            :lastname
     alias_accessor :custom_email_message, :customEmailMessage
+
 
     #
     # Converts access rights to human-readable format flag.

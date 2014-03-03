@@ -22,8 +22,13 @@ module GroupDocs
     # Returns array of jobs.
     #
     # @param [Hash] options Hash of options
-    # @option options [Integer] :page Page to start with
-    # @option options [Integer] :count How many items to list
+    # @option options [String] :page Page Index
+    # @option options [String] :date Data
+    # @option options [String] :count How many items to list
+    # @option options [String] :statusIds Comma separated status identifiers
+    # @option options [String] :actions Actions
+    # @option options [String] :excluded_actions Excluded actions
+    # @option options [String] :jobName Foltred job name
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key

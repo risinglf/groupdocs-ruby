@@ -258,5 +258,26 @@ module GroupDocs
       Job.new(:id => json[:job_id])
     end
 
+
+    #
+    # Added in release 1.5.8
+    #
+    # Get questionnaire by collector guid
+    #
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    #
+    def get_questionnaire!(access = {})
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/merge/{{client_id}}/questionnaires/collector/#{guid}"
+      end
+      json = api.execute!
+      Questionnaire.new(json[:questionnaire])
+
+    end
+
   end # Questionnaire::Collector
 end # GroupDocs

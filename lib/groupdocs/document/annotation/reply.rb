@@ -49,16 +49,23 @@ module GroupDocs
     attr_accessor :userGuid
     # @attr [String] userName
     attr_accessor :userName
-    # @attr [String] text
-    attr_accessor :text
     # @attr [Time] repliedOn
     attr_accessor :repliedOn
+
+    # added in release 1.5.8
+    # @attr [String] parentReplyGuid
+    attr_accessor :parentReplyGuid
+    # @attr [Boolean] isAvatarExist
+    attr_accessor :isAvatarExist
 
     # Human-readable accessors
     alias_accessor :annotation_guid, :annotationGuid
     alias_accessor :user_guid,       :userGuid
     alias_accessor :user_name,       :userName
     alias_accessor :replied_on,      :repliedOn
+    # added in release 1.5.8
+    alias_accessor :parent_reply_guid, :parentReplyGuid
+    alias_accessor :is_avatar_exist,   :isAvatarExist
 
     #
     # Creates new GroupDocs::Document::Annotation.

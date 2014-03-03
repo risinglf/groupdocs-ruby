@@ -7,15 +7,15 @@ module GroupDocs
     attr_accessor :documentId
     # @attr [String] fieldId
     attr_accessor :fieldId
-    # @attr [Integer] page
+    # @attr [Integer] page (required)
     attr_accessor :page
-    # @attr [Float] locationX
+    # @attr [Float] locationX (required)
     attr_accessor :locationX
-    # @attr [Float] locationY
+    # @attr [Float] locationY (required)
     attr_accessor :locationY
-    # @attr [Float] locationWidth
+    # @attr [Float] locationWidth (required)
     attr_accessor :locationWidth
-    # @attr [Float] locationHeight
+    # @attr [Float] locationHeight (required)
     attr_accessor :locationHeight
     # @attr [String] fontName
     attr_accessor :fontName
@@ -33,6 +33,15 @@ module GroupDocs
     attr_accessor :forceNewField
     # @attr [String] page
     attr_accessor :page
+
+    # added in realise 1.5.8
+    # @attr [Integer] pageWidth
+    attr_accessor :pageWidth
+    # @attr [Integer] pageHeight
+    attr_accessor :pageHeight
+    # @attr [Integer] align
+    attr_accessor :align
+
 
     # Human-readable accessors
     alias_accessor :document_id,     :documentId
@@ -53,8 +62,10 @@ module GroupDocs
     alias_accessor :font_bold,       :fontBold
     alias_accessor :font_italic,     :fontItalic
     alias_accessor :font_underline,  :fontUnderline
-    alias_accessor :forceNewField,   :forceNewField
-    alias_accessor :page,            :page
+    alias_accessor :force_new_field, :forceNewField
+    # added in release 1.5.8
+    alias_accessor :page_width,         :pageWidth
+    alias_accessor :page_height,        :pageHeight
 
   end # Signature::Field::Location
 end # GroupDocs

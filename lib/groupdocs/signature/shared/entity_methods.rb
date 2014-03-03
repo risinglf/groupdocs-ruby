@@ -31,7 +31,6 @@ module GroupDocs
             request[:method] = :GET
             request[:path] = "/signature/{{client_id}}/#{class_name}s/#{id}"
           end.execute!
-
           new(json[class_name.to_sym])
         end
       end # ClassMethods

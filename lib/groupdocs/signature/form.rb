@@ -30,7 +30,7 @@ module GroupDocs
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
-    # @return [Array<GroupDocs::Signature::Envelope>]
+    # @return [Array<GroupDocs::Signature::Form>]
     #
     def self.all!(options = {}, access = {})
       status_id = options.delete(:status_id)
@@ -117,7 +117,7 @@ module GroupDocs
     alias_accessor :can_participant_download_form, :canParticipantDownloadForm
     alias_accessor :water_mark_text,               :waterMarkText
     alias_accessor :water_mark_image,              :waterMarkImage
-    alias_accessor :notifyOwnerOnSign,             :notifyOwnerOnSign
+    alias_accessor :notify_owner_on_sign,          :notifyOwnerOnSign
 
 
     #
@@ -154,7 +154,7 @@ module GroupDocs
     # @example
     #   form = GroupDocs::Signature::Form.new
     #   form.name = "Form"
-    #   form.create! template
+    #   form.create!
     #
     # @param [Hash] options Hash of options
     # @option options [String] :template_id Template GUID to create form from
@@ -259,23 +259,29 @@ module GroupDocs
     end
 
     #
+    # Changed in release 1.5.8
+    #
     # Returns an array of fields for document per participant.
     #
     # @param [GroupDocs::Document] document
+    # @param  [Hash] options
+    # @option options [String] :field Field GUID
     # @param [Hash] access Access credentials
     # @option access [String] :client_id
     # @option access [String] :private_key
     # @raise [ArgumentError] if document is not GroupDocs::Document
     #
-    def fields!(document, access = {})
+    def fields!(document, options = {}, access = {})
       document.is_a?(GroupDocs::Document) or raise ArgumentError,
         "Document should be GroupDocs::Document object, received: #{document.inspect}"
 
-      json = Api::Request.new do |request|
+      api = Api::Request.new do |request|
         request[:access] = access
         request[:method] = :GET
         request[:path] = "/signature/{{client_id}}/forms/#{id}/documents/#{document.file.guid}/fields"
-      end.execute!
+      end
+      api.add_params(options)
+      json = api.execute!
 
       json[:fields].map do |field|
         Signature::Field.new(field)
@@ -347,7 +353,7 @@ module GroupDocs
     # @raise [ArgumentError] if field is not GroupDocs::Signature::Field
     # @raise [ArgumentError] if document is not GroupDocs::Document
     #
-    def modify_field_location!(location, field, document, recipient, access = {})
+    def modify_field_location!(location, field, document, access = {})
       location.is_a?(GroupDocs::Signature::Field::Location) or raise ArgumentError,
         "Location should be GroupDocs::Signature::Field::Location object, received: #{location.inspect}"
       field.is_a?(GroupDocs::Signature::Field) or raise ArgumentError,
@@ -388,9 +394,8 @@ module GroupDocs
     #
     # @example
     #   form = GroupDocs::Signature::Form.get!("g94h5g84hj9g4gf23i40j")
-    #   document = envelope.documents!.first
-    #   recipient = envelope.recipients!.first
-    #   field = envelope.fields!(document, recipient).first
+    #   document = form.documents!.first
+    #   field = form.fields!(document).first
     #   field.name = "Field"
     #   envelope.modify_field! field, document
     #
@@ -417,6 +422,8 @@ module GroupDocs
     end
 
     #
+    # Changed in release 1.5.8
+    #
     # Downloads signed documents to given path.
     # If there is only one file in envelope, it's saved as PDF.
     # If there are two or more files in envelope, it's saved as ZIP.
@@ -433,6 +440,188 @@ module GroupDocs
         request[:method] = :DOWNLOAD
         request[:path] = "/signature/{{client_id}}/forms/#{id}/documents/get"
       end.execute!
+
+      filepath = "#{path}/#{name}.zip"
+
+
+      Object::File.open(filepath, 'wb') do |file|
+        file.write(response)
+      end
+
+      filepath
+    end
+
+    #
+    # Changed in release 1.5.8
+	#
+	# Public fill signature form.
+    #
+    # @param [String] form Form GUID
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def public_fill!(access = {})
+      Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/signature/public/forms/#{id}/fill"
+      end.execute!
+    end
+
+    #
+    # Changed in release 1.5.8
+    #
+    # Public fill form field.
+    #
+    # @example Fill single line field
+    #   form = GroupDocs::Signature::Form.get!("g94h5g84hj9g4gf23i40j")
+    #   document = form.documents!.first
+    #   field = form.fields!(document).first
+    #   fill_form = form.public_fill!
+    #   participant = fill_form[:participant][:id]
+    #   envelope.fill_field! "my_data", field, document, participant
+    #
+    # @example Fill signature field
+    #   form = GroupDocs::Signature::Form.get!("g94h5g84hj9g4gf23i40j")
+    #   document = form.documents!.first
+    #   field = form.fields!(document).first
+    #   fill_form = form.public_fill!
+    #   participant = fill_form[:participant][:id]
+    #   signature = GroupDocs::Signature.get!.first
+    #   form.fill_field! signature, field, document, participant
+    #
+    # @example Fill checkbox field
+    #   form = GroupDocs::Signature::Form.get!("g94h5g84hj9g4gf23i40j")
+    #   document = form.documents!.first
+    #   field = form.fields!(document).first
+    #   fill_form = form.public_fill!
+    #   participant = fill_form[:participant][:id]
+    #   form.fill_field! false, field, document, participant
+    #
+    #
+    # @param [GroupDocs::Document] document Document GUID
+    # @param [String] participant Participant ID
+    # @param [GroupDocs::Signature::Field] field Field GUID
+    # @param [String] authentication Authentication signature
+    # @param [File Stream] value Data to be placed in field
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def public_fill_field!(value, field, document, participant, authentication,  access = {})
+      field.is_a?(GroupDocs::Signature::Field) or raise ArgumentError,
+                                                        "Field should be GroupDocs::Signature::Field object, received: #{field.inspect}"
+      document.is_a?(GroupDocs::Document) or raise ArgumentError,
+                                                   "Document should be GroupDocs::Document object, received: #{document.inspect}"
+
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/signature/public/forms/#{id}/documents/#{document.guid}/participant/#{participant}/field/#{field.id}"
+        request[:request_body] = value
+        request[:plain] = true
+      end
+      api.add_params(:participantAuthSignature => authentication)
+      json = api.execute!
+      Signature::Field.new(json[:field])
+    end
+
+    #
+    # Changed in release 1.5.8
+    #
+    # Public sign form.
+    #
+    # @param [String] form Form GUID
+    # @param [String] participant Participant GUID
+    # @param [String] authentication Authentication signature
+    # @param [String] participant_name Participant Name
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def sign!( participant, authentication, participant_name, access = {})
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :PUT
+        request[:path] = "/signature/public/forms/#{id}/participant/#{participant}/sign"
+      end
+      api.add_params(:participantAuthSignature => authentication, :name => participant_name)
+      api.execute!
+    end
+
+    #
+    #  Changed in release 1.5.8
+    #
+    #
+    # Get form fields for document in form per participant
+    #
+    # @param [Hash] options
+    # @option [String] :document Document GUID
+    # @option [String] :participant Participant GUID
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def public_fields!(options = {}, access = {})
+      api = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/signature/public/forms/#{id}/fields"
+      end
+      api.add_params(options)
+      json = api.execute!
+
+      json[:fields].map do |field|
+        Signature::Field.new(field)
+      end
+    end
+
+    #
+    #  Changed in release 1.5.8
+    #
+    #
+    # Get signature form participant.
+    #
+    # @param [String] participant Participant GUID
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def participant!(participant, access = {})
+      json = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :GET
+        request[:path] = "/signature/public/forms/#{form}/participants/#{participant}"
+      end.execute!
+
+      json[:participant]
+    end
+
+    #
+    # Changed in release 1.5.8
+    #
+    #
+    # Get signed form documents.
+    #
+    # @param [String] participant Participant GUID
+    # @param [Hash] access Access credentials
+    # @option access [String] :client_id
+    # @option access [String] :private_key
+    # @return [Array]
+    #
+    def public_signed_documents!(path, participant, access = {})
+      response = Api::Request.new do |request|
+        request[:access] = access
+        request[:method] = :DOWNLOAD
+        request[:path] = "/signature/public/forms/#{id}/participant/#{participant}/documents/get"
+      end.execute!
+
 
       filepath = "#{path}/#{name}."
       if documents!.size == 1
