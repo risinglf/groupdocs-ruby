@@ -76,6 +76,13 @@ post '/sample42' do
       iframe = "<iframe width='100%' height='600' frameborder='0' src='#{iframe}'></iframe>"
 
       path = "#{File.dirname(__FILE__)}/../public/downloads"
+      # Remove all files from download directory or create folder if it not there
+      if File.directory?(path)
+        Dir.foreach(path) { |f| fn = File.join(downloads_path, f); File.delete(fn) if f != '.' && f != '..' }
+      else
+        Dir::mkdir(path)
+      end
+
       GroupDocs::User.download!(path, document[0].outputs[0].name, document[0].outputs[0].guid)
       message = "<span style=\"color:green\">File with annotations was downloaded to server's local folder. You can check them <a href=\"/downloads/#{document[0].outputs[0].name}\">here</a></span>"
     else
