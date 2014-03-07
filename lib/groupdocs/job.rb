@@ -13,6 +13,11 @@ module GroupDocs
       :print              => 128,
       :compare            => 256,
       :import_annotations => 512,
+      # add in release 1.5.8
+      :split => 1024,
+      :view => 2048,
+      :index => 4096,
+      :number_lines => 8192
     }
 
     extend Api::Helpers::ByteFlag
