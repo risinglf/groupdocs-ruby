@@ -1,3 +1,54 @@
+## v1.5.8
+
+**Changes**
+
+* `Api::Helpers::REST#send_request!` new functionality for request type :DELETE
+* `Document#access_mode_set!` updates in request path 
+* `Document#details!` updates in request path
+* `Document#compare!` updates in request path
+* `Document#update_changes!` updates in request path
+* `Document#changes` updates in request path
+* `Document#download!` updates in request path. Fixed bugs
+* `Signature#get_document_fields!` renamed to `Document#public_fields!`
+* `Signature#sign_document!` renamed to `Document#public_sign_document!`
+* `Document::Annotation.remove!` renamed to `Document::Annotation#remove!`
+* Fixed bugs `Document::Annotation#move_marker!`
+* Fixed bugs `Document::Annotation#resize!`
+* Fixed bugs `Questionnaire#collectors!`
+* Fixed bugs `Questionnaire#copy_to_templates!`
+* Fixed bugs `Signature.verify!`
+* Fixed bugs `Signature.sign_document_status!`
+* `Signature::Envelope#add_recipient!` returns GroupDosc::Signature::Recipient
+* `Signature#get_sign_envelope!` renamed to `Signature::Envelope#public_get!`
+* `Signature#get_signed_documents!` renamed to `Signature::Envelope#public_signed_documents!  `
+* `Signature#field_envelope_date!` renamed to `Signature::Envelope#date!`
+* `Signature::Form#fields!` updated
+* Fixed bugs `Signature::Form#assign_field!`
+* `Subscription.self.list!` updated
+
+**New**
+
+* Added `Document#hyperlinks!`
+* Added `Document::Annotation` attributes
+* Added `Document::Annotation::MarkerPosition` class
+* Added `Document::Annotation::Reply` attributes
+* Added `Document::Field` attributes
+* Added `Questionnaire` attributes
+* Added `Questionnaire#get_document!`
+* Added `Questionnaire.get_by_name!`
+* Added `Questionnaire#delete_list!`
+* Added `Questionnaire#delete_collectors_list!`
+* Added `Questionnaire#delete_executions_list!`
+* Added `Questionnaire#delete_datasources_list!`
+* Added `Questionnaire::Collector#get_questionnaire!`
+* Added `Questionnaire::Question` attributes
+* Added `Questionnaire::Question::Conditions` class
+* Added `Questionnaire::Question::Answer` attribute
+* Added `Signature::Field` attributes
+* Added `Signature::Field::Location` attributes
+* Added `Storage::File#upload_cancel!`
+* Added `User` attributes
+
 ## v1.5.3
 
 **Changes**
